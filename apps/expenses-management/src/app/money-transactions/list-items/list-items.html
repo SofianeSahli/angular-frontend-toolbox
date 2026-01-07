@@ -1,0 +1,26 @@
+<div
+  class="card"
+  [class.expenses-borders]="moneyTransition().categorie.is_income == 0"
+  [class.income-borders]="moneyTransition().categorie.is_income"
+>
+  <div
+    class="card-header d-flex justify-content-between"
+    [class.bg-danger]="moneyTransition().categorie.is_income == 0"
+    [class.bg-success]="moneyTransition().categorie.is_income == 1"
+  >
+    <span class="title text-light"
+      >{{moneyTransition().amount | currency : '' : '' }}</span
+    >
+    <span class="lower-alpha date text-light">
+      <i class="bi bi-calendar-date" style="margin: 0 8px"></i>
+      {{moneyTransition().date | date }}
+    </span>
+  </div>
+  <div class="card-body">
+    <h5>{{moneyTransition().categorie.name | translate}}</h5>
+    <p>
+      <span class="lower-alpha"> {{"labels.description" | translate}} </span>:
+      <strong> {{moneyTransition().description}}</strong>
+    </p>
+  </div>
+</div>

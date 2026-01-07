@@ -1,0 +1,19 @@
+// libs/shared/styles/_mixins.scss
+@mixin use-shared-variables {
+  // This mixin ensures components use CSS variables with fallbacks
+  .shared-button {
+    background-color: var(--bs-primary, #007bff);
+    color: var(--bs-body-color, #212529);
+    border-color: var(--bs-border-color, #dee2e6);
+
+    &:hover {
+      background-color: var(--bs-primary-hover, #0056b3);
+    }
+  }
+
+  .shared-card {
+    background-color: var(--bs-card-bg, #ffffff);
+    border-color: var(--bs-border-color, #dee2e6);
+    color: var(--bs-body-color, #212529);
+  }
+}

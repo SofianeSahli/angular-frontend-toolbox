@@ -1,0 +1,13 @@
+@use '../../../index' as *;
+
+.image-preview-btn-close {
+  --bs-btn-close-color: red; /* changes the X color */
+  --bs-btn-close-focus-shadow: none; /* optional */
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* Optional: make it more visible on hover */
+.image-preview-btn-close:hover {
+  --bs-btn-close-color: darkred;
+}

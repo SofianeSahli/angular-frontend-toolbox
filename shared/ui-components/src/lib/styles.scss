@@ -1,0 +1,15 @@
+// libs/shared/styles/styles.scss
+// Main entry point for shared styles
+@import 'variables';
+@import 'mixins';
+
+// Apply shared styles
+@include use-shared-variables;
+
+// Shared component styles (example)
+.shared-component {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: var(--bs-card-bg, #fff);
+  border: 1px solid var(--bs-border-color, #ddd);
+}

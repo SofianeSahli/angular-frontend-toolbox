@@ -1,0 +1,135 @@
+// apps/app1/src/styles/styles.scss
+// 1. Load app-specific variables (overrides default)
+@import 'variables';
+
+// 3. App-specific additional styles
+.app-header {
+  background: var(--bs-primary);
+  color: white;
+}
+/* ---------------------------------------- */
+/* OUTLINE PRIMARY                          */
+/* ---------------------------------------- */
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--bs-primary),
+    var(--bs-primary-hover)
+  );
+  border-color: var(--bs-primary);
+  color: white;
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      var(--bs-primary-hover),
+      var(--bs-primary)
+    );
+    border-color: var(--bs-primary-hover);
+    transform: translateY(-1px);
+  }
+}
+
+.btn-outline-primary {
+  color: var(--bs-primary);
+  border-color: var(--bs-primary);
+
+  &:hover {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+  }
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+  background-color: var(--bs-primary-hover) !important;
+  border-color: var(--bs-primary-hover) !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------- */
+/* OUTLINE SECONDARY                        */
+/* ---------------------------------------- */
+.btn-outline-secondary {
+  background-color: transparent !important;
+  border-color: var(--bs-secondary) !important;
+  color: var(--bs-secondary) !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active {
+  background-color: var(--bs-secondary-hover) !important;
+  border-color: var(--bs-secondary-hover) !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------- */
+/* OUTLINE SUCCESS                          */
+/* ---------------------------------------- */
+.btn-outline-success {
+  background-color: transparent !important;
+  border-color: var(--bs-success) !important;
+  color: var(--bs-success) !important;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus,
+.btn-outline-success:active {
+  background-color: var(--bs-success) !important;
+  border-color: var(--bs-success) !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------- */
+/* OUTLINE WARNING                          */
+/* ---------------------------------------- */
+.btn-outline-warning {
+  background-color: transparent !important;
+  border-color: var(--bs-warning) !important;
+  color: var(--bs-warning) !important;
+}
+
+.btn-outline-warning:hover,
+.btn-outline-warning:focus,
+.btn-outline-warning:active {
+  background-color: var(--bs-warning) !important;
+  border-color: var(--bs-warning) !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------- */
+/* OUTLINE DANGER                           */
+/* ---------------------------------------- */
+.btn-outline-danger {
+  background-color: transparent !important;
+  border-color: var(--bs-danger) !important;
+  color: var(--bs-danger) !important;
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger:active {
+  background-color: var(--bs-danger) !important;
+  border-color: var(--bs-danger) !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------- */
+/* OUTLINE INFO                             */
+/* ---------------------------------------- */
+.btn-outline-info {
+  background-color: transparent !important;
+  border-color: var(--bs-info) !important;
+  color: var(--bs-info) !important;
+}
+
+.btn-outline-info:hover,
+.btn-outline-info:focus,
+.btn-outline-info:active {
+  background-color: var(--bs-info) !important;
+  border-color: var(--bs-info) !important;
+  color: #fff !important;
+}

@@ -1,0 +1,12 @@
+.switch-buttons {
+  margin-bottom: 1rem;
+}
+
+.btn-check:checked + .btn {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(var(--bs-primary-rgb), 0.3);
+}
+
+.btn {
+  transition: all 0.2s ease;
+}

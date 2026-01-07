@@ -1,0 +1,86 @@
+<div class="col-12">
+  <app-date-range></app-date-range>
+</div>
+<div class="col-12">
+  <div class="row d-block d-md-none overflow-hidden">
+    <div class="col-12">
+      <lib-switch-buttons [(value)]="showingItem" [options]="tabOptions" />
+    </div>
+    <div
+      class="col-12 col-md-10 animation-container"
+      [@routeAnimations]="showingItem()"
+    >
+      @if(showingItem() === 'labels.show_summary') {
+      <div class="row">
+        @if(summarySignal.summary()) {
+        <app-summary-item
+          [moneyAmount]="summarySignal.summary().total_income_amount"
+          [moneyEntriescount]="summarySignal.summary().number_income_entries"
+          [lineType]="'income'"
+        />
+        <app-summary-item
+          [moneyAmount]="summarySignal.summary().total_expenses_amount"
+          [moneyEntriescount]="summarySignal.summary().number_expenses_entries"
+          [lineType]="'expense'"
+        />
+        <app-summary-item
+          [moneyAmount]="summarySignal.summary().total_saved_amount"
+          [moneyEntriescount]="summarySignal.summary().number_savings_entries"
+          [lineType]="'saving'"
+        />
+        }
+      </div>
+      } @else if(showingItem() === 'labels.show_pie_chart') {
+      <app-chart-item
+        [values]="[summarySignal.summary().total_income_amount, 
+                  summarySignal.summary().total_expenses_amount, 
+                  summarySignal.summary().total_saved_amount]"
+      />
+      } @else if (showingItem() === 'labels.show_bar_chart') {
+      <app-bar-chart
+        [dailyExpenses]="summarySignal.summary().daily_expenses"
+        [dailyIncome]="summarySignal.summary().daily_income"
+        [dailySavings]="summarySignal.summary().daily_savings"
+      />
+      }
+    </div>
+  </div>
+  <!-- Bigger view-->
+  <div class="d-none d-md-block row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-6" style="margin-top: auto">
+          <app-summary-item
+            [moneyAmount]="summarySignal.summary().total_income_amount"
+            [moneyEntriescount]="summarySignal.summary().number_income_entries"
+            [lineType]="'income'"
+          />
+          <app-summary-item
+            [moneyAmount]="summarySignal.summary().total_expenses_amount"
+            [moneyEntriescount]="summarySignal.summary().number_expenses_entries"
+            [lineType]="'expense'"
+          />
+          <app-summary-item
+            [moneyAmount]="summarySignal.summary().total_saved_amount"
+            [moneyEntriescount]="summarySignal.summary().number_savings_entries"
+            [lineType]="'saving'"
+          />
+        </div>
+        <div class="col-6">
+          <app-chart-item
+            [values]="[summarySignal.summary().total_income_amount, 
+                  summarySignal.summary().total_expenses_amount, 
+                  summarySignal.summary().total_saved_amount]"
+          />
+        </div>
+        <div class="col-12">
+          <app-bar-chart
+            [dailyExpenses]="summarySignal.summary().daily_expenses"
+            [dailyIncome]="summarySignal.summary().daily_income"
+            [dailySavings]="summarySignal.summary().daily_savings"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

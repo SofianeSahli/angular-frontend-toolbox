@@ -1,0 +1,42 @@
+@use '../../index' as *;
+
+.toast {
+  &--container {
+    position: fixed;
+    top: 20px;
+    right: 5px;
+    transform: translateX(-50%);
+    z-index: 2000; // 🔥 higher than Bootstrap modals
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  &--message {
+    min-width: 250px;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--bs-bg);
+    animation: fadeIn 200ms ease-out, fadeOut 200ms ease-in 2.8s;
+
+    &--info {
+      background-color: var(--bs-info);
+    }
+
+    &--success {
+      background-color: var(--bs-success);
+    }
+
+    &--warning {
+      background-color: var(--bs-warning);
+    }
+
+    &--danger {
+      background-color: var(--bs-danger);
+    }
+  }
+}

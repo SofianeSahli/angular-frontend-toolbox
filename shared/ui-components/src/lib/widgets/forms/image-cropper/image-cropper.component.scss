@@ -1,0 +1,50 @@
+@use '../../../index' as *;
+
+.cropper-container {
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas-wrapper {
+  flex: 1; /* Fill available height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.canvas-wrapper canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.thumbnail {
+  width: 50px; /* smaller square */
+  height: 50px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bs-bg);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &:hover {
+    border-color: bar(--bs-primary);
+  }
+
+  &.active {
+    border-color: bar(--bs-primary);
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+  }
+}

@@ -1,0 +1,94 @@
+<div class="row">
+  <!-- Unified Previews -->
+  @if(previews().length > 0){
+  <div
+    class="col-12 mt-2 flex-shrink-0 flex-grow-0 d-flex flex-wrap justify-content-center"
+    style="max-height: 400px; overflow-y: auto"
+  >
+    @for(preview of previews(); let i = $index; track preview.url){
+    <div
+      [@fadeTranslate]
+      class="position-relative m-1 d-flex align-items-center justify-content-center"
+      style="width: 120px; height: 120px; border-radius: 6px; overflow: hidden"
+    >
+      <!-- IMAGE -->
+      @if(preview.type === 'image'){
+      <img
+        [src]="preview.url"
+        alt="Preview"
+        style="width: 100%; height: 100%; object-fit: cover; cursor: pointer"
+        (click)="currentIndex = i"
+      />
+      }
+
+      <!-- VIDEO -->
+      @if(preview.type === 'video'){
+      <video
+        [src]="preview.url"
+        controls
+        style="width: 100%; height: 100%; object-fit: cover"
+      ></video>
+      }
+
+      <!-- DOCUMENT (PDF, Word, etc.) -->
+      @if(preview.type === 'document'){
+      <div
+        class="d-flex  flex-shrink-0 flex-grow-0 flex-column align-items-center justify-content-center bg-body w-100 h-100"
+      >
+        <i class="bi bi-file-earmark-text fs-1 text-primary"></i>
+        <small class="text-muted px-1">{{ preview.name }}</small>
+      </div>
+      }
+
+      <!-- Delete button -->
+      <button
+        type="button"
+        class="btn-close btn-sm position-absolute top-0 end-0 m-1"
+        (click)="deleteFile(i)"
+      ></button>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Label -->
+  @if(props.label){
+  <div class="col-12 mb-2">
+    <label for="field.id">{{ props.label | translate }}</label>
+    @if(props.required){
+    <span style="color: red; margin-left: 8px">*</span>
+    }
+  </div>
+  }
+
+  <!-- File Input -->
+  <div class="col-12 d-flex align-items-center mb-4 flex-shrink-0 flex-grow-0">
+    <input
+      type="file"
+      #fileInput
+      [formlyAttributes]="field"
+      (change)="onFileChange($event)"
+      [required]="props.required ? props.required : false"
+      [accept]="props['accept'] || '*/*'"
+      style="display: none"
+      multiple
+    />
+
+    <button
+      type="button"
+      class="btn btn-primary me-2"
+      (click)="fileInput.click()"
+    >
+      {{ "labels.select_file" | translate }}
+    </button>
+
+    <span class="file-name text-body">{{ fileNames | translate }}</span>
+  </div>
+
+  <!-- Validation -->
+  @if(formControl.invalid && (formControl.touched || formControl.dirty)){
+  <div class="col-12">
+    <formly-validation-message [field]="field"></formly-validation-message>
+  </div>
+  }
+</div>

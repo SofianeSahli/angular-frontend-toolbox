@@ -1,0 +1,25 @@
+{
+  "name": "ui-components",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/ui-components/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "options": {
+        "tsConfig": "shared/ui-components/tsconfig.lib.json",
+        "project": "shared/ui-components/ng-package.json",
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "libs/shared-styles/src/lib"
+          ]
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

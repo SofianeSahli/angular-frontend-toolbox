@@ -1,0 +1,100 @@
+{
+  "name": "app-launcher",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/launcher/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/launcher",
+        "index": "apps/launcher/src/index.html",
+        "main": "apps/launcher/src/main.ts",
+        "polyfills": [
+          "zone.js"
+        ],
+        "tsConfig": "apps/launcher/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/launcher/public",
+            "output": "/"
+          }
+        ],
+        "styles": [
+          "bootstrap/dist/css/bootstrap.min.css",
+          "apps/launcher/src/styles.scss"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/launcher/src/environments/environment.ts",
+              "with": "apps/launcher/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "app-launcher:build:production"
+        },
+        "development": {
+          "buildTarget": "app-launcher:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "app-launcher:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "app-launcher:build",
+        "spa": true
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+.card {
+  background-color: var(--bs-card-bg);
+  border-color: var(--bs-card-border-color);
+  color: var(--bs-card-color);
+  box-shadow: var(--bs-card-box-shadow);
+  transition: all 0.3s ease;
+}
+
+.card-header {
+  background-color: var(--bs-card-header-bg);
+  color: var(--bs-card-header-color);
+  border-bottom-color: var(--bs-card-border-color);
+}
+
+.card-footer {
+  background-color: var(--bs-card-footer-bg);
+  color: var(--bs-card-footer-color);
+  border-top-color: var(--bs-card-border-color);
+}

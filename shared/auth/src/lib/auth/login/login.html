@@ -1,0 +1,77 @@
+<app-loader [loading]="loading()"></app-loader>
+<div class="container-sign-in row justify-content-center">
+  <div class="col-md-6 col-xl-4 col-lg-5 col-12 card p-0">
+    <div class="card-header">
+      <h4 class="card-title">{{ "labels.login" | translate}}</h4>
+    </div>
+    <div class="col-12 mt-5 card-body">
+      <form class="row" [formGroup]="form">
+        <div class="col-12">
+          <lib-text-input
+            [id]="'username'"
+            [label]="'labels.username'"
+            [placeholder]="'placeholder.username'"
+            [rows]="4"
+            formControlName="username"
+            [required]="true"
+            [showErrors]="form.get('amount')?.touched ?? false"
+          />
+        </div>
+        <div class="col-12">
+          <lib-text-input
+            [id]="'password'"
+            [label]="'labels.password'"
+            [placeholder]="'placeholder.password'"
+            [rows]="4"
+            [type]="'password'"
+            formControlName="password"
+            [required]="true"
+            [showErrors]="form.get('amount')?.touched ?? false"
+          />
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+          <button
+            (click)="onSubmit()"
+            type="button"
+            class="btn btn-primary mt-3 m-auto"
+            [disabled]="!form.valid"
+            appRipple
+          >
+            {{ "labels.login" | translate }}
+          </button>
+        </div>
+      </form>
+
+      <div class="col-12">
+        <span class="d-block text-center mt-3 no-account-text">
+          {{ "text.forget_password" | translate}}
+
+          <a
+            (click)="sendResetPasswordEmail()"
+            tabindex="0"
+            matRipple
+            (keyup.enter)="sendResetPasswordEmail()"
+            (keyup.space)="sendResetPasswordEmail()"
+          >
+            {{ "labels.reset_password" | translate }}
+          </a>
+        </span>
+      </div>
+      <div class="col-12">
+        <span class="d-block text-center mt-3 no-account-text">
+          {{ "text.no_account" | translate}}
+
+          <a
+            (click)="navto()"
+            tabindex="0"
+            matRipple
+            (keyup.enter)="navto()"
+            (keyup.space)="navto()"
+          >
+            {{ "labels.register" | translate }}
+          </a>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

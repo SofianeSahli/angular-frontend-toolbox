@@ -1,0 +1,122 @@
+{
+  "routings": {
+    "home": "Accueil",
+    "profile": "Profile"
+  },
+  "privacy": {
+    "public": "Publique",
+    "friends": "Amis seulement",
+    "private": "Juste moi"
+  },
+  "labels": {
+    "load_more_comments": "Charger plus de commentaires",
+    "security_setting": "Paramétres sécurités",
+    "update_password": "Modifier votre mot de passe",
+    "files": "Media(s)",
+    "replied_comment_text": "A répondu il y'a",
+    "commented_text": "Commenté il y'a",
+    "delete_comment": "Suppression définitive du commentaire",
+    "commenter": "Commentez",
+    "may_add_images": "Besoin de rajouter un image ? ",
+    "write_comment": "Exprimez vous !",
+    "choose_file": "Choisir un fichier",
+    "select_file": "Choisir un fichier",
+    "brightness": "Luminosité",
+    "contrast": "Contrast",
+    "saturation": "Saturation",
+    "image_add_text": "Ajouter un text",
+    "image_add_image": "Ajouter une image",
+    "share_comment": "Commentez",
+    "show_comment": "Affichers {{count}} commentaires",
+    "hide_comment": "Cacher {{count}} commentaires",
+    "be_first": "Soyez le premier à commenter",
+    "mark_as_read": "Marquer comme lu",
+    "fill_form_instructions": "Votre histoire mérite d’être racontée, partagez-la ici",
+    "post_form": "À vous la parole",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "share": "Visibilité",
+    "light_dark_mode": "Mode clair/sombre",
+    "update_profile": "Modifier le profil",
+    "my_posts": "Mes publications",
+    "my_network": "Mon réseau",
+    "my_groups": "Mes groupes",
+    "my_activities": "Mes activités",
+    "email": "Email",
+    "password": "Mot de passe",
+    "login": "Se connecter",
+    "register": "Rejoins-nous 🚀",
+    "email_username": "Email ou nom d'utilisateur",
+    "password_confirm": "Confirmez le mot de passe",
+    "save": "Enregistrer",
+    "click_here": "Cliquez ici",
+    "username": "Nom d'utilisateur",
+    "profile_pictures": "Photo de profil",
+    "first_name": "Prénom",
+    "last_name": "Nom de famille",
+    "title": "Un bref présentation qui vous décrivent",
+    "description": "Quelques mots pour vos décrire",
+    "post_files": "Fichiers",
+    "post_title": "Titre",
+    "post_description": "Description",
+    "tags": "Catégories",
+    "add_friend": "Ajouter un ami",
+    "block_user": "Bloquer l'utilisateur",
+    "accept_request": "Accepter la demande",
+    "deny_request": "Refuser la demande",
+    "cancel_request": "Annuler la demande",
+    "remove_friend": "Supprimer un ami"
+  },
+  "placeholder": {
+    "post_files": "Fichiers relatives aux posts (Vidéos, Images, GIF, PDF etc...)",
+    "post_title": "Un titre pour votre poste",
+    "post_description": "Un peut plus de détails relatives à votre poste",
+    "tags": "Catégories relatives au postes",
+    "profile_pictures": "Photo de profil",
+    "first_name": "Ex. Mourad",
+    "last_name": "Ex. Arafat",
+    "title": "Ex. Le fondateur de l'URSS",
+    "description": "Ex. Nationalist jusqu'au bout des ongles, j'ai fait tel et tel",
+    "email": "Entrez votre email",
+    "password": "Entrez votre mot de passe",
+    "password_confirm": "Confirmez votre mot de passe",
+    "username": "Entrez votre nom d'utilisateur"
+  },
+  "text": {
+    "emails_is_missing": "Renseignez votre e-mail pour sécuriser et récupérer votre compte.",
+    "do_you_want_to_delete": "⚠️ Action permanente et irréversible ! Confirmez-vous que vous souhaitez continuer ? ",
+    "no_profile_title": "⚠️ Profil incomplet ",
+    "no_profile_body": "Vous n’avez pas encore créé votre profil.\nSans profil, vous ne pouvez pas profiter pleinement de l’application : publier, commenter ou interagir avec les autres utilisateurs.",
+    "no_profile_footer": "Complétez votre profile",
+    "no_account": "Vous n'avez pas de compte ?",
+    "create_account": "Créez votre compte et rejoignez notre communauté !",
+    "already_account": "Vous avez déja un compte ? Clickez ici pour vous connecter"
+  },
+  "errors": {
+    "old_pasword_incoret": "Mot de passe actual n'est pas correcte",
+    "not_yours": "Vous n'êtes pas autorisé a effectué cette action",
+    "username_invalid": "Les informations d'identification sont invalides."
+  },
+  "validation": {
+    "required": "Ce champ est requis.",
+    "minlength": "La longueur minimale est de {{min}} caractères.",
+    "maxlength": "La longueur maximale est de {{max}} caractères.",
+    "email": "Veuillez entrer une adresse email valide.",
+    "invalid-username": "Nom d'utilisateur invalide : lettres minuscules, chiffres, ., -, _ seulement.",
+    "regex": "Le format est invalide."
+  },
+  "notifications": {
+    "titles": {
+      "mentionned_you_comment": "{{ user }} vous a mentioné",
+      "all": "Toutes les notifications",
+      "friend_request": "Nouvelle demande d'ami",
+      "friend_request_accepted": "Demande d'ami acceptée",
+      "friend_request_denied": "Demande d'ami refusée"
+    },
+    "messages": {
+      "friend_request_received": "vous a envoyé(e) une demande d'ami.",
+      "friend_request_accepted": "a accepté(e) votre demande d'ami.",
+      "friend_request_denied": "a refusé(e) votre demande d'ami."
+    }
+  }
+}

@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-12 mb-2 mt-2">
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn btn-secondary" (click)="previousMonth()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+
+      <h4 class="mb-0 text-center">
+        <i class="bi bi-calendar me-2"></i>
+        {{ getCurrentMonthLabel() }}
+      </h4>
+
+      <button type="button" class="btn btn-secondary" (click)="nextMonth()">
+        <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <lib-switch-buttons
+      [(value)]="showingItem"
+      [options]="tabOptions"
+      (valueChange)="changeCurrentDate($event)"
+    />
+  </div>
+
+  <div class="col-12">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      class="row g-3 align-items-center"
+    >
+      <div class="col-md col-5">
+        <lib-date-input
+          [id]="'startDateControl'"
+          [label]="'labels.start_date'"
+          [placeholder]="'placeholder.start_date'"
+          formControlName="start_date"
+          [formControl]="startDateControl"
+          [required]="true"
+          [minDate]="'2024-01-01'"
+          [maxDate]="endDateControl.value"
+          [showErrors]="startDateControl.touched"
+        ></lib-date-input>
+      </div>
+
+      <div class="col-md col-5">
+        <lib-date-input
+          [id]="'endDateControl'"
+          [label]="'labels.end_date'"
+          [placeholder]="'placeholder.end_date'"
+          formControlName="end_date"
+          [formControl]="endDateControl"
+          [required]="true"
+          [minDate]="startDateControl.value || '2024-01-01'"
+          [showErrors]="endDateControl.touched"
+        ></lib-date-input>
+      </div>
+      <div class="col-1" style="margin-top: auto">
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+          <i class="bi bi-arrow-repeat"></i>
+        </button>
+      </div>
+    </form>
+    @if (form.errors?.['invalidDateRange'] && (startDateControl.touched ||
+    endDateControl.touched)) {
+    <div class="col-12">
+      <div class="alert alert-danger mt-2">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {{ form.errors?.['invalidDateRange'].message }}
+      </div>
+    </div>
+    }
+  </div>
+</div>

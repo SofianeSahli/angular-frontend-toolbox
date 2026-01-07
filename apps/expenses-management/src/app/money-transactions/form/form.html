@@ -1,0 +1,117 @@
+<app-loader [loading]="moneyTransitionStore.isLoading()"></app-loader>
+
+<form [formGroup]="form" class="row g-3">
+  <div class="col-12">
+    <lib-switch-buttons
+      [label]="'labels.expenses_nature'"
+      [options]="TYPE_OPTIONS"
+      [value]="form.get('type')?.value || ''"
+      [required]="true"
+      formControlName="type"
+    />
+  </div>
+
+  @if (typeValue() === '0' || typeValue() === '1') {
+  <div class="col-12 col-lg-6">
+    <lib-select
+      [label]="'labels.categorie'"
+      [options]="filteredCategories()"
+      [placeholder]="'placeholder.categorie'"
+      formControlName="categorie"
+      [required]="true"
+      [formControl]="form.controls.categorie"
+      [showErrors]="form.get('categorie')?.touched ?? false"
+    />
+  </div>
+  } @if (categorieValue()) {
+  <div class="col-12 col-lg-6">
+    <lib-select
+      [label]="'labels.categorie'"
+      [options]="childCategories()"
+      [placeholder]="'placeholder.categorie'"
+      formControlName="categorie_id"
+      [required]="true"
+      [formControl]="form.controls.categorie_id"
+      [showErrors]="form.get('categorie_id')?.touched ?? false"
+    />
+  </div>
+  }
+
+  <!-- Amount Input -->
+  @if (categorieIdValue()) {
+
+  <div class="col-12">
+    <lib-text-input
+      [label]="'labels.amount'"
+      [type]="'number'"
+      [placeholder]="'placeholder.amount'"
+      formControlName="amount"
+      [required]="true"
+      [step]="0.01"
+      [min]="0.01"
+      [formControl]="form.controls.amount"
+      [showErrors]="form.get('amount')?.touched ?? false"
+    />
+  </div>
+
+  <div class="col-12">
+    <lib-text-input
+      [label]="'labels.description'"
+      [multiline]="true"
+      [placeholder]="'placeholder.description'"
+      [rows]="4"
+      formControlName="description"
+      [required]="true"
+      [formControl]="form.controls.description"
+      [showErrors]="form.get('description')?.touched ?? false"
+    />
+  </div>
+  <div class="col-12">
+    <lib-switch-buttons
+      [label]="'labels.transition_occurence'"
+      [options]="OCCUREN_OPTIONS"
+      [value]="form.get('occurence')?.value || ''"
+      [required]="true"
+      formControlName="occurence"
+    />
+  </div>
+  <div class="col-12">
+    <div class="col-12">
+      <lib-date-input
+        label="Event Date"
+        placeholder="Select event date"
+        [required]="true"
+        format="dd/mm/yyyy"
+        formControlName="date"
+        [formControl]="form.controls.date"
+        [showErrors]="form.get('date')?.touched ?? false"
+      />
+    </div>
+  </div>
+  } @if (occurenceValue() === 'weekly' || occurenceValue() === 'monthly' ||
+  occurenceValue() === 'yearly' ){
+  <div class="col-6">
+    <lib-date-input
+      label="Birth Date"
+      placeholder="Select your birth date"
+      [required]="true"
+      format="dd/mm/yyyy"
+      formControlName="start_date"
+      [formControl]="form.controls.start_date"
+      [showErrors]="form.get('start_date')?.touched ?? false"
+    />
+  </div>
+  <div class="col-6">
+    <lib-date-input
+      label="Birth Date"
+      placeholder="Select your birth date"
+      [required]="true"
+      format="dd/mm/yyyy"
+      formControlName="end_date"
+      [formControl]="form.controls.end_date"
+      [showErrors]="form.get('end_date')?.touched ?? false"
+    />
+  </div>
+  }
+  <!-- Submit Button -->
+</form>

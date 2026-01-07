@@ -1,0 +1,24 @@
+<div ngbDropdown class="context-menu" container="body" keyboard-nav>
+  <button
+    class="btn btn-sm btn-outline-secondary"
+    id="{{ menuId() }}Toggle"
+    ngbDropdownToggle
+  >
+    <i class="bi bi-three-dots-vertical"></i>
+    <span class="visually-hidden">Actions menu</span>
+  </button>
+
+  <div ngbDropdownMenu class="shadow-sm rounded">
+    @for(item of items() ; track item.label){
+    <button
+      ngbDropdownItem
+      class="d-flex align-items-center gap-2"
+      [ngClass]="item.colorClass"
+      (click)="onSelect(item.action)"
+    >
+      @if(item.icon){
+      <i class="bi {{ item.icon }}"></i>}
+      <span>{{ item.label | translate }}</span></button
+    >}
+  </div>
+</div>

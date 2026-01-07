@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "es2022",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "typeCheckHostBindings": true,
+    "strictTemplates": true
+  },
+  "include": ["src/**/*.ts"]
+}

@@ -1,0 +1,32 @@
+<div class="col-12">
+  <div class="row justify-content-center pb-3">
+    <div class="col-12 d-flex justify-content-end">
+      <button class="btn btn-secondary m-1" (click)="filter()">
+        {{ "labels.filter" | translate }}
+      </button>
+      <button class="btn btn-primary m-1" (click)="addEntry()">
+        {{ "labels.add_money_transition" | translate }}
+      </button>
+    </div>
+
+    <div class="col-12">
+      <h5>{{ "labels.activated_filter" | translate }}</h5>
+    </div>
+
+    <div class="col-12 mt-2 pb-2">
+      <div class="row" style="height: 200px">
+        @for (item of items(); track $index) {
+        <div class="col-md-6 col-12 mt-1 mb-1" [@listStaggerAnimation]>
+          <app-list-items [moneyTransition]="item"></app-list-items>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  @if(isLoadingMore()) {
+  <div class="col-12" style="height: 100px">
+    <app-loader [loading]="isLoadingMore()"></app-loader>
+  </div>
+
+  }
+</div>

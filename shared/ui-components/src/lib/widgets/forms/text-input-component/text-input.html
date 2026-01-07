@@ -1,0 +1,50 @@
+<div class="input-text-container">
+  @if(label()){
+  <label [for]="id()" class="form-label">
+    {{ label() | translate }} @if (required()) {
+    <span class="text-danger">*</span>
+    }
+  </label>
+  } @if (multiline()) {
+  <textarea
+    [id]="id()"
+    [name]="name()"
+    [class]="inputClass()"
+    [class.is-invalid]="showErrors() && hasError()"
+    [class.is-valid]="showValid() && isValid()"
+    [rows]="rows()"
+    [cols]="cols()"
+    [placeholder]="placeholder() | translate"
+    [disabled]="disabled()"
+    [readonly]="readonly()"
+    [value]="_value"
+    (input)="onInputChange($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  ></textarea>
+  } @else {
+  <input
+    [autocomplete]="autocomplete()"
+    [id]="id()"
+    [name]="name()"
+    [type]="type()"
+    [class]="inputClass()"
+    [class.is-invalid]="showErrors() && hasError()"
+    [class.is-valid]="showValid() && isValid()"
+    [placeholder]="placeholder() | translate"
+    [disabled]="disabled()"
+    [readonly]="readonly()"
+    [step]="step()"
+    [min]="min()"
+    [max]="max()"
+    [value]="_value"
+    (input)="onInputChange($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  />
+  }@if (showErrors() && hasError()) {
+  <div class="invalid-feedback d-block">
+    {{ getErrorMessage() | translate }}
+  </div>
+  }
+</div>

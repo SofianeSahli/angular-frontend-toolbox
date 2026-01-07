@@ -1,0 +1,129 @@
+/* You can add global styles to this file, and also import other style files */
+/* 🌞 Light Theme */
+:root,
+body[data-bs-theme="light"] {
+  --bs-primary: #9b59b6;
+  --bs-primary-hover: #8844a6; /* darker purple for hover */
+  --bs-secondary: #1abc9c; /* vibrant teal/cyan */
+  --bs-secondary-hover: #17a589;
+  --bs-accent: #00bcd4;
+  --bs-accent-hover: #00a3bf;
+  --bs-navbar-bg: #ede7f6; /* soft lavender gray */
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #1f1f1f;
+  --bs-tertiary-color: #555555;
+  --bs-card-bg: #f8f9fa;
+  --bs-card-bg-alt: #f1f3f5;
+  --bs-card-border-color: #dcdcdc;
+  --bs-card-header-bg: #e9ecef;
+  --bs-card-footer-bg: #e9ecef;
+  --bs-card-color: #1f1f1f;
+  --bs-card-header-color: #333333;
+  --bs-card-footer-color: #555555;
+  --bs-card-box-shadow: rgba(0, 0, 0, 0.08);
+  --bs-card-box-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --bs-success: #2ecc71;
+  --bs-info: #00bcd4;
+  --bs-warning: #f39c12;
+  --bs-danger: #e74c3c;
+  --bs-border-color: #dcdcdc;
+  --scrollbar-track-color: #e0e0e0;
+  --scrollbar-thumb-color: #666;
+  --scrollbar-thumb-hover-color: #444;
+  --bubble-bg: #ffffff;
+  --bubble-border: #333;
+  --bubble-text: #222;
+  --bubble-reply-bg: #f8f9fa; /* reply bubble in light mode */
+}
+
+/* 🌙 Dark Theme */
+body[data-bs-theme="dark"] {
+  --bubble-reply-bg: #2c2c2c; /* slightly lighter than main bubble */
+  --bubble-bg: #2b2b2b;
+  --bubble-border: #555;
+  --bubble-text: #eee;
+  --bs-primary: #8e44ad;
+  --bs-primary-hover: #a055d0;
+  --bs-secondary: #c0392b;
+  --bs-secondary-hover: #d94d40;
+  --bs-accent: #00acc1;
+  --bs-accent-hover: #00b9d8;
+  --bs-navbar-bg: #2b2b3a; /* deep purple gray */
+  --bs-body-bg: #1e1e1e;
+  --bs-body-color: #f5f5f5;
+  --bs-tertiary-color: #aaaaaa;
+  --bs-card-bg: #2a2a2a;
+  --bs-card-bg-alt: #3a3a3a;
+  --bs-card-border-color: #444444;
+  --bs-card-header-bg: #333333;
+  --bs-card-footer-bg: #333333;
+  --bs-card-color: #f5f5f5;
+  --bs-card-header-color: #e0e0e0;
+  --bs-card-footer-color: #cccccc;
+  --bs-card-box-shadow: rgba(255, 255, 255, 0.05);
+  --bs-card-box-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
+  --bs-success: #27ae60;
+  --bs-info: #00acc1;
+  --bs-warning: #d35400;
+  --bs-danger: #c0392b;
+  --bs-border-color: #333333;
+}
+
+/* === Cards === */
+.card {
+  background-color: var(--bs-card-bg);
+  color: var(--bs-card-color);
+  box-shadow: var(--bs-card-box-shadow);
+  border-color: var(--bs-card-border-color);
+}
+
+/* === Buttons === */
+.btn-primary {
+  background-color: var(--bs-primary) !important;
+  border-color: var(--bs-primary) !important;
+  color: #fff !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--bs-primary-hover) !important;
+  border-color: var(--bs-primary-hover) !important;
+}
+
+.btn-secondary {
+  background-color: var(--bs-secondary) !important;
+  border-color: var(--bs-secondary) !important;
+  color: #fff !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+  background-color: var(--bs-secondary-hover) !important;
+  border-color: var(--bs-secondary-hover) !important;
+}
+
+.btn-success {
+  background-color: var(--bs-success) !important;
+  border-color: var(--bs-success) !important;
+  color: #fff !important;
+}
+
+.btn-warning {
+  background-color: var(--bs-warning) !important;
+  border-color: var(--bs-warning) !important;
+  color: #fff !important;
+}
+
+.btn-danger {
+  background-color: var(--bs-danger) !important;
+  border-color: var(--bs-danger) !important;
+  color: #fff !important;
+}
+
+.btn-info {
+  background-color: var(--bs-info) !important;
+  border-color: var(--bs-info) !important;
+  color: #fff !important;
+}

@@ -1,0 +1,27 @@
+<div class="input-text-container">
+  @if(label()){
+  <label [for]="id()" class="form-label">
+    {{ label() | translate }} @if (required()) {
+    <span class="text-danger">*</span>
+    }
+  </label>
+  }
+
+  <input
+    type="date"
+    class="form-control"
+    [class.is-invalid]="showErrors() && hasError()"
+    [class.is-valid]="showValid() && isValid()"
+    [placeholder]="placeholder() | translate"
+    [disabled]="disabled()"
+    [readonly]="readonly()"
+    [id]="id()"
+    [name]="name()"
+  />
+
+  @if (helpText()) {
+  <div class="form-text">{{ helpText() | translate }}</div>
+  } @if (showErrors() && hasError()) {
+  <div class="invalid-feedback">{{ getErrorMessage() | translate }}</div>
+  }
+</div>

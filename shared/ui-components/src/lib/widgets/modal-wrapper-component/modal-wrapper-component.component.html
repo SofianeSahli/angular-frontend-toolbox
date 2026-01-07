@@ -1,0 +1,30 @@
+<div class="modal-dialog m-0">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{ title() }}</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="activeModal.dismiss()"
+      ></button>
+    </div>
+
+    <div class="modal-body">
+      <ng-template #modalContent></ng-template>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        class="btn btn-accent"
+        appRipple
+        (click)="activeModal.dismiss('cancel')"
+      >
+        {{ 'labels.cancel' | translate }}
+      </button>
+      <button class="btn btn-primary" appRipple (click)="onOk()">
+        {{ 'labels.submit' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

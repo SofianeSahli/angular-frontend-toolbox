@@ -1,0 +1,123 @@
+<div class="container py-4">
+  <h3 class="mb-4">
+    <i class="bi-shield-lock me-2"></i>
+    Paramètres de sécurité
+  </h3>
+
+  <!-- Account recovery email -->
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title"><i class="bi-envelope me-2 text-primary"></i> Email de récupération</h5>
+      <p class="card-text text-muted">
+        Cet email est utilisé pour récupérer votre compte en cas de perte d’accès.
+      </p>
+      <div class="input-group">
+        <input
+          type="email"
+          class="form-control"
+          placeholder="exemple@mail.com"
+          [(ngModel)]="recoveryEmail"
+        />
+        <button class="btn btn-primary" style="width: 125px;"  (click)="saveRecoveryEmail()">
+          Mettre à jour
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phone for SMS 2FA -->
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title"><i class="bi-phone me-2 text-success"></i> Authentification à deux facteurs (SMS)</h5>
+      <p class="card-text text-muted">
+        Activez la double authentification par SMS pour renforcer la sécurité de votre compte.
+      </p>
+      <div class="d-flex align-items-center input-group">
+        <input
+          type="tel"
+          class="form-control"
+          placeholder="+216 99 999 999"
+          [(ngModel)]="phoneNumber"
+        />
+        <button class="btn btn-success" style="width: 125px;" (click)="enableSms2FA()">
+          Activer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Authenticator App -->
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title"><i class="bi-qr-code-scan me-2 text-info"></i> Application d’authentification</h5>
+      <p class="card-text text-muted">
+        Utilisez une application comme Google Authenticator ou Authy pour sécuriser vos connexions.
+      </p>
+      <button class="btn btn-info" (click)="openAppAuthModal(appAuthModal)">
+        Configurer
+      </button>
+    </div>
+  </div>
+
+  <!-- Password change -->
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title"><i class="bi-lock me-2 text-warning"></i> Changer le mot de passe</h5>
+      <p class="card-text text-muted">
+        Mettez à jour régulièrement votre mot de passe pour protéger votre compte.
+      </p>
+      <button class="btn btn-warning" (click)="openPasswordModal()">
+        Modifier le mot de passe
+      </button>
+    </div>
+  </div>
+
+  <!-- Account activity -->
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title"><i class="bi-clock-history me-2 text-secondary"></i> Activité du compte</h5>
+      <p class="card-text text-muted">
+        Consultez les connexions récentes et les appareils autorisés.
+      </p>
+      <button class="btn btn-secondary" (click)="openActivityModal(activityModal)">
+        Voir l’activité
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<ng-template #appAuthModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Configurer l’application d’authentification</h5>
+    <button class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <p>Scannez ce QR code avec votre application d’authentification.</p>
+    <div class="text-center my-3">
+      <img src="/assets/qr-example.png" alt="QR Code" class="img-fluid" style="max-width: 180px" />
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+  </div>
+</ng-template>
+
+
+
+<ng-template #activityModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Activité récente</h5>
+    <button class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <ul class="list-group">
+      <li class="list-group-item">📱 Connexion depuis iPhone 15 — Tunis (08 Oct, 20:34)</li>
+      <li class="list-group-item">💻 Connexion depuis Chrome — Desktop (07 Oct, 18:10)</li>
+      <li class="list-group-item">🌍 Nouvelle localisation détectée — Sousse (03 Oct, 12:42)</li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+  </div>
+</ng-template>

@@ -1,0 +1,104 @@
+{
+  "name": "expenses-management",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/expenses-management/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/expenses-management",
+        "index": "apps/expenses-management/src/index.html",
+        "main": "apps/expenses-management/src/main.ts",
+        "polyfills": [
+          "zone.js"
+        ],
+        "tsConfig": "apps/expenses-management/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/expenses-management/public"
+          }
+        ],
+        "styles": [
+          "bootstrap/dist/css/bootstrap.min.css",
+          "apps/expenses-management/src/styles.scss",
+          "node_modules/bootstrap-icons/font/bootstrap-icons.css"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "shared/ui-components/src/lib"
+          ]
+        }
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/launcher/src/environments/environment.ts",
+              "with": "apps/launcher/src/environments/environment.prod.ts"
+            }
+          ],
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "expenses-management:build:production"
+        },
+        "development": {
+          "buildTarget": "expenses-management:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "expenses-management:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "expenses-management:build",
+        "spa": true
+      }
+    }
+  }
+}

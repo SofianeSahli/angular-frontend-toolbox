@@ -1,0 +1,121 @@
+<div class="cropper-container">
+  <!-- Top Thumbnails -->
+  <div class="d-flex flex-wrap mb-2 gap-1 justify-content-center">
+    @for(preview of previews; track preview; let i = $index ){
+    <div
+      tabIndex="0"
+      role="button"
+      (keydown.enter)="openImage(i)"
+      class="thumbnail"
+      [class.active]="i === currentIndex"
+      (click)="openImage(i)"
+    >
+      <img [src]="preview" />
+    </div>
+    }
+  </div>
+
+  <div #canvasWrapper class="canvas-wrapper">
+    <canvas #canvasContainer></canvas>
+  </div>
+
+  <!-- Transform Controls -->
+  <div class="mt-2 d-flex justify-content-center gap-1 flex-wrap">
+    <button class="btn btn-outline-secondary" (click)="rotateLeft()">⟲</button>
+    <button class="btn btn-outline-secondary" (click)="rotateRight()">⟳</button>
+    <button class="btn btn-outline-secondary" (click)="flipH()">⇋</button>
+    <button class="btn btn-outline-secondary" (click)="flipV()">⇵</button>
+    <button class="btn btn-outline-secondary" (click)="zoomIn()">＋</button>
+    <button class="btn btn-outline-secondary" (click)="zoomOut()">－</button>
+    <button class="btn btn-outline-secondary" (click)="addText('Hello')">
+      {{ 'labels.image_add_text' | translate }}
+    </button>
+    <button class="btn btn-outline-secondary" (click)="addOverlayImage()">
+      {{ 'labels.image_add_image' | translate }}
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="mt-2 d-flex flex-wrap gap-2 justify-content-center">
+    <input
+      type="color"
+      (input)="updateTextStyle({ fill: $any($event.target).value })"
+    />
+    <input
+      type="number"
+      min="8"
+      max="72"
+      value="24"
+      (input)="updateTextStyle({ fontSize: +$any($event.target).value })"
+    />
+
+    <button
+      class="btn btn-sm btn-outline-secondary"
+      (click)="updateTextStyle({ fontWeight: 'bold' })"
+    >
+      B
+    </button>
+    <button
+      class="btn btn-sm btn-outline-secondary"
+      (click)="updateTextStyle({ fontStyle: 'italic' })"
+    >
+      <i>I</i>
+    </button>
+    <button
+      class="btn btn-sm btn-outline-secondary"
+      (click)="updateTextStyle({ underline: true })"
+    >
+      U
+    </button>
+
+    <label
+      >{{ 'labels.brightness' | translate
+      }}<input
+        type="range"
+        [(ngModel)]="brightness"
+        min="-1"
+        max="1"
+        step="0.01"
+        (input)="applyFilter()"
+    /></label>
+    <label
+      >{{ 'labels.contrast' | translate
+      }}<input
+        type="range"
+        [(ngModel)]="contrast"
+        min="-1"
+        max="1"
+        step="0.01"
+        (input)="applyFilter()"
+    /></label>
+
+    <label
+      >{{ 'labels.saturation' | translate
+      }}<input
+        type="range"
+        [(ngModel)]="saturation"
+        min="-1"
+        max="1"
+        step="0.01"
+        (input)="applyFilter()"
+    /></label>
+    <label
+      >Hue<input
+        type="range"
+        [(ngModel)]="hue"
+        min="0"
+        max="6.28"
+        step="0.01"
+        (input)="applyFilter()"
+    /></label>
+    <label
+      >Blur<input
+        type="range"
+        [(ngModel)]="blur"
+        min="0"
+        max="1"
+        step="0.01"
+        (input)="applyFilter()"
+    /></label>
+  </div>
+</div>

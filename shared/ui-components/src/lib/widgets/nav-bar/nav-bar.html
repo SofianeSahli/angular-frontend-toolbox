@@ -1,0 +1,35 @@
+<div class="main-navbar d-flex justify-content-evenly gap-2">
+  <div
+    class="main-navbar-dark-light"
+    (click)="toggleTheme()"
+    [title]="isDarkMode ? 'Light Mode' : 'Dark Mode'"
+  >
+    <i
+      class="bi"
+      style="font-size: larger"
+      [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"
+    >
+    </i>
+  </div>
+
+  <ul
+    class="main-navbar-list-items d-flex flex-grow-1 flex-shrink-1 justify-content-center gap-2"
+  >
+    @for(route of ROUTES(); track route.url) {
+    <li>
+      <a
+        style="margin: auto auto auto 32px"
+        class="main-navbar-list-item d-flex justify-content-center flex-column"
+        [routerLink]="route.url"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: route.url === '/dashboard' }"
+      >
+        <i [class]="route.icone"></i>
+        <span>{{ route.title | translate }}</span>
+      </a>
+    </li>
+    }
+  </ul>
+
+
+</div>

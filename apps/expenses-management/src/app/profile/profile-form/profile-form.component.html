@@ -1,0 +1,57 @@
+<app-loader [loading]="store.isLoading()"></app-loader>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-7 card p-0">
+    <div class="card-header">
+      <h5 class="card-title">{{ 'labels.profile_information' | translate }}</h5>
+    </div>
+    <form
+      [formGroup]="profileForm"
+      class="row justify-content-center card-body"
+    >
+      <div class="col-12 col-md-6">
+        <lib-text-input
+          [label]="'labels.first_name'"
+          [placeholder]="'placeholder.first_name'"
+          formControlName="first_name"
+          [required]="true"
+          [showErrors]="profileForm.get('first_name')?.touched ?? false"
+        />
+      </div>
+      <div class="col-12 col-md-6">
+        <lib-text-input
+          [label]="'labels.last_name'"
+          [placeholder]="'placeholder.last_name'"
+          formControlName="last_name"
+          [required]="true"
+          [showErrors]="profileForm.get('last_name')?.touched ?? false"
+        />
+      </div>
+      <div class="col-12 col-md-6">
+        <lib-text-input
+          [label]="'labels.phone_number'"
+          [placeholder]="'placeholder.phone_number'"
+          formControlName="phone_number"
+          [required]="true"
+          [showErrors]="profileForm.get('phone_number')?.touched ?? false"
+        />
+      </div>
+      <div class="col-12 col-md-6">
+        <lib-text-input
+          [label]="'labels.email'"
+          [placeholder]="'placeholder.email'"
+          formControlName="email"
+          [type]="'text'"
+          [required]="true"
+          [formControl]="mailControl"
+          [showErrors]="profileForm.get('email')?.touched ?? false"
+        />
+      </div>
+    </form>
+    <div class="card-footer d-flex justify-content-end">
+      <button class="btn btn-primary" (click)="submit()">
+        {{ 'labels.submit' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

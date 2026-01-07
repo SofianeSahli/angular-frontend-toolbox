@@ -1,0 +1,94 @@
+<form [formGroup]="form" class="row">
+  <div class="col-12">
+    <lib-switch-buttons
+      [label]="'labels.expenses_nature'"
+      [options]="TYPE_OPTIONS"
+      [value]="form.get('type')?.value || ''"
+      [required]="true"
+      formControlName="type"
+    />
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <lib-text-input
+        [label]="'labels.min_amount'"
+        [type]="'number'"
+        [placeholder]="'placeholder.min_amount'"
+        formControlName="min_amount"
+        [required]="true"
+        [step]="0.01"
+        [min]="0.01"
+        [formControl]="form.controls.min_amount"
+        [showErrors]="form.get('min_amount')?.touched ?? false"
+      />
+    </div>
+    <div class="col-12 col-lg-6">
+      <lib-text-input
+        [label]="'labels.max_amount'"
+        [type]="'number'"
+        [placeholder]="'placeholder.max_amount'"
+        formControlName="max_amount"
+        [required]="true"
+        [step]="0.01"
+        [min]="0.01"
+        [formControl]="form.controls.max_amount"
+        [showErrors]="form.get('max_amount')?.touched ?? false"
+      />
+    </div>
+  </div>
+  <div class="row">
+    @if (typeValue() === '0' || typeValue() === '1') {
+
+    <div class="col-12 col-lg-6">
+      <lib-select
+        [label]="'labels.categorie'"
+        [options]="filteredCategories()"
+        [placeholder]="'placeholder.categorie'"
+        formControlName="categorie"
+        [required]="true"
+        [formControl]="form.controls.categorie"
+        [showErrors]="form.get('categorie')?.touched ?? false"
+      />
+    </div>
+    } @if (categorieValue()) {
+    <div class="col-12 col-lg-6">
+      <lib-select
+        [label]="'labels.categorie'"
+        [multiple]="true"
+        [options]="childCategories()"
+        [placeholder]="'placeholder.categorie'"
+        formControlName="categorie_id"
+        [required]="true"
+        [formControl]="form.controls.categorie_id"
+        [showErrors]="form.get('categorie_id')?.touched ?? false"
+      />
+    </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <lib-date-input
+        [id]="'start_date'"
+        [label]="'labels.start_date'"
+        [placeholder]="'placeholder.start_date'"
+        formControlName="start_date"
+        [formControl]="form.controls.start_date"
+        [required]="true"
+        [showErrors]="form.controls.start_date.touched"
+      ></lib-date-input>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <lib-date-input
+        [id]="'end_date'"
+        [label]="'labels.end_date'"
+        [placeholder]="'placeholder.end_date'"
+        formControlName="end_date"
+        [formControl]="form.controls.end_date"
+        [required]="true"
+        [showErrors]="form.controls.end_date.touched"
+      ></lib-date-input>
+    </div>
+  </div>
+</form>

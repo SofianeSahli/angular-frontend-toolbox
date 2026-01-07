@@ -1,0 +1,31 @@
+<div class="switch-buttons">
+  @if(label()){
+  <label [for]="id()" class="form-label">{{ label() | translate }}</label>}
+  <div class="d-flex flex-wrap justify-content-evenly gap-1" role="group">
+    @for (option of options(); track option.value) {
+    <div class="flex-grow-1 flex-shrink-1 d-flex justify-content-center">
+      <input
+        type="radio"
+        class="btn-check"
+        [name]="name()"
+        [id]="getId(option.value)"
+        [value]="option.value"
+        [checked]="value() === option.value"
+        [disabled]="option.disabled || disabled()"
+        (change)="onValueChange(option.value)"
+      />
+      <label
+        class="btn w-100"
+        [class]="getButtonClass(option.value)"
+        [for]="getId(option.value)"
+      >
+        {{ option.label | translate }}
+      </label>
+    </div>
+
+    }
+  </div>
+  @if ( hasError()) {
+  <div class="text-danger small mt-1">{{ getErrorMessage() }}</div>
+  }
+</div>

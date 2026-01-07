@@ -1,0 +1,24 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{"errors.oups" | translate}}</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="modal.dismiss()"
+  ></button>
+</div>
+@if(errors() !== null && errors()!.length > 0){ @for ( error of errors(); track
+error) {
+<div class="modal-body">
+  <ul>
+    <li>{{ error | translate }}</li>
+  </ul>
+</div>
+} } @else{
+<div class="modal-body">
+  <p>{{ "errors.unknow_error" | translate}}</p>
+</div>
+}
+<div class="modal-footer d-flex justify-content-center">
+  <button class="btn btn-danger" (click)="modal.close()">Close</button>
+</div>

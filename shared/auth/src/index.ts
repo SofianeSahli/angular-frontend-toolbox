@@ -1,0 +1,10 @@
+export * from './lib/auth/auth.routes';
+export { authRoutes } from './lib/auth/auth.routes';
+export * from './lib/auth/auth.signals';
+export * from './lib/auth/login/login';
+export * from './lib/auth/register/register';
+export * from './lib/auth/security-settings/security-settings.component';
+export * from './lib/auth/security-settings/update-password-form/update-password-form.component';
+export * from './lib/services/auth.config';
+export * from './lib/services/http-errors-interceptor';
+export * from './lib/services/http-token-interceptor';

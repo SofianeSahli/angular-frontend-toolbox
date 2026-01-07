@@ -1,0 +1,11 @@
+<div class="toast--container">
+  @for( toast of toasts() ; track toast.message ) {
+  <div
+    class="toast--message toast--message--{{ toast.type }}"
+    role="alert"
+    [@fadeInOut]
+  >
+    {{ toast.message }}
+  </div>
+  }
+</div>

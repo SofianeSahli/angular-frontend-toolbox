@@ -1,0 +1,43 @@
+<div class="select-container">
+  @if(label()){
+  <label [for]="id()" class="form-label">
+    {{ label() | translate }} @if (required()) {
+    <span class="text-danger">*</span>
+    }
+  </label>
+  }
+  <select
+    [id]="id()"
+    [name]="name()"
+    [class]="selectClass()"
+    [class.is-invalid]="showErrors() && hasError()"
+    [class.is-valid]="showValid() && isValid()"
+    [multiple]="multiple()"
+    [size]="multiple() ? (size() || 4) : null"
+    [disabled]="disabled()"
+    [value]="_value"
+    (change)="onValueChange($event)"
+  >
+    @if (placeholder() && !multiple()) {
+    <option value="">{{ placeholder() | translate }}</option>
+    } @for (option of options(); track trackByValue(option.value)) {
+    <option
+      [value]="option.value"
+      [disabled]="option.disabled"
+      [selected]="isSelected(option.value)"
+    >
+      {{ option.label | translate }}
+    </option>
+    } @if (options().length === 0 && showEmptyState()) {
+    <option value="" disabled>{{ emptyStateText() | translate }}</option>
+    }
+  </select>
+
+  @if (showErrors() && hasError()) {
+  <div class="alert alert-danger mt-2">{{ getErrorMessage() | translate }}</div>
+  } @if (multiple() && selectedCount() > 0) {
+  <div class="form-text">
+    {{ 'messages.selected_count' | translate: { count: selectedCount() } }}
+  </div>
+  }
+</div>

@@ -1,0 +1,30 @@
+nav {
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+  &.backdrop-blur {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .nav-link,
+  .btn {
+    transition: all 0.3s ease;
+
+    i {
+      min-width: 1.5rem; // Ensure icons have consistent width
+    }
+
+    span {
+      transition: opacity 0.3s ease;
+      overflow: hidden;
+    }
+  }
+
+  .nav-link.active {
+    font-weight: 500;
+  }
+
+  // Improve text contrast
+  .text {
+    color: var(--bs-body-color);
+  }
+}
