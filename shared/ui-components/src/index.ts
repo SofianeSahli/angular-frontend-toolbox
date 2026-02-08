@@ -21,4 +21,4 @@ export * from './lib/widgets/ripple.directive'
 export * from './lib/widgets/toast/toast'
 export * from './lib/widgets/toast/toast.service'
 export * from './lib/widgets/top-navbar/app-navbar'
-
+export * from './lib/widgets/drawer-header/drawer-header'

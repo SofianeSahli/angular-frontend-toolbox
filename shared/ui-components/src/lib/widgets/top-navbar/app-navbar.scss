@@ -1,6 +1,28 @@
-nav {
+.navbar {
+  height: 75px;
+  width: 100vw;
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: flex-start;
+  -webkit-backdrop-filter: blur(10px);
+  transition: padding 0.3s;
+  overflow: hidden;
+}
+.navbar.collapsed {
+  padding-left: 16rem;
+}
+.drawer-body {
+  transition: width 0.3s;
+  border-right: 1px solid var(--bs-border-color);
+  width: 0;
+  z-index: 2;
+  position: absolute;
+  top: 0;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   height: 100vh;
+  overflow: hidden;
+  width: 16rem;
+
   &.backdrop-blur {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -10,9 +32,8 @@ nav {
     transition: all 0.3s ease;
 
     i {
-      min-width: 1.5rem; // Ensure icons have consistent width
+      min-width: 1.5rem;
     }
-
     span {
       transition: opacity 0.3s ease;
       overflow: hidden;
@@ -23,8 +44,28 @@ nav {
     font-weight: 500;
   }
 
-  // Improve text contrast
   .text {
     color: var(--bs-body-color);
+  }
+  .footer.collapsed {
+    padding: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .drawer-body.collapsed {
+    width: 40px;
+  }
+  .navbar {
+    margin-left: 40px;
+  }
+}
+@media (max-width: 767.98px) {
+  .drawer-body.collapsed {
+    width: 0;
+  }
+
+  .navbar {
+    margin-left: 0;
   }
 }

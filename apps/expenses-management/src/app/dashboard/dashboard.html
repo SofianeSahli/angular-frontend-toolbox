@@ -1,15 +1,14 @@
 @if(authSignal.profile?.()){
-<div class="d-flex">
-  <div style="max-width: 80px; z-index: 8900">
-    <lib-app-navbar-top
-      [isCollapsed]="drawerCollapsed()"
-      [routes]="routingsLists"
-    ></lib-app-navbar-top>
-  </div>
+<div style="max-width: 80px; z-index: 8900">
+  <lib-app-navbar-top
+    [user]="authSignal.profile?.() ?? null"
+    [isCollapsed]="drawerCollapsed()"
+    [routes]="routingsLists"
+  ></lib-app-navbar-top>
+</div>
 
-  <div style="height: 100vh; overflow-x: hidden; overflow-y: scroll">
-    <router-outlet></router-outlet>
-  </div>
+<div class="content p-2">
+  <router-outlet></router-outlet>
 </div>
 }@else {
 <app-profile-form></app-profile-form>

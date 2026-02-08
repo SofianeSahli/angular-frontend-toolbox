@@ -19,14 +19,18 @@ export class Dashboard {
     {
       label: 'routings.settings',
       url: '/dashboard/settings',
+      icon: "bi bi-gear  fs-6"
+
     },
     {
       label: 'routings.summary',
       url: '/dashboard',
+      icon: 'bi bi-bar-chart  fs-6'
     },
     {
       label: 'routings.listes',
       url: '/dashboard/lists',
+      icon: 'bi bi-list-ul  fs-6'
     }
   ];
 }
