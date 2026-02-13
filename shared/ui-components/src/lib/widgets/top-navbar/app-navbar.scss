@@ -11,46 +11,85 @@
 .navbar.collapsed {
   padding-left: 16rem;
 }
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
 .drawer-body {
-  transition: width 0.3s;
-  border-right: 1px solid var(--bs-border-color);
-  width: 0;
-  z-index: 2;
-  position: absolute;
+  position: fixed;
   top: 0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  left: 0;
   height: 100vh;
-  overflow: hidden;
-  width: 16rem;
 
-  &.backdrop-blur {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
+  width: 16rem;
+  overflow: hidden;
+
+  transition: width 0.3s ease, transform 0.3s ease;
+
+  /* Bootstrap variables */
+  background-color: var(--bs-body-bg);
+  border-right: 1px solid var(--bs-border-color);
+  box-shadow: var(--bs-box-shadow-sm);
+
+  z-index: 1050;
+
+  /* Slight glass effect */
+  backdrop-filter: blur(6px);
+
+  /* Better contrast */
+  color: var(--bs-body-color);
+
   .nav-link,
   .btn {
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 
     i {
       min-width: 1.5rem;
+      color: inherit;
     }
+
     span {
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease;
       overflow: hidden;
     }
   }
 
-  .nav-link.active {
-    font-weight: 500;
+  .nav-link {
+    color: var(--bs-secondary-color);
+
+    &:hover {
+      background-color: var(--bs-tertiary-bg);
+      color: var(--bs-body-color);
+    }
+
+    &.active {
+      font-weight: 500;
+      background-color: var(--bs-primary-bg-subtle);
+      color: var(--bs-primary);
+    }
+  }
+
+  .btn {
+    border: 1px solid var(--bs-border-color);
+
+    &:hover {
+      background-color: var(--bs-tertiary-bg);
+    }
   }
 
   .text {
     color: var(--bs-body-color);
   }
+
   .footer.collapsed {
     padding: 0;
   }
 }
+
 
 @media (min-width: 768px) {
   .drawer-body.collapsed {
