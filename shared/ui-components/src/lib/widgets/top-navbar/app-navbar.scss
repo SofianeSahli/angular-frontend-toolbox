@@ -1,30 +1,110 @@
-nav {
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+.navbar {
+  height: 75px;
+  width: 100vw;
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: flex-start;
+  -webkit-backdrop-filter: blur(10px);
+  transition: padding 0.3s;
+  overflow: hidden;
+}
+.navbar.collapsed {
+  padding-left: 16rem;
+}
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+.drawer-body {
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 100vh;
-  &.backdrop-blur {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
+
+  width: 16rem;
+  overflow: hidden;
+
+  transition: width 0.3s ease, transform 0.3s ease;
+
+  /* Bootstrap variables */
+  background-color: var(--bs-body-bg);
+  border-right: 1px solid var(--bs-border-color);
+  box-shadow: var(--bs-box-shadow-sm);
+
+  z-index: 1050;
+
+  /* Slight glass effect */
+  backdrop-filter: blur(6px);
+
+  /* Better contrast */
+  color: var(--bs-body-color);
+
   .nav-link,
   .btn {
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 
     i {
-      min-width: 1.5rem; // Ensure icons have consistent width
+      min-width: 1.5rem;
+      color: inherit;
     }
 
     span {
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease;
       overflow: hidden;
     }
   }
 
-  .nav-link.active {
-    font-weight: 500;
+  .nav-link {
+    color: var(--bs-secondary-color);
+
+    &:hover {
+      background-color: var(--bs-tertiary-bg);
+      color: var(--bs-body-color);
+    }
+
+    &.active {
+      font-weight: 500;
+      background-color: var(--bs-primary-bg-subtle);
+      color: var(--bs-primary);
+    }
   }
 
-  // Improve text contrast
+  .btn {
+    border: 1px solid var(--bs-border-color);
+
+    &:hover {
+      background-color: var(--bs-tertiary-bg);
+    }
+  }
+
   .text {
     color: var(--bs-body-color);
+  }
+
+  .footer.collapsed {
+    padding: 0;
+  }
+}
+
+
+@media (min-width: 768px) {
+  .drawer-body.collapsed {
+    width: 40px;
+  }
+  .navbar {
+    margin-left: 40px;
+  }
+}
+@media (max-width: 767.98px) {
+  .drawer-body.collapsed {
+    width: 0;
+  }
+
+  .navbar {
+    margin-left: 0;
   }
 }

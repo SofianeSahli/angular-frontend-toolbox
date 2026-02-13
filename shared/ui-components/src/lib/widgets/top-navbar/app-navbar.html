@@ -1,120 +1,69 @@
-<nav
-  (mouseenter)="isCollapsed.set(false)"
-  (mouseleave)="isCollapsed.set(true)"
-  class="d-flex flex-column flex-shrink-0 bg-opacity-75 backdrop-blur drawer-body"
-  [class.drawer-collapsed]="isCollapsed()"
-  [style.width]="isCollapsed() ? '4rem' : '16rem'"
-  style="
-    transition: width 0.3s ease;
-    border-right: 1px solid var(--bs-border-color);
-  "
->
-  <!-- Brand/Header -->
-  <div class="p-3 border-bottom">
-    <a
-      class="navbar-brand fw-bold text d-flex align-items-center text-decoration-none text-truncate"
-      href="/dashboard"
-      [class.justify-content-center]="isCollapsed()"
-      [title]="isCollapsed() ? 'Gestion Argent' : ''"
-    >
-      <i class="bi bi-wallet2 fs-5"></i>
-      <span
-        class="ms-2"
-        [class.d-none]="isCollapsed()"
-        style="transition: opacity 0.3s ease"
-      >
-        Gestion Argent
+<div class="navbar border-bottom" [class.collapsed]="!isCollapsed()">
+
+  <button class="btn d-md-none" type="button" (click)="toggleCollapse()">
+    <i class="bi bi-list fs-5"></i>
+  </button>
+  <a class="navbar-brand fw-bold text d-flex align-items-center text-decoration-none text-truncate" href="/dashboard"
+    [class.justify-content-center]="isCollapsed()" [title]="'Gestion Argent'">
+    <span class="ms-2" style="transition: opacity 0.3s ease">
+      Gestion Argent
+    </span>
+  </a>
+</div>
+<div 
+  class="drawer-backdrop d-md-none"
+  *ngIf="!isCollapsed()"
+  (click)="toggleCollapse()">
+</div>
+<div class="d-flex flex-column flex-shrink-0 bg-opacity-75 drawer-body"
+  [class.drawer-collapsed]="isCollapsed()" [class.collapsed]="isCollapsed()">
+
+  <!-- Collapse Toggle -->
+  <button class="btn btn-outline-secondary  d-flex align-items-center justify-content-center"
+    style="margin-left: auto; width: 100%;" (click)="toggleCollapse()">
+    <i class="bi fs-6" [ngClass]="isCollapsed() ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+  </button>
+  @if(!isCollapsed()){
+  <lib-drawer-header [user]="user()"></lib-drawer-header>
+  }
+
+  <div class="flex-grow-1 overflow-hidden" style="margin-top: 20%">
+    @for(route of routes(); track route.url){
+    <a [ngClass]="{ 'justify-content-center': isCollapsed() }"
+      class="nav-link d-flex align-items-center justify-content-center rounded" style="padding: 8px 0"
+      [class.active]="isActive(route.url)" [class.btn]="isActive(route.url)" [class.btn-primary]="isActive(route.url)"
+      [class.text-white]="isActive(route.url)" [class.text-muted]="!isActive(route.url)"
+      [class.border]="!isActive(route.url)" [class.border-primary]="!isActive(route.url)" [routerLink]="route.url"
+      [routerLinkActive]="['active']" [title]="isCollapsed() ? (route.label) : ''">
+      <i [class]="route.icon" class="bi fs-6"></i>
+      <span class="d-md-inline" [class.d-md-none]="isCollapsed()"
+        style="transition: opacity 0.3s ease; white-space: nowrap">
+        {{ route.label }}
       </span>
     </a>
-  </div>
-
-  <!-- Navigation Links -->
-  <div class="flex-grow-1 p-3 overflow-hidden">
-    <ul class="nav flex-column gap-2">
-      @for(route of routes(); track route.url){
-      <li class="nav-item">
-        <a
-          class="nav-link d-flex align-items-center px-3 py-2 rounded"
-          [class.active]="isActive(route.url)"
-          [class.btn]="isActive(route.url)"
-          [class.btn-primary]="isActive(route.url)"
-          [class.text-white]="isActive(route.url)"
-          [class.text-muted]="!isActive(route.url)"
-          [class.border]="!isActive(route.url)"
-          [class.border-primary]="!isActive(route.url)"
-          [routerLink]="route.url"
-          [routerLinkActive]="['active']"
-          [title]="isCollapsed() ? (route.label) : ''"
-        >
-          <i class="bi fs-6 me-0 me-md-2"></i>
-          <span
-            class="d-none d-md-inline"
-            [class.d-md-none]="isCollapsed()"
-            style="transition: opacity 0.3s ease; white-space: nowrap"
-          >
-            {{ route.label }}
-          </span>
-        </a>
-      </li>
-      }
-    </ul>
+    }
   </div>
 
   <!-- Footer Buttons -->
-  <div class="p-3 border-top">
+  <div class="footer border-top">
     <div class="d-flex flex-column gap-2">
       <!-- Theme Toggle -->
-      <button
-        class="btn btn-primary d-flex align-items-center"
-        [class.justify-content-center]="isCollapsed()"
-        [class.justify-content-start]="!isCollapsed()"
-        (click)="toggleTheme()"
-        [title]="isCollapsed() ? (isDarkMode ? 'Light Mode' : 'Dark Mode') : ''"
-      >
-        <i
-          class="bi fs-6"
-          [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"
-        ></i>
-        <span
-          class="d-none d-md-inline"
-          [class.d-md-none]="isCollapsed()"
-          style="white-space: nowrap"
-        >
+      <button class="btn btn-primary d-flex align-items-center" [class.justify-content-center]="isCollapsed()"
+        [class.justify-content-start]="!isCollapsed()" (click)="toggleTheme()"
+        [title]="isCollapsed() ? (isDarkMode ? 'Light Mode' : 'Dark Mode') : ''">
+        <i class="bi fs-6" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+        <span [class.d-md-none]="isCollapsed()" style="white-space: nowrap">
           {{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}
         </span>
       </button>
 
       <!-- Logout -->
-      <button
-        class="btn btn-primary d-flex align-items-center"
-        [class.justify-content-center]="isCollapsed()"
-        [class.justify-content-start]="!isCollapsed()"
-        (click)="logOutClicked.emit()"
-        [title]="isCollapsed() ? 'Logout' : ''"
-      >
+      <button class="btn btn-primary d-flex align-items-center" [class.justify-content-center]="isCollapsed()"
+        [class.justify-content-start]="!isCollapsed()" (click)="logOutClicked.emit()"
+        [title]="isCollapsed() ? 'Logout' : ''">
         <i class="bi bi-box-arrow-right fs-6"></i>
-        <span
-          class="d-none d-md-inline"
-          [class.d-md-none]="isCollapsed()"
-          style="white-space: nowrap"
-        >
-          Logout
-        </span>
-      </button>
-
-      <!-- Collapse Toggle -->
-      <button
-        class="btn btn-outline-secondary mt-3 d-flex align-items-center"
-        [class.justify-content-center]="isCollapsed()"
-        [class.justify-content-start]="!isCollapsed()"
-        (click)="toggleCollapse()"
-        [title]="isCollapsed() ? 'Expand' : 'Collapse'"
-      >
-        <i
-          class="bi fs-6"
-          [ngClass]="isCollapsed() ? 'bi-chevron-right' : 'bi-chevron-left'"
-        ></i>
+        <span style="white-space: nowrap"> Logout </span>
       </button>
     </div>
   </div>
-</nav>
+</div>
