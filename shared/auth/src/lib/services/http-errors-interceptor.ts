@@ -4,16 +4,15 @@ import {
   HttpInterceptorFn,
   HttpRequest,
 } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ErrorAlert } from '@shared/ui-components';
+import { inject, signal } from '@angular/core';
+import { GlobalErrorModalService } from '@shared/ui-components';
 import { tap } from 'rxjs';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ) => {
-  const modalService = inject(NgbModal);
+  const errorsService = inject(GlobalErrorModalService);
 
   return next(req).pipe(
     tap({
@@ -51,14 +50,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (
           messages.push('An unknown error occurred.');
         }
 
-
-        const modalRef = modalService.open(ErrorAlert, {
-          centered: true,
-          size: 'md',
-          backdrop: 'static',
-        });
-
-        modalRef.componentInstance.errors.set(messages);
+        errorsService.show(messages)
       },
     })
   );
