@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, effect, forwardRef, inject, input, output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, effect, forwardRef, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -6,6 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'lib-date-input',
   imports: [TranslatePipe],
   templateUrl: './date-input-component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

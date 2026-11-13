@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UpdatePasswordFormComponent } from './update-password-form/update-password-form.component';
@@ -9,6 +9,7 @@ import { AppModalWrapperComponent } from '@shared/ui-components';
   imports: [FormsModule],
   selector: 'app-security-settings',
   templateUrl: './security-settings.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./security-settings.component.scss'],
 })
 export class SecuritySettingsComponent implements OnInit {

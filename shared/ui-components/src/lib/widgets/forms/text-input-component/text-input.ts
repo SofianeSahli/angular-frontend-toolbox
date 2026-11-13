@@ -1,4 +1,4 @@
-import { Component, forwardRef, input, OnChanges, output, SimpleChanges } from '@angular/core';
+import { Component, forwardRef, input, OnChanges, output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -7,6 +7,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [TranslatePipe],
   templateUrl: './text-input.html',
   styleUrl: './text-input.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -1,12 +1,13 @@
-import { CommonModule } from '@angular/common';
-import { Component, effect, inject, input, signal } from '@angular/core';
+
+import { Component, effect, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Chart, ChartConfiguration, ChartData } from 'chart.js';
 
 @Component({
   selector: 'app-bar-chart',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './bar-chart.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './bar-chart.scss',
 })
 export class BarChart {

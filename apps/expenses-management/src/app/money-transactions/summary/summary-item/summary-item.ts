@@ -1,11 +1,12 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-summary-item',
   imports: [TranslatePipe, CurrencyPipe],
   templateUrl: './summary-item.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './summary-item.scss',
 })
 export class SummaryItem {

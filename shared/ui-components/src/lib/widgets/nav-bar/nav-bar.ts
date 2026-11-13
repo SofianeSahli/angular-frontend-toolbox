@@ -6,7 +6,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgbCollapseModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
@@ -18,6 +18,7 @@ import { ThemeService } from '../../utils/display-mode.service';
   imports: [RouterModule, CommonModule, TranslateModule, NgbCollapseModule],
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [
     trigger('slideInOut', [
       state('out', style({ width: '0px', padding: '0' })),

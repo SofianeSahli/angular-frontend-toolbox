@@ -1,6 +1,6 @@
-import { Component, inject, OnChanges, OnInit } from '@angular/core';
+import { Component, inject, OnChanges, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FieldType, FormlyModule } from '@ngx-formly/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppModalWrapperComponent } from '../../modal-wrapper-component/modal-wrapper-component.component';
@@ -29,10 +29,10 @@ export interface FileModel {
   imports: [
     FormsModule,
     FormlyModule,
-    CommonModule,
     TranslatePipe,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [
     trigger('fadeTranslate', [
       transition(':enter', [

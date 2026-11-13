@@ -1,4 +1,4 @@
-import { Component, effect, inject, input } from '@angular/core';
+import { Component, effect, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Chart, ChartConfiguration } from 'chart.js/auto';
 
@@ -6,6 +6,7 @@ import { Chart, ChartConfiguration } from 'chart.js/auto';
   selector: 'app-chart-item',
   imports: [],
   templateUrl: './chart-item.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './chart-item.scss',
 })
 export class ChartItem {

@@ -1,4 +1,4 @@
-import { Component, forwardRef, input, OnChanges, output, SimpleChanges } from '@angular/core';
+import { Component, forwardRef, input, OnChanges, output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { SwitchOption } from '../switch-buttons/switch-buttons';
@@ -8,6 +8,7 @@ import { SwitchOption } from '../switch-buttons/switch-buttons';
   imports: [TranslatePipe],
   templateUrl: './select-component.html',
   styleUrl: './select-component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

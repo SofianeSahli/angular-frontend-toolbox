@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DateInputComponent, dateRangeValidator, minDateValidator, SwitchButtons } from '@shared/ui-components';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { withSummary } from '../../state/summary/summary.signals';
   selector: 'app-date-range',
   imports: [DateInputComponent, ReactiveFormsModule, SwitchButtons],
   templateUrl: './date-range.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './date-range.scss',
 })
 export class DateRange implements OnInit, OnDestroy {

@@ -1,6 +1,13 @@
-
 .nx/installation
 .nx/cache
 .nx/workspace-data
 .angular
 node_modules/
+.claude/worktrees
+.claude/settings.local.json
+.nx/polygraph
+.nx/self-healing
+.nx/migrate-runs
+
+# build output
+/dist
