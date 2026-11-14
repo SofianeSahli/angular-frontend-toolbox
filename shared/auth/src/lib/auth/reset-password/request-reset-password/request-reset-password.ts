@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { TextInput, ToastService } from "@shared/ui-components";
@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth.service';
   selector: 'lib-request-reset-password',
   imports: [TranslatePipe, TextInput],
   templateUrl: './request-reset-password.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './request-reset-password.scss',
 })
 export class RequestResetPassword {

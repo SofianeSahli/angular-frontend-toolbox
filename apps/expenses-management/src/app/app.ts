@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ScrollService, ToastComponent } from '@shared/ui-components';
 
@@ -6,6 +6,7 @@ import { ScrollService, ToastComponent } from '@shared/ui-components';
   imports: [RouterModule, ToastComponent],
   selector: 'app-root',
   templateUrl: './app.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.scss',
 })
 export class App {

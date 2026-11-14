@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+
+import { Component, effect, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormlyFieldConfig } from '@ngx-formly/core';
@@ -13,12 +13,13 @@ import { PROFILE_FORM } from './profile.form';
   selector: 'app-profile-form',
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     Loader,
     TranslateModule,
-    CommonModule, TextInput
-  ],
+    TextInput
+],
 })
 export class ProfileFormComponent {
   store = inject(authStore);

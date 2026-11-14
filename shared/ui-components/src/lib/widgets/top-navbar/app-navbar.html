@@ -10,11 +10,12 @@
     </span>
   </a>
 </div>
-<div 
-  class="drawer-backdrop d-md-none"
-  *ngIf="!isCollapsed()"
-  (click)="toggleCollapse()">
-</div>
+@if (!isCollapsed()) {
+  <div
+    class="drawer-backdrop d-md-none"
+    (click)="toggleCollapse()">
+  </div>
+}
 <div class="d-flex flex-column flex-shrink-0 bg-opacity-75 drawer-body"
   [class.drawer-collapsed]="isCollapsed()" [class.collapsed]="isCollapsed()">
 
@@ -24,23 +25,23 @@
     <i class="bi fs-6" [ngClass]="isCollapsed() ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
   </button>
   @if(!isCollapsed()){
-  <lib-drawer-header [user]="user()"></lib-drawer-header>
+    <lib-drawer-header [user]="user()"></lib-drawer-header>
   }
 
   <div class="flex-grow-1 overflow-hidden" style="margin-top: 20%">
     @for(route of routes(); track route.url){
-    <a [ngClass]="{ 'justify-content-center': isCollapsed() }"
-      class="nav-link d-flex align-items-center justify-content-center rounded" style="padding: 8px 0"
-      [class.active]="isActive(route.url)" [class.btn]="isActive(route.url)" [class.btn-primary]="isActive(route.url)"
-      [class.text-white]="isActive(route.url)" [class.text-muted]="!isActive(route.url)"
-      [class.border]="!isActive(route.url)" [class.border-primary]="!isActive(route.url)" [routerLink]="route.url"
-      [routerLinkActive]="['active']" [title]="isCollapsed() ? (route.label) : ''">
-      <i [class]="route.icon" class="bi fs-6"></i>
-      <span class="d-md-inline" [class.d-md-none]="isCollapsed()"
-        style="transition: opacity 0.3s ease; white-space: nowrap">
-        {{ route.label }}
-      </span>
-    </a>
+      <a [ngClass]="{ 'justify-content-center': isCollapsed() }"
+        class="nav-link d-flex align-items-center justify-content-center rounded" style="padding: 8px 0"
+        [class.active]="isActive(route.url)" [class.btn]="isActive(route.url)" [class.btn-primary]="isActive(route.url)"
+        [class.text-white]="isActive(route.url)" [class.text-muted]="!isActive(route.url)"
+        [class.border]="!isActive(route.url)" [class.border-primary]="!isActive(route.url)" [routerLink]="route.url"
+        [routerLinkActive]="['active']" [title]="isCollapsed() ? (route.label) : ''">
+        <i [class]="route.icon" class="bi fs-6"></i>
+        <span class="d-md-inline" [class.d-md-none]="isCollapsed()"
+          style="transition: opacity 0.3s ease; white-space: nowrap">
+          {{ route.label }}
+        </span>
+      </a>
     }
   </div>
 

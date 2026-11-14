@@ -1,4 +1,4 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject, model, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { authStore } from '@shared/auth';
 import { AppNavbar } from '@shared/ui-components';
@@ -9,6 +9,7 @@ import { ProfileFormComponent } from '../profile/profile-form/profile-form.compo
   selector: 'app-dashboard',
   imports: [ProfileFormComponent, AppNavbar, RouterOutlet],
   templateUrl: './dashboard.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.scss',
 })
 export class Dashboard {

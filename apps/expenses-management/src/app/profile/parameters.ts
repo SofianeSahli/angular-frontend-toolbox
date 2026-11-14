@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { UpdatePasswordFormComponent } from '@shared/auth';
 import { routeAnimations, SwitchButtons } from '@shared/ui-components';
 import { ProfileFormComponent } from "./profile-form/profile-form.component";
@@ -8,6 +8,7 @@ import { ProfileFormComponent } from "./profile-form/profile-form.component";
   imports: [UpdatePasswordFormComponent, ProfileFormComponent, SwitchButtons],
   templateUrl: './parameters.html',
   styleUrl: './parameters.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [routeAnimations]
 })
 export class Parameters {

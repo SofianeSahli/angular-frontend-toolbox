@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslatePipe } from '@ngx-translate/core';
 import {
@@ -17,6 +17,7 @@ import { moneyTransitionSignalStore } from '../state/money-transitions/money-tra
   imports: [ListItems, TranslatePipe, Loader],
   templateUrl: './list.html',
   styleUrl: './list.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [listStaggerAnimation],
 })
 export class List {

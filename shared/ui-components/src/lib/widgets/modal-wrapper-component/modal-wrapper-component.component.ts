@@ -10,6 +10,7 @@ import {
   WritableSignal,
   signal,
   inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { RippleDirective } from '../ripple.directive';
@@ -27,6 +28,7 @@ export interface DynamicComponentInterface<T> {
   selector: 'app-modal-wrapper-component',
   templateUrl: './modal-wrapper-component.component.html',
   styleUrls: ['./modal-wrapper-component.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RippleDirective, TranslatePipe],
 })
 export class AppModalWrapperComponent implements AfterViewInit {

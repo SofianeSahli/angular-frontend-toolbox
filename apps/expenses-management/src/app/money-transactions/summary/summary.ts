@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { routeAnimations, SwitchButtons } from '@shared/ui-components';
@@ -13,6 +13,7 @@ import { SummaryItem } from './summary-item/summary-item';
   imports: [SummaryItem, ChartItem, SwitchButtons, DateRange, BarChart],
   templateUrl: './summary.html',
   styleUrl: './summary.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [routeAnimations]
 })
 export class Summary {

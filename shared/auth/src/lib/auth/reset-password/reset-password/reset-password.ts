@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -9,6 +9,7 @@ import { AuthService } from '../../../services/auth.service';
   selector: 'lib-reset-password',
   imports: [TextInput, ReactiveFormsModule, Loader, TranslatePipe],
   templateUrl: './reset-password.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './reset-password.scss',
 })
 export class ResetPassword {

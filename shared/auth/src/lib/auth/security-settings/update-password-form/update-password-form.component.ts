@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Loader, passwordMatchValidator, TextInput } from '@shared/ui-components';
@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth.service';
   selector: 'lib-update-password-form',
   imports: [ReactiveFormsModule, TranslatePipe, TextInput, Loader],
   templateUrl: './update-password-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./update-password-form.component.scss'],
 })
 export class UpdatePasswordFormComponent {

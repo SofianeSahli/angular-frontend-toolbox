@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, model, output } from '@angular/core';
+import { Component, inject, input, model, output, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { ThemeService } from '../../utils/display-mode.service';
 import { DrawerHeader } from '../drawer-header/drawer-header';
@@ -8,6 +8,7 @@ import { DrawerHeader } from '../drawer-header/drawer-header';
   selector: 'lib-app-navbar-top',
   imports: [RouterLink, RouterModule, CommonModule, DrawerHeader],
   templateUrl: './app-navbar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app-navbar.scss',
 })
 export class AppNavbar {

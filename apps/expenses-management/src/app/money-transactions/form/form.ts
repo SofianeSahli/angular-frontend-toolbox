@@ -4,7 +4,8 @@ import {
   effect,
   inject,
   output,
-  OutputEmitterRef
+  OutputEmitterRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
@@ -24,6 +25,7 @@ import { MoneyTransition } from '../state/money-transitions/MoneyTransition.mode
     Loader, SwitchButtons, SelectComponent, TextInput, DateInputComponent
   ],
   templateUrl: './form.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./form.scss'],
 })
 export class Form implements DynamicComponentInterface<void> {

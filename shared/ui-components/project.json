@@ -12,14 +12,9 @@
         "tsConfig": "shared/ui-components/tsconfig.lib.json",
         "project": "shared/ui-components/ng-package.json",
         "stylePreprocessorOptions": {
-          "includePaths": [
-            "libs/shared-styles/src/lib"
-          ]
+          "includePaths": ["libs/shared-styles/src/lib"]
         }
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
     }
   }
 }

@@ -2,6 +2,7 @@ import {
   Component,
   input,
   output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
@@ -19,6 +20,7 @@ export interface ContextMenuItem {
   standalone: true,
   imports: [CommonModule, NgbDropdownModule, TranslatePipe],
   templateUrl: './context-menu.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./context-menu.component.scss'],
 })
 export class ContextMenuComponent {

@@ -23,7 +23,12 @@
         "apps/expenses-management/src/environments/environment.ts"
       ],
       "profile-section": ["shared/profile-section/src/index.ts"]
-    }
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false,
+    "ignoreDeprecations": "6.0"
   },
   "exclude": ["node_modules", "tmp"]
 }

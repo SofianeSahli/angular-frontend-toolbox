@@ -1,4 +1,4 @@
-import { Component, forwardRef, input, model, OnChanges, output, SimpleChanges } from '@angular/core';
+import { Component, forwardRef, input, OnChanges, output, SimpleChanges, ChangeDetectionStrategy, linkedSignal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -12,6 +12,7 @@ export interface SwitchOption {
   imports: [TranslatePipe],
   templateUrl: './switch-buttons.html',
   styleUrl: './switch-buttons.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -24,7 +25,8 @@ export class SwitchButtons implements ControlValueAccessor, OnChanges {
   options = input.required<SwitchOption[]>();
   id = input<string>()
   label = input<string>('');
-  value = model<string>('');
+  valueInput = input<string>('', {alias: 'value'});
+  value = linkedSignal(this.valueInput);
   name = input<string>('switch-buttons');
   disabled = input<boolean>(false);
   required = input<boolean>(false);
