@@ -4,7 +4,6 @@
     "lint:fix": "nx lint --fix"
   },
   "dependencies": {
-    "@angular-architects/module-federation": "^22.0.0",
     "@angular/animations": "~22.2.6",
     "@angular/common": "~22.2.6",
     "@angular/compiler": "~22.2.6",
