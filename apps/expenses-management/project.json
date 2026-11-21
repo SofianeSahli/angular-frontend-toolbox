@@ -8,14 +8,18 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath.base}"],
+      "outputs": [
+        "{options.outputPath.base}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": {
           "base": "dist/apps/expenses-management"
         },
         "index": "apps/expenses-management/src/index.html",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/expenses-management/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -30,7 +34,9 @@
           "node_modules/bootstrap-icons/font/bootstrap-icons.css"
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["shared/ui-components/src/lib"]
+          "includePaths": [
+            "shared/ui-components/src/lib"
+          ]
         },
         "browser": "apps/expenses-management/src/main.ts"
       },
@@ -92,10 +98,20 @@
       "readyWhen": {
         "signal": true
       },
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "options": {
         "buildTarget": "expenses-management:build",
         "spa": true
+      }
+    },
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "buildTarget": "expenses-management:build:development",
+        "tsConfig": "apps/expenses-management/tsconfig.spec.json",
+        "runner": "vitest"
       }
     }
   }

@@ -120,7 +120,8 @@ Order: removal → tooling (Node, test runner) → config (URLs, builds) → tag
 (T5 fills this in: file, reason.)
 
 ## Deviations from spec
-(Any change made during implementation, and when it was approved.)
+- **T3, app test setup:** no `src/test-setup.ts` for the app. Angular's `@angular/build:unit-test` generates its own TestBed setup, including `zone.js/testing` and `provideZoneChangeDetection()`, so zone-based change detection matches the app without extra code. Simplification of D1; no behaviour impact.
+- **T3, Windows-only environment issue:** if `NX_WORKSPACE_ROOT_PATH` is set with a lowercase drive letter (`c:...`), for example by an editor's Nx integration, every app test fails with "Vitest failed to find the runner" (Vitest is loaded twice; see angular/angular-cli#33559). Workaround: unset that variable or set it to `C:...`. Not a repo problem; CI (Linux) is unaffected. Documented in CLAUDE.md in T18.
 
 ## Verification report
 | REQ | Verified how | Result |
