@@ -15,7 +15,7 @@
     [multiple]="multiple()"
     [size]="multiple() ? (size() || 4) : null"
     [disabled]="disabled()"
-    [value]="_value"
+    [value]="_value()"
     (change)="onValueChange($event)"
   >
     @if (placeholder() && !multiple()) {

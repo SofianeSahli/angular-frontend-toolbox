@@ -1,4 +1,4 @@
-import { Component, forwardRef, input, model, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, forwardRef, input, model, OnChanges, SimpleChanges, ChangeDetectionStrategy, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -12,7 +12,7 @@ export interface SwitchOption {
   imports: [TranslatePipe],
   templateUrl: './switch-buttons.html',
   styleUrl: './switch-buttons.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -33,21 +33,21 @@ export class SwitchButtons implements ControlValueAccessor, OnChanges {
   showErrors = input<boolean>(true);
   private onChange: (value: any) => void = () => { /* replaced by registerOnChange */ };
   private onTouched: () => void = () => { /* replaced by registerOnTouched */ };
-  private _value: any = '';
+  private _value = signal<any>('');
 
   // Validation state
   touched = false;
-  hasError = () => this.required() && !this._value && this.touched;
+  hasError = () => this.required() && !this._value() && this.touched;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['value'] && changes['value'].currentValue !== this._value) {
-      this._value = changes['value'].currentValue;
-      this.onChange(this._value);
+    if (changes['value'] && changes['value'].currentValue !== this._value()) {
+      this._value.set(changes['value'].currentValue);
+      this.onChange(this._value());
     }
   }
 
   onValueChange(value: string): void {
-    this._value = value;
+    this._value.set(value);
     this.touched = true;
     this.onChange(value);
     this.onTouched();
@@ -56,7 +56,7 @@ export class SwitchButtons implements ControlValueAccessor, OnChanges {
 
   getButtonClass(optionValue: string): string {
     const baseClass = 'btn-outline-primary';
-    return this._value === optionValue ? `btn-primary` : baseClass;
+    return this._value() === optionValue ? `btn-primary` : baseClass;
   }
 
   getId(value: string): string {
@@ -69,7 +69,7 @@ export class SwitchButtons implements ControlValueAccessor, OnChanges {
 
   // ControlValueAccessor implementation
   writeValue(value: string): void {
-    this._value = value;
+    this._value.set(value);
   }
 
   registerOnChange(fn: any): void {

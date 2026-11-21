@@ -1,4 +1,4 @@
-import { Component, forwardRef, input, OnChanges, output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, forwardRef, input, OnChanges, output, SimpleChanges, ChangeDetectionStrategy, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { SwitchOption } from '../switch-buttons/switch-buttons';
@@ -8,7 +8,7 @@ import { SwitchOption } from '../switch-buttons/switch-buttons';
   imports: [TranslatePipe],
   templateUrl: './select-component.html',
   styleUrl: './select-component.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -33,7 +33,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges {
   selectClass = input<string>('form-select');
   valueChange = output<any>();
   touched = output<void>();
-  _value: string | Array<string> = this.multiple() ? [] : '';
+  _value = signal<string | Array<string>>('');
   private onChange: (value: any) => void = () => { /* replaced by registerOnChange */ };
   private onTouched: () => void = () => { /* replaced by registerOnTouched */ };
   private _touched = false;
@@ -41,32 +41,32 @@ export class SelectComponent implements ControlValueAccessor, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['multiple'] && changes['multiple'].currentValue !== changes['multiple'].previousValue) {
       // Reset value when multiple mode changes
-      this._value = this.multiple() ? [] : '';
-      this.onChange(this._value);
+      this._value.set(this.multiple() ? [] : '');
+      this.onChange(this._value());
     }
   }
 
   // Computed properties
   selectedCount = () => {
-    if (!this.multiple() || !Array.isArray(this._value)) return 0;
-    return this._value.length;
+    if (!this.multiple() || !Array.isArray(this._value())) return 0;
+    return this._value().length;
   };
 
   hasError = () => this.required() && !this.hasValue() && this._touched;
   isValid = () => this.hasValue() && !this.hasError();
   hasValue = () => {
     if (this.multiple()) {
-      return Array.isArray(this._value) && this._value.length > 0;
+      return Array.isArray(this._value()) && this._value().length > 0;
     }
-    return !!this._value;
+    return !!this._value();
   };
   trackByValue = (value: string) => value;
 
   isSelected(value: string): boolean {
     if (this.multiple()) {
-      return Array.isArray(this._value) && this._value.includes(value);
+      return Array.isArray(this._value()) && this._value().includes(value);
     }
-    return this._value === value;
+    return this._value() === value;
   }
 
   onValueChange(event: Event): void {
@@ -74,13 +74,13 @@ export class SelectComponent implements ControlValueAccessor, OnChanges {
 
     if (this.multiple()) {
       const selectedOptions = Array.from(select.selectedOptions);
-      this._value = selectedOptions.map(option => option.value);
+      this._value.set(selectedOptions.map(option => option.value));
     } else {
-      this._value = select.value;
+      this._value.set(select.value);
     }
 
-    this.onChange(this._value);
-    this.valueChange.emit(this._value);
+    this.onChange(this._value());
+    this.valueChange.emit(this._value());
   }
 
   onBlur(): void {
@@ -98,9 +98,9 @@ export class SelectComponent implements ControlValueAccessor, OnChanges {
 
   writeValue(value: string | Array<string>): void {
     if (this.multiple()) {
-      this._value = Array.isArray(value) ? value : [];
+      this._value.set(Array.isArray(value) ? value : []);
     } else {
-      this._value = value || '';
+      this._value.set(value || '');
     }
   }
 

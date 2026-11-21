@@ -32,7 +32,7 @@ export interface FileModel {
     TranslatePipe,
     ReactiveFormsModule
 ],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('fadeTranslate', [
       transition(':enter', [
