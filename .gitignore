@@ -11,3 +11,5 @@ node_modules/
 
 # build output
 /dist
+vitest.config.*.timestamp*
+.vitest

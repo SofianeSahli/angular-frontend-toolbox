@@ -121,8 +121,10 @@ Order: removal → tooling (Node, test runner) → config (URLs, builds) → tag
 
 ## Deviations from spec
 - **T3, app test setup:** no `src/test-setup.ts` for the app. Angular's `@angular/build:unit-test` generates its own TestBed setup, including `zone.js/testing` and `provideZoneChangeDetection()`, so zone-based change detection matches the app without extra code. Simplification of D1; no behaviour impact.
-- **T3, Windows-only environment issue:** if `NX_WORKSPACE_ROOT_PATH` is set with a lowercase drive letter (`c:...`), for example by an editor's Nx integration, every app test fails with "Vitest failed to find the runner" (Vitest is loaded twice; see angular/angular-cli#33559). Workaround: unset that variable or set it to `C:...`. Not a repo problem; CI (Linux) is unaffected. Documented in CLAUDE.md in T18.
+- **T3, Windows-only environment issue:** if `NX_WORKSPACE_ROOT_PATH` is set with a lowercase drive letter (`c:\projects\...`), for example by an editor's Nx integration, every app test fails with "Vitest failed to find the runner" (Vitest is loaded twice; see angular/angular-cli#33559). Workaround: unset that variable or set it to `C:\projects\...`. Not a repo problem; CI (Linux) is unaffected. Documented in CLAUDE.md in T18.
 
 ## Verification report
 | REQ | Verified how | Result |
 |---|---|---|
+- **T4, Vitest version:** pinned to **Vitest 4** (`^4.1`), not 5. `nx g @nx/vitest:configuration` refuses Vitest 5 because a workspace package only accepts Vitest ≤ 4. Angular's builder supports both (`^4.0.8 || ^5`). Revisit when the Nx/Analog peers allow 5. Nx also chose Analog `~2.7.3`.
+- **T4, stores tests in T4:** the planned `withCrudOperations` tests (D1, REQ-1.7) were written here rather than later, because a project with no tests fails `nx test`. The error-path test documents today's behaviour (the unhandled error ends the load stream), pointing to spec 005.
