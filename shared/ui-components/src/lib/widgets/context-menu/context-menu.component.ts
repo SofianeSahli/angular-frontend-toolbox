@@ -16,7 +16,7 @@ export interface ContextMenuItem {
 }
 
 @Component({
-  selector: 'app-context-menu',
+  selector: 'lib-context-menu',
   standalone: true,
   imports: [CommonModule, NgbDropdownModule, TranslatePipe],
   templateUrl: './context-menu.component.html',
@@ -27,9 +27,9 @@ export class ContextMenuComponent {
   menuId = input('contextMenu');
   items = input<ContextMenuItem[]>([]);
   context = input<any>();
-  select = output<{ action: string; context: any }>();
+  itemSelected = output<{ action: string; context: any }>();
 
   onSelect(action: string) {
-    this.select.emit({ action, context: this.context() });
+    this.itemSelected.emit({ action, context: this.context() });
   }
 }

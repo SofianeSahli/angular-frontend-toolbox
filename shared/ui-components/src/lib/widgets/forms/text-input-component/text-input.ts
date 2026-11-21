@@ -40,8 +40,8 @@ export class TextInput implements ControlValueAccessor, OnChanges {
   focused = output<void>();
   autocomplete = input('')
   protected _value: any = '';
-  private _onChange: (value: any) => void = () => { };
-  private _onTouched: () => void = () => { };
+  private _onChange: (value: any) => void = () => { /* replaced by registerOnChange */ };
+  private _onTouched: () => void = () => { /* replaced by registerOnTouched */ };
   private _touched = false;
 
   ngOnChanges(changes: SimpleChanges): void {

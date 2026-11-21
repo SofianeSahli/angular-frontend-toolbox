@@ -36,8 +36,8 @@ export class DateInputComponent implements ControlValueAccessor, AfterViewInit {
   focused = output<void>();
 
   protected _value: any = '';
-  private _onChange: (value: any) => void = () => { };
-  private _onTouched: () => void = () => { };
+  private _onChange: (value: any) => void = () => { /* replaced by registerOnChange */ };
+  private _onTouched: () => void = () => { /* replaced by registerOnTouched */ };
   private _touched = false;
   private elementRef = inject(ElementRef);
   private inputElement: HTMLInputElement | null = null;

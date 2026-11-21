@@ -1,7 +1,7 @@
 import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'app-loader',
+  selector: 'lib-loader',
   templateUrl: './loader.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './loader.scss',

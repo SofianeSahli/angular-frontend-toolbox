@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   output,
   OutputEmitterRef,
@@ -72,12 +71,6 @@ export class Filter implements DynamicComponentInterface<void> {
 
   categoriesStore = inject(categoriesStore);
   moneyTransitionSignal = inject(moneyTransitionSignalStore);
-
-  constructor() {
-    effect(() => {
-
-    });
-  }
 
   submit() {
     this.moneyTransitionSignal.resesetQuery(this.form.getRawValue() as GeneralQuery);

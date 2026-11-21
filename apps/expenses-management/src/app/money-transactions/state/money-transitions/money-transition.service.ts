@@ -9,7 +9,7 @@ import { MoneyTransition, MoneyTransitionQuery } from './MoneyTransition.model';
 @Injectable({ providedIn: 'root' })
 export class MoneyTransitionService implements BaseService<MoneyTransition> {
   httpClient = inject(HttpClient);
-  ENTITY_ENDPOINT: string = '/money-transition';
+  ENTITY_ENDPOINT = '/money-transition';
   BASE_URL = environment.apiBaseUrl;
 
   toQueryParams(filters: MoneyTransitionQuery) {

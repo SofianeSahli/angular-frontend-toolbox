@@ -14,7 +14,7 @@ import { ThemeService } from '../../utils/display-mode.service';
 
 
 @Component({
-  selector: 'app-nav-bar',
+  selector: 'lib-nav-bar',
   imports: [RouterModule, CommonModule, TranslateModule, NgbCollapseModule],
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.scss',
@@ -49,8 +49,6 @@ export class NavBar {
     this.isNotificationOpen = !this.isNotificationOpen;
   }
 
-  logout() {
-  }
 
   toggleTheme() {
     this.themeService.toggleTheme();

@@ -20,7 +20,7 @@ import { DynamicComponentInterface } from '../../modal-wrapper-component/modal-w
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-image-cropper',
+  selector: 'lib-image-cropper',
   templateUrl: './image-cropper.component.html',
   styleUrls: ['./image-cropper.component.scss'],
   standalone: true,

@@ -1,4 +1,4 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { Injectable, effect, inject, signal } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ErrorAlert } from '../widgets/error-alert/error-alert';
 
@@ -6,8 +6,10 @@ import { ErrorAlert } from '../widgets/error-alert/error-alert';
 export class GlobalErrorModalService {
   private errorSignal = signal<string[] | null>(null);
   private modalRef: NgbModalRef | null = null;
-  private alreadyDisplaying : boolean= false 
-  constructor(private modal: NgbModal) {
+  private alreadyDisplaying = false 
+  private modal = inject(NgbModal);
+
+  constructor() {
     effect(() => {
       const errors = this.errorSignal();
 

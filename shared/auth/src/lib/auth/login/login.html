@@ -1,4 +1,4 @@
-<app-loader [loading]="loading()"></app-loader>
+<lib-loader [loading]="loading()"></lib-loader>
 <div class="container-sign-in row justify-content-center">
   <div class="col-md-6 col-xl-4 col-lg-5 col-12 card p-0">
     <div class="card-header">
@@ -35,7 +35,7 @@
             type="button"
             class="btn btn-primary mt-3 m-auto"
             [disabled]="!form.valid"
-            appRipple
+            libRipple
           >
             {{ "labels.login" | translate }}
           </button>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UpdatePasswordFormComponent } from './update-password-form/update-password-form.component';
@@ -7,20 +7,17 @@ import { AppModalWrapperComponent } from '@shared/ui-components';
 
 @Component({
   imports: [FormsModule],
-  selector: 'app-security-settings',
+  selector: 'lib-security-settings',
   templateUrl: './security-settings.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./security-settings.component.scss'],
 })
-export class SecuritySettingsComponent implements OnInit {
-  recoveryEmail: string = '';
-  phoneNumber: string = '';
-  searchTerm: string = '';
+export class SecuritySettingsComponent {
+  recoveryEmail = '';
+  phoneNumber = '';
+  searchTerm = '';
   modalService = inject(NgbModal);
   
-  ngOnInit(): void {
-
-  }
 
   saveRecoveryEmail() {
     // TODO: call backend API to save email
@@ -47,7 +44,6 @@ export class SecuritySettingsComponent implements OnInit {
     modalRef.componentInstance.title = 'Mise à jour de votre mot de passe';
     modalRef.componentInstance.contentComponent = UpdatePasswordFormComponent;
 
-    modalRef.closed.subscribe(() => {});
   }
 
   openActivityModal(content: any) {

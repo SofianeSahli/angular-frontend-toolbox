@@ -1,10 +1,10 @@
-import { Component, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DynamicComponentInterface } from '../modal-wrapper-component/modal-wrapper-component.component';
 
 @Component({
-  selector: 'app-confirmation-modal',
+  selector: 'lib-confirmation-modal',
   standalone: true,
   imports: [],
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -20,7 +20,7 @@ export class ConfirmationModalComponent
   message = signal('Are you sure?');
   done = output<boolean>();
 
-  constructor(public activeModal: NgbActiveModal) {}
+  activeModal = inject(NgbActiveModal);
 
   submit() {
     this.done.emit(true);

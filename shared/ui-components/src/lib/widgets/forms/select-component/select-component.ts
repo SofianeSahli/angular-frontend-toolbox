@@ -34,8 +34,8 @@ export class SelectComponent implements ControlValueAccessor, OnChanges {
   valueChange = output<any>();
   touched = output<void>();
   _value: string | Array<string> = this.multiple() ? [] : '';
-  private onChange: (value: any) => void = () => { };
-  private onTouched: () => void = () => { };
+  private onChange: (value: any) => void = () => { /* replaced by registerOnChange */ };
+  private onTouched: () => void = () => { /* replaced by registerOnTouched */ };
   private _touched = false;
 
   ngOnChanges(changes: SimpleChanges): void {

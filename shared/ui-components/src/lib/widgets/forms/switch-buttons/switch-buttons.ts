@@ -1,4 +1,4 @@
-import { Component, forwardRef, input, OnChanges, output, SimpleChanges, ChangeDetectionStrategy, linkedSignal } from '@angular/core';
+import { Component, forwardRef, input, model, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -25,15 +25,14 @@ export class SwitchButtons implements ControlValueAccessor, OnChanges {
   options = input.required<SwitchOption[]>();
   id = input<string>()
   label = input<string>('');
-  valueInput = input<string>('', {alias: 'value'});
-  value = linkedSignal(this.valueInput);
+  /** Two-way bindable: `[(value)]`. `model()` also emits `valueChange`. */
+  value = model<string>('');
   name = input<string>('switch-buttons');
   disabled = input<boolean>(false);
   required = input<boolean>(false);
   showErrors = input<boolean>(true);
-  valueChange = output<string>();
-  private onChange: (value: any) => void = () => { };
-  private onTouched: () => void = () => { };
+  private onChange: (value: any) => void = () => { /* replaced by registerOnChange */ };
+  private onTouched: () => void = () => { /* replaced by registerOnTouched */ };
   private _value: any = '';
 
   // Validation state
@@ -52,7 +51,7 @@ export class SwitchButtons implements ControlValueAccessor, OnChanges {
     this.touched = true;
     this.onChange(value);
     this.onTouched();
-    this.valueChange.emit(value);
+    this.value.set(value);
   }
 
   getButtonClass(optionValue: string): string {
