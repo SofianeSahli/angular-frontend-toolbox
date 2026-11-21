@@ -10,7 +10,7 @@ import { MoneyTransition, MoneyTransitionQuery } from './MoneyTransition.model';
 export class MoneyTransitionService implements BaseService<MoneyTransition> {
   httpClient = inject(HttpClient);
   ENTITY_ENDPOINT: string = '/money-transition';
-  BASE_URL = environment.mainAppUrl;
+  BASE_URL = environment.apiBaseUrl;
 
   toQueryParams(filters: MoneyTransitionQuery) {
     const params = new URLSearchParams();
@@ -55,7 +55,7 @@ export class MoneyTransitionService implements BaseService<MoneyTransition> {
 
   delete(id: string) {
     return this.httpClient.delete<MoneyTransition>(
-      `  ${this.BASE_URL}${this.ENTITY_ENDPOINT}/${id}`
+      `${this.BASE_URL}${this.ENTITY_ENDPOINT}/${id}`
     );
   }
 

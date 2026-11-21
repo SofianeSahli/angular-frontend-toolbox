@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:3000/api/v1',
+  // The one API base URL for this app (spec 001, REQ-5.6). Dev: the rebuilt backend.
+  apiBaseUrl: 'http://localhost:8001/api/v1',
   homeRoute: '/dashboard',
   loginUrl: '/auth/login',
   validateEndpoint: '/auth/validate',
@@ -10,6 +11,5 @@ export const environment = {
   registerEndpoint: '/auth/register',
   updatePasswordEndpoint: '/auth/update-password',
   profileEndpoint: '/profile',
-  mainAppUrl: 'http://localhost:8000/api/v1',
   categoriesEndpoint : '/categories'
 };

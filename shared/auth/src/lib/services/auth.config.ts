@@ -12,7 +12,6 @@ export interface AuthConfig {
   registerEndpoint?: string;
   updatePasswordEndpoint?: string;
   profileEndpoint?: string
-  profileBaseUrl?: string // TODO implement a proper gateway
   logoutEndpoint?: string
   requestResetPassword?: string,
   resetPassword?: string

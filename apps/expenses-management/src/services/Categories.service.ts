@@ -11,7 +11,7 @@ export class CategoriesService implements BaseService<Categorie> {
     query: GeneralQuery
   ): Observable<Categorie[] | PaginatedEntities<Categorie>> {
     return this.httpClient.get<Categorie[]>(
-      environment.mainAppUrl + environment.categoriesEndpoint
+      environment.apiBaseUrl + environment.categoriesEndpoint
     );
   }
   create(args: Partial<Categorie>): Observable<Categorie> {

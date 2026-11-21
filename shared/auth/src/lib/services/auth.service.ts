@@ -88,7 +88,9 @@ export class AuthService {
     this.router.navigate([this.config.loginUrl ?? '/'], {
       queryParams: { sessionExpired: true },
     });
-    return this.http.get<void>(this.config.logoutEndpoint ?? 'logout')
+    return this.http.get<void>(
+      `${this.config.apiBaseUrl}${this.config.logoutEndpoint ?? '/auth/logout'}`
+    );
   }
 
   refreshAccessToken(): Observable<LoginResponse> {

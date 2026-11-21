@@ -33,7 +33,6 @@ export const authProvider = {
     registerEndpoint: '/auth/register',
     updatePasswordEndpoint: '/auth/update-password',
     profileEndpoint: '/profile',
-    profileBaseUrl: 'http://localhost:8000/api/v1',
   } as AuthConfig,
 };
 export const appConfig: ApplicationConfig = {
