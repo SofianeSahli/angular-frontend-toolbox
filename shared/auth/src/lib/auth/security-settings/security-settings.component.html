@@ -90,7 +90,7 @@
 <ng-template #appAuthModal let-modal>
   <div class="modal-header">
     <h5 class="modal-title">Configurer l’application d’authentification</h5>
-    <button class="btn-close" (click)="modal.dismiss()"></button>
+    <button type="button" class="btn-close" aria-label="Fermer" (click)="modal.dismiss()"></button>
   </div>
   <div class="modal-body">
     <p>Scannez ce QR code avec votre application d’authentification.</p>
@@ -108,7 +108,7 @@
 <ng-template #activityModal let-modal>
   <div class="modal-header">
     <h5 class="modal-title">Activité récente</h5>
-    <button class="btn-close" (click)="modal.dismiss()"></button>
+    <button type="button" class="btn-close" aria-label="Fermer" (click)="modal.dismiss()"></button>
   </div>
   <div class="modal-body">
     <ul class="list-group">

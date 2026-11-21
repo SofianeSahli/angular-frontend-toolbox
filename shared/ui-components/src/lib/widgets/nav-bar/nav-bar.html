@@ -1,7 +1,11 @@
 <div class="main-navbar d-flex justify-content-evenly gap-2">
   <div
     class="main-navbar-dark-light"
+    role="button"
+    tabindex="0"
     (click)="toggleTheme()"
+    (keydown.enter)="toggleTheme()"
+    (keydown.space)="$event.preventDefault(); toggleTheme()"
     [title]="isDarkMode ? 'Light Mode' : 'Dark Mode'"
   >
     <i
