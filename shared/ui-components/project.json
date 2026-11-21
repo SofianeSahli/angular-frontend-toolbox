@@ -4,6 +4,10 @@
   "sourceRoot": "shared/ui-components/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": [
+    "scope:shared",
+    "type:ui"
+  ],
+  "// tags": "Interim tag (spec 001 REQ-3.2): no layer:* tag because it mixes atoms, molecules, organisms and form validators. Split by level in specs 002-004.",
   "targets": {}
 }

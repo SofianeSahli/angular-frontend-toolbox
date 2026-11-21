@@ -4,7 +4,10 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/expenses-management/src",
-  "tags": [],
+  "tags": [
+    "scope:expenses",
+    "type:app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
