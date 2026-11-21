@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, NgZone, Type } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideTranslateService } from '@ngx-translate/core';
@@ -9,14 +9,20 @@ import { TextInput } from './text-input-component/text-input';
 // spec 001 T12 (REQ-3.5c): the form controls must keep reflecting what a
 // parent form does to them after switching to OnPush.
 //
-// Two parents: an Eager one (today's app forms) and an OnPush one (the app's
-// forms after T15, and the Angular 22 default). With an OnPush parent nothing
-// re-checks the control for it, so the control must redraw on its own.
+// The parent is OnPush (the Angular 22 default, and every app form after T15).
+// Each case runs twice:
+// - the parent re-renders itself (the action came from an event in the parent,
+//   which marks it dirty), and
+// - the parent does not re-render (the action came from elsewhere, e.g. an
+//   effect): nothing re-checks the control for it, so it must redraw on its own.
 //
 // Change detection runs the way the app runs it: parent actions happen inside
 // NgZone (as in an event handler), then autoDetectChanges + whenStable. Never
 // detectChanges() on the control itself.
-const HOST_TEMPLATE = `
+@Component({
+  imports: [ReactiveFormsModule, TextInput, SelectComponent, DateInputComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
     <form [formGroup]="form">
       <lib-text-input
         id="amount"
@@ -37,9 +43,10 @@ const HOST_TEMPLATE = `
         [required]="true"
       />
     </form>
-  `;
-
-abstract class HostBase {
+  `,
+})
+class HostComponent {
+  readonly cdr = inject(ChangeDetectorRef);
   options = [
     { label: 'Alimentation', value: 'c1' },
     { label: 'Transport', value: 'c2' },
@@ -51,41 +58,30 @@ abstract class HostBase {
   });
 }
 
-@Component({
-  imports: [ReactiveFormsModule, TextInput, SelectComponent, DateInputComponent],
-  template: HOST_TEMPLATE,
-  changeDetection: ChangeDetectionStrategy.Eager,
-})
-class EagerHost extends HostBase {}
-
-@Component({
-  imports: [ReactiveFormsModule, TextInput, SelectComponent, DateInputComponent],
-  template: HOST_TEMPLATE,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-class OnPushHost extends HostBase {}
-
-describe.each<[string, Type<HostBase>]>([
-  ['an Eager parent', EagerHost],
-  ['an OnPush parent', OnPushHost],
-])('form controls driven by %s', (_name, Host) => {
-  let fixture: ComponentFixture<HostBase>;
-  let form: HostBase['form'];
+describe.each<[string, boolean]>([
+  ['a parent that re-renders', true],
+  ['a parent that does not re-render', false],
+])('form controls driven by %s', (_name, parentRerenders) => {
+  let fixture: ComponentFixture<HostComponent>;
+  let form: HostComponent['form'];
   const el = <T extends Element>(selector: string): T =>
     fixture.nativeElement.querySelector(selector) as T;
   /** A parent action, run the way an event handler runs in the app. */
   const parent = async (action: () => void) => {
-    TestBed.inject(NgZone).run(action);
+    TestBed.inject(NgZone).run(() => {
+      action();
+      if (parentRerenders) fixture.componentInstance.cdr.markForCheck();
+    });
     await fixture.whenStable();
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Host],
+      imports: [HostComponent],
       providers: [provideTranslateService()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Host);
+    fixture = TestBed.createComponent(HostComponent);
     form = fixture.componentInstance.form;
     fixture.autoDetectChanges();
     await fixture.whenStable();
