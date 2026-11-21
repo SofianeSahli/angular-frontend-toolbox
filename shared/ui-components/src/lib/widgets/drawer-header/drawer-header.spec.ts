@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DrawerHeader } from './drawer-header';
 
 describe('DrawerHeader', () => {
-  let component: DrawerHeader;
   let fixture: ComponentFixture<DrawerHeader>;
 
   beforeEach(async () => {
@@ -11,11 +10,11 @@ describe('DrawerHeader', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(DrawerHeader);
-    component = fixture.componentInstance;
+    fixture.componentRef.setInput('user', { first_name: 'Amel', last_name: 'Ben Ali' });
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

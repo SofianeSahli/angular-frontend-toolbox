@@ -117,7 +117,7 @@ Order: removal → tooling (Node, test runner) → config (URLs, builds) → tag
   - Fill in the report below; mark `requirements.md`, `design.md` and this file as Done; open the PR
 
 ## Deleted specs
-(T5 fills this in: file, reason.)
+None. All 28 existing specs were kept and fixed (providers, required inputs, standalone imports instead of Ionic). Two chart specs (`bar-chart`, `summary`) stub `getContext` and `Chart.prototype.update`, because jsdom has no canvas; drawing is not under test.
 
 ## Deviations from spec
 - **T3, app test setup:** no `src/test-setup.ts` for the app. Angular's `@angular/build:unit-test` generates its own TestBed setup, including `zone.js/testing` and `provideZoneChangeDetection()`, so zone-based change detection matches the app without extra code. Simplification of D1; no behaviour impact.
