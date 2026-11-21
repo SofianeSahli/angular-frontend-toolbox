@@ -3,6 +3,9 @@
     "lint": "nx lint",
     "lint:fix": "nx lint --fix"
   },
+  "engines": {
+    "node": ">=24 <25"
+  },
   "dependencies": {
     "@angular/animations": "~22.2.6",
     "@angular/common": "~22.2.6",
