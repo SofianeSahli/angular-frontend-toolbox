@@ -5,16 +5,5 @@
   "prefix": "lib",
   "projectType": "library",
   "tags": [],
-  "targets": {
-    "build": {
-      "executor": "@angular-devkit/build-angular:ng-packagr",
-      "options": {
-        "tsConfig": "shared/ui-components/tsconfig.lib.json",
-        "project": "shared/ui-components/ng-package.json",
-        "stylePreprocessorOptions": {
-          "includePaths": ["libs/shared-styles/src/lib"]
-        }
-      }
-    }
-  }
+  "targets": {}
 }

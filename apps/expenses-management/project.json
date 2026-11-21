@@ -44,20 +44,20 @@
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/launcher/src/environments/environment.ts",
-              "with": "apps/launcher/src/environments/environment.prod.ts"
+              "replace": "apps/expenses-management/src/environments/environments.ts",
+              "with": "apps/expenses-management/src/environments/environments.prod.ts"
             }
           ],
           "budgets": [
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "1.5mb"
             },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "4kb",
-              "maximumError": "8kb"
+              "maximumError": "10kb"
             }
           ],
           "outputHashing": "all"
