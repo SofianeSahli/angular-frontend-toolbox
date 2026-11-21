@@ -1,5 +1,5 @@
 import { BaseModel, GeneralQuery } from '@shared/stores';
-import { Categorie } from 'apps/expenses-management/src/models/Categorie.model';
+import { Categorie } from '../../../../models/Categorie.model';
 
 export interface MoneyTransition extends BaseModel {
   amount: string;

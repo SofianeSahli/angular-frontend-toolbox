@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BaseService, PaginatedEntities } from '@shared/stores';
-import { environment } from 'apps/expenses-management/src/environments/environments';
+import { environment } from '../../../../environments/environments';
 import { Observable } from 'rxjs';
 import { SummaryModel } from '../summary/Summary.model';
 import { MoneyTransition, MoneyTransitionQuery } from './MoneyTransition.model';
