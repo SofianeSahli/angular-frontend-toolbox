@@ -4,17 +4,19 @@ Guidance for Claude Code (and humans) working in this repository.
 
 ## Project
 
-Nx monorepo of Angular front-end apps sharing a common toolbox of libraries.
+This repo is a **toolbox plus apps**. `shared/` is the toolbox: brand-free UI and logic that every app reuses. Each app (first: `expenses-management`) adds only its own pages and domain code.
 
-| Path | Kind | Purpose |
-|---|---|---|
-| `apps/expenses-management` | app | Personal finance dashboard (transactions, summary, charts, profile) |
-| `apps/launcher` | app | Entry/launcher app (currently does not build — see Known issues) |
-| `apps/uncensored` | app | Empty scaffold |
-| `shared/auth` (`@shared/auth`) | lib | Login/register/reset flows, auth store, HTTP interceptors |
-| `shared/stores` (`@shared/stores`) | lib | Generic NgRx Signal Store features (`withCrudOperations`, `withLoader`, `withQuery`, …) and base models |
-| `shared/ui-components` (`@shared/ui-components`) | lib | UI widgets, form controls, validators, SCSS theme |
-| `shared/profile-section` | lib | Placeholder (index points to a missing file) |
+**[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) is binding. Read it before creating, moving or renaming any library or component.**
+
+| Path | Kind | Purpose today | Target (ARCHITECTURE §2, §7) |
+|---|---|---|---|
+| `apps/expenses-management` | app | Household budget app (transactions, summary, charts, profile) | stays, `scope:expenses type:app`; domain code moves to `libs/expenses/` later |
+| `apps/launcher` | app | Entry app (does not build) | **removed in spec 001** |
+| `apps/uncensored` | app | Empty scaffold | **removed in spec 001** |
+| `shared/auth` (`@shared/auth`) | lib | Login/register/reset pages, auth store, HTTP interceptors | split into `identity/data-access` + `identity/feature-auth` + `http/*` (spec 005) |
+| `shared/stores` (`@shared/stores`) | lib | Generic NgRx Signal Store features (`withCrudOperations`, `withLoader`, `withQuery`, …) and base models | stays, `type:data-access` |
+| `shared/ui-components` (`@shared/ui-components`) | lib | UI widgets, form controls, validators, SCSS theme | split into `ui/*` atoms → templates, `util-forms`, `util-format` (specs 002–004) |
+| `shared/profile-section` | lib | Empty placeholder | **removed in spec 001** |
 
 **Stack:** Angular 22.2 (standalone, signals, built-in control flow), Nx 24, TypeScript 6.0, `@angular/build:application` (esbuild), NgRx Signals 22, ng-bootstrap 21 + Bootstrap 5, ngx-translate (default language `fr`), Chart.js, RxJS 7.
 
@@ -30,6 +32,19 @@ npx nx show project <project>                             # list inferred target
 ```
 
 No unit-test runner is configured yet (`*.spec.ts` files exist but cannot run). Adding one (Vitest preferred) is a prerequisite for the "tests first" step below — until then, see "Verification without a test runner".
+
+## Architecture (summary)
+
+Full rules, library map and rationale: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+- **Levels:** UI follows atomic design: tokens → atoms → molecules → organisms → templates → pages. Each level imports only the levels below it. Non-UI libraries are `feature`, `data-access`, `domain` or `util`.
+- **Placement:** if every app does it the same way, it goes in `shared/` and is configured with `provideX({...})` and injection tokens. If only one app does it, it goes in `libs/<app>/`. Code moves to the toolbox only when a second app needs it.
+- **Tags:** every project has `scope:*` and `type:*` tags, and UI libraries also have `layer:*`. ESLint enforces them (§3).
+- **Toolbox UI is presentational:** signal inputs and outputs only, with no store, HTTP, router or translation keys. Only `feature` pages inject stores.
+- **Data-access never imports UI.** Logic that must reach the screen publishes on a signal bus, and a `feature` library presents it.
+- **Styling:** components read only `var(--ui-*)` tokens. No raw colours, sizes or fonts.
+- **Text:** no ngx-translate in toolbox UI. Pages pass translated text in; built-in strings come from the `UI_TEXT` token.
+- **Native elements use attribute selectors** (`button[uiButton]`, `input[uiInput]`, …). ControlValueAccessor is only for custom controls.
 
 ---
 
@@ -132,20 +147,31 @@ Until unit tests can run, each task must still be verified and the method record
 - Type `signalStoreFeature` inputs instead of `store: any`.
 
 **Libraries & boundaries**
-- Import shared code only through its alias (`@shared/auth`, `@shared/stores`, `@shared/ui-components`) — never deep paths like `shared/stores/src/lib/...` or `apps/<app>/src/...`.
-- Libraries must not import from apps. App config reaches libraries through injection tokens (see `AUTH_CONFIG`).
-- Anything used by more than one app belongs in `shared/`; app-specific code stays in the app.
+- Which library may import which is defined by tags and `depConstraints`: see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) §2–3.
+- Import shared code only through its `@shared/...` alias, never through deep paths like `shared/stores/src/lib/...` or `apps/<app>/src/...`.
+- Libraries never import from apps. App config reaches libraries through injection tokens and `provideX({...})` (see `AUTH_CONFIG`).
 
 **i18n, dates, HTTP**
 - All user-visible text goes through ngx-translate keys; add keys to `public/i18n/fr.json`.
 - Dates sent to the API as local `YYYY-MM-DD` — never `toISOString().split('T')[0]` (shifts the day in UTC+1/+2).
 - URLs come from environment/config; no hard-coded `localhost`.
 
-**Style:** Prettier (`.prettierrc`, single quotes), SCSS, Bootstrap utility classes before custom CSS.
+**Style:** Prettier (`.prettierrc`, single quotes), SCSS. Use Bootstrap grid and utility classes for layout; components use toolbox tokens; overrides go in the `app` cascade layer, never with `!important`. *This applies once spec 002 (tokens) lands; until then, existing code keeps its current styles.*
 
-## Known issues (do not "fix" silently — open a spec)
+## Toolbox roadmap
+
+One spec each, approved before any code (ARCHITECTURE §8):
+
+1. **001 Foundations** ← **next**: Vitest and Playwright, tags and `depConstraints`, CI, known issues fixed, unused projects removed.
+2. **002 Tokens and themes:** `ui-tokens`, `theme-olivier`, theme compiler, cascade layers, Bootstrap trim, `util-format`, Stylelint and contrast checks.
+3. **003 Atoms and catalog:** the 16 Olivier atoms and `apps/ui-catalog`.
+4. **004 Molecules, organisms and templates:** CDK overlays and app shell; remove ng-bootstrap, `moment` and bootstrap-icons.
+5. **005 Shared logic:** `http/*` and `identity/*`; auth pages rebuilt on the auth layout (Sanctum cookie strategy).
+
+## Known issues (do not "fix" silently — spec 001 fixes these)
 - `app-launcher` does not build: missing `@env/environments` alias, `provideAuthConfig`, `FORMLY_FORM_CONFIG`.
 - `ui-components:build` target references a missing `ng-package.json`.
 - `profile-section` index exports a non-existent file.
 - Production `fileReplacements` in `expenses-management` point at non-existent launcher env files.
 - No unit-test runner; existing specs import `@ionic/angular`, which is not a dependency.
+- `nx run-many -t lint` fails: 90 errors. 47 existed before the Angular 22 upgrade. The upgrade added 43: 36 `prefer-on-push-component-change-detection` (components pinned to `Eager` by the migration), 6 `enforce-module-boundaries` (deep `apps/…` imports, and a static import of the lazy `auth` lib in launcher), and 1 `no-input-rename` (`switch-buttons`).
