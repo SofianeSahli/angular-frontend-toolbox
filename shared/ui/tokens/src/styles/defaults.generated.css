@@ -1,0 +1,22 @@
+/* Generated from contract.json by the theme compiler. Do not edit. */
+@layer tokens {
+  :root {
+    --ui-control-height-sm: 36px;
+    --ui-control-height-md: 44px;
+    --ui-control-height-lg: 52px;
+    --ui-focus-ring-width: 2px;
+    --ui-focus-ring-offset: 2px;
+    --ui-duration-fast: 120ms;
+    --ui-duration-base: 200ms;
+    --ui-duration-slow: 320ms;
+    --ui-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --ui-duration-fast: 0ms;
+      --ui-duration-base: 0ms;
+      --ui-duration-slow: 0ms;
+    }
+  }
+}
