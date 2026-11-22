@@ -19,6 +19,7 @@
         "outputPath": {
           "base": "dist/apps/expenses-management"
         },
+        "browser": "apps/expenses-management/src/main.ts",
         "index": "apps/expenses-management/src/index.html",
         "polyfills": [
           "zone.js"
@@ -32,35 +33,28 @@
           }
         ],
         "styles": [
-          "bootstrap/dist/css/bootstrap.min.css",
-          "apps/expenses-management/src/styles.scss",
-          "node_modules/bootstrap-icons/font/bootstrap-icons.css"
-        ],
-        "stylePreprocessorOptions": {
-          "includePaths": [
-            "shared/ui-components/src/lib"
-          ]
-        },
-        "browser": "apps/expenses-management/src/main.ts"
+          "shared/ui/tokens/src/styles/ui.scss",
+          "shared/themes/olivier/src/olivier.generated.css"
+        ]
       },
       "configurations": {
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/expenses-management/src/environments/environments.ts",
-              "with": "apps/expenses-management/src/environments/environments.prod.ts"
+              "replace": "apps/expenses-management/src/environments/environment.ts",
+              "with": "apps/expenses-management/src/environments/environment.prod.ts"
             }
           ],
           "budgets": [
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1.5mb"
+              "maximumError": "1mb"
             },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "4kb",
-              "maximumError": "10kb"
+              "maximumError": "8kb"
             }
           ],
           "outputHashing": "all"
@@ -77,9 +71,6 @@
       "continuous": true,
       "executor": "@angular/build:dev-server",
       "defaultConfiguration": "development",
-      "readyWhen": {
-        "signal": true
-      },
       "configurations": {
         "production": {
           "buildTarget": "expenses-management:build:production"
@@ -89,26 +80,6 @@
         }
       }
     },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "buildTarget": "expenses-management:build"
-      }
-    },
-    "serve-static": {
-      "continuous": true,
-      "executor": "@nx/web:file-server",
-      "readyWhen": {
-        "signal": true
-      },
-      "dependsOn": [
-        "build"
-      ],
-      "options": {
-        "buildTarget": "expenses-management:build",
-        "spa": true
-      }
-    },
     "test": {
       "executor": "@angular/build:unit-test",
       "options": {
@@ -116,6 +87,14 @@
         "tsConfig": "apps/expenses-management/tsconfig.spec.json",
         "runner": "vitest"
       }
+    },
+    "stylelint": {
+      "command": "stylelint \"apps/expenses-management/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
     }
   }
 }

@@ -6,15 +6,15 @@ The target structure is defined in **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md
 
 ## Projects
 
-| Project | Path | Today | Target |
-|---|---|---|---|
-| `expenses-management` | `apps/expenses-management` | Budget app; builds and runs | Stays; domain code moves to `libs/expenses/` |
-| `expenses-management-e2e` | `apps/expenses-management-e2e` | Playwright smoke test | Stays |
-| `auth` | `shared/auth` | Auth pages, store, interceptors | `shared/identity/*` + `shared/http/*` (spec 005) |
-| `stores` | `shared/stores` | Generic signal-store features | Stays (`type:data-access`) |
-| `ui-components` | `shared/ui-components` | Widgets, form controls, validators, SCSS | `shared/ui/*` atomic levels, `util-forms`, `util-format` (specs 002–004) |
+| Project | Path | Today |
+|---|---|---|
+| `expenses-management` | `apps/expenses-management` | New app shell (spec 002): one placeholder page on the Olivier theme. Screens are rebuilt in later specs. |
+| `stores` | `shared/stores` | Generic signal-store features (`@shared/stores`) |
+| `ui-tokens` | `shared/ui/tokens` | Token contract, cascade layers, trimmed Bootstrap, theme compiler, `provideUi` and the light/dark service (`@shared/ui-tokens`) |
+| `theme-olivier` | `shared/themes/olivier` | The Olivier theme: `tokens.json` compiled to CSS (`@shared/theme-olivier`) |
+| `util-format` | `shared/util/format` | Money in millimes (`fr-TN`, TND) and local dates, with pipes (`@shared/util-format`) |
 
-Full target library map: [ARCHITECTURE §2](docs/ARCHITECTURE.md#2-library-map); migration of each existing piece: [§7](docs/ARCHITECTURE.md#7-migration-of-existing-code).
+The old app, its e2e test and the `auth` and `ui-components` libraries were deleted in spec 002; their replacements are listed in [ARCHITECTURE §7](docs/ARCHITECTURE.md#7-migration-of-existing-code). Full target library map: [ARCHITECTURE §2](docs/ARCHITECTURE.md#2-library-map).
 
 ## Prerequisites
 
@@ -26,15 +26,16 @@ Full target library map: [ARCHITECTURE §2](docs/ARCHITECTURE.md#2-library-map);
 ```bash
 npx nx serve expenses-management                        # dev server on http://localhost:4200
 npx nx build expenses-management --configuration=development
-npx nx lint <project>                                   # or: npx nx run-many -t lint
+npx nx lint <project>                                   # ESLint + Stylelint
 npx nx affected -t lint build                           # only projects changed vs main
 npx nx test <project>                                   # unit tests (Vitest)
-npx nx e2e expenses-management-e2e                      # Playwright smoke test (starts the dev server)
-npm run ci                                              # lint + test + build for projects changed vs main
-npm run ci:all                                          # lint + test + build for every project
+npx nx compile-tokens theme-olivier                     # regenerate the theme CSS after editing tokens.json
+npx nx check-tokens theme-olivier                       # validate a theme: format, required tokens, contrast, stale output
+npm run ci                                              # lint + test + build + check-tokens for projects changed vs main
+npm run ci:all                                          # the same for every project
 ```
 
-CI (`.github/workflows/ci.yml`) runs lint, test and build for the affected projects on every pull request, and the e2e smoke test on `main`.
+CI (`.github/workflows/ci.yml`) runs lint, test, build and check-tokens for the affected projects on every pull request and every push to `main`. There is no e2e test until the first real screen returns.
 
 ## How work is done
 
@@ -46,9 +47,9 @@ All non-trivial work follows **spec-driven development** (rules in [CLAUDE.md](C
 
 ## Roadmap
 
-1. **001 Foundations** (in review): tests, e2e, project tags and boundaries, CI, OnPush everywhere, build fixes, removal of unused projects
-2. **002 Tokens and themes** (next)
-3. **003 Atoms and catalog**
+1. **001 Foundations** (done): tests, project tags and boundaries, CI, OnPush everywhere, build fixes, removal of unused projects
+2. **002 Tokens and themes** (in review): token contract, Olivier theme, compiler, Stylelint and contrast checks, `util-format`; old apps and libraries deleted, new app shell
+3. **003 Atoms and catalog** (next)
 4. **004 Molecules, organisms and templates**
 5. **005 Shared logic** (`http/*`, `identity/*`)
 

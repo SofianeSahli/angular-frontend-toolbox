@@ -1,0 +1,38 @@
+{
+  "name": "theme-olivier",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/themes/olivier/src",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "type:ui",
+    "layer:tokens"
+  ],
+  "targets": {
+    "compile-tokens": {
+      "command": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON shared/ui/tokens/compiler/cli.ts theme shared/themes/olivier"
+    },
+    "check-tokens": {
+      "command": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON shared/ui/tokens/compiler/cli.ts theme shared/themes/olivier --check",
+      "cache": true,
+      "inputs": [
+        "{workspaceRoot}/shared/ui/tokens/contract.json",
+        "{workspaceRoot}/shared/ui/tokens/compiler/*.ts",
+        "{projectRoot}/tokens.json",
+        "{projectRoot}/contrast-pairs.json",
+        "{projectRoot}/src/*.generated.*"
+      ]
+    },
+    "stylelint": {
+      "command": "stylelint \"shared/themes/olivier/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  },
+  "implicitDependencies": [
+    "ui-tokens"
+  ]
+}

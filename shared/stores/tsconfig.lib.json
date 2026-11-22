@@ -23,5 +23,7 @@
     "src/**/*.spec.jsx",
     "src/test-setup.ts"
   ],
-  "include": ["src/**/*.ts", "../auth/src/lib/auth/auth.signals.ts"]
+  "include": [
+    "src/**/*.ts"
+  ]
 }

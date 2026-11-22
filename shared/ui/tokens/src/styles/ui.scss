@@ -1,0 +1,15 @@
+@use 'sass:meta';
+
+@layer reset, vendor, tokens, ui, app;
+
+@layer vendor {
+  @include meta.load-css('bootstrap/dist/css/bootstrap-reboot');
+  @include meta.load-css('bootstrap/dist/css/bootstrap-grid');
+  @include meta.load-css('bootstrap/dist/css/bootstrap-utilities');
+}
+
+@include meta.load-css('defaults.generated');
+
+@layer tokens {
+  @include meta.load-css('bootstrap-map');
+}

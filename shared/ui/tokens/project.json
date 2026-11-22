@@ -1,0 +1,34 @@
+{
+  "name": "ui-tokens",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/ui/tokens/src",
+  "prefix": "ui",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "type:ui",
+    "layer:tokens"
+  ],
+  "targets": {
+    "compile-tokens": {
+      "command": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON shared/ui/tokens/compiler/cli.ts defaults"
+    },
+    "check-tokens": {
+      "command": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON shared/ui/tokens/compiler/cli.ts defaults --check",
+      "cache": true,
+      "inputs": [
+        "{workspaceRoot}/shared/ui/tokens/contract.json",
+        "{workspaceRoot}/shared/ui/tokens/compiler/*.ts",
+        "{projectRoot}/src/styles/defaults.generated.css"
+      ]
+    },
+    "stylelint": {
+      "command": "stylelint \"shared/ui/tokens/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  }
+}

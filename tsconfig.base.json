@@ -18,14 +18,17 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shared/auth": [
-        "shared/auth/src/index.ts"
-      ],
       "@shared/stores": [
         "shared/stores/src/index.ts"
       ],
-      "@shared/ui-components": [
-        "shared/ui-components/src/index.ts"
+      "@shared/theme-olivier": [
+        "shared/themes/olivier/src/index.ts"
+      ],
+      "@shared/ui-tokens": [
+        "shared/ui/tokens/src/index.ts"
+      ],
+      "@shared/util-format": [
+        "shared/util/format/src/index.ts"
       ]
     },
     "strict": false,

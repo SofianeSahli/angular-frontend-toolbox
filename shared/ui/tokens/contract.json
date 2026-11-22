@@ -1,0 +1,50 @@
+{
+  "$comment": "The semantic token contract (ARCHITECTURE §5, spec 002 REQ-1.1, REQ-1.2). 'required': every theme must provide these. 'defaults': brand-free values a theme may override.",
+  "required": {
+    "color": [
+      "bg",
+      "surface",
+      "surface-sunken",
+      "surface-raised",
+      "line",
+      "line-strong",
+      "ink",
+      "ink-muted",
+      "brand",
+      "on-brand",
+      "brand-soft",
+      "accent",
+      "on-accent",
+      "accent-soft",
+      "success",
+      "success-soft",
+      "warning",
+      "warning-soft",
+      "danger",
+      "danger-soft",
+      "focus-ring",
+      "data-1",
+      "data-2",
+      "data-3",
+      "data-4",
+      "data-5",
+      "data-6",
+      "data-7",
+      "data-8",
+      "data-9",
+      "data-10"
+    ],
+    "font": ["sans"]
+  },
+  "defaults": [
+    { "name": "control-height-sm", "value": "36px", "usage": "Small controls." },
+    { "name": "control-height-md", "value": "44px", "usage": "Default control height; minimum touch target." },
+    { "name": "control-height-lg", "value": "52px", "usage": "Large controls." },
+    { "name": "focus-ring-width", "value": "2px", "usage": "Keyboard focus ring width (colour: the theme's focus-ring)." },
+    { "name": "focus-ring-offset", "value": "2px", "usage": "Gap between the control and its focus ring." },
+    { "name": "duration-fast", "value": "120ms", "usage": "Hover, press. 0ms under reduced motion." },
+    { "name": "duration-base", "value": "200ms", "usage": "Most transitions. 0ms under reduced motion." },
+    { "name": "duration-slow", "value": "320ms", "usage": "Sheets and drawers. 0ms under reduced motion." },
+    { "name": "easing-standard", "value": "cubic-bezier(0.2, 0, 0, 1)", "usage": "Default easing curve." }
+  ]
+}
