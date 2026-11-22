@@ -14,3 +14,7 @@ export * from './lib/checkbox/checkbox';
 export * from './lib/radio/radio';
 export * from './lib/switch/switch';
 export * from './lib/check-row/check-row';
+export * from './lib/badge/badge';
+export * from './lib/avatar/avatar';
+export * from './lib/amount/amount';
+export * from './lib/progress/progress';

@@ -1,0 +1,34 @@
+@layer ui {
+  :host {
+    --ui-progress-block-size: 8px;
+    --ui-progress-stripe: 6px;
+    --ui-progress-stripe-gap: 12px;
+    --ui-progress-stripe-light-mix: 70%;
+
+    display: block;
+    block-size: var(--ui-progress-block-size);
+    overflow: hidden;
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-surface-sunken);
+  }
+
+  .ui-progress__bar {
+    display: block;
+    block-size: 100%;
+    border-radius: inherit;
+    background: var(--ui-color-accent);
+  }
+
+  :host(.ui-progress--warning) .ui-progress__bar {
+    background: var(--ui-color-warning);
+  }
+
+  :host(.ui-progress--danger) .ui-progress__bar {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--ui-color-danger) 0 var(--ui-progress-stripe),
+      color-mix(in srgb, var(--ui-color-danger) var(--ui-progress-stripe-light-mix), var(--ui-color-surface)) var(--ui-progress-stripe)
+        var(--ui-progress-stripe-gap)
+    );
+  }
+}

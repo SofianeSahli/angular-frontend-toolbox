@@ -1,0 +1,45 @@
+@layer ui {
+  :host {
+    --ui-avatar-size: 32px;
+    --ui-avatar-font-size: 13px;
+
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--ui-avatar-size);
+    block-size: var(--ui-avatar-size);
+    overflow: hidden;
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-brand-soft);
+    color: var(--ui-color-brand);
+    font-size: var(--ui-avatar-font-size);
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+
+  :host(.ui-avatar--sm) {
+    --ui-avatar-size: 24px;
+    --ui-avatar-font-size: 11px;
+  }
+
+  :host(.ui-avatar--lg) {
+    --ui-avatar-size: 40px;
+    --ui-avatar-font-size: 15px;
+  }
+
+  :host(.ui-avatar--member-2) {
+    background: var(--ui-color-accent-soft);
+    color: var(--ui-color-accent);
+  }
+
+  :host(.ui-avatar--member-3) {
+    background: var(--ui-color-warning-soft);
+    color: var(--ui-color-warning);
+  }
+
+  img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+}
