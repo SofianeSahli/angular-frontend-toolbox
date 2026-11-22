@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="fr" data-theme="light" data-accent="olive">
+<head><meta charset="utf-8"><title>Spec 004 — design reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../../shared/ui/tokens/src/styles/defaults.generated.css">
+<link rel="stylesheet" href="../../../shared/themes/olivier/src/olivier.generated.css">
+<link rel="stylesheet" href="atoms-shim.css">
+<link rel="stylesheet" href="reference.css">
+<style>
+body{margin:0;padding:24px;background:var(--ui-color-bg);color:var(--ui-color-ink);font-family:var(--ui-font-sans);font-size:15px;line-height:22px}
+.pv-bar{display:flex;gap:8px;align-items:center;margin-bottom:16px}
+.pv-level{margin:32px 0 12px;font-size:28px}
+.pv-card{margin-bottom:24px;border:1px solid var(--ui-color-line);border-radius:16px;background:var(--ui-color-surface);overflow:hidden}
+.pv-name{margin:0;padding:8px 16px;font-size:13px;color:var(--ui-color-ink-muted);border-bottom:1px solid var(--ui-color-line)}
+</style></head>
+<body>
+<div class="pv-bar"><strong>Spec 004 — design reference</strong>
+<button onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'">Light / dark</button>
+<button onclick="document.documentElement.dir=document.documentElement.dir==='rtl'?'ltr':'rtl'">LTR / RTL</button></div>
+<h2 class="pv-level">Molecules</h2>
+<section class="pv-card" id="FormField"><h3 class="pv-name">FormField</h3>
+<div class="demo-col">
+ <div class="ui-form-field"><label class="ui-label" for="ff1">Nom du foyer</label>
+  <div class="ui-form-field__control"><input class="ui-input" id="ff1" value="Foyer Sahli" aria-describedby="ff1h"></div>
+  <div class="ui-form-field__footer"><span class="ui-field-message" id="ff1h" style="margin:0">Visible par les membres.</span><span class="ui-form-field__counter">11/60</span></div></div>
+ <div class="ui-form-field"><label class="ui-label" for="ff2">Mot de passe</label>
+  <div class="ui-form-field__control"><input class="ui-input" id="ff2" type="password" value="motdepasse"><button type="button" class="ui-form-field__action" aria-label="Afficher le mot de passe"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+ <div class="ui-form-field"><label class="ui-label" for="ff3">Téléphone <span class="ui-label__optional">(facultatif)</span></label>
+  <div class="ui-form-field__control" dir="ltr"><span class="ui-form-field__affix ui-form-field__affix--prefix">+216</span><input class="ui-input" id="ff3" placeholder="20 123 456"></div></div>
+ <div class="ui-form-field"><label class="ui-label" for="ff4">Montant</label>
+  <div class="ui-form-field__control"><input class="ui-input" id="ff4" value="abc" aria-invalid="true" aria-describedby="ff4e"></div>
+  <div class="ui-field-message ui-field-message--error" id="ff4e" style="margin:0"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Saisissez un montant, par exemple 12,500.</div></div>
+</div>
+</section>
+<section class="pv-card" id="Alert"><h3 class="pv-name">Alert</h3>
+<div class="demo-col">
+ <div class="ui-alert ui-alert--info" role="status"><svg class="ui-alert__icon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><div class="ui-alert__body">Vous serez <strong>propriétaire</strong> : vous pourrez renommer le foyer et inviter des membres.</div></div>
+ <div class="ui-alert ui-alert--warning" role="status"><svg class="ui-alert__icon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 4.3 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0z"/></svg><div class="ui-alert__body"><span class="ui-alert__title">La devise est définitive</span>Elle ne pourra plus être changée ensuite.</div></div>
+ <div class="ui-alert ui-alert--success" role="status"><svg class="ui-alert__icon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg><div class="ui-alert__body">Invitation envoyée à amira@exemple.com.</div></div>
+ <div class="ui-alert ui-alert--danger" role="alert"><svg class="ui-alert__icon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg><div class="ui-alert__body"><span class="ui-alert__title">Connexion impossible</span>Vérifiez votre connexion internet puis réessayez.<div class="ui-alert__actions"><button class="ui-button ui-button--secondary ui-button--sm">Réessayer</button></div></div></div>
+</div>
+</section>
+<section class="pv-card" id="SegmentedControl"><h3 class="pv-name">SegmentedControl</h3>
+<div class="demo-col">
+ <div class="ui-segmented" role="radiogroup" aria-label="Pour qui ?"><button class="ui-segmented__item" role="radio" aria-checked="true">Foyer Sahli</button><button class="ui-segmented__item" role="radio" aria-checked="false">Moi seulement</button></div>
+ <div class="ui-segmented" role="radiogroup" aria-label="Type"><button class="ui-segmented__item" role="radio" aria-checked="false">Dépense</button><button class="ui-segmented__item" role="radio" aria-checked="true">Revenu</button><button class="ui-segmented__item" role="radio" aria-checked="false" disabled>Transfert</button></div>
+</div>
+</section>
+<section class="pv-card" id="ChipGroup"><h3 class="pv-name">ChipGroup</h3>
+<div class="demo-col">
+ <div class="ui-chip-group" role="group" aria-label="Type d'opération"><button class="ui-chip" aria-pressed="true">Tout</button><button class="ui-chip" aria-pressed="false">Dépenses <span class="ui-chip__count">24</span></button><button class="ui-chip" aria-pressed="false">Revenus <span class="ui-chip__count">1</span></button></div>
+ <div class="ui-chip-group ui-chip-group--scroll" role="group" aria-label="Catégories"><button class="ui-chip" aria-pressed="true">Alimentation</button><button class="ui-chip" aria-pressed="true">Transport</button><button class="ui-chip" aria-pressed="false">Santé</button><button class="ui-chip" aria-pressed="false">Cafés &amp; resto</button><button class="ui-chip" aria-pressed="false">École</button></div>
+</div>
+</section>
+<section class="pv-card" id="Stat"><h3 class="pv-name">Stat</h3>
+<div class="demo" style="align-items:flex-start;gap:32px">
+ <div class="ui-stat ui-stat--hero"><span class="ui-stat__label">Reste à dépenser</span><span class="ui-stat__value">657 DT</span><span class="ui-stat__meta">≈ 73 DT / jour · 9 jours</span></div>
+ <div class="ui-stat"><span class="ui-stat__label">Dépensé ce mois</span><span class="ui-stat__value">1 843 DT</span><span class="ui-stat__meta">+112 DT vs le 21 octobre</span></div>
+ <div class="ui-stat ui-stat--income"><span class="ui-stat__label">Revenus</span><span class="ui-stat__value">+2 800 DT</span></div>
+</div>
+</section>
+<section class="pv-card" id="ListItem"><h3 class="pv-name">ListItem</h3>
+<div class="demo-col" style="max-width:420px">
+<ul class="ui-list">
+ <li><a class="ui-list-item" href="#"><span class="ui-icon-tile" style="color:var(--ui-color-data-1)"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.5L20 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg></span><span class="ui-list-item__body"><span class="ui-list-item__title">Carrefour Market</span><span class="ui-list-item__subtitle">Alimentation · Sofiane</span></span><span class="ui-list-item__trailing"><span class="ui-amount">48,350 DT</span></span></a></li>
+ <li><a class="ui-list-item" href="#"><span class="ui-icon-tile" style="color:var(--ui-color-data-6)"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l1.5-5A2 2 0 0 1 7.4 8.6h9.2a2 2 0 0 1 1.9 1.4L20 15v3H4z"/></svg></span><span class="ui-list-item__body"><span class="ui-list-item__title">Taxi</span><span class="ui-list-item__subtitle">Transport · Amira</span></span><span class="ui-list-item__trailing"><span class="ui-amount">12,000 DT</span></span></a></li>
+ <li><div class="ui-list-item"><span class="ui-avatar ui-avatar--m2" aria-hidden="true">A</span><span class="ui-list-item__body"><span class="ui-list-item__title">Amira</span><span class="ui-list-item__subtitle">Membre</span></span><span class="ui-list-item__trailing"><span class="ui-badge">Invitée</span></span></div></li>
+</ul></div>
+</section>
+<section class="pv-card" id="SectionHeader"><h3 class="pv-name">SectionHeader</h3>
+<div class="demo-col" style="max-width:420px">
+ <div class="ui-section-header"><h2 class="ui-section-header__title">À surveiller</h2><a class="ui-link" href="#">Toutes les catégories</a></div>
+ <div class="ui-section-header"><h2 class="ui-section-header__title">Dépenses courantes</h2><span class="ui-section-header__aside">hors loyer et factures</span></div>
+</div>
+</section>
+<section class="pv-card" id="MonthSwitcher"><h3 class="pv-name">MonthSwitcher</h3>
+<div class="demo" style="flex-direction:column;align-items:flex-start">
+ <div class="ui-month-switcher"><button class="ui-button ui-button--ghost ui-button--sm ui-button--icon" aria-label="Mois précédent"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><span class="ui-month-switcher__label" aria-live="polite">Novembre 2026</span><button class="ui-button ui-button--ghost ui-button--sm ui-button--icon" aria-label="Mois suivant"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+ <div class="ui-month-switcher ui-month-switcher--plain"><button class="ui-button ui-button--ghost ui-button--icon" aria-label="Mois précédent"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><span class="ui-month-switcher__label"><span class="ui-month-switcher__caption">DÉPENSES DU FOYER</span>Novembre 2026</span><button class="ui-button ui-button--ghost ui-button--icon" aria-label="Mois suivant"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+</div>
+</section>
+<section class="pv-card" id="SearchField"><h3 class="pv-name">SearchField</h3>
+<div class="demo-col"><div class="ui-search-field"><svg class="ui-search-field__icon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input class="ui-input" type="search" aria-label="Rechercher" value="carrefour"><button class="ui-search-field__clear" aria-label="Effacer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>
+</section>
+<section class="pv-card" id="EmptyState"><h3 class="pv-name">EmptyState</h3>
+<div class="ui-empty"><span class="ui-empty__icon"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h5l2 3h4l2-3h5"/><path d="M5 5h14l2 8v6H3v-6z"/></svg></span><h3 class="ui-empty__title">Aucune opération ce mois-ci</h3><p class="ui-empty__text">Ajoutez votre première dépense : elle apparaîtra ici, groupée par jour.</p><button class="ui-button ui-button--primary"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Ajouter une dépense</button></div>
+</section>
+<section class="pv-card" id="Menu"><h3 class="pv-name">Menu</h3>
+<div class="demo" style="align-items:flex-start">
+ <button class="ui-button ui-button--ghost ui-button--icon" aria-label="Plus d'actions" aria-haspopup="menu" aria-expanded="true"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button>
+ <div class="ui-menu" role="menu"><button class="ui-menu__item" role="menuitem"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>Modifier</button><button class="ui-menu__item" role="menuitem"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Dupliquer</button><div class="ui-menu__separator" role="separator"></div><button class="ui-menu__item ui-menu__item--danger" role="menuitem"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Supprimer</button></div>
+</div>
+</section>
+<section class="pv-card" id="OptionCard"><h3 class="pv-name">OptionCard</h3>
+<fieldset class="demo-col" style="border:0;margin:0">
+ <label class="ui-option-card"><input type="radio" name="oc" class="ui-radio" checked><span class="ui-option-card__body"><span class="ui-option-card__title"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M15 14.5c3 0 6 1.5 6 4.5"/></svg>Créer un foyer</span><span class="ui-option-card__desc">Un carnet partagé avec votre conjoint·e. Chaque membre voit et ajoute tout.</span></span></label>
+ <label class="ui-option-card"><input type="radio" name="oc" class="ui-radio"><span class="ui-option-card__body"><span class="ui-option-card__title"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>Un carnet personnel</span><span class="ui-option-card__desc">Pour vous seul·e, dans la devise de votre choix.</span></span></label>
+</fieldset>
+</section>
+<section class="pv-card" id="CodeInput"><h3 class="pv-name">CodeInput</h3>
+<div class="demo-col"><label class="ui-label" for="code">Code reçu</label>
+ <div class="ui-code-input"><input class="ui-code-input__native" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" value="482" aria-describedby="codeh"><span class="ui-code-input__cell" aria-hidden="true">4</span><span class="ui-code-input__cell" aria-hidden="true">8</span><span class="ui-code-input__cell" aria-hidden="true">2</span><span class="ui-code-input__cell ui-code-input__cell--active" aria-hidden="true"></span><span class="ui-code-input__cell" aria-hidden="true"></span><span class="ui-code-input__cell" aria-hidden="true"></span></div>
+ <span class="ui-field-message" id="codeh" style="margin:0">Collez le code ou tapez-le.</span></div>
+</section>
+<section class="pv-card" id="Stepper"><h3 class="pv-name">Stepper</h3>
+<div class="demo-col"><div class="ui-stepper"><span class="ui-stepper__label">Étape 1 sur 2</span><div class="ui-stepper__bars" aria-hidden="true"><span class="ui-stepper__bar ui-stepper__bar--done"></span><span class="ui-stepper__bar"></span></div></div></div>
+</section>
+<section class="pv-card" id="AvatarGroup"><h3 class="pv-name">AvatarGroup</h3>
+<div class="demo"><span class="ui-avatar-group"><span class="ui-avatar" role="img" aria-label="Sofiane">S</span><span class="ui-avatar ui-avatar--m2" role="img" aria-label="Amira">A</span></span><span class="ui-avatar-group"><span class="ui-avatar ui-avatar--sm" aria-hidden="true">S</span><span class="ui-avatar ui-avatar--sm ui-avatar--m2" aria-hidden="true">A</span><span class="ui-avatar ui-avatar--sm ui-avatar--m3" aria-hidden="true">+2</span></span></div>
+</section>
+<h2 class="pv-level">Organisms</h2>
+<section class="pv-card" id="TopBar"><h3 class="pv-name">TopBar</h3>
+<div class="demo-col" style="max-width:390px;padding:0">
+ <header class="ui-top-bar"><button class="ui-button ui-button--ghost ui-button--icon" aria-label="Retour"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><h1 class="ui-top-bar__title">Nouveau foyer</h1><div class="ui-top-bar__actions"><button class="ui-button ui-button--ghost ui-button--icon" aria-label="Fermer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></header>
+ <header class="ui-top-bar ui-top-bar--start"><button class="ui-button ui-button--ghost" style="font-size:17px">Dépenses du foyer<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><span></span><div class="ui-top-bar__actions"><span class="ui-avatar-group"><span class="ui-avatar" aria-hidden="true">S</span><span class="ui-avatar ui-avatar--m2" aria-hidden="true">A</span></span></div></header>
+</div>
+</section>
+<section class="pv-card" id="SideRail"><h3 class="pv-name">SideRail</h3>
+<nav class="ui-side-rail" aria-label="Navigation principale" style="block-size:580px;position:static">
+ <div class="ui-side-rail__brand"><span aria-hidden="true" style="inline-size:32px;block-size:32px;border-radius:10px;background:var(--ui-color-brand);color:var(--ui-color-on-brand);display:flex;align-items:center;justify-content:center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 13c-3 0-5-2-5-5 3 0 5 2 5 5zM12 11c0-3 2-6 6-6 0 4-3 6-6 6z"/></svg></span>Olivier</div>
+ <button class="ui-button ui-button--primary" style="inline-size:100%"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Ajouter une dépense<kbd class="ui-kbd ui-kbd--on-accent">N</kbd></button>
+ <div class="ui-side-rail__nav"><a class="ui-side-rail__item" href="#"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1z"/></svg>Accueil</a><a class="ui-side-rail__item" href="#" aria-current="page"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Opérations</a><a class="ui-side-rail__item" href="#"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Budget</a><a class="ui-side-rail__item" href="#"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M15 14.5c3 0 6 1.5 6 4.5"/></svg>Foyer</a></div>
+ <div class="ui-side-rail__nav"><p class="ui-side-rail__section-label">Carnets</p><a class="ui-side-rail__item" href="#" style="font-size:14px">Dépenses du foyer</a><a class="ui-side-rail__item" href="#" style="font-size:14px">Mes dépenses · EUR</a></div>
+ <div class="ui-side-rail__footer" style="display:flex;align-items:center;gap:10px"><span class="ui-avatar" aria-hidden="true">S</span><span><span style="display:block;font-weight:500;font-size:14px">Sofiane</span><span style="font-size:12px;color:var(--ui-color-ink-muted)">Foyer Sahli · propriétaire</span></span></div>
+</nav>
+</section>
+<section class="pv-card" id="BottomTabs"><h3 class="pv-name">BottomTabs</h3>
+<div class="demo-col" style="max-width:390px;padding:40px 0 0">
+<nav class="ui-bottom-tabs" aria-label="Navigation principale" style="position:static">
+ <a class="ui-bottom-tabs__item" href="#" aria-current="page"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1z"/></svg>Accueil</a><a class="ui-bottom-tabs__item" href="#"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Opérations</a>
+ <button class="ui-bottom-tabs__action" aria-label="Ajouter une dépense"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+ <a class="ui-bottom-tabs__item" href="#"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Budget</a><a class="ui-bottom-tabs__item" href="#"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M15 14.5c3 0 6 1.5 6 4.5"/></svg>Foyer</a>
+</nav></div>
+</section>
+<section class="pv-card" id="Dialog"><h3 class="pv-name">Dialog</h3>
+<div class="demo" style="align-items:flex-end;gap:32px;background:rgb(var(--ui-color-ink-rgb) / 0.4);padding:24px">
+ <div class="ui-dialog ui-dialog--sm" role="dialog" aria-labelledby="dg1"><div class="ui-dialog__header"><h2 class="ui-dialog__title" id="dg1">Renommer le foyer</h2><button class="ui-button ui-button--ghost ui-button--icon" aria-label="Fermer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="ui-dialog__body"><div class="ui-form-field"><label class="ui-label" for="dg1i">Nom du foyer</label><div class="ui-form-field__control"><input class="ui-input" id="dg1i" value="Foyer Sahli"></div></div></div>
+  <div class="ui-dialog__footer"><button class="ui-button ui-button--secondary">Annuler</button><button class="ui-button ui-button--primary">Enregistrer</button></div></div>
+ <div class="ui-dialog ui-dialog--sheet" role="dialog" aria-labelledby="dg2" style="inline-size:360px"><span class="ui-dialog__handle" aria-hidden="true"></span><div class="ui-dialog__header"><h2 class="ui-dialog__title" id="dg2">Choisir un carnet</h2></div>
+  <div class="ui-dialog__body" style="padding:0"><ul class="ui-list" style="border:0;border-radius:0"><li><button class="ui-list-item">Dépenses du foyer</button></li><li><button class="ui-list-item">Mes dépenses · EUR</button></li></ul></div>
+  <div class="ui-dialog__footer"><button class="ui-button ui-button--secondary">Nouveau carnet</button></div></div>
+</div>
+</section>
+<section class="pv-card" id="ConfirmDialog"><h3 class="pv-name">ConfirmDialog</h3>
+<div class="demo" style="background:rgb(var(--ui-color-ink-rgb) / 0.4);padding:24px">
+ <div class="ui-dialog ui-dialog--sm" role="alertdialog" aria-labelledby="cf1" aria-describedby="cf1d"><div class="ui-dialog__header"><h2 class="ui-dialog__title" id="cf1">Supprimer cette dépense ?</h2></div>
+  <div class="ui-dialog__body" id="cf1d">Carrefour Market · 48,350 DT. Vous pourrez l'annuler pendant quelques secondes.</div>
+  <div class="ui-dialog__footer"><button class="ui-button ui-button--secondary">Annuler</button><button class="ui-button ui-button--danger">Supprimer</button></div></div>
+</div>
+</section>
+<section class="pv-card" id="Toast"><h3 class="pv-name">Toast</h3>
+<div class="demo-col" style="max-width:480px">
+ <div class="ui-toast ui-toast--success" role="status"><svg class="ui-toast__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg><span class="ui-toast__message">Dépense supprimée.</span><button class="ui-toast__action">Annuler</button></div>
+ <div class="ui-toast ui-toast--danger" role="alert"><svg class="ui-toast__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg><span class="ui-toast__message">Hors ligne : la dépense sera envoyée au retour du réseau.</span></div>
+</div>
+</section>
+<section class="pv-card" id="FilterBar"><h3 class="pv-name">FilterBar</h3>
+<div class="ui-filter-bar" style="padding:16px">
+ <div class="ui-search-field"><svg class="ui-search-field__icon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input class="ui-input" type="search" aria-label="Rechercher" placeholder="Rechercher une dépense, une note…"></div>
+ <div class="ui-form-field" style="flex-direction:row;align-items:center"><label class="ui-label" for="fbc" style="margin:0">Catégorie</label><select class="ui-select" id="fbc" style="inline-size:auto"><option>Toutes</option></select></div>
+ <div class="ui-segmented" role="radiogroup" aria-label="Membre"><button class="ui-segmented__item" role="radio" aria-checked="true">Tous</button><button class="ui-segmented__item" role="radio" aria-checked="false">Sofiane</button><button class="ui-segmented__item" role="radio" aria-checked="false">Amira</button></div>
+</div>
+</section>
+<section class="pv-card" id="GroupedList"><h3 class="pv-name">GroupedList</h3>
+<div class="ui-grouped-list" style="max-width:420px;padding:16px">
+ <section><div class="ui-grouped-list__header"><span>Aujourd'hui · sam. 21 nov.</span><span>63,850 DT</span></div>
+  <ul class="ui-list"><li><a class="ui-list-item" href="#"><span class="ui-icon-tile" style="color:var(--ui-color-data-1)"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.5L20 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg></span><span class="ui-list-item__body"><span class="ui-list-item__title">Carrefour Market</span><span class="ui-list-item__subtitle">Alimentation · Sofiane</span></span><span class="ui-list-item__trailing"><span class="ui-amount">48,350 DT</span></span></a></li><li><a class="ui-list-item" href="#"><span class="ui-icon-tile" style="color:var(--ui-color-data-6)"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l1.5-5A2 2 0 0 1 7.4 8.6h9.2a2 2 0 0 1 1.9 1.4L20 15v3H4z"/></svg></span><span class="ui-list-item__body"><span class="ui-list-item__title">Taxi</span><span class="ui-list-item__subtitle">Transport · Amira</span></span><span class="ui-list-item__trailing"><span class="ui-amount">12,000 DT</span></span></a></li></ul></section>
+ <section><div class="ui-grouped-list__header"><span>Hier · ven. 20 nov.</span><span>87,500 DT</span></div>
+  <ul class="ui-list"><li><a class="ui-list-item" href="#"><span class="ui-icon-tile" style="color:var(--ui-color-data-10)"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1z"/></svg></span><span class="ui-list-item__body"><span class="ui-list-item__title">Loyer</span><span class="ui-list-item__subtitle">Logement · Sofiane</span></span><span class="ui-list-item__trailing"><span class="ui-amount">650,000 DT</span></span></a></li></ul></section>
+</div>
+</section>
+<h2 class="pv-level">Templates</h2>
+<section class="pv-card" id="AppShell"><h3 class="pv-name">AppShell</h3>
+<div style="display:flex;gap:24px;align-items:flex-start;padding:16px;background:var(--ui-color-surface-sunken)">
+ <div style="flex:1;display:grid;grid-template-columns:120px 1fr;block-size:300px;border:1px solid var(--ui-color-line);border-radius:12px;overflow:hidden;background:var(--ui-color-bg)">
+  <div style="background:var(--ui-color-surface);border-inline-end:1px solid var(--ui-color-line);padding:12px;font-size:12px;color:var(--ui-color-ink-muted)">ui-side-rail<br>(≥ 820 px)</div>
+  <div style="padding:12px;font-size:12px;color:var(--ui-color-ink-muted)">main: router-outlet<br>→ ui-page<br><br>ui-toast-region</div></div>
+ <div style="inline-size:150px;display:grid;grid-template-rows:40px 1fr 48px;block-size:300px;border:1px solid var(--ui-color-line);border-radius:12px;overflow:hidden;background:var(--ui-color-bg);font-size:12px;color:var(--ui-color-ink-muted)">
+  <div style="padding:10px;border-block-end:1px solid var(--ui-color-line)">ui-top-bar</div><div style="padding:10px">main<br>(&lt; 820 px)</div><div style="padding:10px;background:var(--ui-color-surface);border-block-start:1px solid var(--ui-color-line)">ui-bottom-tabs</div></div>
+</div>
+</section>
+<section class="pv-card" id="PageLayout"><h3 class="pv-name">PageLayout</h3>
+<div class="ui-page" style="--ui-page-padding:16px;max-inline-size:none">
+ <header class="ui-page__header"><div><p class="ui-page__eyebrow">Bonjour Sofiane · samedi 21 novembre</p><h1 class="ui-page__title">Dépenses du foyer</h1></div><div class="ui-page__actions"><span class="ui-badge">actions</span></div></header>
+ <div class="ui-page__columns"><div style="block-size:120px;border:1px dashed var(--ui-color-line-strong);border-radius:12px;padding:12px;font-size:12px;color:var(--ui-color-ink-muted)">main column (2fr)</div><div style="block-size:120px;border:1px dashed var(--ui-color-line-strong);border-radius:12px;padding:12px;font-size:12px;color:var(--ui-color-ink-muted)">aside (1fr) · stacks under 1100 px</div></div>
+</div>
+</section>
+<section class="pv-card" id="AuthLayout"><h3 class="pv-name">AuthLayout</h3>
+<div class="ui-auth" style="min-block-size:300px;grid-template-columns:5fr 7fr">
+ <div class="ui-auth__brand" style="padding:24px"><span style="font-weight:600">Olivier</span><span style="font-size:20px;line-height:28px;font-weight:600">Brand panel: logo, promise, benefits</span><span style="font-size:12px">footer note</span></div>
+ <div class="ui-auth__main" style="padding:16px"><div class="ui-auth__toolbar"><span class="ui-badge">FR · EN · ع</span></div><div class="ui-auth__content" style="padding:0"><div class="ui-auth__panel" style="gap:8px"><h1 style="margin:0;font-size:22px">Créer un compte</h1><div style="block-size:80px;border:1px dashed var(--ui-color-line-strong);border-radius:12px;padding:8px;font-size:12px;color:var(--ui-color-ink-muted)">form (max 400 px)</div></div></div></div>
+</div>
+</section>
+<section class="pv-card" id="FlowLayout"><h3 class="pv-name">FlowLayout</h3>
+<div class="ui-flow" style="min-block-size:540px;max-inline-size:390px;margin:0;border:1px solid var(--ui-color-line);border-radius:12px">
+ <div class="ui-flow__bar"><button class="ui-button ui-button--ghost ui-button--icon" aria-label="Retour"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><span class="ui-stepper__label">Étape 1 sur 2</span><button class="ui-button ui-button--ghost ui-button--icon" aria-label="Fermer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+ <div class="ui-stepper__bars" aria-hidden="true" style="margin-block-start:8px"><span class="ui-stepper__bar ui-stepper__bar--done"></span><span class="ui-stepper__bar"></span></div>
+ <div class="ui-flow__content"><div><h1 class="ui-flow__title">Nommez votre foyer</h1><p class="ui-flow__lead">C'est le nom que verront les membres.</p></div><div style="block-size:90px;border:1px dashed var(--ui-color-line-strong);border-radius:12px;padding:12px;font-size:12px;color:var(--ui-color-ink-muted)">form fields</div></div>
+ <div class="ui-flow__footer"><button class="ui-button ui-button--primary ui-button--lg" style="inline-size:100%">Continuer</button></div>
+</div>
+</section>
+</body></html>
