@@ -10,25 +10,34 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shared/auth": ["shared/auth/src/index.ts"],
-      "@shared/stores": ["shared/stores/src/index.ts"],
-      "@shared/ui-components": ["shared/ui-components/src/index.ts"],
-      "@env/launcher": ["apps/launcher/src/environments/*"],
-      "@env/expenses": [
-        "apps/expenses-management/src/environments/environment.ts"
+      "@shared/auth": [
+        "shared/auth/src/index.ts"
       ],
-      "profile-section": ["shared/profile-section/src/index.ts"]
+      "@shared/stores": [
+        "shared/stores/src/index.ts"
+      ],
+      "@shared/ui-components": [
+        "shared/ui-components/src/index.ts"
+      ]
     },
     "strict": false,
     "noUncheckedSideEffectImports": false,
-    "types": ["*"],
+    "types": [
+      "*"
+    ],
     "esModuleInterop": false,
     "ignoreDeprecations": "6.0"
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

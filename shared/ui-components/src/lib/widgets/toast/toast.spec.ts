@@ -1,23 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { ToastComponent } from './toast';
+import { ToastService } from './toast.service';
 
-import { Toast } from './toast';
-
-describe('Toast', () => {
-  let component: Toast;
-  let fixture: ComponentFixture<Toast>;
+describe('ToastComponent', () => {
+  let fixture: ComponentFixture<ToastComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Toast]
-    })
-    .compileComponents();
+      imports: [ToastComponent],
+      providers: [provideNoopAnimations()],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(Toast);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(ToastComponent);
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('shows a toast added through ToastService', () => {
+    TestBed.inject(ToastService).show('Enregistré', 'success');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Enregistré');
   });
 });

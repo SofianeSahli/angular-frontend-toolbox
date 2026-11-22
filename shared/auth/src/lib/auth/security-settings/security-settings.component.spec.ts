@@ -1,24 +1,21 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideTranslateService } from '@ngx-translate/core';
 import { SecuritySettingsComponent } from './security-settings.component';
 
 describe('SecuritySettingsComponent', () => {
-  let component: SecuritySettingsComponent;
   let fixture: ComponentFixture<SecuritySettingsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SecuritySettingsComponent ],
-      imports: [IonicModule.forRoot()]
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SecuritySettingsComponent],
+      providers: [provideTranslateService()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SecuritySettingsComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
-  }));
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

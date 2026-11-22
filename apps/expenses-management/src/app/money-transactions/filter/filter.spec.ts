@@ -1,21 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { appTestProviders } from '../../../testing/test-providers';
 import { Filter } from './filter';
 
 describe('Filter', () => {
-  let component: Filter;
   let fixture: ComponentFixture<Filter>;
 
   beforeEach(async () => {
+    localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [Filter],
+      providers: appTestProviders(),
     }).compileComponents();
 
     fixture = TestBed.createComponent(Filter);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

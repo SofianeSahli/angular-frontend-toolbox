@@ -13,7 +13,7 @@ import { SummaryItem } from './summary-item/summary-item';
   imports: [SummaryItem, ChartItem, SwitchButtons, DateRange, BarChart],
   templateUrl: './summary.html',
   styleUrl: './summary.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [routeAnimations]
 })
 export class Summary {

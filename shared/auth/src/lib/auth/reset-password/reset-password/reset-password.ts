@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -9,13 +9,13 @@ import { AuthService } from '../../../services/auth.service';
   selector: 'lib-reset-password',
   imports: [TextInput, ReactiveFormsModule, Loader, TranslatePipe],
   templateUrl: './reset-password.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './reset-password.scss',
 })
 export class ResetPassword {
   password_confirmation = new FormControl('', [Validators.required]);
   toastService = inject(ToastService)
-  loading = false
+  loading = signal(false)
   get passwordMismatchError() {
     return this.form.errors?.['passwordMismatch'] &&
       this.password_confirmation.touched;
@@ -32,7 +32,7 @@ export class ResetPassword {
 
   onSubmit() {
     if (this.form.valid && this.token) {
-      this.loading = true
+      this.loading.set(true)
       this.authService.resetPassword({
         password: this.form.controls.password.value!,
         token: this.token!

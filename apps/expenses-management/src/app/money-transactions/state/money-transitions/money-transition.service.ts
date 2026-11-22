@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BaseService, PaginatedEntities } from '@shared/stores';
-import { environment } from 'apps/expenses-management/src/environments/environments';
+import { environment } from '../../../../environments/environments';
 import { Observable } from 'rxjs';
 import { SummaryModel } from '../summary/Summary.model';
 import { MoneyTransition, MoneyTransitionQuery } from './MoneyTransition.model';
@@ -9,8 +9,8 @@ import { MoneyTransition, MoneyTransitionQuery } from './MoneyTransition.model';
 @Injectable({ providedIn: 'root' })
 export class MoneyTransitionService implements BaseService<MoneyTransition> {
   httpClient = inject(HttpClient);
-  ENTITY_ENDPOINT: string = '/money-transition';
-  BASE_URL = environment.mainAppUrl;
+  ENTITY_ENDPOINT = '/money-transition';
+  BASE_URL = environment.apiBaseUrl;
 
   toQueryParams(filters: MoneyTransitionQuery) {
     const params = new URLSearchParams();
@@ -55,7 +55,7 @@ export class MoneyTransitionService implements BaseService<MoneyTransition> {
 
   delete(id: string) {
     return this.httpClient.delete<MoneyTransition>(
-      `  ${this.BASE_URL}${this.ENTITY_ENDPOINT}/${id}`
+      `${this.BASE_URL}${this.ENTITY_ENDPOINT}/${id}`
     );
   }
 

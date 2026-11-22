@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideTranslateService } from '@ngx-translate/core';
 import { TextInput } from './text-input';
 
 describe('TextInput', () => {
-  let component: TextInput;
   let fixture: ComponentFixture<TextInput>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TextInput],
+      providers: [provideTranslateService()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TextInput);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

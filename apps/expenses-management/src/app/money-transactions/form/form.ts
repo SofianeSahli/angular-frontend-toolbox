@@ -12,7 +12,7 @@ import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validatio
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DateInputComponent, DynamicComponentInterface, Loader, SelectComponent, SwitchButtons, SwitchOption, TextInput } from '@shared/ui-components';
-import { Categorie } from 'apps/expenses-management/src/models/Categorie.model';
+import { Categorie } from '../../../models/Categorie.model';
 import { categoriesStore } from '../../../stores/categories.signal';
 import { moneyTransitionSignalStore } from '../state/money-transitions/money-transition.signal';
 import { MoneyTransition } from '../state/money-transitions/MoneyTransition.model';
@@ -25,7 +25,7 @@ import { MoneyTransition } from '../state/money-transitions/MoneyTransition.mode
     Loader, SwitchButtons, SelectComponent, TextInput, DateInputComponent
   ],
   templateUrl: './form.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./form.scss'],
 })
 export class Form implements DynamicComponentInterface<void> {

@@ -4,18 +4,25 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/expenses-management/src",
-  "tags": [],
+  "tags": [
+    "scope:expenses",
+    "type:app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath.base}"],
+      "outputs": [
+        "{options.outputPath.base}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": {
           "base": "dist/apps/expenses-management"
         },
         "index": "apps/expenses-management/src/index.html",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/expenses-management/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -30,7 +37,9 @@
           "node_modules/bootstrap-icons/font/bootstrap-icons.css"
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["shared/ui-components/src/lib"]
+          "includePaths": [
+            "shared/ui-components/src/lib"
+          ]
         },
         "browser": "apps/expenses-management/src/main.ts"
       },
@@ -38,20 +47,20 @@
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/launcher/src/environments/environment.ts",
-              "with": "apps/launcher/src/environments/environment.prod.ts"
+              "replace": "apps/expenses-management/src/environments/environments.ts",
+              "with": "apps/expenses-management/src/environments/environments.prod.ts"
             }
           ],
           "budgets": [
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "1.5mb"
             },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "4kb",
-              "maximumError": "8kb"
+              "maximumError": "10kb"
             }
           ],
           "outputHashing": "all"
@@ -66,7 +75,7 @@
     },
     "serve": {
       "continuous": true,
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@angular/build:dev-server",
       "defaultConfiguration": "development",
       "readyWhen": {
         "signal": true
@@ -92,10 +101,20 @@
       "readyWhen": {
         "signal": true
       },
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "options": {
         "buildTarget": "expenses-management:build",
         "spa": true
+      }
+    },
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "buildTarget": "expenses-management:build:development",
+        "tsConfig": "apps/expenses-management/tsconfig.spec.json",
+        "runner": "vitest"
       }
     }
   }

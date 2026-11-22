@@ -4,12 +4,12 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { ToastService } from './toast.service';
 
 @Component({
-  selector: 'app-toast',
+  selector: 'lib-toast',
   standalone: true,
   imports: [],
   templateUrl: './toast.html',
   styleUrls: ['./toast.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [

@@ -1,13 +1,14 @@
-import { Component, forwardRef, input, OnChanges, output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, forwardRef, input, OnChanges, output, SimpleChanges, ChangeDetectionStrategy, signal } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { redrawOnControlEvents } from '../redraw-on-control-events';
 
 @Component({
   selector: 'lib-text-input',
   imports: [TranslatePipe],
   templateUrl: './text-input.html',
   styleUrl: './text-input.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -39,16 +40,20 @@ export class TextInput implements ControlValueAccessor, OnChanges {
   valueChange = output<any>();
   focused = output<void>();
   autocomplete = input('')
-  protected _value: any = '';
-  private _onChange: (value: any) => void = () => { };
-  private _onTouched: () => void = () => { };
+  protected _value = signal<any>('');
+  private _onChange: (value: any) => void = () => { /* replaced by registerOnChange */ };
+  private _onTouched: () => void = () => { /* replaced by registerOnTouched */ };
   private _touched = false;
+
+  constructor() {
+    redrawOnControlEvents(this.formControl);
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['type'] && this.type() === 'number') {
-      if (this._value !== '' && this._value !== null && this._value !== undefined) {
-        this._value = Number(this._value);
-        this._onChange(this._value);
+      if (this._value() !== '' && this._value() !== null && this._value() !== undefined) {
+        this._value.set(Number(this._value()));
+        this._onChange(this._value());
       }
     }
   }
@@ -63,7 +68,7 @@ export class TextInput implements ControlValueAccessor, OnChanges {
 
   isValid = () => this.hasValue() && !this.hasError();
   hasValue = () => {
-    return this._value !== '' && this._value !== null && this._value !== undefined;
+    return this._value() !== '' && this._value() !== null && this._value() !== undefined;
   };
 
   onInputChange(event: Event): void {
@@ -73,7 +78,7 @@ export class TextInput implements ControlValueAccessor, OnChanges {
       const numValue = Number(newValue);
       newValue = isNaN(numValue) ? newValue : numValue;
     }
-    this._value = newValue;
+    this._value.set(newValue);
     this._onChange(newValue);
     this.valueChange.emit(newValue);
   }
@@ -136,9 +141,9 @@ export class TextInput implements ControlValueAccessor, OnChanges {
 
   writeValue(value: any): void {
     if (value === null || value === undefined) {
-      this._value = '';
+      this._value.set('');
     } else {
-      this._value = value;
+      this._value.set(value);
     }
   }
 

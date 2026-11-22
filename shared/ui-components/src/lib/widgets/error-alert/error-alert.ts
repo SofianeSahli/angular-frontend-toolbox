@@ -6,7 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'lib-error-alert',
   imports: [TranslatePipe],
   templateUrl: './error-alert.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './error-alert.scss',
 })
 export class ErrorAlert {

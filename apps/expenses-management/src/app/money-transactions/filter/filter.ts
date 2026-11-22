@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   output,
   OutputEmitterRef,
@@ -12,8 +11,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GeneralQuery } from '@shared/stores';
 import { DateInputComponent, DynamicComponentInterface, SelectComponent, SwitchButtons, SwitchOption, TextInput } from '@shared/ui-components';
-import { Categorie } from 'apps/expenses-management/src/models/Categorie.model';
-import { categoriesStore } from 'apps/expenses-management/src/stores/categories.signal';
+import { Categorie } from '../../../models/Categorie.model';
+import { categoriesStore } from '../../../stores/categories.signal';
 import { moneyTransitionSignalStore } from '../state/money-transitions/money-transition.signal';
 
 @Component({
@@ -72,12 +71,6 @@ export class Filter implements DynamicComponentInterface<void> {
 
   categoriesStore = inject(categoriesStore);
   moneyTransitionSignal = inject(moneyTransitionSignalStore);
-
-  constructor() {
-    effect(() => {
-
-    });
-  }
 
   submit() {
     this.moneyTransitionSignal.resesetQuery(this.form.getRawValue() as GeneralQuery);

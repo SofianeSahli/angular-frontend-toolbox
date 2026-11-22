@@ -8,7 +8,7 @@ import { AuthService } from '../../../services/auth.service';
   selector: 'lib-request-reset-password',
   imports: [TranslatePipe, TextInput],
   templateUrl: './request-reset-password.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './request-reset-password.scss',
 })
 export class RequestResetPassword {

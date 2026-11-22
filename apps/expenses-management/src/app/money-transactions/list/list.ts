@@ -17,7 +17,7 @@ import { moneyTransitionSignalStore } from '../state/money-transitions/money-tra
   imports: [ListItems, TranslatePipe, Loader],
   templateUrl: './list.html',
   styleUrl: './list.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [listStaggerAnimation],
 })
 export class List {

@@ -11,7 +11,7 @@ export class ProfileService {
 
   get(): Observable<User> {
     return this.httpClient.get<User>(
-      this.config.profileBaseUrl! + this.config.profileEndpoint!
+      this.config.apiBaseUrl + this.profilePath()
     );
   }
   private toFormData(user: Partial<User>): FormData {
@@ -48,14 +48,18 @@ export class ProfileService {
       email: profileData.email ?? '', phone: profileData.phone_number ?? ''
     }
     ).pipe(switchMap(value => this.httpClient.post<User>(
-      this.config.profileBaseUrl! + this.config.profileEndpoint!,
+      this.config.apiBaseUrl + this.profilePath(),
       profileData
     )));
   }
 
   getById(id: string): Observable<User> {
     return this.httpClient.get<User>(
-      this.config.profileEndpoint ?? 'profile' + '/' + id
+      `${this.config.apiBaseUrl}${this.profilePath()}/${id}`
     );
+  }
+
+  private profilePath(): string {
+    return this.config.profileEndpoint ?? '/profile';
   }
 }

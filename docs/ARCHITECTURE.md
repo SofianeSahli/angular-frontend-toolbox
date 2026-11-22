@@ -77,6 +77,8 @@ depConstraints: [
 
 Data-access never imports UI. Where logic must reach the screen (HTTP errors), it publishes on a signal bus, and a `feature` library presents it.
 
+E2E projects are tagged `type:e2e`; they import no library, so no constraint row applies. (Added by spec 001, approved 2026-11-21.)
+
 ## 4. Component conventions
 
 - **Selectors:** prefix `ui-` in the toolbox and the app prefix in app libraries. Native elements get attribute selectors (`button[uiButton]`, `a[uiButton]`, `input[uiInput]`, `select[uiSelect]`, `input[type=checkbox][uiSwitch]`), so forms and keyboard work natively. Use ControlValueAccessor only for custom controls with no native element.

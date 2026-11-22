@@ -8,7 +8,7 @@ import { DrawerHeader } from '../drawer-header/drawer-header';
   selector: 'lib-app-navbar-top',
   imports: [RouterLink, RouterModule, CommonModule, DrawerHeader],
   templateUrl: './app-navbar.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './app-navbar.scss',
 })
 export class AppNavbar {

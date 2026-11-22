@@ -1,4 +1,4 @@
-import { Component, inject, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, output, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Loader, passwordMatchValidator, TextInput } from '@shared/ui-components';
@@ -8,7 +8,7 @@ import { AuthService } from '../../../services/auth.service';
   selector: 'lib-update-password-form',
   imports: [ReactiveFormsModule, TranslatePipe, TextInput, Loader],
   templateUrl: './update-password-form.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./update-password-form.component.scss'],
 })
 export class UpdatePasswordFormComponent {
@@ -23,23 +23,23 @@ export class UpdatePasswordFormComponent {
 
   done = output();
   authService: AuthService = inject(AuthService);
-  loading = false;
+  loading = signal(false);
 
   submit() {
     if (this.form.invalid) return;
 
-    this.loading = true;
+    this.loading.set(true);
     const { current_password, password } = this.form.getRawValue()
     this.authService
       .updatePassword(current_password!, password!)
       .subscribe({
         next: () => {
-          this.loading = false;
+          this.loading.set(false);
           this.form.reset();
           this.done.emit()
         },
         error: () => {
-          this.loading = false;
+          this.loading.set(false);
         },
       });
   }

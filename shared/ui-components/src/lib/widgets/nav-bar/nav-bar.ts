@@ -14,11 +14,11 @@ import { ThemeService } from '../../utils/display-mode.service';
 
 
 @Component({
-  selector: 'app-nav-bar',
+  selector: 'lib-nav-bar',
   imports: [RouterModule, CommonModule, TranslateModule, NgbCollapseModule],
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('slideInOut', [
       state('out', style({ width: '0px', padding: '0' })),
@@ -49,8 +49,6 @@ export class NavBar {
     this.isNotificationOpen = !this.isNotificationOpen;
   }
 
-  logout() {
-  }
 
   toggleTheme() {
     this.themeService.toggleTheme();

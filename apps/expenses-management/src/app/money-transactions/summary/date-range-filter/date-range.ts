@@ -8,7 +8,7 @@ import { withSummary } from '../../state/summary/summary.signals';
   selector: 'app-date-range',
   imports: [DateInputComponent, ReactiveFormsModule, SwitchButtons],
   templateUrl: './date-range.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './date-range.scss',
 })
 export class DateRange implements OnInit, OnDestroy {

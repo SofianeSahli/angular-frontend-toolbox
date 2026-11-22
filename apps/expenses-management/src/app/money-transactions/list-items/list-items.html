@@ -1,12 +1,12 @@
 <div
   class="card"
-  [class.expenses-borders]="moneyTransition().categorie.is_income == 0"
+  [class.expenses-borders]="isExpense()"
   [class.income-borders]="moneyTransition().categorie.is_income"
 >
   <div
     class="card-header d-flex justify-content-between"
-    [class.bg-danger]="moneyTransition().categorie.is_income == 0"
-    [class.bg-success]="moneyTransition().categorie.is_income == 1"
+    [class.bg-danger]="isExpense()"
+    [class.bg-success]="isIncome()"
   >
     <span class="title text-light"
       >{{moneyTransition().amount | currency : '' : '' }}</span

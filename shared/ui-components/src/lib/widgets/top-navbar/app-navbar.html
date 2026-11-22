@@ -13,7 +13,10 @@
 @if (!isCollapsed()) {
   <div
     class="drawer-backdrop d-md-none"
-    (click)="toggleCollapse()">
+    tabindex="-1"
+    aria-hidden="true"
+    (click)="toggleCollapse()"
+    (keydown.escape)="toggleCollapse()">
   </div>
 }
 <div class="d-flex flex-column flex-shrink-0 bg-opacity-75 drawer-body"

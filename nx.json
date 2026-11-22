@@ -5,10 +5,7 @@
   "targetDefaults": {
     "@angular/build:application": {
       "cache": true,
-      "inputs": [
-        "production",
-        "^production"
-      ]
+      "inputs": ["production", "^production"]
     },
     "lint": [
       {
@@ -23,24 +20,26 @@
           "{workspaceRoot}/eslint.config.mjs",
           "{workspaceRoot}/tools/eslint-rules/**/*",
           {
-            "externalDependencies": [
-              "eslint"
-            ]
+            "externalDependencies": ["eslint"]
           }
         ]
       }
-    ]
+    ],
+    "@angular/build:unit-test": {
+      "cache": true,
+      "inputs": ["default", "^production"]
+    }
   },
   "generators": {
     "@nx/angular:application": {
-      "e2eTestRunner": "none",
+      "e2eTestRunner": "playwright",
       "linter": "eslint",
       "style": "scss",
-      "unitTestRunner": "none"
+      "unitTestRunner": "vitest-angular"
     },
     "@nx/angular:library": {
       "linter": "eslint",
-      "unitTestRunner": "none"
+      "unitTestRunner": "vitest-analog"
     },
     "@nx/angular:component": {
       "style": "scss"
@@ -55,17 +54,30 @@
       "options": {
         "targetName": "lint"
       }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "test",
+        "ciTargetName": "test-ci",
+        "testMode": "watch"
+      }
+    },
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "e2e"
+      }
     }
   ],
   "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
       "default",
       "!{projectRoot}/**/*.spec.ts",
-      "!{projectRoot}/eslint.config.mjs"
+      "!{projectRoot}/eslint.config.mjs",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json"
     ],
     "sharedGlobals": []
   }

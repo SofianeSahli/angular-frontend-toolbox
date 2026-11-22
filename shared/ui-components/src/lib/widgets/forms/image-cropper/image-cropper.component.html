@@ -3,14 +3,14 @@
   <div class="d-flex flex-wrap mb-2 gap-1 justify-content-center">
     @for(preview of previews; track preview; let i = $index ){
     <div
-      tabIndex="0"
+      tabindex="0"
       role="button"
       (keydown.enter)="openImage(i)"
       class="thumbnail"
       [class.active]="i === currentIndex"
       (click)="openImage(i)"
     >
-      <img [src]="preview" />
+      <img [src]="preview" [alt]="'Image ' + (i + 1)" />
     </div>
     }
   </div>

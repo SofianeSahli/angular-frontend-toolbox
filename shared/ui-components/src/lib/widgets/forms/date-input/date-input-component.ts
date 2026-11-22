@@ -1,12 +1,13 @@
-import { AfterViewInit, Component, ElementRef, effect, forwardRef, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, effect, forwardRef, inject, input, output, ChangeDetectionStrategy, signal } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { redrawOnControlEvents } from '../redraw-on-control-events';
 
 @Component({
   selector: 'lib-date-input',
   imports: [TranslatePipe],
   templateUrl: './date-input-component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -35,14 +36,15 @@ export class DateInputComponent implements ControlValueAccessor, AfterViewInit {
   valueChange = output<any>();
   focused = output<void>();
 
-  protected _value: any = '';
-  private _onChange: (value: any) => void = () => { };
-  private _onTouched: () => void = () => { };
-  private _touched = false;
+  protected _value = signal<any>('');
+  private _onChange: (value: any) => void = () => { /* replaced by registerOnChange */ };
+  private _onTouched: () => void = () => { /* replaced by registerOnTouched */ };
+  private _touched = signal(false);
   private elementRef = inject(ElementRef);
   private inputElement: HTMLInputElement | null = null;
 
   constructor() {
+    redrawOnControlEvents(this.formControl);
     effect(() => {
       this.updateInputAttributes();
     });
@@ -91,13 +93,13 @@ export class DateInputComponent implements ControlValueAccessor, AfterViewInit {
 
   onInputChange(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
-    this._value = value;
+    this._value.set(value);
     this._onChange(value);
     this.valueChange.emit(value);
   }
 
   onBlur(): void {
-    this._touched = true;
+    this._touched.set(true);
     this._onTouched();
   }
 
@@ -110,19 +112,19 @@ export class DateInputComponent implements ControlValueAccessor, AfterViewInit {
     if (control && control.touched && control.invalid) {
       return true;
     }
-    return this.required() && !this.hasValue() && this._touched;
+    return this.required() && !this.hasValue() && this._touched();
   };
 
   isValid = () => this.hasValue() && !this.hasError();
 
   hasValue = () => {
-    return this._value !== '' && this._value !== null && this._value !== undefined;
+    return this._value() !== '' && this._value() !== null && this._value() !== undefined;
   };
 
   getErrorMessage(): string {
     const control = this.formControl();
 
-    if (control && control.errors && this._touched) {
+    if (control && control.errors && this._touched()) {
       const errors = control.errors;
 
       if (errors['required']) {
@@ -151,21 +153,21 @@ export class DateInputComponent implements ControlValueAccessor, AfterViewInit {
 
   writeValue(value: any): void {
     if (value === null || value === undefined) {
-      this._value = '';
+      this._value.set('');
     } else {
       // Formater la date pour l'input type="date" (YYYY-MM-DD)
       if (value instanceof Date) {
-        this._value = value.toISOString().split('T')[0];
+        this._value.set(value.toISOString().split('T')[0]);
       } else if (typeof value === 'string') {
         // S'assurer que c'est au format YYYY-MM-DD
-        this._value = value.split('T')[0];
+        this._value.set(value.split('T')[0]);
       } else {
-        this._value = value;
+        this._value.set(value);
       }
     }
 
     if (this.inputElement) {
-      this.inputElement.value = this._value;
+      this.inputElement.value = this._value();
     }
   }
 
