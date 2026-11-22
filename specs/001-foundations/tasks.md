@@ -179,7 +179,7 @@ Final run on 2026-11-22 (`nx run-many -t lint test build` + `nx e2e expenses-man
 | 5.3 | `ui-components:build` target removed (T7) | ✅ |
 | 5.5 | Budget error limits raised only as approved in D5.1; warnings still printed | ✅ |
 | 5.6, 5.7 | URL tests for every service method (written first, failed before); `grep localhost` → only the dev `environments.ts` (T6) | ✅ |
-| 6.1, 6.3 | `.github/workflows/ci.yml` on PRs to main: `nx affected -t lint test build` | ⏳ verified by the workflow run on this PR |
+| 6.1, 6.3 | `.github/workflows/ci.yml` on PRs to main: `nx affected -t lint test build`. PR #3 run 45012841792: `npm ci` and lint/test/build for 5 projects passed; the first run (45012213330) failed at `npm ci` and the workflow was marked failed, as REQ-6.3 requires (see T17 deviation) | ✅ |
 | 6.2 | Same workflow on push to `main`, plus the e2e smoke test | ⏳ verified after merge |
 | 6.4 | `.nvmrc` = 24, `engines.node` = `>=24 <25`, workflow uses `node-version-file: .nvmrc` | ✅ |
 | 6.5 | Workflow uses no secrets and no backend (smoke test aborts API calls) | ✅ |
