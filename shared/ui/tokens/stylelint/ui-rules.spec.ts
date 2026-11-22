@@ -52,6 +52,7 @@ describe('ui/color-mix-tokens-only', () => {
     const css = `:host {
       background: color-mix(in srgb, var(--ui-color-accent) 88%, var(--ui-color-ink));
       background: color-mix(in srgb, currentColor 13%, transparent);
+      background: color-mix(in srgb, currentColor var(--ui-icon-tile-tint), transparent);
     }`;
     expect(await problems(css)).toEqual([]);
   });

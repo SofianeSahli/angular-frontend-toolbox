@@ -1,0 +1,45 @@
+@layer ui {
+  :host {
+    --ui-icon-default-size: 20px;
+    --ui-icon-stroke-width: 1.8;
+    --ui-icon-tile-size: 40px;
+    --ui-icon-tile-tint: 13%;
+
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--ui-icon-size, var(--ui-icon-default-size));
+    block-size: var(--ui-icon-size, var(--ui-icon-default-size));
+    color: inherit;
+  }
+
+  :host(.ui-icon--16) {
+    --ui-icon-size: 16px;
+  }
+
+  :host(.ui-icon--24) {
+    --ui-icon-size: 24px;
+  }
+
+  :host(.ui-icon--tile) {
+    inline-size: var(--ui-icon-tile-size);
+    block-size: var(--ui-icon-tile-size);
+    border-radius: var(--ui-radius-md);
+    background: color-mix(in srgb, currentColor var(--ui-icon-tile-tint), transparent);
+  }
+
+  svg {
+    inline-size: var(--ui-icon-size, var(--ui-icon-default-size));
+    block-size: var(--ui-icon-size, var(--ui-icon-default-size));
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--ui-icon-stroke-width);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  :host(.ui-icon--directional:dir(rtl)) svg {
+    transform: scaleX(-1);
+  }
+}

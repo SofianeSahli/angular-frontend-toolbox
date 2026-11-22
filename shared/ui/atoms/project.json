@@ -1,0 +1,22 @@
+{
+  "name": "ui-atoms",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/ui/atoms/src",
+  "prefix": "ui",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "type:ui",
+    "layer:atom"
+  ],
+  "targets": {
+    "stylelint": {
+      "command": "stylelint \"shared/ui/atoms/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  }
+}

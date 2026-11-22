@@ -12,7 +12,7 @@ export const COLOR_MIX_RULE = 'ui/color-mix-tokens-only';
 const RAW_LENGTH = /(?<![\w.#-])-?\d*\.?\d+(px|rem|em|pt|vh|vw|vmin|vmax|ch|ex)\b/;
 const COLOR_MIX_START = /color-mix\(/gi;
 const ALLOWED_COLOR = /^(var\(--ui-[a-z0-9-]+\)|currentcolor|transparent)$/i;
-const PERCENTAGE = /(^|\s)\d*\.?\d+%(\s|$)/g;
+const PERCENTAGE = /^\d*\.?\d+%$/;
 
 const lengthMessages = ruleMessages(LENGTHS_RULE, {
   rejected: (property, component) =>
@@ -63,9 +63,9 @@ function invalidColorMixArguments(value) {
     const content = balancedContentAfter(value, match.index + match[0].length - 1);
     const [, ...colors] = splitTopLevelArguments(content);
     for (const argument of colors) {
-      const color = argument.replace(PERCENTAGE, ' ').trim();
-      if (/^color-mix\(/i.test(color)) continue;
-      if (!ALLOWED_COLOR.test(color)) invalid.push(argument);
+      if (/^color-mix\(/i.test(argument)) continue;
+      const pieces = argument.split(/\s+/);
+      if (!pieces.every((piece) => ALLOWED_COLOR.test(piece) || PERCENTAGE.test(piece))) invalid.push(argument);
     }
   }
   return invalid;

@@ -1,0 +1,31 @@
+@layer ui {
+  :host {
+    --ui-spinner-size: 18px;
+    --ui-spinner-turn-duration: 0.8s;
+
+    display: inline-block;
+    flex: none;
+    inline-size: var(--ui-spinner-size);
+    block-size: var(--ui-spinner-size);
+    border: var(--ui-border-width-thick) solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: var(--ui-radius-pill);
+    animation: ui-spinner-turn var(--ui-spinner-turn-duration) linear infinite;
+  }
+
+  :host(.ui-spinner--24) {
+    --ui-spinner-size: 24px;
+  }
+
+  @keyframes ui-spinner-turn {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      animation: none;
+    }
+  }
+}

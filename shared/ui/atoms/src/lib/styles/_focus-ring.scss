@@ -1,0 +1,6 @@
+@mixin visible {
+  :host(:focus-visible) {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+    outline-offset: var(--ui-focus-ring-offset);
+  }
+}
