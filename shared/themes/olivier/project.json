@@ -22,6 +22,14 @@
         "{projectRoot}/contrast-pairs.json",
         "{projectRoot}/src/*.generated.*"
       ]
+    },
+    "stylelint": {
+      "command": "stylelint \"shared/themes/olivier/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
     }
   },
   "implicitDependencies": [

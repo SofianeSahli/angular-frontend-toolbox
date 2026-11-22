@@ -36,6 +36,23 @@
         "default",
         "^production"
       ]
+    },
+    "stylelint": {
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/**/*.css",
+        "{projectRoot}/**/*.scss",
+        "{workspaceRoot}/stylelint.config.mjs",
+        {
+          "externalDependencies": [
+            "stylelint",
+            "postcss-scss"
+          ]
+        }
+      ]
+    },
+    "check-tokens": {
+      "cache": true
     }
   },
   "generators": {

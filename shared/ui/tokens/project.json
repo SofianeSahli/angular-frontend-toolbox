@@ -21,6 +21,14 @@
         "{workspaceRoot}/shared/ui/tokens/compiler/*.ts",
         "{projectRoot}/src/styles/defaults.generated.css"
       ]
+    },
+    "stylelint": {
+      "command": "stylelint \"shared/ui/tokens/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
     }
   }
 }

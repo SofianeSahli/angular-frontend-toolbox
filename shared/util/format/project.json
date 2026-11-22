@@ -8,5 +8,14 @@
     "scope:shared",
     "type:util"
   ],
-  "targets": {}
+  "targets": {
+    "stylelint": {
+      "command": "stylelint \"shared/util/format/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  }
 }
