@@ -14,7 +14,8 @@
     "vite.config.mts",
     "src/**/*.spec.ts",
     "compiler/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "stylelint/**/*.spec.ts"
   ],
   "files": [
     "src/test-setup.ts"

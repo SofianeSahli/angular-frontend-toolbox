@@ -16,7 +16,7 @@ export default defineConfig(() => ({
     watch: false,
     globals: true,
     environment: 'jsdom',
-    include: ['{src,compiler}/**/*.spec.ts'],
+    include: ['{src,compiler,stylelint}/**/*.spec.ts'],
     setupFiles: ['src/test-setup.ts'],
     reporters: ['default'],
     coverage: {
