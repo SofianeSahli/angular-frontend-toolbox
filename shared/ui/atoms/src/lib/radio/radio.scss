@@ -1,0 +1,31 @@
+@use '../styles/focus-ring';
+
+@layer ui {
+  :host {
+    --ui-radio-size: 20px;
+    --ui-radio-border-width: 1.5px;
+    --ui-radio-dot-ring: 6px;
+    --ui-radio-disabled-opacity: 0.45;
+
+    flex: none;
+    inline-size: var(--ui-radio-size);
+    block-size: var(--ui-radio-size);
+    margin: 0;
+    border: var(--ui-radio-border-width) solid var(--ui-color-line-strong);
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-surface);
+    cursor: pointer;
+    appearance: none;
+  }
+
+  :host(:checked) {
+    border: var(--ui-radio-dot-ring) solid var(--ui-color-accent);
+  }
+
+  :host(:disabled) {
+    opacity: var(--ui-radio-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  @include focus-ring.visible;
+}

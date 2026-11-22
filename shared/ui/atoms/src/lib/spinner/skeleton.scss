@@ -1,0 +1,38 @@
+@layer ui {
+  :host {
+    --ui-skeleton-line-block-size: 14px;
+    --ui-skeleton-circle-size: 40px;
+    --ui-skeleton-block-min-block-size: 40px;
+    --ui-skeleton-pulse-duration: 1.4s;
+    --ui-skeleton-pulse-opacity: 0.55;
+
+    display: block;
+    block-size: var(--ui-skeleton-line-block-size);
+    border-radius: var(--ui-radius-sm);
+    background: var(--ui-color-surface-sunken);
+    animation: ui-skeleton-pulse var(--ui-skeleton-pulse-duration) var(--ui-easing-standard) infinite;
+  }
+
+  :host(.ui-skeleton--block) {
+    block-size: auto;
+    min-block-size: var(--ui-skeleton-block-min-block-size);
+  }
+
+  :host(.ui-skeleton--circle) {
+    inline-size: var(--ui-skeleton-circle-size);
+    block-size: var(--ui-skeleton-circle-size);
+    border-radius: var(--ui-radius-pill);
+  }
+
+  @keyframes ui-skeleton-pulse {
+    50% {
+      opacity: var(--ui-skeleton-pulse-opacity);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      animation: none;
+    }
+  }
+}

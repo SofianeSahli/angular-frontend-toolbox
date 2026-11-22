@@ -24,6 +24,9 @@
       "@shared/theme-olivier": [
         "shared/themes/olivier/src/index.ts"
       ],
+      "@shared/ui-atoms": [
+        "shared/ui/atoms/src/index.ts"
+      ],
       "@shared/ui-tokens": [
         "shared/ui/tokens/src/index.ts"
       ],

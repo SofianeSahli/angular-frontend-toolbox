@@ -1,0 +1,39 @@
+@layer ui {
+  :host {
+    --ui-badge-block-size: 22px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ui-space-1);
+    block-size: var(--ui-badge-block-size);
+    padding-block: 0;
+    padding-inline: var(--ui-space-2);
+    border-radius: var(--ui-radius-sm);
+    background: var(--ui-color-surface-sunken);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-caption-size);
+    font-weight: var(--ui-text-body-strong-weight);
+    line-height: var(--ui-text-caption-line-height);
+    white-space: nowrap;
+  }
+
+  :host(.ui-badge--accent) {
+    background: var(--ui-color-accent-soft);
+    color: var(--ui-color-accent);
+  }
+
+  :host(.ui-badge--success) {
+    background: var(--ui-color-success-soft);
+    color: var(--ui-color-success);
+  }
+
+  :host(.ui-badge--warning) {
+    background: var(--ui-color-warning-soft);
+    color: var(--ui-color-warning);
+  }
+
+  :host(.ui-badge--danger) {
+    background: var(--ui-color-danger-soft);
+    color: var(--ui-color-danger);
+  }
+}

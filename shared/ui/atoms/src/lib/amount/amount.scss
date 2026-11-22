@@ -1,0 +1,29 @@
+@layer ui {
+  :host {
+    --ui-amount-hero-unit-font-size: 20px;
+
+    font-weight: var(--ui-text-amount-weight);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  :host(.ui-amount--income) {
+    color: var(--ui-color-success);
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+
+  :host(.ui-amount--hero) {
+    font-size: var(--ui-text-amount-hero-size);
+    font-weight: var(--ui-text-amount-hero-weight);
+    line-height: var(--ui-text-amount-hero-line-height);
+    letter-spacing: var(--ui-text-amount-hero-tracking);
+  }
+
+  :host(.ui-amount--hero) .ui-amount__unit {
+    margin-inline-start: var(--ui-space-1);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-amount-hero-unit-font-size);
+    font-weight: var(--ui-text-amount-weight);
+    letter-spacing: 0;
+  }
+}

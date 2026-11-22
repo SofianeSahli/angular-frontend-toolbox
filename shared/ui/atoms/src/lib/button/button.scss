@@ -1,0 +1,106 @@
+@use '../styles/focus-ring';
+
+@layer ui {
+  :host {
+    --ui-button-gap: var(--ui-space-2);
+    --ui-button-padding-inline: var(--ui-space-4);
+    --ui-button-font-size: var(--ui-text-body-size);
+    --ui-button-font-size-lg: 16px;
+    --ui-button-icon-size: 18px;
+    --ui-button-disabled-opacity: 0.45;
+    --ui-button-hover-ink-mix: 12%;
+    --ui-icon-size: var(--ui-button-icon-size);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ui-button-gap);
+    block-size: var(--ui-control-height-md);
+    padding-block: 0;
+    padding-inline: var(--ui-button-padding-inline);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line-strong);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface);
+    color: var(--ui-color-ink);
+    font: inherit;
+    font-size: var(--ui-button-font-size);
+    font-weight: var(--ui-text-body-strong-weight);
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--ui-duration-fast) var(--ui-easing-standard),
+      border-color var(--ui-duration-fast) var(--ui-easing-standard);
+  }
+
+  :host(:hover) {
+    background: var(--ui-color-surface-sunken);
+  }
+
+  :host(.ui-button--sm) {
+    --ui-button-padding-inline: var(--ui-space-3);
+    --ui-button-font-size: var(--ui-text-small-size);
+
+    block-size: var(--ui-control-height-sm);
+    border-radius: var(--ui-radius-sm);
+  }
+
+  :host(.ui-button--lg) {
+    --ui-button-padding-inline: var(--ui-space-6);
+    --ui-button-font-size: var(--ui-button-font-size-lg);
+
+    block-size: var(--ui-control-height-lg);
+  }
+
+  :host(.ui-button--primary) {
+    border-color: transparent;
+    background: var(--ui-color-accent);
+    color: var(--ui-color-on-accent);
+  }
+
+  :host(.ui-button--primary:hover) {
+    background: color-mix(in srgb, var(--ui-color-ink) var(--ui-button-hover-ink-mix), var(--ui-color-accent));
+  }
+
+  :host(.ui-button--ghost) {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  :host(.ui-button--ghost:hover) {
+    background: var(--ui-color-surface-sunken);
+  }
+
+  :host(.ui-button--danger) {
+    border-color: transparent;
+    background: var(--ui-color-danger);
+    color: var(--ui-color-on-accent);
+  }
+
+  :host(.ui-button--icon-only) {
+    inline-size: var(--ui-control-height-md);
+    padding-inline: 0;
+  }
+
+  :host(.ui-button--icon-only.ui-button--sm) {
+    inline-size: var(--ui-control-height-sm);
+  }
+
+  :host(.ui-button--icon-only.ui-button--lg) {
+    inline-size: var(--ui-control-height-lg);
+  }
+
+  :host(:disabled),
+  :host([aria-disabled='true']) {
+    opacity: var(--ui-button-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  :host([aria-busy='true']) {
+    cursor: progress;
+  }
+
+  @include focus-ring.visible;
+}

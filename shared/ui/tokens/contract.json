@@ -34,17 +34,65 @@
       "data-9",
       "data-10"
     ],
-    "font": ["sans"]
+    "font": [
+      "sans"
+    ]
   },
   "defaults": [
-    { "name": "control-height-sm", "value": "36px", "usage": "Small controls." },
-    { "name": "control-height-md", "value": "44px", "usage": "Default control height; minimum touch target." },
-    { "name": "control-height-lg", "value": "52px", "usage": "Large controls." },
-    { "name": "focus-ring-width", "value": "2px", "usage": "Keyboard focus ring width (colour: the theme's focus-ring)." },
-    { "name": "focus-ring-offset", "value": "2px", "usage": "Gap between the control and its focus ring." },
-    { "name": "duration-fast", "value": "120ms", "usage": "Hover, press. 0ms under reduced motion." },
-    { "name": "duration-base", "value": "200ms", "usage": "Most transitions. 0ms under reduced motion." },
-    { "name": "duration-slow", "value": "320ms", "usage": "Sheets and drawers. 0ms under reduced motion." },
-    { "name": "easing-standard", "value": "cubic-bezier(0.2, 0, 0, 1)", "usage": "Default easing curve." }
+    {
+      "name": "control-height-sm",
+      "value": "36px",
+      "usage": "Small controls."
+    },
+    {
+      "name": "control-height-md",
+      "value": "44px",
+      "usage": "Default control height; minimum touch target."
+    },
+    {
+      "name": "control-height-lg",
+      "value": "52px",
+      "usage": "Large controls."
+    },
+    {
+      "name": "border-width-thin",
+      "value": "1px",
+      "usage": "Hairline borders: cards, dividers, control edges."
+    },
+    {
+      "name": "border-width-thick",
+      "value": "2px",
+      "usage": "Emphasised borders: invalid controls, spinners."
+    },
+    {
+      "name": "focus-ring-width",
+      "value": "2px",
+      "usage": "Keyboard focus ring width (colour: the theme's focus-ring)."
+    },
+    {
+      "name": "focus-ring-offset",
+      "value": "2px",
+      "usage": "Gap between the control and its focus ring."
+    },
+    {
+      "name": "duration-fast",
+      "value": "120ms",
+      "usage": "Hover, press. 0ms under reduced motion."
+    },
+    {
+      "name": "duration-base",
+      "value": "200ms",
+      "usage": "Most transitions. 0ms under reduced motion."
+    },
+    {
+      "name": "duration-slow",
+      "value": "320ms",
+      "usage": "Sheets and drawers. 0ms under reduced motion."
+    },
+    {
+      "name": "easing-standard",
+      "value": "cubic-bezier(0.2, 0, 0, 1)",
+      "usage": "Default easing curve."
+    }
   ]
 }

@@ -1,0 +1,11 @@
+@layer ui {
+  :host {
+    --ui-check-row-gap: 10px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ui-check-row-gap);
+    min-block-size: var(--ui-control-height-md);
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,49 @@
+@use '../styles/focus-ring';
+
+@layer ui {
+  :host {
+    --ui-switch-track-inline-size: 44px;
+    --ui-switch-track-block-size: 26px;
+    --ui-switch-thumb-size: 20px;
+    --ui-switch-thumb-inset: 3px;
+    --ui-switch-disabled-opacity: 0.45;
+
+    position: relative;
+    flex: none;
+    inline-size: var(--ui-switch-track-inline-size);
+    block-size: var(--ui-switch-track-block-size);
+    margin: 0;
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-line-strong);
+    cursor: pointer;
+    appearance: none;
+    transition: background-color var(--ui-duration-fast) var(--ui-easing-standard);
+  }
+
+  :host::before {
+    content: '';
+    position: absolute;
+    inset-block-start: var(--ui-switch-thumb-inset);
+    inset-inline-start: var(--ui-switch-thumb-inset);
+    inline-size: var(--ui-switch-thumb-size);
+    block-size: var(--ui-switch-thumb-size);
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-surface);
+    transition: inset-inline-start var(--ui-duration-fast) var(--ui-easing-standard);
+  }
+
+  :host(:checked) {
+    background: var(--ui-color-accent);
+  }
+
+  :host(:checked)::before {
+    inset-inline-start: calc(var(--ui-switch-track-inline-size) - var(--ui-switch-thumb-size) - var(--ui-switch-thumb-inset));
+  }
+
+  :host(:disabled) {
+    opacity: var(--ui-switch-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  @include focus-ring.visible;
+}

@@ -1,0 +1,22 @@
+@layer ui {
+  :host {
+    --ui-field-message-gap: 6px;
+    --ui-field-message-icon-nudge: 1px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ui-field-message-gap);
+    margin-block-start: var(--ui-field-message-gap);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+    line-height: var(--ui-text-small-line-height);
+  }
+
+  :host(.ui-field-message--error) {
+    color: var(--ui-color-danger);
+  }
+
+  ui-icon {
+    margin-block-start: var(--ui-field-message-icon-nudge);
+  }
+}

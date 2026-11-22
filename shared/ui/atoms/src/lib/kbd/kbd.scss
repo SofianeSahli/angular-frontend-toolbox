@@ -1,0 +1,31 @@
+@layer ui {
+  :host {
+    --ui-kbd-font-size: 11px;
+    --ui-kbd-line-height: 16px;
+    --ui-kbd-padding-inline: 6px;
+    --ui-kbd-on-accent-mix: 18%;
+
+    padding-block: 0;
+    padding-inline: var(--ui-kbd-padding-inline);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line);
+    border-radius: var(--ui-radius-sm);
+    background: var(--ui-color-surface-sunken);
+    color: var(--ui-color-ink-muted);
+    font: inherit;
+    font-size: var(--ui-kbd-font-size);
+    font-weight: var(--ui-text-amount-weight);
+    line-height: var(--ui-kbd-line-height);
+  }
+
+  :host(.ui-kbd--on-accent) {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--ui-color-on-accent) var(--ui-kbd-on-accent-mix), transparent);
+    color: inherit;
+  }
+
+  @media (max-width: 767.98px) {
+    :host {
+      display: none;
+    }
+  }
+}

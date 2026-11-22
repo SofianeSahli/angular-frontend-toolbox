@@ -13,6 +13,8 @@ The target structure is defined in **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md
 | `ui-tokens` | `shared/ui/tokens` | Token contract, cascade layers, trimmed Bootstrap, theme compiler, `provideUi` and the light/dark service (`@shared/ui-tokens`) |
 | `theme-olivier` | `shared/themes/olivier` | The Olivier theme: `tokens.json` compiled to CSS (`@shared/theme-olivier`) |
 | `util-format` | `shared/util/format` | Money in millimes (`fr-TN`, TND) and local dates, with pipes (`@shared/util-format`) |
+| `ui-atoms` | `shared/ui/atoms` | The 16 Olivier atoms: button, chip, keyboard hint, input, select, checkbox, radio, switch, label, field message, icon, badge, avatar, amount, progress, spinner and skeleton (`@shared/ui-atoms`) |
+| `ui-catalog` | `apps/ui-catalog` | Every atom in every state, with theme, accent and direction switches |
 
 The old app, its e2e test and the `auth` and `ui-components` libraries were deleted in spec 002; their replacements are listed in [ARCHITECTURE §7](docs/ARCHITECTURE.md#7-migration-of-existing-code). Full target library map: [ARCHITECTURE §2](docs/ARCHITECTURE.md#2-library-map).
 
@@ -48,9 +50,9 @@ All non-trivial work follows **spec-driven development** (rules in [CLAUDE.md](C
 ## Roadmap
 
 1. **001 Foundations** (done): tests, project tags and boundaries, CI, OnPush everywhere, build fixes, removal of unused projects
-2. **002 Tokens and themes** (in review): token contract, Olivier theme, compiler, Stylelint and contrast checks, `util-format`; old apps and libraries deleted, new app shell
-3. **003 Atoms and catalog** (next)
-4. **004 Molecules, organisms and templates**
+2. **002 Tokens and themes** (done): token contract, Olivier theme, compiler, Stylelint and contrast checks, `util-format`; old apps and libraries deleted, new app shell
+3. **003 Atoms and catalog** (in review): the 16 atoms, `UI_TEXT`, Stylelint component-token rules, `ui-catalog`
+4. **004 Molecules, organisms and templates** (next)
 5. **005 Shared logic** (`http/*`, `identity/*`)
 
 ## Docs

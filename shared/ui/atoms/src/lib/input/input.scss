@@ -1,0 +1,50 @@
+@use '../styles/focus-ring';
+
+@layer ui {
+  :host {
+    --ui-input-padding-inline: var(--ui-space-3);
+    --ui-input-textarea-min-block-size: 88px;
+    --ui-input-textarea-padding-block: 10px;
+
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: var(--ui-control-height-md);
+    padding-block: 0;
+    padding-inline: var(--ui-input-padding-inline);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line-strong);
+    border-radius: var(--ui-radius-sm);
+    background: var(--ui-color-surface);
+    color: var(--ui-color-ink);
+    font: inherit;
+    font-size: var(--ui-text-body-size);
+  }
+
+  :host::placeholder {
+    color: var(--ui-color-ink-muted);
+  }
+
+  :host(textarea) {
+    block-size: auto;
+    min-block-size: var(--ui-input-textarea-min-block-size);
+    padding-block: var(--ui-input-textarea-padding-block);
+    resize: vertical;
+  }
+
+  :host([aria-invalid='true']) {
+    border-color: var(--ui-color-danger);
+    border-width: var(--ui-border-width-thick);
+    padding-inline: calc(var(--ui-input-padding-inline) - (var(--ui-border-width-thick) - var(--ui-border-width-thin)));
+  }
+
+  :host(:read-only:not(:disabled)) {
+    background: var(--ui-color-surface-sunken);
+  }
+
+  :host(:disabled) {
+    background: var(--ui-color-surface-sunken);
+    color: var(--ui-color-ink-muted);
+    cursor: not-allowed;
+  }
+
+  @include focus-ring.visible;
+}

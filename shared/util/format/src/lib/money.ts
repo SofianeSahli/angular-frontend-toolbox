@@ -42,3 +42,16 @@ export function formatSignedMillimes(value: number): string {
   assertMillimes(value);
   return signed.format(value / MILLIMES_PER_DINAR);
 }
+
+const signedHeadline = new Intl.NumberFormat('fr-TN', {
+  style: 'currency',
+  currency: 'TND',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+  signDisplay: 'exceptZero',
+});
+
+export function formatSignedMillimesHeadline(value: number): string {
+  assertMillimes(value);
+  return signedHeadline.format(value / MILLIMES_PER_DINAR);
+}

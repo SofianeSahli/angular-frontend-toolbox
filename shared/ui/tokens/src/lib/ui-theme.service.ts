@@ -14,7 +14,11 @@ export class UiThemeService {
   private readonly choiceState = signal<ThemeChoice>(this.readStoredChoice());
   private readonly deviceDark = signal(this.media?.matches ?? false);
 
+  private readonly accentState = signal<string | null>(this.config?.accent ?? this.config?.theme.defaultAccent ?? null);
+
   readonly choice = this.choiceState.asReadonly();
+
+  readonly accent = this.accentState.asReadonly();
 
   readonly active = computed<ActiveTheme>(() => {
     const choice = this.choiceState();
@@ -39,12 +43,21 @@ export class UiThemeService {
     this.apply();
   }
 
+  setAccent(accent: string): void {
+    const accents = this.config?.theme.accents ?? [];
+    if (!accents.includes(accent)) {
+      throw new Error(`Unknown accent "${accent}" (theme accents: ${accents.join(', ') || 'none'})`);
+    }
+    this.accentState.set(accent);
+    this.apply();
+  }
+
   private apply(): void {
     const html = this.document.documentElement;
     const active = this.active();
     html.setAttribute('data-theme', active);
     html.setAttribute('data-bs-theme', active);
-    const accent = this.config?.accent ?? this.config?.theme.defaultAccent;
+    const accent = this.accentState();
     if (accent) html.setAttribute('data-accent', accent);
   }
 
