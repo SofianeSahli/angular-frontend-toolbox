@@ -10,3 +10,7 @@ export * from './lib/input/input';
 export * from './lib/select/select';
 export * from './lib/label/label';
 export * from './lib/field-message/field-message';
+export * from './lib/checkbox/checkbox';
+export * from './lib/radio/radio';
+export * from './lib/switch/switch';
+export * from './lib/check-row/check-row';
