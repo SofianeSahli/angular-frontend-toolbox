@@ -65,3 +65,24 @@ describe('ui/color-mix-tokens-only', () => {
     ]);
   });
 });
+
+describe('ui/lengths-only-in-component-tokens, SCSS variables and viewport units', () => {
+  const breakpoints = 'shared/ui/tokens/src/styles/_breakpoints.scss';
+
+  it("allows a raw length in this file's own $<file name>-* variables", async () => {
+    expect(await problems('$breakpoints-medium: 820px;\n$breakpoints-below-offset: 0.02px;', breakpoints)).toEqual([]);
+  });
+
+  it('refuses a raw length in another SCSS variable', async () => {
+    expect(await problems('$other-gap: 4px;', breakpoints)).toHaveLength(1);
+    expect(await problems('$breakpoints-medium: 820px;')).toHaveLength(1);
+  });
+
+  it.each(['100dvh', '92svh', '50lvh', '100dvw', '10svw', '20lvw'])('refuses %s in a property', async (value) => {
+    expect(await problems(`:host { block-size: ${value}; }`)).toHaveLength(1);
+  });
+
+  it('allows a dynamic viewport unit in a component token', async () => {
+    expect(await problems(':host { --ui-switch-full-height: 100dvh; block-size: var(--ui-switch-full-height); }')).toEqual([]);
+  });
+});
