@@ -1,0 +1,22 @@
+// Global entry of the toolbox styles (spec 002, US-1, US-4). List it FIRST in an app's
+// `styles`, followed by the theme CSS (for example olivier.generated.css).
+@use 'sass:meta';
+
+// REQ-1.4: the layer order, declared once, before any other style.
+@layer reset, vendor, tokens, ui, app;
+
+// REQ-4.1: only Bootstrap's Reboot, grid and utilities, inside the vendor layer.
+@layer vendor {
+  @include meta.load-css('bootstrap/dist/css/bootstrap-reboot');
+  @include meta.load-css('bootstrap/dist/css/bootstrap-grid');
+  @include meta.load-css('bootstrap/dist/css/bootstrap-utilities');
+}
+
+// REQ-1.2, REQ-1.3: brand-free defaults (compiled from contract.json, already in @layer tokens).
+@include meta.load-css('defaults.generated');
+
+// REQ-4.2: Bootstrap's variables fed by the tokens. The tokens layer beats vendor whatever
+// the selector specificity, so Bootstrap's own [data-bs-theme] values never win.
+@layer tokens {
+  @include meta.load-css('bootstrap-map');
+}
