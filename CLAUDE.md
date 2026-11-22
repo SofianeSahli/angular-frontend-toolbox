@@ -11,12 +11,10 @@ This repo is a **toolbox plus apps**. `shared/` is the toolbox: brand-free UI an
 | Path | Kind | Purpose today | Target (ARCHITECTURE §2, §7) |
 |---|---|---|---|
 | `apps/expenses-management` | app | Household budget app (transactions, summary, charts, profile) | stays, `scope:expenses type:app`; domain code moves to `libs/expenses/` later |
-| `apps/launcher` | app | Entry app (does not build) | **removed in spec 001** |
-| `apps/uncensored` | app | Empty scaffold | **removed in spec 001** |
-| `shared/auth` (`@shared/auth`) | lib | Login/register/reset pages, auth store, HTTP interceptors | split into `identity/data-access` + `identity/feature-auth` + `http/*` (spec 005) |
+| `apps/expenses-management-e2e` | e2e | Playwright smoke test for the app | stays, `scope:expenses type:e2e` |
+| `shared/auth` (`@shared/auth`) | lib | Login/register/reset pages, auth store, HTTP interceptors (interim tags `scope:shared type:feature`) | split into `identity/data-access` + `identity/feature-auth` + `http/*` (spec 005) |
 | `shared/stores` (`@shared/stores`) | lib | Generic NgRx Signal Store features (`withCrudOperations`, `withLoader`, `withQuery`, …) and base models | stays, `type:data-access` |
-| `shared/ui-components` (`@shared/ui-components`) | lib | UI widgets, form controls, validators, SCSS theme | split into `ui/*` atoms → templates, `util-forms`, `util-format` (specs 002–004) |
-| `shared/profile-section` | lib | Empty placeholder | **removed in spec 001** |
+| `shared/ui-components` (`@shared/ui-components`) | lib | UI widgets, form controls, validators, SCSS theme (interim tags `scope:shared type:ui`, no layer) | split into `ui/*` atoms → templates, `util-forms`, `util-format` (specs 002–004) |
 
 **Stack:** Angular 22.2 (standalone, signals, built-in control flow), Nx 24, TypeScript 6.0, `@angular/build:application` (esbuild), NgRx Signals 22, ng-bootstrap 21 + Bootstrap 5, ngx-translate (default language `fr`), Chart.js, RxJS 7.
 
@@ -27,11 +25,16 @@ npx nx serve expenses-management                         # dev server
 npx nx build <project> --configuration=development        # build
 npx nx lint <project>                                     # lint one project
 npx nx run-many -t lint                                   # lint everything
-npx nx affected -t lint build                             # only what changed
+npx nx test <project>                                     # unit tests (Vitest)
+npx nx e2e expenses-management-e2e                        # Playwright smoke test (starts the dev server)
+npm run ci                                                # lint + test + build for projects changed vs main (same as the PR workflow)
+npm run ci:all                                            # lint + test + build for every project
 npx nx show project <project>                             # list inferred targets
 ```
 
-No unit-test runner is configured yet (`*.spec.ts` files exist but cannot run). Adding one (Vitest preferred) is a prerequisite for the "tests first" step below — until then, see "Verification without a test runner".
+Unit tests: Vitest. The app uses Angular's `@angular/build:unit-test`; the libraries use `@nx/vitest` + Analog (`vite.config.mts`, `src/test-setup.ts`). All tests use zone-based change detection, like the app. CI (`.github/workflows/ci.yml`) runs lint, test and build for affected projects on every PR, plus the e2e smoke test on `main`.
+
+**Windows:** if every app test fails with "Vitest failed to find the runner", the environment variable `NX_WORKSPACE_ROOT_PATH` is set with a lowercase drive letter (`c:\...`, often by an editor's Nx integration). Unset it or set it to `C:\...` (angular/angular-cli#33559).
 
 ## Architecture (summary)
 
@@ -136,7 +139,7 @@ Until unit tests can run, each task must still be verified and the method record
 - `computed()` must only read signals. Form values are not signals — use `toSignal(control.valueChanges, …)`.
 - Never read a signal once into a plain field (`loading = store.isLoading()`) — keep the signal.
 - Built-in control flow (`@if`, `@for` with `track`, `@switch`); no `*ngIf`/`*ngFor`.
-- New components use `ChangeDetectionStrategy.OnPush` (the v22 default). Existing components are pinned to `Eager` by the migration; switch them to OnPush only when you touch them and verify the behaviour.
+- Every component uses `ChangeDetectionStrategy.OnPush` (the v22 default; lint enforces it). Template-visible state that changes outside a template event, an input or a signal (HTTP callbacks, timers, `writeValue`, native listeners) must be a signal, or call `markForCheck()`. Form controls that display an `AbstractControl`'s state use `redrawOnControlEvents()`.
 - No `any` in new code; no `@ts-expect-error` / `@ts-ignore` to silence real type mismatches. No index signatures (`[key: string]: any`) on components.
 - Prefer `viewChild()` over global DOM IDs/`document` access; clean up third-party instances (e.g. Chart.js) with `DestroyRef`.
 
@@ -162,16 +165,27 @@ Until unit tests can run, each task must still be verified and the method record
 
 One spec each, approved before any code (ARCHITECTURE §8):
 
-1. **001 Foundations** ← **next**: Vitest and Playwright, tags and `depConstraints`, CI, known issues fixed, unused projects removed.
-2. **002 Tokens and themes:** `ui-tokens`, `theme-olivier`, theme compiler, cascade layers, Bootstrap trim, `util-format`, Stylelint and contrast checks.
+1. **001 Foundations** ← **in review**: Vitest and Playwright, tags and `depConstraints`, CI, OnPush everywhere, lint at 0 errors, known build issues fixed, unused projects removed.
+2. **002 Tokens and themes** ← **next**: `ui-tokens`, `theme-olivier`, theme compiler, cascade layers, Bootstrap trim, `util-format`, Stylelint and contrast checks.
 3. **003 Atoms and catalog:** the 16 Olivier atoms and `apps/ui-catalog`.
 4. **004 Molecules, organisms and templates:** CDK overlays and app shell; remove ng-bootstrap, `moment` and bootstrap-icons.
 5. **005 Shared logic:** `http/*` and `identity/*`; auth pages rebuilt on the auth layout (Sanctum cookie strategy).
 
-## Known issues (do not "fix" silently — spec 001 fixes these)
-- `app-launcher` does not build: missing `@env/environments` alias, `provideAuthConfig`, `FORMLY_FORM_CONFIG`.
-- `ui-components:build` target references a missing `ng-package.json`.
-- `profile-section` index exports a non-existent file.
-- Production `fileReplacements` in `expenses-management` point at non-existent launcher env files.
-- No unit-test runner; existing specs import `@ionic/angular`, which is not a dependency.
-- `nx run-many -t lint` fails: 90 errors. 47 existed before the Angular 22 upgrade. The upgrade added 43: 36 `prefer-on-push-component-change-detection` (components pinned to `Eager` by the migration), 6 `enforce-module-boundaries` (deep `apps/…` imports, and a static import of the lazy `auth` lib in launcher), and 1 `no-input-rename` (`switch-buttons`).
+## Known issues (do not "fix" silently — open or update a spec)
+
+Tooling
+- Production budget error limits are raised to 1.5 MB (initial) and 10 kB (component style); the warnings at 500 kB / 4 kB still fire. Restore in spec 002 (Bootstrap trim) and spec 004 (ng-bootstrap, `moment`, nav bar). (spec 001 D5.1)
+- Vitest is pinned to 4 because `@nx/vitest`'s generator rejects 5; revisit when the Nx/Analog peers allow it.
+- `nx run-many -t lint` has 0 errors but still reports warnings (`no-explicit-any`, `no-non-null-assertion`, `no-unused-vars`).
+- Production `apiBaseUrl` is a placeholder (`https://api.example.invalid/api/v1`); replace it before the first deployment.
+
+App behaviour found during spec 001, deliberately not changed (spec 005 unless noted)
+- The frontend still calls the **old** API paths (`/auth/login`, `/money-transition`, `/categories`, `/profile`, …); the rebuilt backend on `:8001` serves none of them, so every call after sign-in returns 404 in development.
+- `withCrudOperations` (and `loadSummary`) have no `catchError`: one failed request ends the stream for good (documented by a test in `shared/stores`).
+- `AuthService.updatePassword` / `resetPassword` / `resetPasswordRequest` build URLs with a line break and spaces inside the template literal.
+- Login fields bind `[showErrors]` to a non-existent `amount` control, so the sign-in page never shows field errors.
+- Opening `/register` directly redirects to `/` (the auth store's `onInit` navigates to `''` without a token).
+- `ResetPassword` never resets `loading` after the response; `SecuritySettingsComponent.openPasswordModal` assigns plain values over the modal wrapper's signals.
+- The HTTP error interceptor shows "Client error occurred (undefined)" for a 4xx without a `message`.
+- `text-input` and `select` ignore `setDisabledState`; `date-input` drops a value written before its view initialises. (spec 004)
+- `bar-chart` relies on `chart-item` importing `chart.js/auto` to register Chart.js controllers. (spec 004)
