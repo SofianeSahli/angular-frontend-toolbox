@@ -10,13 +10,15 @@ This repo is a **toolbox plus apps**. `shared/` is the toolbox: brand-free UI an
 
 | Path | Kind | Purpose today | Target (ARCHITECTURE §2, §7) |
 |---|---|---|---|
-| `apps/expenses-management` | app | Household budget app (transactions, summary, charts, profile) | stays, `scope:expenses type:app`; domain code moves to `libs/expenses/` later |
-| `apps/expenses-management-e2e` | e2e | Playwright smoke test for the app | stays, `scope:expenses type:e2e` |
-| `shared/auth` (`@shared/auth`) | lib | Login/register/reset pages, auth store, HTTP interceptors (interim tags `scope:shared type:feature`) | split into `identity/data-access` + `identity/feature-auth` + `http/*` (spec 005) |
+| `apps/expenses-management` | app | New shell (spec 002): one placeholder page on the Olivier theme | stays, `scope:expenses type:app`; screens rebuilt in later specs, domain code in `libs/expenses/` |
 | `shared/stores` (`@shared/stores`) | lib | Generic NgRx Signal Store features (`withCrudOperations`, `withLoader`, `withQuery`, …) and base models | stays, `type:data-access` |
-| `shared/ui-components` (`@shared/ui-components`) | lib | UI widgets, form controls, validators, SCSS theme (interim tags `scope:shared type:ui`, no layer) | split into `ui/*` atoms → templates, `util-forms`, `util-format` (specs 002–004) |
+| `shared/ui/tokens` (`@shared/ui-tokens`) | lib | Token contract (`contract.json`), cascade layers, trimmed Bootstrap + `--bs-*` mapping, theme compiler (`compiler/`), `provideUi`, `UiThemeService` | `type:ui layer:tokens` |
+| `shared/themes/olivier` (`@shared/theme-olivier`) | lib | Olivier `tokens.json` (source of truth), contrast pairs, generated CSS/TS | `type:ui layer:tokens` |
+| `shared/util/format` (`@shared/util-format`) | lib | Money in integer millimes (`fr-TN`, TND), local `YYYY-MM-DD` dates, pipes | `type:util` |
 
-**Stack:** Angular 22.2 (standalone, signals, built-in control flow), Nx 24, TypeScript 6.0, `@angular/build:application` (esbuild), NgRx Signals 22, ng-bootstrap 21 + Bootstrap 5, ngx-translate (default language `fr`), Chart.js, RxJS 7.
+The old app, its e2e project and the `auth` and `ui-components` libraries were deleted in spec 002. There is no e2e test until the first real screen returns.
+
+**Stack:** Angular 22.2 (standalone, signals, built-in control flow), Nx 24, TypeScript 6.0, `@angular/build:application` (esbuild), NgRx Signals 22, Bootstrap 5 (Reboot, grid and utilities only, in the `vendor` layer), ngx-translate (default language `fr`), RxJS 7, Stylelint 17.
 
 ## Commands
 
@@ -25,18 +27,19 @@ npx nx build <project> --configuration=development        # development build
 npx nx affected -t lint                                   # lint the projects you changed
 npx nx affected -t test                                   # unit tests (Vitest) of the projects you changed
 npx nx test <project>                                     # unit tests of one project
-npm run ci                                                # lint + test + build for projects changed vs main (same as the PR workflow)
+npx nx compile-tokens theme-olivier                       # regenerate theme CSS/TS after editing tokens.json
+npx nx check-tokens theme-olivier                         # validate a theme (format, required tokens, contrast, stale output)
+npm run ci                                                # lint + test + build + check-tokens vs main (same as the PR workflow)
 npx nx show project <project>                             # list inferred targets
 
 # Owner only (see "Testing rules"): not run by the assistant
 npx nx serve expenses-management                          # dev server
-npx nx e2e expenses-management-e2e                        # Playwright smoke test (starts the dev server)
-npm run ci:all                                            # lint + test + build for every project
+npm run ci:all                                            # lint + test + build + check-tokens for every project
 ```
 
-Unit tests: Vitest. The app uses Angular's `@angular/build:unit-test`; the libraries use `@nx/vitest` + Analog (`vite.config.mts`, `src/test-setup.ts`). All tests use zone-based change detection, like the app. CI (`.github/workflows/ci.yml`) runs lint, test and build for affected projects on every PR, plus the e2e smoke test on `main`.
+Unit tests: Vitest. The app uses Angular's `@angular/build:unit-test`; the libraries use `@nx/vitest` + Analog (`vite.config.mts`, `src/test-setup.ts`). All tests use zone-based change detection, like the app. `lint` runs ESLint and Stylelint (`stylelint.config.mjs`). CI (`.github/workflows/ci.yml`) runs lint, test, build and check-tokens for affected projects on every PR and push to `main`.
 
-**Windows:** if every app test fails with "Vitest failed to find the runner", the environment variable `NX_WORKSPACE_ROOT_PATH` is set with a lowercase drive letter (`c:\...`, often by an editor's Nx integration). Unset it or set it to `C:\...` (angular/angular-cli#33559).
+**Windows:** if every app test fails with "Vitest failed to find the runner", the environment variable `NX_WORKSPACE_ROOT_PATH` is set with a lowercase drive letter (`c:\...`, often by an editor's Nx integration). Unset it or set it to `C:\...` (angular/angular-cli#33559). The same error appears when the shell's current directory has a lowercase drive letter (some Git Bash sessions); run the app's tests from a shell opened in `C:\...` (for example PowerShell).
 
 ## Architecture (summary)
 
@@ -122,8 +125,8 @@ When all tasks are done, report: which `REQ` IDs are verified and how, anything 
 ### Testing rules (permanent)
 
 - **Unit tests only** (Vitest), and only for the projects you changed: `npx nx affected -t test` or `npx nx test <project>`. Never `run-many` on the whole repo.
-- **Never run Playwright or any e2e test, never start `nx serve`, and never open a browser to check anything.** The owner runs e2e when needed; CI runs the smoke test on `main`.
-- Keep the existing e2e smoke test file and its CI job as they are: don't delete or disable them, just don't run them.
+- **Never run Playwright or any e2e test, never start `nx serve`, and never open a browser to check anything.** The owner checks the app by hand when needed.
+- The old e2e smoke test was deleted with the old app (spec 002). A new one comes with the spec that brings back the first real screen; once it exists, keep it and its CI job, and don't run it.
 - **Per task, verify once at the end of the task** (not after every small edit) with:
   1. lint of the affected projects: `npx nx affected -t lint`;
   2. unit tests of the affected projects: `npx nx affected -t test`;
@@ -152,9 +155,9 @@ When all tasks are done, report: which `REQ` IDs are verified and how, anything 
 - `computed()` must only read signals. Form values are not signals — use `toSignal(control.valueChanges, …)`.
 - Never read a signal once into a plain field (`loading = store.isLoading()`) — keep the signal.
 - Built-in control flow (`@if`, `@for` with `track`, `@switch`); no `*ngIf`/`*ngFor`.
-- Every component uses `ChangeDetectionStrategy.OnPush` (the v22 default; lint enforces it). Template-visible state that changes outside a template event, an input or a signal (HTTP callbacks, timers, `writeValue`, native listeners) must be a signal, or call `markForCheck()`. Form controls that display an `AbstractControl`'s state use `redrawOnControlEvents()`.
+- Every component uses `ChangeDetectionStrategy.OnPush` (the v22 default; lint enforces it). Template-visible state that changes outside a template event, an input or a signal (HTTP callbacks, timers, `writeValue`, native listeners) must be a signal, or call `markForCheck()`. Form controls that display an `AbstractControl`'s state must redraw on its events.
 - No `any` in new code; no `@ts-expect-error` / `@ts-ignore` to silence real type mismatches. No index signatures (`[key: string]: any`) on components.
-- Prefer `viewChild()` over global DOM IDs/`document` access; clean up third-party instances (e.g. Chart.js) with `DestroyRef`.
+- Prefer `viewChild()` over global DOM IDs/`document` access; clean up third-party instances with `DestroyRef`.
 
 **State (NgRx Signals)**
 - Feature stores compose features from `@shared/stores`.
@@ -165,40 +168,33 @@ When all tasks are done, report: which `REQ` IDs are verified and how, anything 
 **Libraries & boundaries**
 - Which library may import which is defined by tags and `depConstraints`: see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) §2–3.
 - Import shared code only through its `@shared/...` alias, never through deep paths like `shared/stores/src/lib/...` or `apps/<app>/src/...`.
-- Libraries never import from apps. App config reaches libraries through injection tokens and `provideX({...})` (see `AUTH_CONFIG`).
+- Libraries never import from apps. App config reaches libraries through injection tokens and `provideX({...})` (see `provideUi` in `@shared/ui-tokens`).
 
 **i18n, dates, HTTP**
 - All user-visible text goes through ngx-translate keys; add keys to `public/i18n/fr.json`.
 - Dates sent to the API as local `YYYY-MM-DD` — never `toISOString().split('T')[0]` (shifts the day in UTC+1/+2).
 - URLs come from environment/config; no hard-coded `localhost`.
 
-**Style:** Prettier (`.prettierrc`, single quotes), SCSS. Use Bootstrap grid and utility classes for layout; components use toolbox tokens; overrides go in the `app` cascade layer, never with `!important`. *This applies once spec 002 (tokens) lands; until then, existing code keeps its current styles.*
+**Style:** Prettier (`.prettierrc`, single quotes), SCSS. Use Bootstrap grid and utility classes for layout; components read only `var(--ui-*)` tokens (Stylelint refuses raw colours, fonts and lengths; only the 1px hairline is allowed); overrides go in the `app` cascade layer, never with `!important`. Never edit `*.generated.*` files: change `tokens.json` or `contract.json` and run `compile-tokens`. Money is integer millimes, formatted with `@shared/util-format`.
 
 ## Toolbox roadmap
 
 One spec each, approved before any code (ARCHITECTURE §8):
 
-1. **001 Foundations** ← **in review**: Vitest and Playwright, tags and `depConstraints`, CI, OnPush everywhere, lint at 0 errors, known build issues fixed, unused projects removed.
-2. **002 Tokens and themes** ← **next**: `ui-tokens`, `theme-olivier`, theme compiler, cascade layers, Bootstrap trim, `util-format`, Stylelint and contrast checks.
-3. **003 Atoms and catalog:** the 16 Olivier atoms and `apps/ui-catalog`.
-4. **004 Molecules, organisms and templates:** CDK overlays and app shell; remove ng-bootstrap, `moment` and bootstrap-icons.
+1. **001 Foundations** ← done: Vitest, tags and `depConstraints`, CI, OnPush everywhere, lint at 0 errors, known build issues fixed, unused projects removed.
+2. **002 Tokens and themes** ← **in review**: `ui-tokens`, `theme-olivier`, theme compiler, cascade layers, Bootstrap trim, `util-format`, Stylelint and contrast checks; old apps and libraries deleted, new app shell.
+3. **003 Atoms and catalog** ← **next**: the 16 Olivier atoms and `apps/ui-catalog`.
+4. **004 Molecules, organisms and templates:** CDK overlays and app shell.
 5. **005 Shared logic:** `http/*` and `identity/*`; auth pages rebuilt on the auth layout (Sanctum cookie strategy).
 
 ## Known issues (do not "fix" silently — open or update a spec)
 
 Tooling
-- Production budget error limits are raised to 1.5 MB (initial) and 10 kB (component style); the warnings at 500 kB / 4 kB still fire. Restore in spec 002 (Bootstrap trim) and spec 004 (ng-bootstrap, `moment`, nav bar). (spec 001 D5.1)
 - Vitest is pinned to 4 because `@nx/vitest`'s generator rejects 5; revisit when the Nx/Analog peers allow it.
-- `nx run-many -t lint` has 0 errors but still reports warnings (`no-explicit-any`, `no-non-null-assertion`, `no-unused-vars`).
+- Stylelint is pinned to 17: 18 needs Node ≥ 24.15.
+- `shared/ui/tokens` and `shared/util/format` set `server: { watch: null }` in `vite.config.mts`: with the watcher on, Analog drops its compiled output mid-run and tests fail at random ("not in the TypeScript program"). `vitest --watch` does not re-run there. Clear `node_modules/.vite` if tests report the same message elsewhere.
+- `nx run-many -t lint` has 0 errors but still reports warnings in `shared/stores` (`no-explicit-any`, `no-non-null-assertion`, `no-unused-vars`).
 - Production `apiBaseUrl` is a placeholder (`https://api.example.invalid/api/v1`); replace it before the first deployment.
 
-App behaviour found during spec 001, deliberately not changed (spec 005 unless noted)
-- The frontend still calls the **old** API paths (`/auth/login`, `/money-transition`, `/categories`, `/profile`, …); the rebuilt backend on `:8001` serves none of them, so every call after sign-in returns 404 in development.
-- `withCrudOperations` (and `loadSummary`) have no `catchError`: one failed request ends the stream for good (documented by a test in `shared/stores`).
-- `AuthService.updatePassword` / `resetPassword` / `resetPasswordRequest` build URLs with a line break and spaces inside the template literal.
-- Login fields bind `[showErrors]` to a non-existent `amount` control, so the sign-in page never shows field errors.
-- Opening `/register` directly redirects to `/` (the auth store's `onInit` navigates to `''` without a token).
-- `ResetPassword` never resets `loading` after the response; `SecuritySettingsComponent.openPasswordModal` assigns plain values over the modal wrapper's signals.
-- The HTTP error interceptor shows "Client error occurred (undefined)" for a 4xx without a `message`.
-- `text-input` and `select` ignore `setDisabledState`; `date-input` drops a value written before its view initialises. (spec 004)
-- `bar-chart` relies on `chart-item` importing `chart.js/auto` to register Chart.js controllers. (spec 004)
+Code
+- `withCrudOperations` has no `catchError`: one failed request ends the stream for good (documented by a test in `shared/stores`). Fix before a screen uses it.

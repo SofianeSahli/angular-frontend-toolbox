@@ -37,5 +37,5 @@ jobs:
       # Sets NX_BASE / NX_HEAD: the PR base, or the last successful run on main.
       - uses: nrwl/nx-set-shas@v5
 
-      - name: Lint, test and build (affected)
-        run: npx nx affected -t lint test build
+      - name: Lint, test, build and check themes (affected)
+        run: npx nx affected -t lint test build check-tokens

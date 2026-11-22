@@ -113,12 +113,12 @@ The toolbox is brand-free. Components read only `var(--ui-*)`: semantic and comp
 **Component tokens** follow `--ui-<component>-<property>`, default to a semantic token, and are declared in the component's own styles. Each atom adds its own (spec 003); none exist before.
 
 - A theme is a `tokens.json` (Olivier format) compiled to one CSS file. The repo copy is the source of truth and changes by pull request (a new export from the design system replaces the file); the build validates its format, the required tokens and WCAG AA contrast. Olivier lives in `shared/themes/olivier`. A client's theme lives in the client app's folder.
-- An app selects a theme with `provideUi({ theme, accent })` plus the theme CSS. Bootstrap `--bs-*` variables are mapped from the same tokens.
+- An app selects a theme with `provideUi({ theme, accent })` plus the theme CSS. Bootstrap `--bs-*` variables are mapped from the same tokens. The compiler also emits `--ui-color-<name>-rgb` (`r, g, b`) for Bootstrap's `rgba()`; components never read it.
 - Fonts load from Google Fonts through a `<link>` in the app's `index.html` with `display=swap`: Inter, and IBM Plex Sans Arabic for right-to-left text.
 - Light and dark: `[data-theme]` on `<html>`. The user's choice is `light | dark | system` (default `system`, which follows `prefers-color-scheme`), saved per device.
 - Cascade layers: `@layer reset, vendor, tokens, ui, app;`. Apps override in `app`, never with `!important`, and never fork a component.
 - Bootstrap: only Reboot, the grid and utilities, in the `vendor` layer.
-- Checks: Stylelint refuses raw colours, sizes and fonts in **every** style file in the repo (no ignore list, no legacy exceptions; only theme CSS generated from `tokens.json` holds raw values), and a CI script verifies WCAG AA contrast for every theme in light and dark.
+- Checks: Stylelint refuses raw colours, sizes and fonts in **every** style file in the repo (no ignore list, no legacy exceptions; only the compiler output `*.generated.css`, built from `tokens.json` and the contract, holds raw values), and a CI script verifies WCAG AA contrast for every theme in light and dark.
 
 ## 6. Tests
 
@@ -128,6 +128,8 @@ The toolbox is brand-free. Components read only `var(--ui-*)`: semantic and comp
 - **End-to-end:** a manual check by the owner when needed, plus the Playwright smoke test in CI on `main`.
 
 ## 7. Migration of existing code
+
+Spec 002 deleted the old code outright (the old app, its e2e project, `shared/auth` and `shared/ui-components`) instead of migrating it. The right column remains the list of what each old piece is rebuilt as.
 
 | Today | Becomes |
 |---|---|

@@ -2,8 +2,8 @@
   "scripts": {
     "lint": "nx lint",
     "lint:fix": "nx lint --fix",
-    "ci": "nx affected -t lint test build --base=main",
-    "ci:all": "nx run-many -t lint test build"
+    "ci": "nx affected -t lint test build check-tokens --base=main",
+    "ci:all": "nx run-many -t lint test build check-tokens"
   },
   "engines": {
     "node": ">=24 <25"
