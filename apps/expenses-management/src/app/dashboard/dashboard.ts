@@ -9,7 +9,7 @@ import { ProfileFormComponent } from '../profile/profile-form/profile-form.compo
   selector: 'app-dashboard',
   imports: [ProfileFormComponent, AppNavbar, RouterOutlet],
   templateUrl: './dashboard.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './dashboard.scss',
 })
 export class Dashboard {

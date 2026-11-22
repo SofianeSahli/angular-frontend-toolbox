@@ -6,7 +6,7 @@ import { Chart, ChartConfiguration } from 'chart.js/auto';
   selector: 'app-chart-item',
   imports: [],
   templateUrl: './chart-item.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './chart-item.scss',
 })
 export class ChartItem {

@@ -6,7 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-summary-item',
   imports: [TranslatePipe, CurrencyPipe],
   templateUrl: './summary-item.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './summary-item.scss',
 })
 export class SummaryItem {

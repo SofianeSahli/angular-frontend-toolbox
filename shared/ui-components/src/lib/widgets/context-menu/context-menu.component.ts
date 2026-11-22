@@ -20,7 +20,7 @@ export interface ContextMenuItem {
   standalone: true,
   imports: [CommonModule, NgbDropdownModule, TranslatePipe],
   templateUrl: './context-menu.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./context-menu.component.scss'],
 })
 export class ContextMenuComponent {

@@ -7,7 +7,7 @@ import { Chart, ChartConfiguration, ChartData } from 'chart.js';
   selector: 'app-bar-chart',
   imports: [],
   templateUrl: './bar-chart.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './bar-chart.scss',
 })
 export class BarChart {

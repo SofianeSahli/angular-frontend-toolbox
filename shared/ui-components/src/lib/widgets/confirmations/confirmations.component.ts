@@ -7,7 +7,7 @@ import { DynamicComponentInterface } from '../modal-wrapper-component/modal-wrap
   selector: 'lib-confirmation-modal',
   standalone: true,
   imports: [],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="modal-body">
       <p>{{ message() }}</p>

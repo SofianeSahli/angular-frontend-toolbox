@@ -9,7 +9,7 @@ import { ToastService } from './toast.service';
   imports: [],
   templateUrl: './toast.html',
   styleUrls: ['./toast.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [

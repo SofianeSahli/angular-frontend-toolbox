@@ -25,7 +25,7 @@ import { MoneyTransition } from '../state/money-transitions/MoneyTransition.mode
     Loader, SwitchButtons, SelectComponent, TextInput, DateInputComponent
   ],
   templateUrl: './form.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./form.scss'],
 })
 export class Form implements DynamicComponentInterface<void> {

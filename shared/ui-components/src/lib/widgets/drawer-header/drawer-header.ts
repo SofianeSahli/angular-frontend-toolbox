@@ -4,7 +4,7 @@ import { Component, input, ChangeDetectionStrategy } from '@angular/core';
   selector: 'lib-drawer-header',
   imports: [],
   templateUrl: './drawer-header.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './drawer-header.scss',
 })
 export class DrawerHeader {

@@ -7,7 +7,7 @@ import { MoneyTransition } from '../state/money-transitions/MoneyTransition.mode
   selector: 'app-list-items',
   imports: [DatePipe, TranslatePipe, CurrencyPipe],
   templateUrl: './list-items.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './list-items.scss',
 })
 export class ListItems {

@@ -8,7 +8,7 @@ import { ProfileFormComponent } from "./profile-form/profile-form.component";
   imports: [UpdatePasswordFormComponent, ProfileFormComponent, SwitchButtons],
   templateUrl: './parameters.html',
   styleUrl: './parameters.scss',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [routeAnimations]
 })
 export class Parameters {
