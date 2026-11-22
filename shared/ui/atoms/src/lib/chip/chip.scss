@@ -1,0 +1,58 @@
+@use '../styles/focus-ring';
+
+@layer ui {
+  :host {
+    --ui-chip-block-size: 36px;
+    --ui-chip-padding-inline: 14px;
+    --ui-chip-gap: 6px;
+    --ui-chip-hit-outset: 4px;
+    --ui-chip-disabled-opacity: 0.45;
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ui-chip-gap);
+    block-size: var(--ui-chip-block-size);
+    padding-block: 0;
+    padding-inline: var(--ui-chip-padding-inline);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line-strong);
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-surface);
+    color: var(--ui-color-ink);
+    font: inherit;
+    font-size: var(--ui-text-small-size);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  :host::after {
+    content: '';
+    position: absolute;
+    inset-block: calc(-1 * var(--ui-chip-hit-outset));
+    inset-inline: 0;
+  }
+
+  :host([aria-pressed='true']) {
+    border-color: var(--ui-color-accent);
+    background: var(--ui-color-accent-soft);
+    color: var(--ui-color-accent);
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+
+  :host(:disabled) {
+    opacity: var(--ui-chip-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  .ui-chip__count {
+    color: var(--ui-color-ink-muted);
+    font-weight: var(--ui-text-amount-weight);
+    font-variant-numeric: tabular-nums;
+  }
+
+  :host([aria-pressed='true']) .ui-chip__count {
+    color: inherit;
+  }
+
+  @include focus-ring.visible;
+}
