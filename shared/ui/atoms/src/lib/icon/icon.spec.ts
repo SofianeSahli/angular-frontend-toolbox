@@ -54,3 +54,20 @@ describe('ui-icon', () => {
     expect(report).toHaveBeenCalledWith('ui-icon: no icon is registered under "nope"');
   });
 });
+
+describe('ui-icon starter set additions', () => {
+  const added = ['info', 'circle-check', 'triangle-exclamation-point', 'circle-x', 'x', 'eye', 'eye-off', 'ellipsis', 'inbox', 'pencil', 'check', 'menu'];
+  const directional = ['chevron-left', 'chevron-right', 'arrow-left'];
+
+  it.each(added)('draws %s, which does not mirror', async (name) => {
+    const { container } = await render(`<ui-icon name="${name}" />`, { imports: [UiIcon] });
+    const host = container.querySelector('ui-icon');
+    expect(host?.querySelector('svg')?.children.length).toBeGreaterThan(0);
+    expect(host?.classList).not.toContain('ui-icon--directional');
+  });
+
+  it.each(directional)('draws %s and mirrors it in RTL', async (name) => {
+    const { container } = await render(`<ui-icon name="${name}" />`, { imports: [UiIcon] });
+    expect(container.querySelector('ui-icon')?.classList).toContain('ui-icon--directional');
+  });
+});
