@@ -110,7 +110,7 @@ The toolbox is brand-free. Components read only `var(--ui-*)`: semantic and comp
   - `--ui-duration-fast/base/slow`: 120 / 200 / 320ms; `--ui-easing-standard`: `cubic-bezier(0.2, 0, 0, 1)`
   - every duration becomes `0ms` under `prefers-reduced-motion: reduce`, in the token CSS.
 
-**Component tokens** follow `--ui-<component>-<property>`, default to a semantic token, and are declared in the component's own styles. Each atom adds its own (spec 003); none exist before.
+**Component tokens** follow `--ui-<component>-<property>` and are declared, with a default, in the component's own style file (`switch.scss` declares `--ui-switch-*`). A default is a scale token when one matches the value, otherwise a raw value. A theme may override them. They are the **only** place a raw length may appear outside generated CSS; motion always comes from the `--ui-duration-*` tokens.
 
 - A theme is a `tokens.json` (Olivier format) compiled to one CSS file. The repo copy is the source of truth and changes by pull request (a new export from the design system replaces the file); the build validates its format, the required tokens and WCAG AA contrast. Olivier lives in `shared/themes/olivier`. A client's theme lives in the client app's folder.
 - An app selects a theme with `provideUi({ theme, accent })` plus the theme CSS. Bootstrap `--bs-*` variables are mapped from the same tokens. The compiler also emits `--ui-color-<name>-rgb` (`r, g, b`) for Bootstrap's `rgba()`; components never read it.
@@ -118,7 +118,8 @@ The toolbox is brand-free. Components read only `var(--ui-*)`: semantic and comp
 - Light and dark: `[data-theme]` on `<html>`. The user's choice is `light | dark | system` (default `system`, which follows `prefers-color-scheme`), saved per device.
 - Cascade layers: `@layer reset, vendor, tokens, ui, app;`. Apps override in `app`, never with `!important`, and never fork a component.
 - Bootstrap: only Reboot, the grid and utilities, in the `vendor` layer.
-- Checks: Stylelint refuses raw colours, sizes and fonts in **every** style file in the repo (no ignore list, no legacy exceptions; only the compiler output `*.generated.css`, built from `tokens.json` and the contract, holds raw values), and a CI script verifies WCAG AA contrast for every theme in light and dark.
+- Right-to-left: styles use logical properties and values only (`padding-inline`, `inset-inline-start`, `margin-inline-start`, `text-align: start`), never physical `left`/`right`. Horizontal movement mirrors (logical insets, or `:dir(rtl)`), and directional icons (chevrons, arrows, back, list) are flagged `directional` and mirror in RTL.
+- Checks: Stylelint refuses raw colours, sizes and fonts in **every** style file in the repo (no ignore list, no legacy exceptions). Raw lengths are allowed only in a component's own `--ui-<component>-*` tokens and in the compiler output `*.generated.css`. `color-mix()` takes only `var(--ui-*)` tokens, `currentColor` and `transparent`. A CI script verifies WCAG AA contrast for every theme in light and dark.
 
 ## 6. Tests
 
