@@ -1,9 +1,9 @@
 import { formatMillimes, formatMillimesHeadline, formatSignedMillimes } from './money';
 
-// fr-TN output uses U+202F (narrow no-break space) between thousands and U+00A0 before "DT".
-const NNBSP = String.fromCharCode(0x202f);
-const NBSP = String.fromCharCode(0x00a0);
-const dt = (s: string) => s.replaceAll(' ', NNBSP).replace(new RegExp(`${NNBSP}DT$`), `${NBSP}DT`);
+const THOUSANDS_SEPARATOR = String.fromCharCode(0x202f);
+const SPACE_BEFORE_CURRENCY = String.fromCharCode(0x00a0);
+const dt = (s: string) =>
+  s.replaceAll(' ', THOUSANDS_SEPARATOR).replace(new RegExp(`${THOUSANDS_SEPARATOR}DT$`), `${SPACE_BEFORE_CURRENCY}DT`);
 
 describe('formatMillimes (REQ-6.2)', () => {
   it.each([

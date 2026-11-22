@@ -1,11 +1,7 @@
-// WCAG 2.1 contrast checker for themes (spec 002, REQ-7.3 – REQ-7.5).
-// Self-contained (no relative imports) so that Node 24 and Vitest both load it as is.
-
 export type PairKind = 'text' | 'large' | 'ui';
 export type Theme = 'light' | 'dark';
 
-/** WCAG AA: 4.5:1 for text; 3:1 for large text (24px+), control borders, focus rings and icons. */
-export const THRESHOLDS: Readonly<Record<PairKind, number>> = { text: 4.5, large: 3, ui: 3 };
+export const WCAG_AA_MINIMUM_RATIO: Readonly<Record<PairKind, number>> = { text: 4.5, large: 3, ui: 3 };
 
 export interface ContrastPair {
   fg: string;
@@ -70,13 +66,12 @@ export function parsePairs(json: unknown): ContrastPair[] {
   });
 }
 
-/** Every declared pair, in both themes; returns the pairs below their threshold. */
-export function checkContrast(colors: Colors, pairs: ContrastPair[]): ContrastFailure[] {
+export function findPairsBelowMinimum(colors: Colors, pairs: ContrastPair[]): ContrastFailure[] {
   const failures: ContrastFailure[] = [];
   for (const pair of pairs) {
     for (const theme of ['light', 'dark'] as const) {
       const ratio = contrastRatio(resolve(colors, pair.fg, theme), resolve(colors, pair.bg, theme));
-      const required = THRESHOLDS[pair.kind];
+      const required = WCAG_AA_MINIMUM_RATIO[pair.kind];
       if (ratio < required) failures.push({ ...pair, theme, ratio, required });
     }
   }

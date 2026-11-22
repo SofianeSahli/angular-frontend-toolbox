@@ -8,16 +8,17 @@ describe('local ISO dates (REQ-6.6)', () => {
 
   it.each(['Africa/Tunis', 'Europe/Paris'])('keeps the local day just after midnight in %s', (tz) => {
     process.env['TZ'] = tz;
-    const justAfterMidnight = new Date(2026, 2, 29, 0, 30); // 29 March, 00:30 local (UTC+1/+2)
-    expect(justAfterMidnight.toISOString().slice(0, 10)).toBe('2026-03-28'); // the bug this avoids
-    expect(toLocalIsoDate(justAfterMidnight)).toBe('2026-03-29');
+    const march29At0030Local = new Date(2026, 2, 29, 0, 30);
+    const utcDayThatToIsoStringWouldGive = march29At0030Local.toISOString().slice(0, 10);
+    expect(utcDayThatToIsoStringWouldGive).toBe('2026-03-28');
+    expect(toLocalIsoDate(march29At0030Local)).toBe('2026-03-29');
   });
 
   it('round-trips through local midnight', () => {
     process.env['TZ'] = 'Europe/Paris';
-    const d = fromLocalIsoDate('2026-10-25'); // DST change day
-    expect([d.getFullYear(), d.getMonth(), d.getDate(), d.getHours()]).toEqual([2026, 9, 25, 0]);
-    expect(toLocalIsoDate(d)).toBe('2026-10-25');
+    const dstChangeDay = fromLocalIsoDate('2026-10-25');
+    expect([dstChangeDay.getFullYear(), dstChangeDay.getMonth(), dstChangeDay.getDate(), dstChangeDay.getHours()]).toEqual([2026, 9, 25, 0]);
+    expect(toLocalIsoDate(dstChangeDay)).toBe('2026-10-25');
   });
 
   it('pads years, months and days', () => {

@@ -2,14 +2,6 @@ import { EnvironmentProviders, inject, makeEnvironmentProviders, provideAppIniti
 import { UI_CONFIG, UiConfig, UiTheme } from './ui-theme';
 import { UiThemeService } from './ui-theme.service';
 
-/**
- * Selects the app's theme and accent (spec 002, REQ-1.5, REQ-5.7). Call once in the app config,
- * and load the theme's CSS in the app's styles.
- *
- * ```ts
- * provideUi({ theme: olivierTheme, accent: 'olive' })
- * ```
- */
 export function provideUi<T extends UiTheme>(config: UiConfig<T>): EnvironmentProviders {
   if (config.accent !== undefined && !config.theme.accents.includes(config.accent)) {
     throw new Error(

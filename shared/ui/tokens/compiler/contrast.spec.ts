@@ -1,6 +1,6 @@
-import { checkContrast, contrastRatio, describeFailure, parsePairs } from './contrast';
+import { findPairsBelowMinimum, contrastRatio, describeFailure, parsePairs } from './contrast';
 
-describe('contrast checker (REQ-7.3, REQ-7.4)', () => {
+describe('contrast checker', () => {
   it('computes WCAG ratios', () => {
     expect(contrastRatio('#000000', '#FFFFFF')).toBeCloseTo(21, 5);
     expect(contrastRatio('#FFFFFF', '#000')).toBeCloseTo(21, 5);
@@ -19,11 +19,11 @@ describe('contrast checker (REQ-7.3, REQ-7.4)', () => {
   };
 
   it('passes pairs above their threshold in both themes', () => {
-    expect(checkContrast(colors, [{ fg: 'ink', bg: 'bg', kind: 'text' }])).toEqual([]);
+    expect(findPairsBelowMinimum(colors, [{ fg: 'ink', bg: 'bg', kind: 'text' }])).toEqual([]);
   });
 
   it('applies 4.5:1 to text and 3:1 to large text and controls, resolving aliases', () => {
-    const failures = checkContrast(colors, [
+    const failures = findPairsBelowMinimum(colors, [
       { fg: 'accent', bg: 'bg', kind: 'text' },
       { fg: 'accent', bg: 'bg', kind: 'ui' },
       { fg: 'accent', bg: 'bg', kind: 'large' },
@@ -34,7 +34,7 @@ describe('contrast checker (REQ-7.3, REQ-7.4)', () => {
   });
 
   it('fails on an unknown token in a pair', () => {
-    expect(() => checkContrast(colors, [{ fg: 'nope', bg: 'bg', kind: 'text' }])).toThrow('unknown token "nope"');
+    expect(() => findPairsBelowMinimum(colors, [{ fg: 'nope', bg: 'bg', kind: 'text' }])).toThrow('unknown token "nope"');
   });
 
   it('validates the pairs file', () => {

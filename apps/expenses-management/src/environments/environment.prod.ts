@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  // TODO(deploy): placeholder. Replace with the real production API before the first deployment.
+  // TODO(deploy): placeholder until the production API exists.
   apiBaseUrl: 'https://api.example.invalid/api/v1',
 };

@@ -4,11 +4,6 @@ import { ActiveTheme, ThemeChoice, UI_CONFIG, UI_THEME_STORAGE_KEY, isThemeChoic
 
 const DARK_QUERY = '(prefers-color-scheme: dark)';
 
-/**
- * Light, dark and accent (spec 002, US-5). Applies `data-theme`, `data-bs-theme` and
- * `data-accent` on `<html>` synchronously: on creation, on `setChoice` and when the
- * device setting changes while the choice is `system`.
- */
 @Injectable({ providedIn: 'root' })
 export class UiThemeService {
   private readonly document = inject(DOCUMENT);
@@ -19,10 +14,8 @@ export class UiThemeService {
   private readonly choiceState = signal<ThemeChoice>(this.readStoredChoice());
   private readonly deviceDark = signal(this.media?.matches ?? false);
 
-  /** The user's choice: `light`, `dark` or `system` (default). */
   readonly choice = this.choiceState.asReadonly();
 
-  /** The theme applied now. */
   readonly active = computed<ActiveTheme>(() => {
     const choice = this.choiceState();
     if (choice !== 'system') return choice;
@@ -39,7 +32,6 @@ export class UiThemeService {
     this.apply();
   }
 
-  /** Applies the choice now and remembers it on this device (REQ-5.4). */
   setChoice(choice: ThemeChoice): void {
     if (!isThemeChoice(choice)) throw new Error(`Unknown theme choice "${String(choice)}"`);
     this.choiceState.set(choice);
@@ -56,7 +48,6 @@ export class UiThemeService {
     if (accent) html.setAttribute('data-accent', accent);
   }
 
-  // Storage can be missing or throw (private mode, blocked site data): REQ-5.6.
   private readStoredChoice(): ThemeChoice {
     try {
       const stored = this.window?.localStorage.getItem(UI_THEME_STORAGE_KEY);
@@ -70,7 +61,7 @@ export class UiThemeService {
     try {
       this.window?.localStorage.setItem(UI_THEME_STORAGE_KEY, choice);
     } catch {
-      // The choice still applies for this session.
+      // Private mode or blocked site data: the choice still applies for this session.
     }
   }
 }

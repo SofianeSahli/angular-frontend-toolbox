@@ -8,8 +8,7 @@ export default defineConfig(() => ({
   resolve: {
     tsconfigPaths: true,
   },
-  // Vitest runs once here (no watch); without a watcher, Analog never drops its compiled
-  // output mid-run (spec 002, T7 deviation).
+  // With the watcher on, Analog drops its compiled output mid-run and tests fail at random.
   server: { watch: null },
   plugins: [angular({ tsconfig: `${import.meta.dirname}/tsconfig.spec.json` })],
   test: {

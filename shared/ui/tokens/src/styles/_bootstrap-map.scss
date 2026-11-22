@@ -1,9 +1,5 @@
-// Bootstrap's variables, fed by the --ui-* tokens (spec 002, REQ-4.2). Loaded inside @layer tokens.
-// Uses the contract's colours and fonts, plus radius-sm/md/lg/pill and the `body` text style,
-// which a theme used with Bootstrap must define (see README).
 :root,
 [data-bs-theme] {
-  // Body, text and surfaces.
   --bs-body-bg: var(--ui-color-bg);
   --bs-body-bg-rgb: var(--ui-color-bg-rgb);
   --bs-body-color: var(--ui-color-ink);
@@ -20,7 +16,6 @@
   --bs-tertiary-bg-rgb: var(--ui-color-surface-sunken-rgb);
   --bs-heading-color: var(--ui-color-ink);
 
-  // Borders.
   --bs-border-color: var(--ui-color-line);
   --bs-border-color-translucent: var(--ui-color-line);
   --bs-border-radius-sm: var(--ui-radius-sm);
@@ -30,7 +25,6 @@
   --bs-border-radius-xxl: var(--ui-radius-lg);
   --bs-border-radius-pill: var(--ui-radius-pill);
 
-  // Theme colours: primary is the app's accent.
   --bs-primary: var(--ui-color-accent);
   --bs-primary-rgb: var(--ui-color-accent-rgb);
   --bs-primary-text-emphasis: var(--ui-color-accent);
@@ -52,13 +46,11 @@
   --bs-danger-bg-subtle: var(--ui-color-danger-soft);
   --bs-danger-border-subtle: var(--ui-color-danger);
 
-  // Links: the brand colour.
   --bs-link-color: var(--ui-color-brand);
   --bs-link-color-rgb: var(--ui-color-brand-rgb);
   --bs-link-hover-color: var(--ui-color-brand);
   --bs-link-hover-color-rgb: var(--ui-color-brand-rgb);
 
-  // Type.
   --bs-font-sans-serif: var(--ui-font-sans);
   --bs-body-font-family: var(--ui-font-sans);
   --bs-body-font-size: var(--ui-text-body-size);

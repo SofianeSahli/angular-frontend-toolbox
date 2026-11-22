@@ -1,8 +1,5 @@
 import '@angular/compiler';
-// The app uses zone-based change detection, so tests do too (spec 001, T13).
-// Angular 22 is zoneless by default: Analog's `zoneless: false` only skips
-// adding zoneless mode, so zone.js is loaded here and zone change detection
-// is provided explicitly (the app's Angular builder does the same).
+// Angular 22 defaults to zoneless and Analog's `zoneless: false` does not add zone.js back.
 import 'zone.js';
 import 'zone.js/testing';
 import '@analogjs/vitest-angular/setup-snapshots';
