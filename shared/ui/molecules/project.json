@@ -1,0 +1,22 @@
+{
+  "name": "ui-molecules",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/ui/molecules/src",
+  "prefix": "ui",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "type:ui",
+    "layer:molecule"
+  ],
+  "targets": {
+    "stylelint": {
+      "command": "stylelint \"shared/ui/molecules/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  }
+}
