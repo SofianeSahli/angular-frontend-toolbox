@@ -2,6 +2,9 @@
 import { defineConfig } from 'vite';
 import angular from '@analogjs/vite-plugin-angular';
 
+const TIME_ZONE_WITH_UTC_PLUS_1_AND_PLUS_2 = 'Europe/Paris';
+process.env['TZ'] = TIME_ZONE_WITH_UTC_PLUS_1_AND_PLUS_2;
+
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../../node_modules/.vite/shared/util/format',
