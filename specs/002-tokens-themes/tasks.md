@@ -64,15 +64,8 @@ Each task ends with: `nx affected -t lint`, `nx affected -t test`, and `nx build
   - The app's tests fail with "Vitest failed to find the runner" when run from a Git Bash session whose current directory has a lowercase drive letter, even with `NX_WORKSPACE_ROOT_PATH` unset. Run from PowerShell in `C:\...`, they pass. Recorded in CLAUDE.md.
 
 - **CI on PR #4:**
-  - The first run failed at Unknown command: "ci"
-
-
-Did you mean one of these?
-  npm ci # Clean install a project
-  npm run ci # run the "ci" package script
-To see a list of supported npm commands, run:
-  npm help: the lockfile written on Windows lacked Linux-only  entries. It was regenerated from  in a clean folder; key versions are unchanged.
-  - The second run failed in : on Linux, setting  inside a test does not change the worker's time zone. 's Vite config now sets  (UTC+1/+2) before the workers start.
+  - The first run failed at `npm ci`: the lockfile written on Windows lacked Linux-only `@emnapi` entries. It was regenerated from `package.json` in a clean folder; key versions are unchanged.
+  - The second run failed in `dates.spec.ts`: on Linux, setting `process.env.TZ` inside a test does not change the worker's time zone. `util-format`'s Vite config now sets `Europe/Paris` (UTC+1/+2) before the workers start.
   - The third run passed.
 
 ## Verification report
