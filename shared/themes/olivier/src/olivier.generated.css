@@ -1,0 +1,229 @@
+/* Generated from tokens.json by the theme compiler. Do not edit. */
+@layer tokens {
+  :root,
+  [data-theme='light'] {
+    --ui-color-bg: #FBF8F3;
+    --ui-color-bg-rgb: 251, 248, 243;
+    --ui-color-surface: #FFFFFF;
+    --ui-color-surface-rgb: 255, 255, 255;
+    --ui-color-surface-sunken: #F3EEE6;
+    --ui-color-surface-sunken-rgb: 243, 238, 230;
+    --ui-color-surface-raised: #FFFFFF;
+    --ui-color-surface-raised-rgb: 255, 255, 255;
+    --ui-color-line: #E7E0D5;
+    --ui-color-line-rgb: 231, 224, 213;
+    --ui-color-line-strong: #8F877A;
+    --ui-color-line-strong-rgb: 143, 135, 122;
+    --ui-color-ink: #1C1A17;
+    --ui-color-ink-rgb: 28, 26, 23;
+    --ui-color-ink-muted: #6B6358;
+    --ui-color-ink-muted-rgb: 107, 99, 88;
+    --ui-color-brand: #1D4E89;
+    --ui-color-brand-rgb: 29, 78, 137;
+    --ui-color-on-brand: #FFFFFF;
+    --ui-color-on-brand-rgb: 255, 255, 255;
+    --ui-color-brand-soft: #E3ECF7;
+    --ui-color-brand-soft-rgb: 227, 236, 247;
+    --ui-color-accent: var(--ui-color-accent-olive);
+    --ui-color-accent-rgb: var(--ui-color-accent-olive-rgb);
+    --ui-color-on-accent: #FFFFFF;
+    --ui-color-on-accent-rgb: 255, 255, 255;
+    --ui-color-accent-soft: var(--ui-color-accent-olive-soft);
+    --ui-color-accent-soft-rgb: var(--ui-color-accent-olive-soft-rgb);
+    --ui-color-accent-olive: #4E6B1F;
+    --ui-color-accent-olive-rgb: 78, 107, 31;
+    --ui-color-accent-olive-soft: #EDF2DF;
+    --ui-color-accent-olive-soft-rgb: 237, 242, 223;
+    --ui-color-accent-terracotta: #A8452A;
+    --ui-color-accent-terracotta-rgb: 168, 69, 42;
+    --ui-color-accent-safran: #8A5A00;
+    --ui-color-accent-safran-rgb: 138, 90, 0;
+    --ui-color-accent-lagune: #0F6E73;
+    --ui-color-accent-lagune-rgb: 15, 110, 115;
+    --ui-color-accent-figue: #7A3E6E;
+    --ui-color-accent-figue-rgb: 122, 62, 110;
+    --ui-color-success: #2D7A4C;
+    --ui-color-success-rgb: 45, 122, 76;
+    --ui-color-success-soft: #E4F2E9;
+    --ui-color-success-soft-rgb: 228, 242, 233;
+    --ui-color-warning: #9A6210;
+    --ui-color-warning-rgb: 154, 98, 16;
+    --ui-color-warning-soft: #FBF0DC;
+    --ui-color-warning-soft-rgb: 251, 240, 220;
+    --ui-color-danger: #B8443A;
+    --ui-color-danger-rgb: 184, 68, 58;
+    --ui-color-danger-soft: #FBE9E6;
+    --ui-color-danger-soft-rgb: 251, 233, 230;
+    --ui-color-focus-ring: var(--ui-color-brand);
+    --ui-color-focus-ring-rgb: var(--ui-color-brand-rgb);
+    --ui-color-data-1: #C2410C;
+    --ui-color-data-1-rgb: 194, 65, 12;
+    --ui-color-data-2: #B45309;
+    --ui-color-data-2-rgb: 180, 83, 9;
+    --ui-color-data-3: #4D7C0F;
+    --ui-color-data-3-rgb: 77, 124, 15;
+    --ui-color-data-4: #047857;
+    --ui-color-data-4-rgb: 4, 120, 87;
+    --ui-color-data-5: #0E7490;
+    --ui-color-data-5-rgb: 14, 116, 144;
+    --ui-color-data-6: #1D4ED8;
+    --ui-color-data-6-rgb: 29, 78, 216;
+    --ui-color-data-7: #6D28D9;
+    --ui-color-data-7-rgb: 109, 40, 217;
+    --ui-color-data-8: #BE185D;
+    --ui-color-data-8-rgb: 190, 24, 93;
+    --ui-color-data-9: #A16207;
+    --ui-color-data-9-rgb: 161, 98, 7;
+    --ui-color-data-10: #57534E;
+    --ui-color-data-10-rgb: 87, 83, 78;
+    --ui-font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+    --ui-font-arabic: "IBM Plex Sans Arabic", "Inter", "Segoe UI", system-ui, sans-serif;
+    --ui-text-amount-hero-size: 44px;
+    --ui-text-amount-hero-line-height: 48px;
+    --ui-text-amount-hero-weight: 600;
+    --ui-text-amount-hero-tracking: -0.02em;
+    --ui-text-title-1-size: 28px;
+    --ui-text-title-1-line-height: 34px;
+    --ui-text-title-1-weight: 600;
+    --ui-text-title-1-tracking: -0.01em;
+    --ui-text-title-2-size: 20px;
+    --ui-text-title-2-line-height: 28px;
+    --ui-text-title-2-weight: 600;
+    --ui-text-body-size: 15px;
+    --ui-text-body-line-height: 22px;
+    --ui-text-body-weight: 400;
+    --ui-text-body-strong-size: 15px;
+    --ui-text-body-strong-line-height: 22px;
+    --ui-text-body-strong-weight: 600;
+    --ui-text-amount-size: 15px;
+    --ui-text-amount-line-height: 22px;
+    --ui-text-amount-weight: 500;
+    --ui-text-small-size: 13px;
+    --ui-text-small-line-height: 18px;
+    --ui-text-small-weight: 400;
+    --ui-text-caption-size: 12px;
+    --ui-text-caption-line-height: 16px;
+    --ui-text-caption-weight: 500;
+    --ui-text-caption-tracking: 0.02em;
+    --ui-space-1: 4px;
+    --ui-space-2: 8px;
+    --ui-space-3: 12px;
+    --ui-space-4: 16px;
+    --ui-space-6: 24px;
+    --ui-space-8: 32px;
+    --ui-space-12: 48px;
+    --ui-radius-sm: 6px;
+    --ui-radius-md: 12px;
+    --ui-radius-lg: 20px;
+    --ui-radius-pill: 999px;
+    --ui-shadow-sheet: 0 8px 24px rgba(28,26,23,0.10);
+  }
+
+  [data-theme='dark'] {
+    --ui-color-bg: #141311;
+    --ui-color-bg-rgb: 20, 19, 17;
+    --ui-color-surface: #1E1C19;
+    --ui-color-surface-rgb: 30, 28, 25;
+    --ui-color-surface-sunken: #191714;
+    --ui-color-surface-sunken-rgb: 25, 23, 20;
+    --ui-color-surface-raised: #26231F;
+    --ui-color-surface-raised-rgb: 38, 35, 31;
+    --ui-color-line: #37332D;
+    --ui-color-line-rgb: 55, 51, 45;
+    --ui-color-line-strong: #80786B;
+    --ui-color-line-strong-rgb: 128, 120, 107;
+    --ui-color-ink: #F2EDE5;
+    --ui-color-ink-rgb: 242, 237, 229;
+    --ui-color-ink-muted: #A8A092;
+    --ui-color-ink-muted-rgb: 168, 160, 146;
+    --ui-color-brand: #8DB4E6;
+    --ui-color-brand-rgb: 141, 180, 230;
+    --ui-color-on-brand: #141311;
+    --ui-color-on-brand-rgb: 20, 19, 17;
+    --ui-color-brand-soft: #1B2A3D;
+    --ui-color-brand-soft-rgb: 27, 42, 61;
+    --ui-color-accent: var(--ui-color-accent-olive);
+    --ui-color-accent-rgb: var(--ui-color-accent-olive-rgb);
+    --ui-color-on-accent: #141311;
+    --ui-color-on-accent-rgb: 20, 19, 17;
+    --ui-color-accent-soft: var(--ui-color-accent-olive-soft);
+    --ui-color-accent-soft-rgb: var(--ui-color-accent-olive-soft-rgb);
+    --ui-color-accent-olive: #B3CC7A;
+    --ui-color-accent-olive-rgb: 179, 204, 122;
+    --ui-color-accent-olive-soft: #263018;
+    --ui-color-accent-olive-soft-rgb: 38, 48, 24;
+    --ui-color-accent-terracotta: #F0A285;
+    --ui-color-accent-terracotta-rgb: 240, 162, 133;
+    --ui-color-accent-safran: #F2C25B;
+    --ui-color-accent-safran-rgb: 242, 194, 91;
+    --ui-color-accent-lagune: #7FD3D3;
+    --ui-color-accent-lagune-rgb: 127, 211, 211;
+    --ui-color-accent-figue: #E3A6D6;
+    --ui-color-accent-figue-rgb: 227, 166, 214;
+    --ui-color-success: #6CC596;
+    --ui-color-success-rgb: 108, 197, 150;
+    --ui-color-success-soft: #173024;
+    --ui-color-success-soft-rgb: 23, 48, 36;
+    --ui-color-warning: #F0B44C;
+    --ui-color-warning-rgb: 240, 180, 76;
+    --ui-color-warning-soft: #3A2C14;
+    --ui-color-warning-soft-rgb: 58, 44, 20;
+    --ui-color-danger: #F08A7E;
+    --ui-color-danger-rgb: 240, 138, 126;
+    --ui-color-danger-soft: #3A1F1B;
+    --ui-color-danger-soft-rgb: 58, 31, 27;
+    --ui-color-focus-ring: var(--ui-color-brand);
+    --ui-color-focus-ring-rgb: var(--ui-color-brand-rgb);
+    --ui-color-data-1: #FB923C;
+    --ui-color-data-1-rgb: 251, 146, 60;
+    --ui-color-data-2: #FBBF24;
+    --ui-color-data-2-rgb: 251, 191, 36;
+    --ui-color-data-3: #A3E635;
+    --ui-color-data-3-rgb: 163, 230, 53;
+    --ui-color-data-4: #34D399;
+    --ui-color-data-4-rgb: 52, 211, 153;
+    --ui-color-data-5: #22D3EE;
+    --ui-color-data-5-rgb: 34, 211, 238;
+    --ui-color-data-6: #7DA2FF;
+    --ui-color-data-6-rgb: 125, 162, 255;
+    --ui-color-data-7: #C4B5FD;
+    --ui-color-data-7-rgb: 196, 181, 253;
+    --ui-color-data-8: #F472B6;
+    --ui-color-data-8-rgb: 244, 114, 182;
+    --ui-color-data-9: #FACC15;
+    --ui-color-data-9-rgb: 250, 204, 21;
+    --ui-color-data-10: #D6D3D1;
+    --ui-color-data-10-rgb: 214, 211, 209;
+  }
+
+  [data-accent='olive'] {
+    --ui-color-accent: var(--ui-color-accent-olive);
+    --ui-color-accent-rgb: var(--ui-color-accent-olive-rgb);
+    --ui-color-accent-soft: var(--ui-color-accent-olive-soft);
+    --ui-color-accent-soft-rgb: var(--ui-color-accent-olive-soft-rgb);
+  }
+
+  [data-accent='terracotta'] {
+    --ui-color-accent: var(--ui-color-accent-terracotta);
+    --ui-color-accent-rgb: var(--ui-color-accent-terracotta-rgb);
+  }
+
+  [data-accent='safran'] {
+    --ui-color-accent: var(--ui-color-accent-safran);
+    --ui-color-accent-rgb: var(--ui-color-accent-safran-rgb);
+  }
+
+  [data-accent='lagune'] {
+    --ui-color-accent: var(--ui-color-accent-lagune);
+    --ui-color-accent-rgb: var(--ui-color-accent-lagune-rgb);
+  }
+
+  [data-accent='figue'] {
+    --ui-color-accent: var(--ui-color-accent-figue);
+    --ui-color-accent-rgb: var(--ui-color-accent-figue-rgb);
+  }
+
+  :lang(ar) {
+    font-family: var(--ui-font-arabic);
+  }
+}

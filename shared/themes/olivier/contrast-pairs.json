@@ -1,0 +1,200 @@
+{
+  "$comment": "Contrast pairs checked in light and dark (spec 002, REQ-7.3 – REQ-7.5). text = 4.5:1, large = 3:1, ui = 3:1.",
+  "pairs": [
+    {
+      "fg": "ink",
+      "bg": "bg",
+      "kind": "text"
+    },
+    {
+      "fg": "ink-muted",
+      "bg": "bg",
+      "kind": "text"
+    },
+    {
+      "fg": "ink",
+      "bg": "surface",
+      "kind": "text"
+    },
+    {
+      "fg": "ink-muted",
+      "bg": "surface",
+      "kind": "text"
+    },
+    {
+      "fg": "ink",
+      "bg": "surface-sunken",
+      "kind": "text"
+    },
+    {
+      "fg": "ink-muted",
+      "bg": "surface-sunken",
+      "kind": "text"
+    },
+    {
+      "fg": "ink",
+      "bg": "surface-raised",
+      "kind": "text"
+    },
+    {
+      "fg": "ink-muted",
+      "bg": "surface-raised",
+      "kind": "text"
+    },
+    {
+      "fg": "line-strong",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "line-strong",
+      "bg": "bg",
+      "kind": "ui"
+    },
+    {
+      "fg": "focus-ring",
+      "bg": "bg",
+      "kind": "ui"
+    },
+    {
+      "fg": "focus-ring",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "on-brand",
+      "bg": "brand",
+      "kind": "text"
+    },
+    {
+      "fg": "brand",
+      "bg": "brand-soft",
+      "kind": "text"
+    },
+    {
+      "fg": "brand",
+      "bg": "bg",
+      "kind": "text"
+    },
+    {
+      "fg": "brand",
+      "bg": "surface",
+      "kind": "text"
+    },
+    {
+      "fg": "on-accent",
+      "bg": "accent-olive",
+      "kind": "text"
+    },
+    {
+      "fg": "on-accent",
+      "bg": "accent-terracotta",
+      "kind": "text"
+    },
+    {
+      "fg": "on-accent",
+      "bg": "accent-safran",
+      "kind": "text"
+    },
+    {
+      "fg": "on-accent",
+      "bg": "accent-lagune",
+      "kind": "text"
+    },
+    {
+      "fg": "on-accent",
+      "bg": "accent-figue",
+      "kind": "text"
+    },
+    {
+      "fg": "accent",
+      "bg": "accent-soft",
+      "kind": "text"
+    },
+    {
+      "fg": "accent",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "success",
+      "bg": "success-soft",
+      "kind": "text"
+    },
+    {
+      "fg": "success",
+      "bg": "surface",
+      "kind": "text"
+    },
+    {
+      "fg": "warning",
+      "bg": "warning-soft",
+      "kind": "text"
+    },
+    {
+      "fg": "warning",
+      "bg": "surface",
+      "kind": "text"
+    },
+    {
+      "fg": "danger",
+      "bg": "danger-soft",
+      "kind": "text"
+    },
+    {
+      "fg": "danger",
+      "bg": "surface",
+      "kind": "text"
+    },
+    {
+      "fg": "data-1",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "data-2",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "data-3",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "data-4",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "data-5",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "data-6",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "data-7",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "data-8",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "data-9",
+      "bg": "surface",
+      "kind": "ui"
+    },
+    {
+      "fg": "data-10",
+      "bg": "surface",
+      "kind": "ui"
+    }
+  ]
+}
