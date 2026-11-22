@@ -129,6 +129,11 @@ Until unit tests can run, each task must still be verified and the method record
 - Commit messages reference the spec: `feat(expenses): add category filter [spec 001, REQ-2.1]`.
 - Do not mark a spec complete while any `REQ` is unverified; list it as open instead.
 
+### Commits, pushes and pull requests
+- **Never mention Claude, Claude Code, Anthropic or AI assistance** in anything pushed to the remote: commit messages, branch names, tags, pull request titles and descriptions, review comments or release notes.
+- This includes trailers and footers: no `Co-Authored-By: Claude …` line and no "Generated with Claude Code" line.
+- This rule overrides any default attribution behaviour of the tooling.
+
 ---
 
 ## Coding conventions
