@@ -149,6 +149,11 @@ When all tasks are done, report: which `REQ` IDs are verified and how, anything 
 
 ## Coding conventions
 
+**Self-explanatory code**
+- Make the code explain itself: precise names for variables, functions, types and files; small functions that do one thing; named constants instead of magic values.
+- Avoid comments. Do not write comments that restate what the code does, narrate steps, or reference specs and REQ IDs (traceability lives in specs and commit messages).
+- If code seems to need a comment, rename or extract until it doesn't. The only exception is a short note on a *why* the code cannot express (a workaround for a tool bug, an external constraint), with a link when there is one.
+
 **Angular**
 - Standalone components only; no NgModules. Use `inject()`, not constructor injection.
 - Signals first: `input()`, `output()`, `model()`, `computed()`, `linkedSignal()`. Do not use `@Input`/`@Output` decorators in new code.
