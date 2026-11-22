@@ -1,0 +1,23 @@
+@layer ui {
+  :host {
+    --ui-label-gap: 6px;
+    --ui-label-required-gap: 2px;
+
+    display: block;
+    margin-block-end: var(--ui-label-gap);
+    color: var(--ui-color-ink);
+    font-size: var(--ui-text-small-size);
+    font-weight: var(--ui-text-body-strong-weight);
+    line-height: var(--ui-text-small-line-height);
+  }
+
+  .ui-label__optional {
+    color: var(--ui-color-ink-muted);
+    font-weight: var(--ui-text-small-weight);
+  }
+
+  .ui-label__required {
+    margin-inline-start: var(--ui-label-required-gap);
+    color: var(--ui-color-danger);
+  }
+}

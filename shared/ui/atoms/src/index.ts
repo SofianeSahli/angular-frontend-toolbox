@@ -6,3 +6,7 @@ export * from './lib/spinner/skeleton';
 export * from './lib/button/button';
 export * from './lib/chip/chip';
 export * from './lib/kbd/kbd';
+export * from './lib/input/input';
+export * from './lib/select/select';
+export * from './lib/label/label';
+export * from './lib/field-message/field-message';
