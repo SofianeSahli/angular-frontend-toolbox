@@ -1,6 +1,6 @@
 # 004 — Molecules, organisms and templates: Requirements
 
-> Status: Draft, revision 1 (2026-11-22). Conflicts C1–C9 and open questions 1–7 below.
+> Status: Approved, revision 2 (2026-11-22): the proposals for conflicts C1–C9 are accepted, and questions 1–7 are resolved with the recommended options (one PR for the whole spec). No open questions.
 > Source: [design-reference/README.md](./design-reference/README.md) (the 27 components, their Angular APIs, the global rules, the deferred list) and [design-reference/reference.css](./design-reference/reference.css) (the CSS to port). `preview.html` is the owner's visual check; it is not opened or tested here.
 > Scope: three new libraries, `@shared/ui-molecules` (15 molecules), `@shared/ui-organisms` (8 organisms) and `@shared/ui-templates` (4 templates), plus additions to `@shared/ui-tokens`, the icon set and `apps/ui-catalog`.
 > Architecture: [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) §2–§6, §8 step 4.
@@ -48,11 +48,16 @@ Specs 002 and 003 delivered the tokens, the Olivier theme, the 16 atoms and the 
 - **REQ-0.6** Custom controls with no native element (SegmentedControl, ChipGroup, OptionCards, CodeInput) SHALL implement ControlValueAccessor, including `setDisabledState`. They SHALL redraw when the bound control's state changes (CLAUDE.md OnPush rule).
 
 ### US-7 — Shared foundations
-- **REQ-7.1** THE SYSTEM SHALL add the breakpoints `medium: 820px` and `wide: 1100px` as SCSS constants in `@shared/ui-tokens` (`_breakpoints.scss`) with `up()` and `down()` mixins. Every component SHALL use them instead of writing a width in a media query.
+- **REQ-7.1** THE SYSTEM SHALL add the breakpoints `medium: 820px` and `wide: 1100px` as SCSS constants in `@shared/ui-tokens` (`_breakpoints.scss`: `$breakpoints-medium`, `$breakpoints-wide`) with `up()` and `down()` mixins. Every component SHALL use them instead of writing a width in a media query, and `kbd[uiKbd]` SHALL hide with `down(medium)` (C7).
+- **REQ-7.1a** THE SYSTEM SHALL extend the Stylelint length rule (C3, C4):
+  - a raw length is allowed in a SCSS variable named `$<file name>-*` declared in that file, as for component tokens;
+  - the units `dvh`, `svh`, `lvh`, `dvw`, `svw` and `lvw` count as raw lengths;
+  - the rule's tests cover both changes.
 - **REQ-7.2** THE SYSTEM SHALL add `@angular/cdk`, pinned to the Angular major (22), as the only new UI dependency:
   - `@angular/cdk/menu` for Menu;
   - `@angular/cdk/dialog` for Dialog, ConfirmDialog and the sheet;
   - `@angular/cdk/a11y` for focus trapping and live announcements.
+- **REQ-7.2a** THE SYSTEM SHALL ship one global stylesheet, `overlays.scss` in `@shared/ui-organisms` (in `@layer ui`), for the elements CDK renders outside component hosts (backdrop, dialog and sheet panes) (C5). Apps add it, and CDK's overlay CSS, to `styles` after `ui.scss`.
 - **REQ-7.3** THE SYSTEM SHALL add these `UI_TEXT` keys with French defaults, overridable with `provideUiText`:
   - `close` "Fermer", `cancel` "Annuler", `undo` "Annuler", `clear` "Effacer";
   - `previousMonth` "Mois précédent", `nextMonth` "Mois suivant";
@@ -65,7 +70,7 @@ Specs 002 and 003 delivered the tokens, the Olivier theme, the 16 atoms and the 
   - `errors.maxlength` "{{requiredLength}} caractères maximum.";
   - `errors.pattern` "Le format n'est pas valide.".
 
-  A `{{name}}` placeholder SHALL be filled from the matching value (step numbers, validator error data).
+  A `{{name}}` placeholder SHALL be filled from the matching value (step numbers, validator error data) by one toolbox helper, `fillUiText(template, values)` in `@shared/ui-tokens`, so the strings stay plain text that an app can also feed from translation files.
 - **REQ-7.4** WHEN an app overrides some of the `errors` strings THE SYSTEM SHALL keep the defaults for the others (a deep merge of `errors`).
 - **REQ-7.5** THE SYSTEM SHALL add to the icon starter set every Lucide icon these components use (list in conflict C8), with the directional ones flagged so they mirror in RTL.
 
@@ -122,7 +127,7 @@ Specs 002 and 003 delivered the tokens, the Olivier theme, the 16 atoms and the 
 - **REQ-2.4 SectionHeader:** `<ui-section-header title [level]="2">` with projected end content. `level` (2–6) sets the heading tag without changing the look.
 - **REQ-2.5 MonthSwitcher:** `<ui-month-switcher [(month)] [min] [max] [caption] variant="boxed | plain">`:
   - `month` is a `YYYY-MM` string;
-  - the label is `Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' })`, with `aria-live="polite"`;
+  - the label is `Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' })`, where `locale` is an input that defaults to `fr-TN` (like `util-format`), with `aria-live="polite"`;
   - previous is at the inline start and next at the inline end, with directional chevrons named by `UI_TEXT.previousMonth` and `UI_TEXT.nextMonth`;
   - WHEN `month` equals `max` (or `min`) THE SYSTEM SHALL disable next (or previous);
   - IF `month` is not a valid `YYYY-MM` THEN THE SYSTEM SHALL report it in development and show no label.
@@ -132,8 +137,8 @@ Specs 002 and 003 delivered the tokens, the Olivier theme, the 16 atoms and the 
   - keyboard behaviour (arrows, Escape, typeahead) and focus return come from CDK;
   - it opens below the trigger, aligned to the inline start, and flips when there is no room.
 - **REQ-2.8 Stepper:** `<ui-stepper [current] [total]>`. The text `UI_TEXT.step` carries the meaning; the bars are decorative (`aria-hidden`) and fill from the inline start.
-- **REQ-2.9 AvatarGroup:** `<ui-avatar-group [members] [max]="3" size="sm | md">`:
-  - beyond `max`, a "+N" bubble shows instead of the remaining avatars;
+- **REQ-2.9 AvatarGroup:** `<ui-avatar-group [members] [max]="3" size="sm | md">`, with `members: { name; src?; member? }[]` matching the Avatar atom (C6):
+  - beyond `max`, a "+N" bubble, drawn by the group with the avatar look, shows instead of the remaining avatars;
   - the group's accessible name lists every member's name (including the hidden ones).
 
 ### US-3 — Overlays and feedback (organisms)
@@ -173,7 +178,7 @@ Specs 002 and 003 delivered the tokens, the Olivier theme, the 16 atoms and the 
 - **REQ-5.1 GroupedList:** `<ui-grouped-list [groups] [itemTemplate] [loading] [empty] (endReached)>`, with `groups: { key; label; total?; items: T[] }[]`. Each group is a section with a header (label and total) and its rows from `itemTemplate`.
 - **REQ-5.2** WHILE `loading` is true THE SYSTEM SHALL show skeleton rows after the current groups. IF there are no groups and it is not loading THEN THE SYSTEM SHALL show the `empty` template.
 - **REQ-5.3** WHEN the end of the list comes into view THE SYSTEM SHALL emit `endReached` once per arrival, and not while `loading`.
-- **REQ-5.4 Table:** `table[uiTable]` styles a native table:
+- **REQ-5.4 Table:** `table[uiTable]`, in `@shared/ui-organisms` next to GroupedList, styles a native table:
   - `tr[uiTableGroup]` for group rows;
   - `td[uiNum]` for numbers, end-aligned with tabular figures;
   - `.ui-table__secondary` columns hidden below the medium breakpoint.
@@ -195,6 +200,7 @@ Specs 002 and 003 delivered the tokens, the Olivier theme, the 16 atoms and the 
 
 ### US-8 — Catalog
 - **REQ-8.1** THE SYSTEM SHALL give `apps/ui-catalog` one page per level (atoms, molecules, organisms, templates), with the theme, accent and direction switches available on every page.
+- **REQ-8.1a** THE SYSTEM SHALL show AppShell, PageLayout, AuthLayout and FlowLayout each on its own full-screen catalog route, with a link back to the catalog.
 - **REQ-8.2** THE SYSTEM SHALL show every component of this spec in its states, with French sample text, and open the dialog, sheet, confirmation, menu and toasts from buttons.
 - **REQ-8.3** THE SYSTEM SHALL build the catalog in development and production within the existing budgets.
 
@@ -207,6 +213,8 @@ Specs 002 and 003 delivered the tokens, the Olivier theme, the 16 atoms and the 
 - **REQ-9.2** CDK overlays (Menu, Dialog, ConfirmDialog) SHALL be tested for open, close (Escape, backdrop, button) and focus return. Toast SHALL be tested for auto-close, pause and action, with fake timers.
 - **REQ-9.3** ControlValueAccessor components SHALL be tested bound to a reactive `FormControl` (write, change, disabled).
 - **REQ-9.4** THE SYSTEM SHALL verify each task with affected lint, affected unit tests and the development builds of both apps (CLAUDE.md "Testing rules"). No e2e, no dev server, no browser; `preview.html` is not opened.
+- **REQ-9.5** THE SYSTEM SHALL deliver the whole spec in one pull request.
+- **REQ-9.6** THE SYSTEM SHALL update ARCHITECTURE §7 (date field and file picker deferred) and §8 step 4 (the dependency removals were done in spec 002) (C9).
 
 ## Unhappy paths checklist
 - [x] Loading state: GroupedList skeletons (REQ-5.2); Button `loading` inside dialogs and forms (spec 003)
@@ -270,11 +278,15 @@ Specs 002 and 003 delivered the tokens, the Olivier theme, the 16 atoms and the 
   - §8 step 4 still says "remove ng-bootstrap, `moment` and bootstrap-icons", which was done in spec 002.
   - **Proposal:** update both in this spec.
 
+## Decisions (2026-11-22)
+- **Conflicts C1–C9:** the proposals are accepted (`color-mix()` shadows; tokens renamed to file names; `$<file name>-*` SCSS variables; viewport units in the rule; `overlays.scss`; Avatar `member` naming and a drawn "+N"; Kbd at `down(medium)`; the icon list; ARCHITECTURE updates).
+1. [x] **Breakpoint constants:** `$<file name>-*` SCSS variables (REQ-7.1, REQ-7.1a).
+2. [x] **Overlay styles:** `overlays.scss` in `@shared/ui-organisms` (REQ-7.2a).
+3. [x] **MonthSwitcher locale:** no recommendation was given, so a `locale` input that defaults to `fr-TN` was chosen, consistent with `util-format` (REQ-2.5). The owner can still change this.
+4. [x] **Table directive:** in `@shared/ui-organisms` (REQ-5.4).
+5. [x] **Catalog templates:** full-screen routes (REQ-8.1a).
+6. [x] **Delivery:** one PR for the whole spec (REQ-9.5).
+7. [x] **`UI_TEXT` placeholders:** `{{name}}` strings filled by `fillUiText` (REQ-7.3).
+
 ## Open questions
-1. [ ] **Breakpoint constants (C3):** extend the Stylelint rule to allow raw lengths in `$<file name>-*` SCSS variables (recommended, same logic as component tokens), or allow them only in `shared/ui/tokens/src/styles/_breakpoints.scss` by path?
-2. [ ] **Overlay styles (C5):** ship `overlays.scss` from `@shared/ui-organisms` for apps to add to `styles` (recommended), or put the overlay rules in `ui-tokens`' `ui.scss`? The second is simpler for apps, but makes the token library know about dialogs.
-3. [ ] **MonthSwitcher locale:** take it from Angular's `LOCALE_ID` (apps register `fr`), or from a `locale` input that defaults to `fr-TN` like `util-format`?
-4. [ ] **Table directive placement:** put `table[uiTable]` and its row and cell directives in `@shared/ui-organisms` next to GroupedList (recommended), or in molecules?
-5. [ ] **Catalog templates:** show the templates on their own catalog routes in full screen (AppShell, AuthLayout and FlowLayout each take the whole viewport), with a link back to the catalog? (recommended)
-6. [ ] **Size and delivery:** 27 components and the Table directive in one spec, delivered as about 12 tasks in one PR (one task per small group), or one PR per level (molecules, organisms, templates) with the same spec?
-7. [ ] **`UI_TEXT` placeholders:** the reference writes `{{current}}` in plain strings. Keep that syntax, filled by a small toolbox helper (recommended), or switch the step and error texts to functions (`step: (current, total) => …`) for type safety? Functions cannot be written in JSON translation files if an app later feeds them from ngx-translate.
+None.
