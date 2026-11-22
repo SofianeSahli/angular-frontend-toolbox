@@ -9,7 +9,7 @@ import { AppModalWrapperComponent } from '@shared/ui-components';
   imports: [FormsModule],
   selector: 'lib-security-settings',
   templateUrl: './security-settings.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./security-settings.component.scss'],
 })
 export class SecuritySettingsComponent {
