@@ -1,6 +1,6 @@
 # 001 — Foundations: Requirements
 
-> Status: Approved (2026-11-21), with the open questions resolved below
+> Status: Approved (2026-11-21), open questions resolved below. Implemented (2026-11-22): see the verification report in tasks.md.
 > Scope: whole workspace — `apps/expenses-management`, `shared/auth`, `shared/stores`, `shared/ui-components`, root config (`nx.json`, `eslint.config.mjs`, `tsconfig.base.json`, `package.json`), new `.github/workflows/`, new e2e project. Removes `apps/launcher`, `apps/uncensored`, `shared/profile-section`.
 > Architecture: [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) §3 (boundaries), §6 (tests), §8 step 1.
 

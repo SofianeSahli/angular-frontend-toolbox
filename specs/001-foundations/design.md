@@ -1,6 +1,6 @@
 # 001 — Foundations: Design
 
-> Status: Approved (2026-11-21)
+> Status: Approved (2026-11-21). Implemented (2026-11-22); deviations are listed in tasks.md.
 > Requirements: [requirements.md](./requirements.md) (approved 2026-11-21)
 > Architecture: [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md) §2, §3, §6
 
