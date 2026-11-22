@@ -2,6 +2,7 @@ import { ApplicationInitStatus } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideUi } from './provide-ui';
 import { UI_CONFIG } from './ui-theme';
+import { UiThemeService } from './ui-theme.service';
 
 const theme = { name: 'test', accents: ['olive', 'figue'], defaultAccent: 'olive' } as const;
 
@@ -27,6 +28,16 @@ describe('provideUi (spec 002, REQ-1.5, REQ-5.7)', () => {
     TestBed.configureTestingModule({ providers: [provideUi({ theme })] });
     await init();
     expect(document.documentElement.getAttribute('data-accent')).toBe('olive');
+  });
+
+  it('switches the accent at runtime and refuses one the theme does not have', async () => {
+    TestBed.configureTestingModule({ providers: [provideUi({ theme })] });
+    await init();
+    const service = TestBed.inject(UiThemeService);
+    service.setAccent('figue');
+    expect(service.accent()).toBe('figue');
+    expect(document.documentElement.getAttribute('data-accent')).toBe('figue');
+    expect(() => service.setAccent('safran')).toThrow('Unknown accent "safran" (theme accents: olive, figue)');
   });
 
   it('refuses an accent the theme does not have', () => {

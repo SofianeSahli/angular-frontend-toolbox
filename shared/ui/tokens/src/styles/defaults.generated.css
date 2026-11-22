@@ -4,6 +4,8 @@
     --ui-control-height-sm: 36px;
     --ui-control-height-md: 44px;
     --ui-control-height-lg: 52px;
+    --ui-border-width-thin: 1px;
+    --ui-border-width-thick: 2px;
     --ui-focus-ring-width: 2px;
     --ui-focus-ring-offset: 2px;
     --ui-duration-fast: 120ms;
