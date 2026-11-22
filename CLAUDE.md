@@ -21,15 +21,17 @@ This repo is a **toolbox plus apps**. `shared/` is the toolbox: brand-free UI an
 ## Commands
 
 ```bash
-npx nx serve expenses-management                         # dev server
-npx nx build <project> --configuration=development        # build
-npx nx lint <project>                                     # lint one project
-npx nx run-many -t lint                                   # lint everything
-npx nx test <project>                                     # unit tests (Vitest)
-npx nx e2e expenses-management-e2e                        # Playwright smoke test (starts the dev server)
+npx nx build <project> --configuration=development        # development build
+npx nx affected -t lint                                   # lint the projects you changed
+npx nx affected -t test                                   # unit tests (Vitest) of the projects you changed
+npx nx test <project>                                     # unit tests of one project
 npm run ci                                                # lint + test + build for projects changed vs main (same as the PR workflow)
-npm run ci:all                                            # lint + test + build for every project
 npx nx show project <project>                             # list inferred targets
+
+# Owner only (see "Testing rules"): not run by the assistant
+npx nx serve expenses-management                          # dev server
+npx nx e2e expenses-management-e2e                        # Playwright smoke test (starts the dev server)
+npm run ci:all                                            # lint + test + build for every project
 ```
 
 Unit tests: Vitest. The app uses Angular's `@angular/build:unit-test`; the libraries use `@nx/vitest` + Analog (`vite.config.mts`, `src/test-setup.ts`). All tests use zone-based change detection, like the app. CI (`.github/workflows/ci.yml`) runs lint, test and build for affected projects on every PR, plus the e2e smoke test on `main`.
@@ -111,18 +113,24 @@ Number specs sequentially (`001`, `002`, …). One folder per feature. Specs are
 **Phase 4 — Implement**, one task at a time:
 1. Write/adjust the test(s) for the task's acceptance criteria first (once a runner exists).
 2. Implement the minimum code to satisfy them.
-3. Run `nx lint` and `nx build` for affected projects; fix anything you introduced.
+3. At the end of the task, run the checks in "Testing rules" (affected lint, affected unit tests, development build of the affected app); fix anything you introduced.
 4. Tick the task in `tasks.md` (`- [x]`) and note any deviation.
 5. If implementation reveals the spec is wrong or incomplete: **stop, update the spec, and get approval** before continuing. Never let code and spec silently diverge.
 
 When all tasks are done, report: which `REQ` IDs are verified and how, anything unverified, and any follow-ups.
 
-### Verification without a test runner
+### Testing rules (permanent)
 
-Until unit tests can run, each task must still be verified and the method recorded in `tasks.md`:
-- `npx nx build <app> --configuration=development` passes (strict templates catch most binding errors).
-- `npx nx lint <project>` introduces no new errors.
-- Manual check steps written as concrete reproductions ("open /dashboard/lists, apply filter X, expect Y").
+- **Unit tests only** (Vitest), and only for the projects you changed: `npx nx affected -t test` or `npx nx test <project>`. Never `run-many` on the whole repo.
+- **Never run Playwright or any e2e test, never start `nx serve`, and never open a browser to check anything.** The owner runs e2e when needed; CI runs the smoke test on `main`.
+- Keep the existing e2e smoke test file and its CI job as they are: don't delete or disable them, just don't run them.
+- **Per task, verify once at the end of the task** (not after every small edit) with:
+  1. lint of the affected projects: `npx nx affected -t lint`;
+  2. unit tests of the affected projects: `npx nx affected -t test`;
+  3. a development build of the affected app: `npx nx build <app> --configuration=development`.
+  
+  Record the result in `tasks.md`.
+- Don't add visual or screenshot tests, and don't add tests that need a real browser. Component behaviour is tested with Vitest + TestBed (jsdom).
 
 ### Traceability rules
 - Every acceptance criterion → at least one task → at least one verification.

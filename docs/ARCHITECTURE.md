@@ -91,27 +91,41 @@ E2E projects are tagged `type:e2e`; they import no library, so no constraint row
 
 ## 5. Theming
 
-The toolbox is brand-free. Components read only `var(--ui-*)`.
+The toolbox is brand-free. Components read only `var(--ui-*)`: semantic and component tokens, never palette tokens and never raw values.
 
 | Layer | Example | Set by |
 |---|---|---|
-| palette | `--ui-palette-olive-600` | the theme only; never read by components |
-| semantic (the contract) | `--ui-color-bg`, `--ui-color-ink`, `--ui-color-accent`, `--ui-color-accent-soft`, `--ui-color-danger`, `--ui-font-sans`, `--ui-radius-md`, `--ui-control-height` | the theme |
-| component | `--ui-button-radius`, `--ui-input-border`, `--ui-card-shadow` | defaults to semantic; a theme may override |
+| palette (**optional**) | `--ui-palette-olive-600` | the theme only; never read by components |
+| semantic (the contract) | `--ui-color-bg`, `--ui-color-ink`, `--ui-color-accent`, `--ui-font-sans`, `--ui-radius-md`, `--ui-control-height-md` | the theme (must provide) or `@shared/ui-tokens` defaults (may override), see below |
+| component | `--ui-button-radius`, `--ui-input-border`, `--ui-card-shadow` | the component's own styles, defaulting to a semantic token; a theme may override |
 
-- A theme is a `tokens.json` (Olivier format) compiled to one CSS file. Olivier lives in `shared/themes/olivier`. A client's theme lives in the client app's folder.
+**Palette.** A semantic token holds either a raw value or an alias of a palette token (`{olive-600}`). The palette is optional: Olivier has none (each semantic token holds its own value). A theme that arrives with a brand colour scale should declare it as a palette and alias it.
+
+**The semantic contract** has two parts:
+
+- **Theme must provide** (the build fails if one is missing): every colour token (surfaces, ink, lines, brand, accent and its tints, `on-*` colours, success/warning/danger and their tints, focus-ring colour), the data colours `data-1` … `data-10`, and the font families.
+- **Theme may override** (brand-free defaults live in `@shared/ui-tokens`): sizes, spacing, radius, focus and motion. Defaults:
+  - `--ui-control-height-sm/md/lg`: 36 / 44 / 52px
+  - `--ui-focus-ring-width`: 2px; `--ui-focus-ring-offset`: 2px (`--ui-focus-ring-color` is a theme colour; Olivier aliases it to `brand`)
+  - `--ui-duration-fast/base/slow`: 120 / 200 / 320ms; `--ui-easing-standard`: `cubic-bezier(0.2, 0, 0, 1)`
+  - every duration becomes `0ms` under `prefers-reduced-motion: reduce`, in the token CSS.
+
+**Component tokens** follow `--ui-<component>-<property>`, default to a semantic token, and are declared in the component's own styles. Each atom adds its own (spec 003); none exist before.
+
+- A theme is a `tokens.json` (Olivier format) compiled to one CSS file. The repo copy is the source of truth and changes by pull request (a new export from the design system replaces the file); the build validates its format, the required tokens and WCAG AA contrast. Olivier lives in `shared/themes/olivier`. A client's theme lives in the client app's folder.
 - An app selects a theme with `provideUi({ theme, accent })` plus the theme CSS. Bootstrap `--bs-*` variables are mapped from the same tokens.
-- Light and dark: `[data-theme]` on `<html>`.
+- Fonts load from Google Fonts through a `<link>` in the app's `index.html` with `display=swap`: Inter, and IBM Plex Sans Arabic for right-to-left text.
+- Light and dark: `[data-theme]` on `<html>`. The user's choice is `light | dark | system` (default `system`, which follows `prefers-color-scheme`), saved per device.
 - Cascade layers: `@layer reset, vendor, tokens, ui, app;`. Apps override in `app`, never with `!important`, and never fork a component.
 - Bootstrap: only Reboot, the grid and utilities, in the `vendor` layer.
-- Checks: Stylelint refuses raw colours, sizes and fonts in toolbox styles, and a CI script verifies WCAG AA contrast for every theme in light and dark.
+- Checks: Stylelint refuses raw colours, sizes and fonts in **every** style file in the repo (no ignore list, no legacy exceptions; only theme CSS generated from `tokens.json` holds raw values), and a CI script verifies WCAG AA contrast for every theme in light and dark.
 
 ## 6. Tests
 
-- **Atoms and molecules:** Vitest + Angular Testing Library (variants, disabled, keyboard path, accessible name).
-- **Organisms and templates:** add two viewport widths.
-- **Catalog:** Playwright screenshots, light and dark, on `main`.
-- **Logic libraries:** the existing CLAUDE.md rules (store error paths, `HttpTestingController`).
+- **Atoms, molecules and organisms:** Vitest + Angular Testing Library (variants, disabled state, keyboard path, accessible name), in jsdom.
+- **Logic libraries:** Vitest unit tests (store error paths, `HttpTestingController` for HTTP).
+- **No visual or screenshot tests**, and no tests that need a real browser.
+- **End-to-end:** a manual check by the owner when needed, plus the Playwright smoke test in CI on `main`.
 
 ## 7. Migration of existing code
 

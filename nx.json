@@ -80,5 +80,6 @@
       "!{projectRoot}/tsconfig.spec.json"
     ],
     "sharedGlobals": []
-  }
+  },
+  "analytics": false
 }
