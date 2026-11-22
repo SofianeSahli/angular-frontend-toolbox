@@ -63,6 +63,18 @@ Each task ends with: `nx affected -t lint`, `nx affected -t test`, and `nx build
   - The environment files are named `environment.ts` / `environment.prod.ts` (the old app used `environments.*`).
   - The app's tests fail with "Vitest failed to find the runner" when run from a Git Bash session whose current directory has a lowercase drive letter, even with `NX_WORKSPACE_ROOT_PATH` unset. Run from PowerShell in `C:\...`, they pass. Recorded in CLAUDE.md.
 
+- **CI on PR #4:**
+  - The first run failed at Unknown command: "ci"
+
+
+Did you mean one of these?
+  npm ci # Clean install a project
+  npm run ci # run the "ci" package script
+To see a list of supported npm commands, run:
+  npm help: the lockfile written on Windows lacked Linux-only  entries. It was regenerated from  in a clean folder; key versions are unchanged.
+  - The second run failed in : on Linux, setting  inside a test does not change the worker's time zone. 's Vite config now sets  (UTC+1/+2) before the workers start.
+  - The third run passed.
+
 ## Verification report
 | REQ | Verified how | Result |
 |---|---|---|
@@ -81,7 +93,7 @@ Each task ends with: `nx affected -t lint`, `nx affected -t test`, and `nx build
 | 2.6 | app `index.html`: Google Fonts `<link>` with `display=swap` (Inter, IBM Plex Sans Arabic) | ✅ (by inspection; no browser check) |
 | 2.7 | compile test for `:lang(ar)`; generated CSS | ✅ |
 | 3.1–3.4 | `compile.spec.ts` | ✅ |
-| 3.5 | drift check failed on a stale file (T4); `check-tokens` in the CI step | ✅ (CI run pending on the PR) |
+| 3.5 | drift check failed on a stale file (T4); `check-tokens` in the CI step, green on PR #4 | ✅ |
 | 3.6 | `compile-tokens` / `check-tokens` targets, cached | ✅ |
 | 4.1 | production CSS: only Reboot, grid and utilities, inside `@layer vendor` | ✅ |
 | 4.2 | `_bootstrap-map.scss`; `--bs-primary: var(--ui-color-accent)` in the output | ✅ |
