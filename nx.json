@@ -5,7 +5,10 @@
   "targetDefaults": {
     "@angular/build:application": {
       "cache": true,
-      "inputs": ["production", "^production"]
+      "inputs": [
+        "production",
+        "^production"
+      ]
     },
     "lint": [
       {
@@ -20,19 +23,24 @@
           "{workspaceRoot}/eslint.config.mjs",
           "{workspaceRoot}/tools/eslint-rules/**/*",
           {
-            "externalDependencies": ["eslint"]
+            "externalDependencies": [
+              "eslint"
+            ]
           }
         ]
       }
     ],
     "@angular/build:unit-test": {
       "cache": true,
-      "inputs": ["default", "^production"]
+      "inputs": [
+        "default",
+        "^production"
+      ]
     }
   },
   "generators": {
     "@nx/angular:application": {
-      "e2eTestRunner": "playwright",
+      "e2eTestRunner": "none",
       "linter": "eslint",
       "style": "scss",
       "unitTestRunner": "vitest-angular"
@@ -62,16 +70,13 @@
         "ciTargetName": "test-ci",
         "testMode": "watch"
       }
-    },
-    {
-      "plugin": "@nx/playwright/plugin",
-      "options": {
-        "targetName": "e2e"
-      }
     }
   ],
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
     "production": [
       "default",
       "!{projectRoot}/**/*.spec.ts",

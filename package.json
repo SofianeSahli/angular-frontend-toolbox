@@ -3,8 +3,7 @@
     "lint": "nx lint",
     "lint:fix": "nx lint --fix",
     "ci": "nx affected -t lint test build --base=main",
-    "ci:all": "nx run-many -t lint test build",
-    "e2e": "nx e2e expenses-management-e2e"
+    "ci:all": "nx run-many -t lint test build"
   },
   "engines": {
     "node": ">=24 <25"

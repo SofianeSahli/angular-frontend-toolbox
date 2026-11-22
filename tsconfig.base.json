@@ -18,14 +18,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shared/auth": [
-        "shared/auth/src/index.ts"
-      ],
       "@shared/stores": [
         "shared/stores/src/index.ts"
-      ],
-      "@shared/ui-components": [
-        "shared/ui-components/src/index.ts"
       ]
     },
     "strict": false,

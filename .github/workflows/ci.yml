@@ -1,6 +1,7 @@
-# spec 001 (REQ-6.1 – REQ-6.5): lint, test and build the affected projects on
-# every pull request to main and every push to main; the e2e smoke test runs on
-# main only. No secrets and no backend are used.
+# spec 001 (REQ-6.1 – REQ-6.5), spec 002: lint, test and build the affected
+# projects on every pull request to main and every push to main. The e2e smoke
+# test was removed with the old app (spec 002, REQ-8.2); a new one comes with
+# the first real screen. No secrets and no backend are used.
 name: CI
 
 on:
@@ -38,19 +39,3 @@ jobs:
 
       - name: Lint, test and build (affected)
         run: npx nx affected -t lint test build
-
-      - name: Install Chromium for Playwright
-        if: github.event_name == 'push'
-        run: npx playwright install --with-deps chromium
-
-      - name: E2E smoke test
-        if: github.event_name == 'push'
-        run: npx nx e2e expenses-management-e2e
-
-      - name: Upload Playwright report and traces
-        if: failure() && github.event_name == 'push'
-        uses: actions/upload-artifact@v7
-        with:
-          name: playwright-report
-          path: dist/.playwright
-          retention-days: 14
