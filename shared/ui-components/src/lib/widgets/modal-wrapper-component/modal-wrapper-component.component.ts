@@ -28,7 +28,7 @@ export interface DynamicComponentInterface<T> {
   selector: 'lib-modal-wrapper',
   templateUrl: './modal-wrapper-component.component.html',
   styleUrls: ['./modal-wrapper-component.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RippleDirective, TranslatePipe],
 })
 export class AppModalWrapperComponent implements AfterViewInit {
