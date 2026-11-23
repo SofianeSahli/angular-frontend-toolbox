@@ -117,6 +117,16 @@ export const SessionStore = signalStore(
         }
       },
 
+      async refreshAccount(): Promise<AuthResult> {
+        try {
+          const account = await firstValueFrom(api.me());
+          patchState(store, { account });
+          return DONE;
+        } catch (error) {
+          return failure(error);
+        }
+      },
+
       rememberReturnUrl(returnUrl: string | null): void {
         patchState(store, { returnUrl });
       },

@@ -100,6 +100,29 @@
       "title": "Service unavailable",
       "text": "We can't reach the service right now. Check your connection and try again.",
       "retry": "Try again"
+    },
+    "account": {
+      "title": "Account",
+      "signOut": "Sign out",
+      "profile": "Profile",
+      "notProvided": "Not provided",
+      "language": "Language",
+      "languages": {
+        "fr": "Français",
+        "en": "English"
+      },
+      "readOnly": "Editing the profile is coming soon.",
+      "twoFactor": "Two-step sign-in",
+      "on": "On",
+      "off": "Off",
+      "twoFactorText": "Each time you sign in, you'll be asked for a code sent by email as well as your password.",
+      "enable": "Turn on",
+      "disable": "Turn off",
+      "disableCodeSent": "We emailed you a code to confirm.",
+      "confirmDisable": "Turn off two-step sign-in",
+      "cancel": "Cancel",
+      "twoFactorEnabled": "Two-step sign-in turned on.",
+      "twoFactorDisabled": "Two-step sign-in turned off."
     }
   }
 }

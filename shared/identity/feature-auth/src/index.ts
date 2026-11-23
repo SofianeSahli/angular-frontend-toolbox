@@ -5,3 +5,4 @@ export * from './lib/pages/two-factor/two-factor.page';
 export * from './lib/pages/forgot-password/forgot-password.page';
 export * from './lib/pages/reset-password/reset-password.page';
 export * from './lib/pages/unavailable/unavailable.page';
+export * from './lib/pages/account/account.page';

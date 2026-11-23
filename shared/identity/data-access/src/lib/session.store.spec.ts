@@ -216,6 +216,14 @@ describe('SessionStore', () => {
     expect(store.account()?.twoFactorEnabled).toBe(false);
   });
 
+  it('reloads the account', async () => {
+    const { store, backend } = setup();
+    const refreshing = store.refreshAccount();
+    (await expectRequest(backend, 'GET', `${BASE}/me`)).flush({ data: { ...ACCOUNT, two_factor_enabled: true } });
+    expect(await refreshing).toEqual({ outcome: 'done' });
+    expect(store.account()?.twoFactorEnabled).toBe(true);
+  });
+
   it('remembers the email after a password reset request and clears it after the reset', async () => {
     const { store, backend } = setup();
     const asking = store.forgotPassword('amira@exemple.com');

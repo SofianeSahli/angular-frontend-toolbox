@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router, RouterOutlet, provideRouter } from '@angular/router';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { ApiError, ApiErrorKind, ApiFieldErrors } from '@shared/http-data-access';
-import { AuthResult, IDENTITY_CONFIG, IdentityConfig, PendingTwoFactor, SessionStore } from '@shared/identity-data-access';
+import { Account, AuthResult, IDENTITY_CONFIG, IdentityConfig, PendingTwoFactor, SessionStore } from '@shared/identity-data-access';
 import { UiToast } from '@shared/ui-organisms';
 import { render } from '@testing-library/angular';
 import fr from '../../i18n/fr.json';
@@ -39,13 +39,14 @@ export function fakeSessionStore() {
     pendingEmail: signal<string | null>(null),
     pendingTwoFactor: signal<PendingTwoFactor | null>(null),
     returnUrl: signal<string | null>(null),
-    account: signal(null),
+    account: signal<Account | null>(null),
     status: signal('anonymous'),
     isAuthenticated: signal(false),
     restoring: signal(false),
     unavailable: signal(false),
     rememberReturnUrl: vi.fn(),
     restore: vi.fn(async () => undefined),
+    refreshAccount: vi.fn(async () => DONE),
     register: vi.fn(async () => DONE),
     resendCode: vi.fn(async () => DONE),
     confirmEmail: vi.fn(async () => DONE),

@@ -100,6 +100,29 @@
       "title": "Service indisponible",
       "text": "Nous n'arrivons pas à joindre le service pour le moment. Vérifiez votre connexion puis réessayez.",
       "retry": "Réessayer"
+    },
+    "account": {
+      "title": "Compte",
+      "signOut": "Se déconnecter",
+      "profile": "Profil",
+      "notProvided": "Non renseigné",
+      "language": "Langue",
+      "languages": {
+        "fr": "Français",
+        "en": "English"
+      },
+      "readOnly": "La modification du profil arrive bientôt.",
+      "twoFactor": "Connexion en deux étapes",
+      "on": "Activée",
+      "off": "Désactivée",
+      "twoFactorText": "À chaque connexion, un code envoyé par e-mail vous sera demandé en plus du mot de passe.",
+      "enable": "Activer",
+      "disable": "Désactiver",
+      "disableCodeSent": "Nous vous avons envoyé un code par e-mail pour confirmer.",
+      "confirmDisable": "Désactiver la connexion en deux étapes",
+      "cancel": "Annuler",
+      "twoFactorEnabled": "Connexion en deux étapes activée.",
+      "twoFactorDisabled": "Connexion en deux étapes désactivée."
     }
   }
 }
