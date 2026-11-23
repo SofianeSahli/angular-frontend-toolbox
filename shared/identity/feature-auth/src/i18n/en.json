@@ -77,6 +77,29 @@
       "name": {
         "max": "120 characters at most."
       }
+    },
+    "twoFactor": {
+      "title": "Sign-in code",
+      "sentTo": "We sent a 6-digit code to",
+      "sent": "We emailed you a 6-digit code.",
+      "expired": "Your sign-in has expired, start again."
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "lead": "Enter your email: if an account exists, we'll send you a code to choose a new password.",
+      "submit": "Get a code"
+    },
+    "resetPassword": {
+      "title": "New password",
+      "sentTo": "If an account exists for",
+      "ifAccount": ", a 6-digit code has just been sent to it.",
+      "submit": "Change the password",
+      "done": "Password changed. Sign in."
+    },
+    "unavailable": {
+      "title": "Service unavailable",
+      "text": "We can't reach the service right now. Check your connection and try again.",
+      "retry": "Try again"
     }
   }
 }

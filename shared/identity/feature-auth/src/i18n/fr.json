@@ -77,6 +77,29 @@
       "name": {
         "max": "120 caractères maximum."
       }
+    },
+    "twoFactor": {
+      "title": "Code de connexion",
+      "sentTo": "Nous avons envoyé un code à 6 chiffres à",
+      "sent": "Nous vous avons envoyé un code à 6 chiffres par e-mail.",
+      "expired": "Votre connexion a expiré, recommencez."
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "lead": "Saisissez votre e-mail : si un compte existe, nous vous enverrons un code pour choisir un nouveau mot de passe.",
+      "submit": "Recevoir un code"
+    },
+    "resetPassword": {
+      "title": "Nouveau mot de passe",
+      "sentTo": "Si un compte existe pour",
+      "ifAccount": ", un code à 6 chiffres vient de lui être envoyé.",
+      "submit": "Changer le mot de passe",
+      "done": "Mot de passe modifié. Connectez-vous."
+    },
+    "unavailable": {
+      "title": "Service indisponible",
+      "text": "Nous n'arrivons pas à joindre le service pour le moment. Vérifiez votre connexion puis réessayez.",
+      "retry": "Réessayer"
     }
   }
 }
