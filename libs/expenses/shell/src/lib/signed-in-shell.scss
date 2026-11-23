@@ -1,0 +1,17 @@
+@layer ui {
+  :host {
+    display: contents;
+  }
+
+  .signed-in-shell__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ui-space-2);
+  }
+
+  .signed-in-shell__name {
+    font-weight: var(--ui-text-body-strong-weight);
+    overflow-wrap: anywhere;
+  }
+}

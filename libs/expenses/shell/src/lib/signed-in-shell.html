@@ -1,0 +1,43 @@
+<ui-app-shell>
+  <ui-side-rail uiShellRail [ariaLabel]="'shell.navigation' | translate">
+    <expenses-brand-mark uiRailBrand />
+    <button uiRailAction uiButton variant="primary" type="button" disabled [attr.title]="'shell.addExpenseSoon' | translate">
+      <ui-icon name="plus" />
+      {{ 'shell.addExpense' | translate }}
+    </button>
+
+    <a uiRailItem routerLink="/" routerLinkActive ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }">
+      <ui-icon name="house" />
+      {{ 'shell.home' | translate }}
+    </a>
+    <a uiRailItem routerLink="/compte" routerLinkActive ariaCurrentWhenActive="page">
+      <ui-icon name="user" />
+      {{ 'shell.account' | translate }}
+    </a>
+
+    <div uiRailFooter class="signed-in-shell__footer">
+      <span class="signed-in-shell__name">{{ account()?.name }}</span>
+      <button uiButton variant="ghost" size="sm" type="button" [loading]="signingOut()" (click)="signOut()">
+        <ui-icon name="log-out" />
+        {{ 'shell.signOut' | translate }}
+      </button>
+    </div>
+  </ui-side-rail>
+
+  <ui-top-bar uiShellTop>
+    <span uiTopBarTitle>{{ titleKey() ? (titleKey() | translate) : '' }}</span>
+  </ui-top-bar>
+
+  <router-outlet />
+
+  <ui-bottom-tabs uiShellTabs [ariaLabel]="'shell.navigation' | translate">
+    <a uiTab routerLink="/" routerLinkActive ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }">
+      <ui-icon name="house" />
+      {{ 'shell.home' | translate }}
+    </a>
+    <a uiTab routerLink="/compte" routerLinkActive ariaCurrentWhenActive="page">
+      <ui-icon name="user" />
+      {{ 'shell.account' | translate }}
+    </a>
+  </ui-bottom-tabs>
+</ui-app-shell>

@@ -18,6 +18,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@expenses/shell": [
+        "libs/expenses/shell/src/index.ts"
+      ],
       "@shared/http-data-access": [
         "shared/http/data-access/src/index.ts"
       ],
