@@ -1,34 +1,5 @@
-<header class="catalog-toolbar">
-  <div class="container d-flex flex-wrap gap-3 align-items-end py-3">
-    <h1 class="catalog-title me-auto mb-0">Olivier · atomes</h1>
-    <div>
-      <label uiLabel for="theme">Thème</label>
-      <select uiSelect id="theme" [value]="theme.choice()" (change)="chooseTheme($event)">
-        @for (choice of themeChoices; track choice.value) {
-          <option [value]="choice.value">{{ choice.label }}</option>
-        }
-      </select>
-    </div>
-    <div>
-      <label uiLabel for="accent">Accent</label>
-      <select uiSelect id="accent" [value]="theme.accent()" (change)="chooseAccent($event)">
-        @for (accent of accents; track accent) {
-          <option [value]="accent">{{ accent }}</option>
-        }
-      </select>
-    </div>
-    <div>
-      <label uiLabel for="direction">Sens</label>
-      <select uiSelect id="direction" [value]="direction()" (change)="chooseDirection($event)">
-        <option value="ltr">Gauche à droite</option>
-        <option value="rtl">Droite à gauche</option>
-      </select>
-    </div>
-  </div>
-</header>
-
 <main class="container py-4">
-  @if (direction() === 'rtl') {
+  @if (direction.direction() === 'rtl') {
     <section class="catalog-section" lang="ar" aria-labelledby="arabic">
       <h2 class="catalog-heading" id="arabic">عينات بالعربية</h2>
       <div class="d-flex flex-wrap gap-3 align-items-center">

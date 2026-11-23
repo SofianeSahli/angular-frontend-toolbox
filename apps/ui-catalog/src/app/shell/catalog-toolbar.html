@@ -1,0 +1,28 @@
+<div class="d-flex flex-wrap gap-3 align-items-end">
+  @if (floating()) {
+    <a routerLink="/" class="catalog-toolbar__back">Retour au catalogue</a>
+  }
+  <div>
+    <label uiLabel for="catalog-theme">Thème</label>
+    <select uiSelect id="catalog-theme" [value]="theme.choice()" (change)="chooseTheme($event)">
+      @for (choice of themeChoices; track choice.value) {
+        <option [value]="choice.value">{{ choice.label }}</option>
+      }
+    </select>
+  </div>
+  <div>
+    <label uiLabel for="catalog-accent">Accent</label>
+    <select uiSelect id="catalog-accent" [value]="theme.accent()" (change)="chooseAccent($event)">
+      @for (accent of accents; track accent) {
+        <option [value]="accent">{{ accent }}</option>
+      }
+    </select>
+  </div>
+  <div>
+    <label uiLabel for="catalog-direction">Sens</label>
+    <select uiSelect id="catalog-direction" [value]="direction.direction()" (change)="chooseDirection($event)">
+      <option value="ltr">Gauche à droite</option>
+      <option value="rtl">Droite à gauche</option>
+    </select>
+  </div>
+</div>

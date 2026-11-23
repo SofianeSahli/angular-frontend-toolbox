@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.catalog-header {
+  position: sticky;
+  z-index: 1;
+  inset-block-start: 0;
+  border-block-end: var(--ui-border-width-thin) solid var(--ui-color-line);
+  background: var(--ui-color-surface);
+}
+
+.catalog-title {
+  font-size: var(--ui-text-title-2-size);
+  font-weight: var(--ui-text-title-2-weight);
+  line-height: var(--ui-text-title-2-line-height);
+}
+
+.catalog-level--active {
+  font-weight: var(--ui-text-body-strong-weight);
+}

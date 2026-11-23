@@ -1,0 +1,119 @@
+<main class="container py-4">
+  <h1 class="visually-hidden">Molécules</h1>
+
+  <section class="catalog-section" aria-labelledby="forms">
+    <h2 class="catalog-heading" id="forms">Formulaire</h2>
+    <form class="row g-4" [formGroup]="form">
+      <div class="col-md-6 d-flex flex-column gap-3">
+        <ui-form-field label="Nom du foyer" hint="Visible par les membres." [maxLength]="60">
+          <input uiInput formControlName="name" />
+        </ui-form-field>
+        <ui-form-field label="E-mail">
+          <input uiInput type="email" formControlName="email" placeholder="ex. sofiane@exemple.tn" />
+        </ui-form-field>
+        <ui-form-field label="Téléphone" optional>
+          <span uiPrefix>+216</span>
+          <input uiInput type="tel" formControlName="phone" />
+        </ui-form-field>
+        <ui-form-field label="Mot de passe">
+          <input uiInput [type]="showPassword() ? 'text' : 'password'" formControlName="password" />
+          <button uiFieldAction [attr.aria-label]="showPassword() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'" (click)="showPassword.set(!showPassword())">
+            <ui-icon [name]="showPassword() ? 'eye-off' : 'eye'" />
+          </button>
+        </ui-form-field>
+        <ui-form-field label="Catégorie">
+          <select uiSelect>
+            <option>Alimentation</option>
+            <option>Transport</option>
+          </select>
+        </ui-form-field>
+        <ui-segmented-control [options]="typeOptions" ariaLabel="Type" formControlName="type" />
+        <ui-chip-group [options]="filterOptions" ariaLabel="Filtre" required formControlName="filter" />
+        <ui-option-cards [options]="startOptions" legend="Pour commencer" formControlName="start" />
+        <ui-code-input ariaLabel="Code reçu par e-mail" formControlName="code" />
+      </div>
+      <div class="col-md-6">
+        <pre class="catalog-form-value" aria-label="Valeur du formulaire">{{ formValue() | json }}</pre>
+      </div>
+    </form>
+  </section>
+
+  <section class="catalog-section" aria-labelledby="feedback">
+    <h2 class="catalog-heading" id="feedback">Messages et chiffres</h2>
+    <div class="d-flex flex-column gap-3">
+      <ui-alert tone="info" title="Nouveau">Vous pouvez maintenant partager un carnet.</ui-alert>
+      <ui-alert tone="success">Dépense enregistrée.</ui-alert>
+      <ui-alert tone="warning" title="Bientôt au plafond">Alimentation : 89 % du budget.</ui-alert>
+      <ui-alert tone="danger" title="Budget dépassé" dismissible>
+        Cafés et resto : 112 %.
+        <div uiAlertActions><button uiButton size="sm">Voir le détail</button></div>
+      </ui-alert>
+    </div>
+    <div class="d-flex flex-wrap gap-5 catalog-row">
+      <ui-stat label="Reste à dépenser" size="hero" tone="accent">
+        <ui-amount [millimes]="1843000" display="rounded" />
+        <span uiStatMeta>sur 2 600 DT</span>
+      </ui-stat>
+      <ui-stat label="Revenus" tone="income"><ui-amount [millimes]="2800000" display="rounded" tone="income" /></ui-stat>
+    </div>
+  </section>
+
+  <section class="catalog-section" aria-labelledby="content">
+    <h2 class="catalog-heading" id="content">Contenu</h2>
+    <ui-section-header title="Derniers mouvements"><a href="#content">Tout voir</a></ui-section-header>
+    <div class="catalog-row catalog-narrow">
+      <ui-list>
+        <li uiListItem>
+          <ui-icon uiLeading name="shopping-cart" tile [style.color]="'var(--ui-color-data-1)'" />
+          <span uiTitle>Carrefour Market</span>
+          <span uiSubtitle>Alimentation · Sofiane</span>
+          <ui-amount uiTrailing [millimes]="48350" />
+        </li>
+        <li><a uiListItem href="#content"><span uiTitle>Loyer de novembre, appartement de La Marsa</span><span uiTrailing>›</span></a></li>
+        <li>
+          <button uiListItem type="button">
+            <ui-avatar uiLeading name="Amira" [member]="2" decorative />
+            <span uiTitle>Remboursement</span>
+            <ui-amount uiTrailing [millimes]="15000" tone="income" />
+          </button>
+        </li>
+      </ui-list>
+    </div>
+    <div class="d-flex flex-wrap gap-4 align-items-center catalog-row">
+      <ui-month-switcher [(month)]="month" caption="Carnet du foyer" max="2026-11" />
+      <ui-month-switcher [(month)]="month" variant="plain" />
+      <ui-search-field [(value)]="query" ariaLabel="Rechercher" placeholder="ex. Carrefour" />
+      <span>Recherche : « {{ query() }} »</span>
+    </div>
+    <div class="d-flex flex-wrap gap-4 align-items-center catalog-row">
+      <ui-stepper [current]="1" [total]="2" />
+      <ui-avatar-group [members]="members" [max]="3" />
+      <ui-avatar-group [members]="members" [max]="5" size="md" />
+    </div>
+    <div class="catalog-row catalog-frame">
+      <ui-empty-state icon="inbox" title="Aucune dépense ce mois-ci" text="Vos dépenses apparaîtront ici dès que vous en ajouterez une.">
+        <button uiButton variant="primary">Ajouter une dépense</button>
+      </ui-empty-state>
+    </div>
+  </section>
+
+  <section class="catalog-section" aria-labelledby="menus">
+    <h2 class="catalog-heading" id="menus">Menu</h2>
+    <div class="d-flex gap-3">
+      <button uiButton [uiMenuTriggerFor]="rowActions"><ui-icon name="ellipsis" />Actions</button>
+      <button uiButton [uiMenuTriggerFor]="books">Carnet : {{ book() === 'foyer' ? 'Foyer' : 'Perso' }}</button>
+    </div>
+    <ng-template #rowActions>
+      <ui-menu>
+        <button uiMenuItem icon="pencil">Modifier</button>
+        <button uiMenuItem icon="trash" danger>Supprimer</button>
+      </ui-menu>
+    </ng-template>
+    <ng-template #books>
+      <ui-menu>
+        <button uiMenuItem [checked]="book() === 'foyer'" (triggered)="book.set('foyer')">Carnet du foyer</button>
+        <button uiMenuItem [checked]="book() === 'perso'" (triggered)="book.set('perso')">Carnet perso</button>
+      </ui-menu>
+    </ng-template>
+  </section>
+</main>
