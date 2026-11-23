@@ -1,0 +1,21 @@
+{
+  "name": "identity-data-access",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/identity/data-access/src",
+  "prefix": "shared",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "type:data-access"
+  ],
+  "targets": {
+    "stylelint": {
+      "command": "stylelint \"shared/identity/data-access/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  }
+}
