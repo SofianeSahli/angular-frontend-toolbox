@@ -1,0 +1,61 @@
+@use 'breakpoints' as bp;
+
+@layer ui {
+  :host {
+    --ui-auth-layout-panel-max-inline-size: 400px;
+    --ui-auth-layout-min-block-size: 100dvh;
+
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    min-block-size: var(--ui-auth-layout-min-block-size);
+    background: var(--ui-color-bg);
+  }
+
+  .ui-auth-layout__brand {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--ui-space-8);
+    padding: var(--ui-space-12);
+    background: var(--ui-color-brand);
+    color: var(--ui-color-on-brand);
+  }
+
+  .ui-auth-layout__column {
+    display: flex;
+    flex-direction: column;
+    padding-block: var(--ui-space-8);
+    padding-inline: var(--ui-space-6);
+  }
+
+  .ui-auth-layout__toolbar {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .ui-auth-layout__content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--ui-space-6);
+  }
+
+  .ui-auth-layout__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-6);
+    inline-size: 100%;
+    max-inline-size: var(--ui-auth-layout-panel-max-inline-size);
+  }
+
+  @include bp.down(medium) {
+    :host {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ui-auth-layout__brand {
+      display: none;
+    }
+  }
+}
