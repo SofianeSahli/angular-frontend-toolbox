@@ -1,0 +1,19 @@
+<label uiLabel [attr.for]="controlId()" [optional]="optional()" [required]="required()">{{ label() }}</label>
+<div class="ui-form-field__control">
+  <ng-content select="[uiPrefix]" />
+  <ng-content />
+  <ng-content select="[uiSuffix]" />
+  <ng-content select="[uiFieldAction]" />
+</div>
+@if (errorText() || hint() || maxLength()) {
+  <div class="ui-form-field__footer">
+    @if (errorText(); as message) {
+      <ui-field-message [id]="errorId" tone="error">{{ message }}</ui-field-message>
+    } @else if (hint(); as hintText) {
+      <ui-field-message [id]="hintId">{{ hintText }}</ui-field-message>
+    }
+    @if (maxLength(); as max) {
+      <span class="ui-form-field__counter">{{ length() }}/{{ max }}</span>
+    }
+  </div>
+}

@@ -1,0 +1,30 @@
+@layer ui {
+  :host {
+    --ui-stepper-bar-block-size: 4px;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-2);
+  }
+
+  .ui-stepper__label {
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+  }
+
+  .ui-stepper__bars {
+    display: flex;
+    gap: var(--ui-space-1);
+  }
+
+  .ui-stepper__bar {
+    flex: 1;
+    block-size: var(--ui-stepper-bar-block-size);
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-line);
+  }
+
+  .ui-stepper__bar--done {
+    background: var(--ui-color-accent);
+  }
+}

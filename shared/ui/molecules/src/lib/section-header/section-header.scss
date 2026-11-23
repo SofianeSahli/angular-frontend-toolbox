@@ -1,0 +1,21 @@
+@layer ui {
+  :host {
+    --ui-section-header-title-size: 16px;
+
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--ui-space-3);
+  }
+
+  .ui-section-header__title {
+    margin: 0;
+    font-size: var(--ui-section-header-title-size);
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+
+  .ui-section-header__aside {
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+  }
+}
