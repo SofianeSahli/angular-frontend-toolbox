@@ -56,7 +56,7 @@ Full rules, library map and rationale: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.
 - **Toolbox UI is presentational:** signal inputs and outputs only, with no store, HTTP, router or translation keys. Only `feature` pages inject stores.
 - **Data-access never imports UI.** Logic that must reach the screen publishes on a signal bus, and a `feature` library presents it.
 - **Styling:** components read only `var(--ui-*)` tokens. No raw colours, sizes or fonts.
-- **Text:** no ngx-translate in toolbox UI. Pages pass translated text in; built-in strings come from the `UI_TEXT` token.
+- **Text:** no ngx-translate in toolbox UI (`ui-*` libraries). Pages pass translated text in; built-in strings come from the `UI_TEXT` token. Shared `feature` libraries (for example `identity/feature-auth`) may use ngx-translate and ship their own fr/en/ar files under their namespace, which the app merges.
 - **Native elements use attribute selectors** (`button[uiButton]`, `input[uiInput]`, …). ControlValueAccessor is only for custom controls.
 
 ---
@@ -177,7 +177,7 @@ When all tasks are done, report: which `REQ` IDs are verified and how, anything 
 
 **Libraries & boundaries**
 - Which library may import which is defined by tags and `depConstraints`: see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) §2–3.
-- Import shared code only through its `@shared/...` alias, never through deep paths like `shared/stores/src/lib/...` or `apps/<app>/src/...`.
+- Import shared code only through its `@shared/...` alias, and app libraries through their `@expenses/...` alias (one prefix per app), never through deep paths like `shared/stores/src/lib/...` or `apps/<app>/src/...`.
 - Libraries never import from apps. App config reaches libraries through injection tokens and `provideX({...})` (see `provideUi` in `@shared/ui-tokens`).
 
 **i18n, dates, HTTP**
@@ -187,15 +187,18 @@ When all tasks are done, report: which `REQ` IDs are verified and how, anything 
 
 **Style:** Prettier (`.prettierrc`, single quotes), SCSS. Use Bootstrap grid and utility classes for layout; components read only `var(--ui-*)` tokens (Stylelint refuses raw colours, fonts and lengths; a raw length is allowed only in a component's own `--ui-<component>-*` tokens; `color-mix()` takes tokens only); logical properties only, so layouts mirror in RTL; breakpoints from `@use 'breakpoints' as bp;` only; `::ng-deep` only in the two forms ARCHITECTURE §5 allows; overrides go in the `app` cascade layer, never with `!important`. Never edit `*.generated.*` files: change `tokens.json` or `contract.json` and run `compile-tokens`. Money is integer millimes, formatted with `@shared/util-format`.
 
-## Toolbox roadmap
+## Roadmap
 
-One spec each, approved before any code (ARCHITECTURE §8):
+One spec each, approved before any code (ARCHITECTURE §8). From spec 005 on, every spec delivers **both** the shared toolbox part **and** the expenses app part that uses it. A spec is done only when a real screen of `expenses-management` works against the real backend (`personal-accountings-backend`, API at `environment.apiBaseUrl`).
 
 1. **001 Foundations** ← done: Vitest, tags and `depConstraints`, CI, OnPush everywhere, lint at 0 errors, known build issues fixed, unused projects removed.
 2. **002 Tokens and themes** ← done: `ui-tokens`, `theme-olivier`, theme compiler, cascade layers, Bootstrap trim, `util-format`, Stylelint and contrast checks; old apps and libraries deleted, new app shell.
 3. **003 Atoms and catalog** ← done: the 16 Olivier atoms, `UI_TEXT`, component-token and `color-mix()` Stylelint rules, and `apps/ui-catalog`.
 4. **004 Molecules, organisms and templates** ← **in review**: 15 molecules, 8 organisms, 4 templates, CDK menu and dialog, breakpoints, catalog routes.
-5. **005 Shared logic:** `http/*` and `identity/*`; auth pages rebuilt on the auth layout (Sanctum cookie strategy).
+5. **005 Identity** ← **in progress**: HTTP layer + session + sign-in screens + the signed-in app shell.
+6. **006 Households and books:** first-run choice, create household, create book, invitations, members, book switcher (backend specs 003–004).
+7. **007 Categories and operations:** category picker, quick add, operations list (backend specs 005–006).
+8. **008 Dashboard and budget:** month summary, plan vs actual (backend spec 007).
 
 ## Known issues (do not "fix" silently — open or update a spec)
 
