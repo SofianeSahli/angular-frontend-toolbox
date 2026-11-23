@@ -1,0 +1,12 @@
+<button uiButton variant="ghost" size="sm" iconOnly type="button" [attr.aria-label]="text.previousMonth" [disabled]="atMin()" (click)="move(-1)">
+  <ui-icon name="chevron-left" />
+</button>
+<span class="ui-month-switcher__label" aria-live="polite">
+  {{ label() }}
+  @if (caption(); as captionText) {
+    <span class="ui-month-switcher__caption">{{ captionText }}</span>
+  }
+</span>
+<button uiButton variant="ghost" size="sm" iconOnly type="button" [attr.aria-label]="text.nextMonth" [disabled]="atMax()" (click)="move(1)">
+  <ui-icon name="chevron-right" />
+</button>

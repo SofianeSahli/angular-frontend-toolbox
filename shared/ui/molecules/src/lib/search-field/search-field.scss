@@ -1,0 +1,32 @@
+@layer ui {
+  :host {
+    --ui-search-field-icon-inset: 12px;
+    --ui-search-field-icon-space: 40px;
+
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .ui-search-field__input {
+    padding-inline-start: var(--ui-search-field-icon-space);
+    padding-inline-end: var(--ui-control-height-md);
+  }
+
+  .ui-search-field__input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  .ui-search-field__icon {
+    position: absolute;
+    inset-inline-start: var(--ui-search-field-icon-inset);
+    color: var(--ui-color-ink-muted);
+    pointer-events: none;
+  }
+
+  .ui-search-field__clear {
+    position: absolute;
+    inset-inline-end: 0;
+    color: var(--ui-color-ink-muted);
+  }
+}

@@ -1,0 +1,74 @@
+@use 'focus-ring';
+
+@layer ui {
+  :host {
+    --ui-list-item-padding-inline: 14px;
+    --ui-list-item-title-weight: 500;
+
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-3);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--ui-control-height-lg);
+    padding-block: var(--ui-space-3);
+    padding-inline: var(--ui-list-item-padding-inline);
+    border: 0;
+    background: transparent;
+    color: var(--ui-color-ink);
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+  }
+
+  :host(a),
+  :host(button) {
+    cursor: pointer;
+  }
+
+  :host(a:hover),
+  :host(button:hover) {
+    background: var(--ui-color-surface-sunken);
+  }
+
+  .ui-list-item__leading,
+  .ui-list-item__trailing {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--ui-space-2);
+  }
+
+  .ui-list-item__leading:empty,
+  .ui-list-item__trailing:empty,
+  .ui-list-item__subtitle:empty {
+    display: none;
+  }
+
+  .ui-list-item__trailing {
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  .ui-list-item__body {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .ui-list-item__title {
+    display: block;
+    overflow: hidden;
+    font-weight: var(--ui-list-item-title-weight);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .ui-list-item__subtitle {
+    display: block;
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+    line-height: var(--ui-text-small-line-height);
+  }
+
+  @include focus-ring.visible;
+}

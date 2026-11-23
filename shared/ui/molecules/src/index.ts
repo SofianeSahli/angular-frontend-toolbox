@@ -11,3 +11,8 @@ export * from './lib/segmented-control/segmented-control';
 export * from './lib/chip-group/chip-group';
 export * from './lib/option-cards/option-cards';
 export * from './lib/code-input/code-input';
+export * from './lib/list/list';
+export * from './lib/list/list-item';
+export * from './lib/month-switcher/month-switcher';
+export * from './lib/search-field/search-field';
+export * from './lib/avatar-group/avatar-group';
