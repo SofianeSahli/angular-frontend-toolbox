@@ -18,6 +18,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@shared/http-data-access": [
+        "shared/http/data-access/src/index.ts"
+      ],
       "@shared/stores": [
         "shared/stores/src/index.ts"
       ],
