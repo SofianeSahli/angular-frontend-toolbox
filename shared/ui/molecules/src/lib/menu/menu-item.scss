@@ -1,0 +1,40 @@
+@layer ui {
+  :host {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-3);
+    inline-size: 100%;
+    min-block-size: var(--ui-control-height-md);
+    padding-inline: var(--ui-space-3);
+    border: 0;
+    border-radius: var(--ui-radius-sm);
+    background: transparent;
+    color: var(--ui-color-ink);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  :host(:hover),
+  :host(:focus-visible) {
+    outline: none;
+    background: var(--ui-color-surface-sunken);
+  }
+
+  :host(.ui-menu-item--danger) {
+    color: var(--ui-color-danger);
+  }
+
+  :host([aria-checked='true']) {
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+
+  :host([aria-disabled='true']) {
+    color: var(--ui-color-ink-muted);
+    cursor: not-allowed;
+  }
+
+  .ui-menu-item__label {
+    flex: 1;
+  }
+}
