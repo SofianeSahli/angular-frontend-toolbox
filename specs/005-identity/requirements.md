@@ -1,6 +1,6 @@
 # 005 — Identity: Requirements
 
-> Status: Draft, revision 1 (2026-11-23). Open questions 1–9 below.
+> Status: Approved, revision 2 (2026-11-23): the owner's answers to questions 1–9 applied; for this spec the approval stops are skipped (design, tasks and implementation follow directly).
 > Scope:
 > - **Toolbox (`scope:shared`):** `shared/http/data-access`, `shared/http/feature-errors`, `shared/identity/data-access`, `shared/identity/feature-auth`;
 > - **App (`scope:expenses`):** `libs/expenses/shell`, plus the sign-in, sign-up and account screens of `expenses-management`, working against the real backend.
@@ -64,10 +64,10 @@ Today the app has one placeholder page and no HTTP code. Spec 002 deleted the ol
 - **REQ-2.2** WHEN an `unauthenticated` error arrives while the session is `authenticated` THE SYSTEM SHALL:
   - mark the session `expired`;
   - show a toast ("Votre session a expiré");
-  - go to the sign-in path, keeping the current URL to return to after sign-in (open question 5).
+  - go to the sign-in path with the current URL as `returnUrl` (REQ-3.11).
 - **REQ-2.3** WHEN an `offline` error arrives THE SYSTEM SHALL show one toast (danger) saying the connection is lost. Several offline errors in a row show one toast, not one each.
 - **REQ-2.4** WHEN a `forbidden`, `not-found`, `throttled` or `conflict` error arrives THE SYSTEM SHALL show a toast with the translated message for its code, or a generic message for its kind. A `throttled` message includes the wait in seconds.
-- **REQ-2.5** WHEN a `server` or `csrf` error arrives THE SYSTEM SHALL show a dialog with a short explanation, the request id (selectable text, so it can be quoted to support) and a Retry button (open question 1).
+- **REQ-2.5** WHEN a `server` or `csrf` error arrives THE SYSTEM SHALL show a dialog with a short explanation, the request id (selectable text, so it can be quoted to support), "Fermer" and "Réessayer". Retry reloads the current route (`navigateByUrl` to the same URL with `onSameUrlNavigation: 'reload'`). Held requests are never re-sent.
 - **REQ-2.6** THE SYSTEM SHALL ship the presenter's texts in fr, en and ar, under its own translation namespace (`errors.*`).
 
 ### US-3 — Session (`shared/identity/data-access`, `type:data-access`)
@@ -90,7 +90,7 @@ Today the app has one placeholder page and no HTTP code. Spec 002 deleted the ol
 - **REQ-3.3** WHEN the app starts THE SYSTEM SHALL `restore()` the session: fetch the CSRF cookie, then `GET me`.
   - success → `authenticated` with the account;
   - 401 → `anonymous`;
-  - IF it fails offline or with a server error THEN see open question 2.
+  - IF it fails offline or with a server error THEN the status stays `unknown` and the store records that the service is unavailable. Guarded routes don't redirect to sign-in: they show a full-page "service unavailable" state whose Retry runs `restore()` again.
 
   The 401 from `restore()` is never shown to the user.
 - **REQ-3.4** THE SYSTEM SHALL offer `register`, `resendCode`, `confirmEmail`, `signIn`, `confirmTwoFactor`, `resendTwoFactor`, `forgotPassword`, `resetPassword`, `signInWithGoogle`, `signOut`, `enableTwoFactor`, `requestDisableCode` and `disableTwoFactor`. Each one:
@@ -103,9 +103,16 @@ Today the app has one placeholder page and no HTTP code. Spec 002 deleted the ol
   - `CookieAuthStrategy`, used on the web now;
   - `TokenAuthStrategy`, a stub that throws "not implemented" (spec 009: token in secure storage, `device_id`).
 - **REQ-3.9** THE SYSTEM SHALL provide `authGuard` and `guestGuard`. Both wait for the first `restore()` to finish.
-  - `authGuard` sends a visitor who is not `authenticated` to the sign-in path, keeping the requested URL;
-  - `guestGuard` sends an `authenticated` user to `afterSignIn`.
+  - `authGuard` sends a visitor who is not `authenticated` to the sign-in path with the requested URL as `returnUrl`;
+  - `guestGuard` sends an `authenticated` user to `afterSignIn`;
+  - WHILE the service is unavailable (REQ-3.3) both guards let the navigation through to a "service unavailable" page instead of redirecting.
 - **REQ-3.10** THE SYSTEM SHALL provide `provideIdentity({ termsVersion, googleClientId?, afterSignIn, signInPath, paths })`. `paths` names each auth route (sign-up, email code, two-factor, forgot, reset), so the app chooses its own URLs.
+- **REQ-3.11** WHEN a sign-in succeeds THE SYSTEM SHALL go to the `returnUrl` query parameter IF it is an internal path:
+  - it starts with `/`;
+  - it does not start with `//`;
+  - it has no scheme.
+
+  Otherwise it goes to `afterSignIn` (`/`). `returnUrl` is kept across the email-code and two-factor steps.
 
 ### US-4 — Create an account (`shared/identity/feature-auth`, `type:feature`)
 - **REQ-4.1** THE SYSTEM SHALL provide a sign-up page on `ui-auth-layout` with these fields:
@@ -125,7 +132,7 @@ Today the app has one placeholder page and no HTTP code. Spec 002 deleted the ol
 - **REQ-4.5** THE SYSTEM SHALL provide an email-code page:
   - it shows the address it was sent to and a 6-digit `ui-code-input`;
   - it confirms automatically at the 6th digit, or with the Confirm button;
-  - it offers "Renvoyer le code" after a countdown (open question 3), "Ce n'est pas la bonne adresse" (back to sign-up with the fields kept), and a back button.
+  - it offers "Renvoyer le code" after a 60 s countdown from each send (on a 429 the server's `retry_after_seconds` wins), "Ce n'est pas la bonne adresse" (back to sign-up with the fields kept), and a back button.
 - **REQ-4.6** WHEN the email code is confirmed THE SYSTEM SHALL sign the user in (REQ-3.6, or REQ-3.5 for two-step) and go to the return URL or `afterSignIn`.
 - **REQ-4.7** IF the email-code page opens without a `pendingEmail` (for example after a reload) THEN THE SYSTEM SHALL go to the sign-up page.
 - **REQ-4.8** IF a code is wrong (`422 code.invalid`) THEN THE SYSTEM SHALL show the message on the code field and clear the code, so the user can type it again.
@@ -229,14 +236,14 @@ Today the app has one placeholder page and no HTTP code. Spec 002 deleted the ol
   The Arabic text comes from section 5. "Olivier" stays in Latin script, left-to-right.
 
 ### US-9 — Languages
-- **REQ-10.1** THE SYSTEM SHALL offer fr (default), en and ar. A language switch on the auth pages (a `ui-segmented-control`, as in the mockups) sets the UI language, saved per device as `ui.lang`.
+- **REQ-10.1** THE SYSTEM SHALL offer fr (default), en and ar. A language switch on the auth pages (a `ui-segmented-control` showing FR / EN / ع everywhere) sets the UI language, saved per device as `ui.lang`.
 - **REQ-10.2** WHEN the language changes THE SYSTEM SHALL:
   - load the translations;
   - set `<html lang>`;
   - set `<html dir>` (`rtl` for ar, else `ltr`).
 
   The page reflows without reloading. The IBM Plex Sans Arabic font is already loaded (spec 002).
-- **REQ-10.3** WHEN a user signs in THE SYSTEM SHALL switch to the account's `locale` (open question 6).
+- **REQ-10.3** WHEN a user signs in THE SYSTEM SHALL switch to the account's `locale`, except when the device language is `ar` and the account says `fr`: then Arabic is kept. This exception is removed once the backend accepts `ar` (B1).
 - **REQ-10.4** THE SYSTEM SHALL keep app texts in `public/i18n/{fr,en,ar}.json`. The Arabic files, the app's and the identity library's, are a draft marked for review by a native reader.
 - **REQ-10.5** IF storage is unavailable or holds an unknown language THEN THE SYSTEM SHALL use French.
 
@@ -249,6 +256,7 @@ Today the app has one placeholder page and no HTTP code. Spec 002 deleted the ol
   - one spec per page: client validation, server field errors, the page-specific codes, the two-factor branch, redirects without pending state;
   - the shell and the language service.
 - **REQ-11.2** THE SYSTEM SHALL verify each task with affected lint, affected unit tests and the development builds (CLAUDE.md "Testing rules"). No e2e, no dev server, no browser; the owner runs e2e.
+- **REQ-11.4** THE SYSTEM SHALL add the `@expenses/*` alias prefix for app libraries to ARCHITECTURE §2 and to the alias rule in CLAUDE.md.
 - **REQ-11.3** THE SYSTEM SHALL write the new roadmap into CLAUDE.md and ARCHITECTURE §8:
   - from 005 on, each spec delivers the toolbox part and a working app screen;
   - 005 Identity;
@@ -282,33 +290,18 @@ Today the app has one placeholder page and no HTTP code. Spec 002 deleted the ol
 - Editing the profile or changing the password while signed in; deleting the account (B2).
 - Households, books, first-run choice, invitations: spec 006. After sign-in the user lands on "Accueil" until then.
 - The legal texts (B3).
-- e2e tests run by the assistant (open question 9 asks whether one should be *written*).
+- e2e tests: no smoke test and no CI e2e job in this spec (owner's decision); the owner runs e2e by hand.
+
+## Decisions (2026-11-23)
+1. [x] **Retry:** reload the current route; never re-send held requests (REQ-2.5).
+2. [x] **Backend down at start:** status stays `unknown`; guarded routes show a full-page "service unavailable" state with Retry that re-runs `restore()` (REQ-3.3, REQ-3.9).
+3. [x] **Resend:** 60 s countdown after each send; on 429 the server's `retry_after_seconds` wins (REQ-4.5).
+4. [x] **Language switch:** FR / EN / ع everywhere (REQ-10.1).
+5. [x] **Return after sign-in:** `returnUrl` query parameter, internal paths only, else `/` (REQ-3.11).
+6. [x] **Arabic vs. account `fr`:** keep Arabic in that one case; otherwise the account wins; remove once the backend accepts `ar` (REQ-10.3).
+7. [x] **Names:** as proposed, with the `@expenses/*` prefix added to ARCHITECTURE §2 and CLAUDE.md (REQ-11.4).
+8. [x] **Divider and logo:** the divider is built with existing tokens inside the identity pages (no new molecule); the olive-branch logo is an SVG asset in the expenses app, never in `shared/` (REQ-8.1, REQ-9.4).
+9. [x] **e2e:** no smoke test and no CI e2e job for now (Non-goals).
 
 ## Open questions
-1. [ ] **"Retry" in the server-error dialog (REQ-2.5).** The page that made the request already received the error. Options:
-   - **(a)** Retry reloads the current route (re-runs the page's loads), which is simple and works for screens that load data;
-   - **(b)** the HTTP layer holds the failed request until the user chooses, and re-sends it, so the caller gets the retried result. This is more complex and keeps the caller waiting;
-   - **(c)** no Retry: just "Fermer".
-
-   I recommend **(a)**, plus showing "Fermer".
-2. [ ] **`restore()` fails offline or with a server error at startup (REQ-3.3).** Options:
-   - **(a)** status stays `unknown`, guards wait, and the error presenter shows its offline toast or server dialog with Retry, which runs `restore()` again;
-   - **(b)** treat it as `anonymous` and show sign-in, which would send a signed-in user to sign-in whenever the backend is down.
-
-   I recommend **(a)**.
-3. [ ] **Resend countdown.** The mockup shows "Nouveau code possible dans 0:42", but the contract gives no minimum delay (email routes allow 3 sends per 15 min per address). Use **60 s** after each send, with the server's `retry_after_seconds` winning on a 429? (recommended)
-4. [ ] **Language switch.** The French mockup shows only FR / EN and the Arabic one shows ع / FR / EN. Show all three everywhere (recommended), or hide Arabic while it is UI-only?
-5. [ ] **Return after sign-in.** After an expired session (REQ-2.2) or a guarded link (REQ-3.9), go back to the requested URL after sign-in (recommended), or always to `afterSignIn`?
-6. [ ] **The account's `locale` after sign-in (REQ-10.3) vs. Arabic (B1).** An Arabic user's account is saved as `fr`, so "the account's locale wins" would switch them to French at every sign-in. Options:
-   - **(a)** keep the device's `ui.lang` when it is `ar` and the account says `fr`, and apply the account's locale otherwise (recommended until the backend accepts `ar`);
-   - **(b)** the account always wins.
-7. [ ] **Library names and folders.** Following ARCHITECTURE §2:
-   - `shared/http/data-access` (`@shared/http-data-access`);
-   - `shared/http/feature-errors` (`@shared/http-feature-errors`);
-   - `shared/identity/data-access` (`@shared/identity-data-access`);
-   - `shared/identity/feature-auth` (`@shared/identity-feature-auth`);
-   - `libs/expenses/shell` (`@expenses/shell`), with a new `@expenses/*` alias prefix for app libraries.
-
-   OK?
-8. [ ] **"Or" divider and logo.** The mockups have an "ou avec votre e-mail" divider between Google and the form, and an olive-branch logo mark. Neither is a toolbox component. Draw the divider with existing tokens inside the identity pages (no new toolbox component), and keep the logo as an app asset in the brand panel? (recommended)
-9. [ ] **The e2e smoke test.** CLAUDE.md says a new smoke test comes with "the spec that brings back the first real screen", which is this one. Should this spec *write* a Playwright smoke test (the sign-in page renders; you run it), and bring back `@playwright/test` and the CI e2e job on `main`, or leave e2e entirely to you?
+None.
