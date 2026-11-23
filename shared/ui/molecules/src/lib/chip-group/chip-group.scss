@@ -1,0 +1,14 @@
+@layer ui {
+  :host {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ui-space-2);
+  }
+
+  :host(.ui-chip-group--scroll) {
+    flex-wrap: nowrap;
+    padding-block: var(--ui-space-1);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+}

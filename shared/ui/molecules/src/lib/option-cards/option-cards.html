@@ -1,0 +1,24 @@
+<fieldset class="ui-option-cards__fieldset" [disabled]="isDisabled()">
+  <legend class="ui-option-cards__legend">{{ legend() }}</legend>
+  @for (option of options(); track $index) {
+    <label class="ui-option-cards__card">
+      <input
+        type="radio"
+        uiRadio
+        [name]="groupName"
+        [checked]="isSelected(option)"
+        (change)="select(option)"
+        (blur)="markTouched()"
+      />
+      <span class="ui-option-cards__body">
+        <span class="ui-option-cards__title">
+          @if (option.icon; as icon) {
+            <ui-icon [name]="icon" />
+          }
+          {{ option.title }}
+        </span>
+        <span class="ui-option-cards__description">{{ option.description }}</span>
+      </span>
+    </label>
+  }
+</fieldset>

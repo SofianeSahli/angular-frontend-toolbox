@@ -1,0 +1,42 @@
+@layer ui {
+  :host {
+    --ui-code-input-cell-size: 56px;
+    --ui-code-input-digit-size: 24px;
+    --ui-code-input-native-font-size: 16px;
+
+    position: relative;
+    display: flex;
+    gap: var(--ui-space-2);
+  }
+
+  .ui-code-input__native {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    opacity: 0;
+    caret-color: transparent;
+    font-size: var(--ui-code-input-native-font-size);
+  }
+
+  .ui-code-input__cell {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--ui-code-input-cell-size);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line-strong);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface);
+    font-size: var(--ui-code-input-digit-size);
+    font-weight: var(--ui-text-body-strong-weight);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ui-code-input__cell--active {
+    border: var(--ui-border-width-thick) solid var(--ui-color-focus-ring);
+  }
+
+  :host(.ui-code-input--invalid) .ui-code-input__cell {
+    border-color: var(--ui-color-danger);
+  }
+}

@@ -1,0 +1,68 @@
+@layer ui {
+  :host {
+    --ui-option-cards-gap: 14px;
+    --ui-option-cards-title-size: 16px;
+
+    display: block;
+  }
+
+  .ui-option-cards__fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-3);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ui-option-cards__legend {
+    margin-block-end: var(--ui-space-2);
+    padding: 0;
+    font-size: var(--ui-text-small-size);
+    font-weight: var(--ui-text-body-strong-weight);
+    line-height: var(--ui-text-small-line-height);
+  }
+
+  .ui-option-cards__card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ui-option-cards-gap);
+    padding: var(--ui-space-4);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line-strong);
+    border-radius: var(--ui-radius-lg);
+    background: var(--ui-color-surface);
+    cursor: pointer;
+  }
+
+  .ui-option-cards__card:has(input:checked) {
+    padding: calc(var(--ui-space-4) - var(--ui-border-width-thin));
+    border: var(--ui-border-width-thick) solid var(--ui-color-accent);
+    background: var(--ui-color-accent-soft);
+  }
+
+  .ui-option-cards__card:has(input:focus-visible) {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+    outline-offset: var(--ui-focus-ring-offset);
+  }
+
+  .ui-option-cards__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-1);
+  }
+
+  .ui-option-cards__title {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-2);
+    font-size: var(--ui-option-cards-title-size);
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+
+  .ui-option-cards__description {
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+    line-height: var(--ui-text-small-line-height);
+  }
+}

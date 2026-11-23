@@ -6,3 +6,8 @@ export * from './lib/stat/stat';
 export * from './lib/section-header/section-header';
 export * from './lib/empty-state/empty-state';
 export * from './lib/stepper/stepper';
+export * from './lib/shared/value-accessor';
+export * from './lib/segmented-control/segmented-control';
+export * from './lib/chip-group/chip-group';
+export * from './lib/option-cards/option-cards';
+export * from './lib/code-input/code-input';
