@@ -1,0 +1,37 @@
+<h1 class="identity-title">{{ 'identity.signIn.title' | translate }}</h1>
+<p class="identity-lead">{{ 'identity.signIn.lead' | translate }}</p>
+
+@if (invalidCredentials()) {
+  <ui-alert tone="danger">{{ 'identity.signIn.invalidCredentials' | translate }}</ui-alert>
+}
+@if (locked()) {
+  <ui-alert tone="danger">{{ 'identity.errors.retryIn' | translate: { seconds: lockedSeconds() } }}</ui-alert>
+}
+
+<form class="d-flex flex-column gap-3" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <ui-form-field [label]="'identity.fields.email' | translate" [errors]="serverErrors">
+    <input uiInput type="email" autocomplete="email" formControlName="email" [placeholder]="'identity.fields.emailPlaceholder' | translate" />
+  </ui-form-field>
+
+  <ui-form-field [label]="'identity.fields.password' | translate" [errors]="serverErrors">
+    <input uiInput [type]="showPassword() ? 'text' : 'password'" autocomplete="current-password" formControlName="password" />
+    <button
+      uiFieldAction
+      [attr.aria-label]="(showPassword() ? 'identity.fields.hidePassword' : 'identity.fields.showPassword') | translate"
+      [attr.aria-pressed]="showPassword()"
+      (click)="showPassword.set(!showPassword())"
+    >
+      <ui-icon [name]="showPassword() ? 'eye-off' : 'eye'" />
+    </button>
+  </ui-form-field>
+
+  <a class="identity-link align-self-start" [routerLink]="paths.forgotPassword">{{ 'identity.signIn.forgotPassword' | translate }}</a>
+
+  <button uiButton variant="primary" type="submit" [loading]="submitting()" [disabled]="locked()">
+    {{ 'identity.signIn.submit' | translate }}
+  </button>
+</form>
+
+<p class="identity-switch">
+  {{ 'identity.signIn.noAccount' | translate }}&ngsp;<a class="identity-link" [routerLink]="paths.signUp">{{ 'identity.signIn.createAccount' | translate }}</a>
+</p>

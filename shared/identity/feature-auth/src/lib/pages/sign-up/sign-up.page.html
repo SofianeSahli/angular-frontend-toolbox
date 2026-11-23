@@ -1,0 +1,82 @@
+<h1 class="identity-title">{{ 'identity.signUp.title' | translate }}</h1>
+<p class="identity-lead">{{ 'identity.signUp.lead' | translate }}</p>
+
+<form class="d-flex flex-column gap-3" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <ui-form-field
+    [label]="'identity.fields.name' | translate"
+    [hint]="'identity.fields.nameHint' | translate"
+    [maxLength]="nameMaxLength"
+    [errors]="serverErrors"
+  >
+    <input uiInput type="text" autocomplete="given-name" formControlName="name" />
+  </ui-form-field>
+
+  <div class="d-flex flex-column gap-1">
+    <ui-form-field [label]="'identity.fields.email' | translate" [errors]="serverErrors">
+      <input uiInput type="email" autocomplete="email" formControlName="email" [placeholder]="'identity.fields.emailPlaceholder' | translate" />
+    </ui-form-field>
+    @if (emailTaken()) {
+      <a class="identity-link" [routerLink]="paths.signIn">{{ 'identity.signUp.signInInstead' | translate }}</a>
+    }
+  </div>
+
+  <ui-form-field [label]="'identity.fields.password' | translate" [hint]="'identity.fields.newPasswordHint' | translate" [errors]="serverErrors">
+    <input uiInput [type]="showPassword() ? 'text' : 'password'" autocomplete="new-password" formControlName="password" />
+    <button
+      uiFieldAction
+      [attr.aria-label]="(showPassword() ? 'identity.fields.hidePassword' : 'identity.fields.showPassword') | translate"
+      [attr.aria-pressed]="showPassword()"
+      (click)="showPassword.set(!showPassword())"
+    >
+      <ui-icon [name]="showPassword() ? 'eye-off' : 'eye'" />
+    </button>
+  </ui-form-field>
+
+  <ui-form-field
+    [label]="'identity.fields.phone' | translate"
+    optional
+    [errors]="{ pattern: ('identity.errors.fields.phone' | translate), server: serverErrors['server'] }"
+  >
+    <span uiPrefix>{{ phonePrefix }}</span>
+    <input
+      uiInput
+      type="tel"
+      autocomplete="tel-national"
+      inputmode="tel"
+      formControlName="phone"
+      [placeholder]="'identity.fields.phonePlaceholder' | translate"
+    />
+  </ui-form-field>
+
+  <div class="d-flex flex-column gap-1">
+    <label uiCheckRow>
+      <input
+        type="checkbox"
+        uiCheckbox
+        formControlName="terms"
+        [attr.aria-invalid]="termsInvalid() ? 'true' : null"
+        [attr.aria-describedby]="termsInvalid() ? 'identity-terms-error' : null"
+      />
+      <span>
+        {{ 'identity.signUp.termsBefore' | translate }}&ngsp;<a class="identity-link" [routerLink]="paths.terms" target="_blank">{{
+          'identity.signUp.terms' | translate
+        }}</a
+        >&ngsp;{{ 'identity.signUp.termsBetween' | translate }}&ngsp;<a class="identity-link" [routerLink]="paths.privacy" target="_blank">{{
+          'identity.signUp.privacy' | translate
+        }}</a
+        >{{ 'identity.signUp.termsAfter' | translate }}
+      </span>
+    </label>
+    @if (termsInvalid()) {
+      <ui-field-message id="identity-terms-error" tone="error">{{ 'identity.errors.termsRequired' | translate }}</ui-field-message>
+    }
+  </div>
+
+  <button uiButton variant="primary" type="submit" [loading]="submitting()">{{ 'identity.signUp.submit' | translate }}</button>
+</form>
+
+<p class="identity-switch">
+  {{ 'identity.signUp.haveAccount' | translate }}&ngsp;<a class="identity-link" [routerLink]="paths.signIn">{{
+    'identity.signUp.signIn' | translate
+  }}</a>
+</p>

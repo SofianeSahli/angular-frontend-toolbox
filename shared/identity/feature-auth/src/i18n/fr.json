@@ -1,0 +1,82 @@
+{
+  "identity": {
+    "common": {
+      "back": "Retour"
+    },
+    "fields": {
+      "name": "Prénom",
+      "nameHint": "Visible par les membres de votre foyer.",
+      "email": "E-mail",
+      "emailPlaceholder": "vous@exemple.com",
+      "password": "Mot de passe",
+      "newPassword": "Nouveau mot de passe",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe",
+      "newPasswordHint": "8 caractères minimum. Une phrase facile à retenir fonctionne bien.",
+      "phone": "Téléphone",
+      "phonePlaceholder": "20 123 456",
+      "code": "Code reçu"
+    },
+    "signIn": {
+      "title": "Se connecter",
+      "lead": "Retrouvez le carnet de votre foyer.",
+      "invalidCredentials": "E-mail ou mot de passe incorrect.",
+      "forgotPassword": "Mot de passe oublié ?",
+      "submit": "Se connecter",
+      "noAccount": "Pas encore de compte ?",
+      "createAccount": "Créer un compte"
+    },
+    "signUp": {
+      "title": "Créer un compte",
+      "lead": "Gratuit. Vous créerez votre foyer ou votre carnet juste après.",
+      "signInInstead": "Se connecter avec cette adresse",
+      "termsBefore": "J'accepte les",
+      "terms": "conditions d'utilisation",
+      "termsBetween": "et la",
+      "privacy": "politique de confidentialité",
+      "termsAfter": ".",
+      "submit": "Créer mon compte",
+      "haveAccount": "Déjà un compte ?",
+      "signIn": "Se connecter"
+    },
+    "emailCode": {
+      "title": "Vérifiez votre e-mail",
+      "sentTo": "Nous avons envoyé un code à 6 chiffres à",
+      "validity": ". Il est valable 15 minutes.",
+      "hint": "Collez le code ou tapez-le : la confirmation part toute seule au 6ᵉ chiffre.",
+      "submit": "Confirmer",
+      "notReceived": "Pas reçu ? Vérifiez vos spams.",
+      "resendIn": "Nouveau code possible dans {{time}}.",
+      "resend": "Renvoyer le code",
+      "wrongAddress": "Ce n'est pas la bonne adresse"
+    },
+    "errors": {
+      "generic": "Cette valeur n'est pas acceptée.",
+      "retryIn": "Trop de tentatives. Réessayez dans {{seconds}} s.",
+      "termsRequired": "Acceptez les conditions pour créer votre compte.",
+      "fields": {
+        "name": "Saisissez votre prénom (120 caractères maximum).",
+        "email": "Saisissez une adresse e-mail valide.",
+        "password": "8 caractères minimum.",
+        "phone": "Saisissez les 8 chiffres de votre numéro.",
+        "code": "Le code n'est pas valide.",
+        "locale": "Cette langue n'est pas prise en charge.",
+        "terms_version": "Les conditions ont changé : rechargez la page."
+      },
+      "code": {
+        "incomplete": "Saisissez les 6 chiffres du code.",
+        "invalid": "Code incorrect ou expiré. Vérifiez-le ou demandez-en un nouveau."
+      },
+      "email": {
+        "taken": "Un compte existe déjà avec cette adresse.",
+        "email": "Saisissez une adresse e-mail valide."
+      },
+      "password": {
+        "min": "8 caractères minimum."
+      },
+      "name": {
+        "max": "120 caractères maximum."
+      }
+    }
+  }
+}

@@ -133,6 +133,7 @@ export const SessionStore = signalStore(
       },
 
       resendCode(email: string, codes: readonly string[] = []): Promise<AuthResult> {
+        patchState(store, { pendingEmail: email });
         return attempt(() => api.resendEmailCode(email, handling(...codes)));
       },
 
