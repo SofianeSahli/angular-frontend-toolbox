@@ -1,0 +1,21 @@
+{
+  "name": "http-feature-errors",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/http/feature-errors/src",
+  "prefix": "shared",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "type:feature"
+  ],
+  "targets": {
+    "stylelint": {
+      "command": "stylelint \"shared/http/feature-errors/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  }
+}

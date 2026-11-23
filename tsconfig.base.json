@@ -21,6 +21,9 @@
       "@shared/http-data-access": [
         "shared/http/data-access/src/index.ts"
       ],
+      "@shared/http-feature-errors": [
+        "shared/http/feature-errors/src/index.ts"
+      ],
       "@shared/identity-data-access": [
         "shared/identity/data-access/src/index.ts"
       ],
