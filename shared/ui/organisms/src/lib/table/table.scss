@@ -1,0 +1,52 @@
+@use 'breakpoints' as bp;
+
+@layer ui {
+  :host {
+    --ui-table-header-weight: 500;
+
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  :host ::ng-deep th {
+    padding-block: var(--ui-space-2);
+    padding-inline: var(--ui-space-4);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-caption-size);
+    font-weight: var(--ui-table-header-weight);
+    text-align: start;
+  }
+
+  :host ::ng-deep td {
+    padding-block: var(--ui-space-3);
+    padding-inline: var(--ui-space-4);
+    border-block-start: var(--ui-border-width-thin) solid var(--ui-color-line);
+    vertical-align: middle;
+  }
+
+  :host ::ng-deep .ui-table__num {
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  :host ::ng-deep .ui-table__group td {
+    padding-block: var(--ui-space-2);
+    background: var(--ui-color-surface-sunken);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-caption-size);
+    font-weight: var(--ui-text-caption-weight);
+    letter-spacing: var(--ui-text-caption-tracking);
+    text-transform: uppercase;
+  }
+
+  :host ::ng-deep tbody tr:not(.ui-table__group):hover td {
+    background: var(--ui-color-bg);
+  }
+
+  @include bp.down(medium) {
+    :host ::ng-deep .ui-table__secondary {
+      display: none;
+    }
+  }
+}

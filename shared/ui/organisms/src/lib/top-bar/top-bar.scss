@@ -1,0 +1,40 @@
+@layer ui {
+  :host {
+    --ui-top-bar-min-block-size: 56px;
+
+    display: grid;
+    grid-template-columns: minmax(var(--ui-control-height-md), auto) 1fr minmax(var(--ui-control-height-md), auto);
+    align-items: center;
+    gap: var(--ui-space-2);
+    min-block-size: var(--ui-top-bar-min-block-size);
+    padding-block-start: env(safe-area-inset-top);
+    padding-inline: var(--ui-space-2);
+    background: var(--ui-color-bg);
+  }
+
+  .ui-top-bar__leading,
+  .ui-top-bar__trailing {
+    display: flex;
+    gap: var(--ui-space-1);
+  }
+
+  .ui-top-bar__trailing {
+    justify-content: flex-end;
+  }
+
+  .ui-top-bar__title {
+    min-inline-size: 0;
+    margin: 0;
+    overflow: hidden;
+    font-size: var(--ui-text-title-2-size);
+    font-weight: var(--ui-text-title-2-weight);
+    line-height: var(--ui-text-title-2-line-height);
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  :host(.ui-top-bar--start) .ui-top-bar__title {
+    text-align: start;
+  }
+}

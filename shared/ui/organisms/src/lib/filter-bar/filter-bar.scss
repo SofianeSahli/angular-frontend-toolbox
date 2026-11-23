@@ -1,0 +1,22 @@
+@layer ui {
+  :host {
+    --ui-filter-bar-search-basis: 220px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ui-space-3);
+  }
+
+  :host ::ng-deep > ui-search-field {
+    flex: 1 1 var(--ui-filter-bar-search-basis);
+  }
+
+  .ui-filter-bar__reset {
+    margin-inline-start: auto;
+  }
+
+  .ui-filter-bar__reset:empty {
+    display: none;
+  }
+}
