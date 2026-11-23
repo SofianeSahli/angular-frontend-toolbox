@@ -1,0 +1,52 @@
+@use 'sass:meta';
+
+@layer vendor {
+  @include meta.load-css('@angular/cdk/overlay-prebuilt');
+}
+
+@layer ui {
+  .ui-overlay-backdrop {
+    --ui-overlays-backdrop-mix: 40%;
+
+    background: color-mix(in srgb, var(--ui-color-ink) var(--ui-overlays-backdrop-mix), transparent);
+  }
+
+  .ui-dialog-pane {
+    --ui-overlays-dialog-inline-size: 480px;
+    --ui-overlays-viewport-inline-size: 100vw;
+    --ui-overlays-viewport-block-size: 100dvh;
+
+    inline-size: min(calc(var(--ui-overlays-viewport-inline-size) - 2 * var(--ui-space-4)), var(--ui-overlays-dialog-inline-size));
+    max-block-size: calc(var(--ui-overlays-viewport-block-size) - 2 * var(--ui-space-8));
+    overflow: hidden;
+    border-radius: var(--ui-radius-lg);
+    background: var(--ui-color-surface-raised);
+    box-shadow: var(--ui-shadow-sheet);
+  }
+
+  .ui-dialog-pane--sm {
+    --ui-overlays-dialog-inline-size: 400px;
+  }
+
+  .ui-dialog-pane--lg {
+    --ui-overlays-dialog-inline-size: 640px;
+  }
+
+  .ui-dialog-pane--sheet {
+    --ui-overlays-sheet-max-block-size: 92dvh;
+
+    inline-size: 100%;
+    max-block-size: var(--ui-overlays-sheet-max-block-size);
+    padding-block-end: env(safe-area-inset-bottom);
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .ui-dialog-pane .cdk-dialog-container {
+    display: flex;
+    flex-direction: column;
+    max-block-size: inherit;
+    overflow-y: auto;
+    outline: none;
+  }
+}

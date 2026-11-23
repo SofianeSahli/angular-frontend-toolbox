@@ -1,0 +1,54 @@
+@layer ui {
+  :host {
+    --ui-toast-view-max-inline-size: 480px;
+
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-3);
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: var(--ui-toast-view-max-inline-size);
+    padding-block: var(--ui-space-3);
+    padding-inline: var(--ui-space-4);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-ink);
+    color: var(--ui-color-bg);
+    box-shadow: var(--ui-shadow-sheet);
+    pointer-events: auto;
+  }
+
+  .ui-toast__icon {
+    color: var(--ui-color-bg);
+  }
+
+  :host(.ui-toast--success) .ui-toast__icon {
+    color: var(--ui-color-success-soft);
+  }
+
+  :host(.ui-toast--danger) .ui-toast__icon {
+    color: var(--ui-color-danger-soft);
+  }
+
+  .ui-toast__message {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .ui-toast__action {
+    flex: none;
+    min-block-size: var(--ui-control-height-sm);
+    padding-inline: var(--ui-space-2);
+    border: 0;
+    background: transparent;
+    color: var(--ui-color-bg);
+    font: inherit;
+    font-weight: var(--ui-text-body-strong-weight);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .ui-toast__action:focus-visible {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-bg);
+    outline-offset: var(--ui-focus-ring-offset);
+  }
+}
