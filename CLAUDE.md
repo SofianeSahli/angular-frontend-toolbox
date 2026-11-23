@@ -16,7 +16,10 @@ This repo is a **toolbox plus apps**. `shared/` is the toolbox: brand-free UI an
 | `shared/themes/olivier` (`@shared/theme-olivier`) | lib | Olivier `tokens.json` (source of truth), contrast pairs, generated CSS/TS | `type:ui layer:tokens` |
 | `shared/util/format` (`@shared/util-format`) | lib | Money in integer millimes (`fr-TN`, TND), local `YYYY-MM-DD` dates, pipes | `type:util` |
 | `shared/ui/atoms` (`@shared/ui-atoms`) | lib | The 16 Olivier atoms (one folder each), icon registry with a Lucide starter set | `type:ui layer:atom` |
-| `apps/ui-catalog` | app | Every atom in every state, with theme, accent and direction switches (owner review) | `scope:shared type:app` |
+| `shared/ui/molecules` (`@shared/ui-molecules`) | lib | 15 molecules: form field, alert, segmented control, chip group, stat, list, section header, month switcher, search field, empty state, menu (CDK), option cards, code input, stepper, avatar group | `type:ui layer:molecule` |
+| `shared/ui/organisms` (`@shared/ui-organisms`) | lib | Top bar, side rail, bottom tabs, dialog and sheet (`UiDialog`), `UiConfirm`, `UiToast`, filter bar, grouped list, table; `styles/overlays.scss` | `type:ui layer:organism` |
+| `shared/ui/templates` (`@shared/ui-templates`) | lib | App shell, page layout, auth layout, flow layout | `type:ui layer:template` |
+| `apps/ui-catalog` | app | Every component in every state, one route per level and full-screen templates, with theme, accent and direction switches (owner review) | `scope:shared type:app` |
 
 The old app, its e2e project and the `auth` and `ui-components` libraries were deleted in spec 002. There is no e2e test until the first real screen returns.
 
@@ -182,7 +185,7 @@ When all tasks are done, report: which `REQ` IDs are verified and how, anything 
 - Dates sent to the API as local `YYYY-MM-DD` — never `toISOString().split('T')[0]` (shifts the day in UTC+1/+2).
 - URLs come from environment/config; no hard-coded `localhost`.
 
-**Style:** Prettier (`.prettierrc`, single quotes), SCSS. Use Bootstrap grid and utility classes for layout; components read only `var(--ui-*)` tokens (Stylelint refuses raw colours, fonts and lengths; a raw length is allowed only in a component's own `--ui-<component>-*` tokens; `color-mix()` takes tokens only); logical properties only, so layouts mirror in RTL; overrides go in the `app` cascade layer, never with `!important`. Never edit `*.generated.*` files: change `tokens.json` or `contract.json` and run `compile-tokens`. Money is integer millimes, formatted with `@shared/util-format`.
+**Style:** Prettier (`.prettierrc`, single quotes), SCSS. Use Bootstrap grid and utility classes for layout; components read only `var(--ui-*)` tokens (Stylelint refuses raw colours, fonts and lengths; a raw length is allowed only in a component's own `--ui-<component>-*` tokens; `color-mix()` takes tokens only); logical properties only, so layouts mirror in RTL; breakpoints from `@use 'breakpoints' as bp;` only; `::ng-deep` only in the two forms ARCHITECTURE §5 allows; overrides go in the `app` cascade layer, never with `!important`. Never edit `*.generated.*` files: change `tokens.json` or `contract.json` and run `compile-tokens`. Money is integer millimes, formatted with `@shared/util-format`.
 
 ## Toolbox roadmap
 
@@ -190,8 +193,8 @@ One spec each, approved before any code (ARCHITECTURE §8):
 
 1. **001 Foundations** ← done: Vitest, tags and `depConstraints`, CI, OnPush everywhere, lint at 0 errors, known build issues fixed, unused projects removed.
 2. **002 Tokens and themes** ← done: `ui-tokens`, `theme-olivier`, theme compiler, cascade layers, Bootstrap trim, `util-format`, Stylelint and contrast checks; old apps and libraries deleted, new app shell.
-3. **003 Atoms and catalog** ← **in review**: the 16 Olivier atoms, `UI_TEXT`, component-token and `color-mix()` Stylelint rules, and `apps/ui-catalog`.
-4. **004 Molecules, organisms and templates** ← **next**: CDK overlays and app shell.
+3. **003 Atoms and catalog** ← done: the 16 Olivier atoms, `UI_TEXT`, component-token and `color-mix()` Stylelint rules, and `apps/ui-catalog`.
+4. **004 Molecules, organisms and templates** ← **in review**: 15 molecules, 8 organisms, 4 templates, CDK menu and dialog, breakpoints, catalog routes.
 5. **005 Shared logic:** `http/*` and `identity/*`; auth pages rebuilt on the auth layout (Sanctum cookie strategy).
 
 ## Known issues (do not "fix" silently — open or update a spec)
@@ -199,7 +202,9 @@ One spec each, approved before any code (ARCHITECTURE §8):
 Tooling
 - Vitest is pinned to 4 because `@nx/vitest`'s generator rejects 5; revisit when the Nx/Analog peers allow it.
 - Stylelint is pinned to 17: 18 needs Node ≥ 24.15.
-- `shared/ui/tokens`, `shared/ui/atoms` and `shared/util/format` set `server: { watch: null }` in `vite.config.mts`: with the watcher on, Analog drops its compiled output mid-run and tests fail at random ("not in the TypeScript program"). `vitest --watch` does not re-run there. Clear `node_modules/.vite` if tests report the same message elsewhere.
+- Every library with Vitest (`ui-tokens`, `ui-atoms`, `ui-molecules`, `ui-organisms`, `ui-templates`, `util-format`) sets `server: { watch: null }` in `vite.config.mts`: with the watcher on, Analog drops its compiled output mid-run and tests fail at random ("not in the TypeScript program"). `vitest --watch` does not re-run there. Clear `node_modules/.vite` if tests report the same message elsewhere.
+- CDK menus and dialogs read the legacy `KeyboardEvent.keyCode`, which `@testing-library/user-event` leaves at 0 in jsdom. Tests of CDK keyboard handling dispatch keys with `fireEvent.keyDown(element, { key, keyCode })`; real browsers set `keyCode`.
+- Inside a template, a reference on a native element that carries an attribute component (`<input uiInput #field>`) is the component, not the element: read it with `viewChild('field', { read: ElementRef })`, or read the value from the event.
 - `nx run-many -t lint` has 0 errors but still reports warnings in `shared/stores` (`no-explicit-any`, `no-non-null-assertion`, `no-unused-vars`).
 - Production `apiBaseUrl` is a placeholder (`https://api.example.invalid/api/v1`); replace it before the first deployment.
 
