@@ -1,0 +1,21 @@
+@use 'focus-ring';
+
+@layer ui {
+  :host {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--ui-control-height-md);
+    block-size: var(--ui-control-height-md);
+    border: 0;
+    border-radius: var(--ui-radius-sm);
+    background: transparent;
+    color: var(--ui-color-ink-muted);
+    cursor: pointer;
+  }
+
+  @include focus-ring.visible;
+}

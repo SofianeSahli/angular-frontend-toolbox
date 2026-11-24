@@ -1,0 +1,46 @@
+@layer ui {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-1);
+    min-inline-size: 0;
+  }
+
+  .ui-stat__label,
+  .ui-stat__meta {
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+    line-height: var(--ui-text-small-line-height);
+  }
+
+  .ui-stat__meta {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ui-stat__meta:empty {
+    display: none;
+  }
+
+  .ui-stat__value {
+    font-size: var(--ui-text-title-1-size);
+    font-weight: var(--ui-text-title-1-weight);
+    line-height: var(--ui-text-title-1-line-height);
+    letter-spacing: var(--ui-text-title-1-tracking);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  :host(.ui-stat--hero) .ui-stat__value {
+    font-size: var(--ui-text-amount-hero-size);
+    line-height: var(--ui-text-amount-hero-line-height);
+    letter-spacing: var(--ui-text-amount-hero-tracking);
+  }
+
+  :host(.ui-stat--accent) .ui-stat__value {
+    color: var(--ui-color-accent);
+  }
+
+  :host(.ui-stat--income) .ui-stat__value {
+    color: var(--ui-color-success);
+  }
+}

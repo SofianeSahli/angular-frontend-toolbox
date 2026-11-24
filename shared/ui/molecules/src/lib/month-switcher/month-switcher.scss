@@ -1,0 +1,32 @@
+@layer ui {
+  :host {
+    --ui-month-switcher-label-min: 8.5rem;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ui-space-1);
+    padding: var(--ui-space-1);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface);
+  }
+
+  :host(.ui-month-switcher--plain) {
+    padding: 0;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .ui-month-switcher__label {
+    min-inline-size: var(--ui-month-switcher-label-min);
+    font-weight: var(--ui-text-body-strong-weight);
+    text-align: center;
+  }
+
+  .ui-month-switcher__caption {
+    display: block;
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-caption-size);
+    font-weight: var(--ui-text-caption-weight);
+  }
+}

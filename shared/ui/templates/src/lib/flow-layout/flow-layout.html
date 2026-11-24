@@ -1,0 +1,23 @@
+<div class="ui-flow-layout__bar">
+  <button uiButton variant="ghost" iconOnly type="button" [attr.aria-label]="text.back" (click)="back.emit()">
+    <ui-icon name="arrow-left" />
+  </button>
+  @if (steps() > 1) {
+    <ui-stepper [current]="step()" [total]="steps()" />
+  } @else {
+    <span></span>
+  }
+  <button uiButton variant="ghost" iconOnly type="button" [attr.aria-label]="text.close" (click)="exit.emit()">
+    <ui-icon name="x" />
+  </button>
+</div>
+<main class="ui-flow-layout__content">
+  <div>
+    <h1 class="ui-flow-layout__title">{{ title() }}</h1>
+    @if (lead(); as leadText) {
+      <p class="ui-flow-layout__lead">{{ leadText }}</p>
+    }
+  </div>
+  <ng-content />
+</main>
+<div class="ui-flow-layout__footer"><ng-content select="[uiFlowFooter]" /></div>

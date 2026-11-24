@@ -1,0 +1,24 @@
+@layer ui {
+  :host {
+    display: block;
+    border-block-start: var(--ui-border-width-thin) solid var(--ui-color-line);
+    background: var(--ui-color-surface);
+  }
+
+  .ui-bottom-tabs__nav {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    align-items: center;
+    padding-block: var(--ui-space-2) calc(var(--ui-space-2) + env(safe-area-inset-bottom));
+    padding-inline: var(--ui-space-3);
+  }
+
+  .ui-bottom-tabs__nav ::ng-deep > [uiTab]:nth-of-type(n + 3) {
+    order: 2;
+  }
+
+  .ui-bottom-tabs__nav ::ng-deep > [uiTabAction] {
+    order: 1;
+  }
+}

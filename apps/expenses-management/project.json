@@ -35,7 +35,12 @@
         "styles": [
           "shared/ui/tokens/src/styles/ui.scss",
           "shared/themes/olivier/src/olivier.generated.css"
-        ]
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "shared/ui/tokens/src/styles"
+          ]
+        }
       },
       "configurations": {
         "production": {

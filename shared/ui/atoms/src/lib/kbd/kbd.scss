@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 @layer ui {
   :host {
     --ui-kbd-font-size: 11px;
@@ -23,7 +25,7 @@
     color: inherit;
   }
 
-  @media (max-width: 767.98px) {
+  @include bp.down(medium) {
     :host {
       display: none;
     }

@@ -9,7 +9,7 @@ const {
 export const LENGTHS_RULE = 'ui/lengths-only-in-component-tokens';
 export const COLOR_MIX_RULE = 'ui/color-mix-tokens-only';
 
-const RAW_LENGTH = /(?<![\w.#-])-?\d*\.?\d+(px|rem|em|pt|vh|vw|vmin|vmax|ch|ex)\b/;
+const RAW_LENGTH = /(?<![\w.#-])-?\d*\.?\d+(px|rem|em|pt|vh|vw|dvh|svh|lvh|dvw|svw|lvw|vmin|vmax|ch|ex)\b/;
 const COLOR_MIX_START = /color-mix\(/gi;
 const ALLOWED_COLOR = /^(var\(--ui-[a-z0-9-]+\)|currentcolor|transparent)$/i;
 const PERCENTAGE = /^\d*\.?\d+%$/;
@@ -77,6 +77,7 @@ const lengthsOnlyInComponentTokens = createPlugin(LENGTHS_RULE, (enabled) => (ro
   root.walkDecls((declaration) => {
     if (!RAW_LENGTH.test(declaration.value)) return;
     if (component && declaration.prop.startsWith(`--ui-${component}-`)) return;
+    if (component && declaration.prop.startsWith(`$${component}-`)) return;
     report({ ruleName: LENGTHS_RULE, result, node: declaration, message: lengthMessages.rejected(declaration.prop, component) });
   });
 });

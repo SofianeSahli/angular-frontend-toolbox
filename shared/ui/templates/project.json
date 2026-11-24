@@ -1,0 +1,22 @@
+{
+  "name": "ui-templates",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/ui/templates/src",
+  "prefix": "ui",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "type:ui",
+    "layer:template"
+  ],
+  "targets": {
+    "stylelint": {
+      "command": "stylelint \"shared/ui/templates/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  }
+}

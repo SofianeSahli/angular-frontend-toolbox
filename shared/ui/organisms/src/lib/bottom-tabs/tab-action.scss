@@ -1,0 +1,27 @@
+@use 'focus-ring';
+
+@layer ui {
+  :host {
+    --ui-tab-action-size: 56px;
+    --ui-tab-action-shadow-mix: 18%;
+    --ui-tab-action-shadow-offset: 8px;
+    --ui-tab-action-shadow-blur: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    inline-size: var(--ui-tab-action-size);
+    block-size: var(--ui-tab-action-size);
+    margin-block-start: calc(var(--ui-tab-action-size) / -2);
+    border: 0;
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-accent);
+    color: var(--ui-color-on-accent);
+    box-shadow: 0 var(--ui-tab-action-shadow-offset) var(--ui-tab-action-shadow-blur)
+      color-mix(in srgb, var(--ui-color-ink) var(--ui-tab-action-shadow-mix), transparent);
+    cursor: pointer;
+  }
+
+  @include focus-ring.visible;
+}

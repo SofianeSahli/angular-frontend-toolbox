@@ -1,0 +1,74 @@
+@use 'breakpoints' as bp;
+
+@layer ui {
+  :host {
+    --ui-page-max-inline-size: 1240px;
+    --ui-page-padding: var(--ui-space-8);
+    --ui-page-gap: var(--ui-space-6);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-page-gap);
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: var(--ui-page-max-inline-size);
+    padding: var(--ui-page-padding);
+  }
+
+  .ui-page__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--ui-space-4);
+  }
+
+  .ui-page__eyebrow {
+    margin: 0 0 var(--ui-space-1);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+  }
+
+  .ui-page__title {
+    margin: 0;
+    font-size: var(--ui-text-title-1-size);
+    font-weight: var(--ui-text-title-1-weight);
+    line-height: var(--ui-text-title-1-line-height);
+    letter-spacing: var(--ui-text-title-1-tracking);
+  }
+
+  .ui-page__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ui-space-3);
+  }
+
+  .ui-page__actions:empty {
+    display: none;
+  }
+
+  :host(.ui-page--with-aside) .ui-page__columns {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--ui-page-gap);
+  }
+
+  @include bp.down(wide) {
+    :host(.ui-page--with-aside) .ui-page__columns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @include bp.down(medium) {
+    :host {
+      --ui-page-padding: var(--ui-space-4);
+      --ui-page-gap: var(--ui-space-4);
+    }
+
+    .ui-page__header {
+      display: none;
+    }
+  }
+}

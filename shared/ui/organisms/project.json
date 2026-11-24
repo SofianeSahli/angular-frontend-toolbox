@@ -1,0 +1,22 @@
+{
+  "name": "ui-organisms",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/ui/organisms/src",
+  "prefix": "ui",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "type:ui",
+    "layer:organism"
+  ],
+  "targets": {
+    "stylelint": {
+      "command": "stylelint \"shared/ui/organisms/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  }
+}

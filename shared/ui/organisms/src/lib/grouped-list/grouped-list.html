@@ -1,0 +1,25 @@
+@for (group of groups(); track group.key) {
+  <section class="ui-grouped-list__group" [attr.aria-labelledby]="headerId(group)">
+    <h2 class="ui-grouped-list__header" [id]="headerId(group)">
+      <span>{{ group.label }}</span>
+      @if (group.total; as total) {
+        &ngsp;<span class="ui-grouped-list__total">{{ total }}</span>
+      }
+    </h2>
+    <ui-list>
+      @for (item of group.items; track $index) {
+        <ng-container [ngTemplateOutlet]="itemTemplate()" [ngTemplateOutletContext]="{ $implicit: item }" />
+      }
+    </ui-list>
+  </section>
+}
+@if (loading()) {
+  <ui-list class="ui-grouped-list__loading" aria-hidden="true">
+    @for (row of skeletonRows; track row) {
+      <li class="ui-grouped-list__skeleton-row"><ui-skeleton /></li>
+    }
+  </ui-list>
+} @else if (groups().length === 0 && empty()) {
+  <ng-container [ngTemplateOutlet]="empty()!" />
+}
+<div #sentinel class="ui-grouped-list__sentinel" aria-hidden="true"></div>

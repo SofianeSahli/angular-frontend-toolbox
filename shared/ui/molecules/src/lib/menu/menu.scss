@@ -1,0 +1,13 @@
+@layer ui {
+  :host {
+    --ui-menu-min-inline-size: 200px;
+
+    display: block;
+    min-inline-size: var(--ui-menu-min-inline-size);
+    padding: var(--ui-space-1);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface-raised);
+    box-shadow: var(--ui-shadow-sheet);
+  }
+}

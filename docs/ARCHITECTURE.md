@@ -118,6 +118,9 @@ The toolbox is brand-free. Components read only `var(--ui-*)`: semantic and comp
 - Light and dark: `[data-theme]` on `<html>`. The user's choice is `light | dark | system` (default `system`, which follows `prefers-color-scheme`), saved per device.
 - Cascade layers: `@layer reset, vendor, tokens, ui, app;`. Apps override in `app`, never with `!important`, and never fork a component.
 - Bootstrap: only Reboot, the grid and utilities, in the `vendor` layer.
+- Breakpoints: `medium` 820px (rail vs top bar and bottom tabs, dialog vs sheet, auth brand panel) and `wide` 1100px (page aside column). They are SCSS constants in `ui-tokens` (`_breakpoints.scss`, `@include bp.down(medium)`) and a TS constant (`BREAKPOINTS`, `mediaQueryDown()`); a test keeps the two equal. Component styles reach the shared SCSS through a Sass load path (`@use 'breakpoints' as bp;`, `@use 'focus-ring';`).
+- Overlays: `@shared/ui-organisms` ships `styles/overlays.scss` (CDK overlay CSS in `vendor`, backdrop and dialog panes in `ui`). An app that opens dialogs or menus adds it to `styles` after the theme.
+- Projected content: a component styles atoms that a page projects into it only with `.own-element ::ng-deep > [atom]` (direct children), or `:host ::ng-deep` for native content inside its own host (table cells). Nothing else uses `::ng-deep`.
 - Right-to-left: styles use logical properties and values only (`padding-inline`, `inset-inline-start`, `margin-inline-start`, `text-align: start`), never physical `left`/`right`. Horizontal movement mirrors (logical insets, or `:dir(rtl)`), and directional icons (chevrons, arrows, back, list) are flagged `directional` and mirror in RTL.
 - Checks: Stylelint refuses raw colours, sizes and fonts in **every** style file in the repo (no ignore list, no legacy exceptions). Raw lengths are allowed only in a component's own `--ui-<component>-*` tokens and in the compiler output `*.generated.css`. `color-mix()` takes only `var(--ui-*)` tokens, `currentColor` and `transparent`. A CI script verifies WCAG AA contrast for every theme in light and dark.
 
@@ -136,7 +139,7 @@ Spec 002 deleted the old code outright (the old app, its e2e project, `shared/au
 |---|---|
 | `TextInput`, `SelectComponent` | `uiInput` / `uiSelect` atoms + `ui-form-field` molecule |
 | `SwitchButtons` | `ui-segmented-control` molecule |
-| `DateInput`, `FilesInput`, `ErrorAlert`, `ContextMenu` | `ui-date-field`, `ui-file-picker`, `ui-alert`, `ui-menu` (CDK) molecules |
+| `DateInput`, `FilesInput`, `ErrorAlert`, `ContextMenu` | `ui-alert` and `ui-menu` (CDK) molecules (spec 004); date field and file picker deferred until an app needs them (a native `input[type=date]` in `ui-form-field` covers dates for now) |
 | `Loader` | `ui-spinner` atom |
 | `ModalWrapper`, `Confirmations`, `Toast` | `ui-dialog`, `ui-confirm-dialog` (CDK), `ui-toast-region` organisms |
 | `NavBar`, `AppNavbar`, `DrawerHeader` | `ui-top-bar`, `ui-side-rail`, `ui-bottom-tabs` organisms + `ui-app-shell` template |
@@ -153,7 +156,7 @@ Spec 002 deleted the old code outright (the old app, its e2e project, `shared/au
 1. **Foundations:** merge the Angular 22 upgrade, add Vitest and Playwright, tag every project, write the depConstraints above, fix the known build issues.
 2. **Tokens and themes:** `ui-tokens`, `theme-olivier`, the theme compiler, cascade layers, Bootstrap trim, `util-format`, the Stylelint and contrast checks.
 3. **Atoms and catalog:** the 16 atoms in the Olivier design system, plus `apps/ui-catalog`.
-4. **Molecules, organisms and templates:** CDK overlays, app shell; remove ng-bootstrap, `moment` and bootstrap-icons.
+4. **Molecules, organisms and templates:** the 27 components drawn by the design session (spec 004 `design-reference/`), CDK menu and dialog, app shell. (ng-bootstrap, `moment` and bootstrap-icons were already removed in spec 002.)
 5. **Shared logic:** `http/*` and `identity/*`, with the auth pages rebuilt on the auth layout (Sanctum cookie strategy).
 
 App architecture (expenses) comes after this, in `libs/expenses/`.

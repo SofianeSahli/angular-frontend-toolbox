@@ -1,0 +1,57 @@
+@use 'breakpoints' as bp;
+
+@layer ui {
+  :host {
+    --ui-app-shell-min-block-size: 100dvh;
+    --ui-app-shell-bar-layer: 10;
+
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    min-block-size: var(--ui-app-shell-min-block-size);
+    background: var(--ui-color-bg);
+    color: var(--ui-color-ink);
+  }
+
+  .ui-app-shell__column {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .ui-app-shell__main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .ui-app-shell__top,
+  .ui-app-shell__tabs {
+    display: none;
+  }
+
+  @include bp.down(medium) {
+    :host {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ui-app-shell__rail {
+      display: none;
+    }
+
+    .ui-app-shell__top {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: var(--ui-app-shell-bar-layer);
+      display: block;
+    }
+
+    .ui-app-shell__tabs {
+      position: sticky;
+      inset-block-end: 0;
+      z-index: var(--ui-app-shell-bar-layer);
+      display: block;
+      margin-block-start: auto;
+    }
+  }
+}

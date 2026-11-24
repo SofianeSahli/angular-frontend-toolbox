@@ -1,0 +1,39 @@
+@layer ui {
+  :host {
+    --ui-avatar-group-overlap: -8px;
+    --ui-avatar-group-ring: 2px;
+    --ui-avatar-group-more-size: 32px;
+    --ui-avatar-group-more-size-sm: 24px;
+    --ui-avatar-group-more-font-size: 11px;
+
+    display: inline-flex;
+  }
+
+  ui-avatar,
+  .ui-avatar-group__more {
+    border-radius: var(--ui-radius-pill);
+    box-shadow: 0 0 0 var(--ui-avatar-group-ring) var(--ui-color-bg);
+  }
+
+  ui-avatar + ui-avatar,
+  ui-avatar + .ui-avatar-group__more {
+    margin-inline-start: var(--ui-avatar-group-overlap);
+  }
+
+  .ui-avatar-group__more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--ui-avatar-group-more-size);
+    block-size: var(--ui-avatar-group-more-size);
+    background: var(--ui-color-surface-sunken);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-avatar-group-more-font-size);
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+
+  .ui-avatar-group__more--sm {
+    inline-size: var(--ui-avatar-group-more-size-sm);
+    block-size: var(--ui-avatar-group-more-size-sm);
+  }
+}

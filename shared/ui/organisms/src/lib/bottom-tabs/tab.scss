@@ -1,0 +1,27 @@
+@use 'focus-ring';
+
+@layer ui {
+  :host {
+    --ui-tab-label-size: 11px;
+    --ui-tab-gap: 2px;
+    --ui-tab-line-height: 1.3;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ui-tab-gap);
+    min-block-size: var(--ui-control-height-md);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-tab-label-size);
+    line-height: var(--ui-tab-line-height);
+    text-decoration: none;
+  }
+
+  :host([aria-current='page']) {
+    color: var(--ui-color-accent);
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+
+  @include focus-ring.visible;
+}

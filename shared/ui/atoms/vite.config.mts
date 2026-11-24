@@ -10,6 +10,7 @@ export default defineConfig(() => ({
   },
   // With the watcher on, Analog drops its compiled output mid-run and tests fail at random.
   server: { watch: null },
+  css: { preprocessorOptions: { scss: { loadPaths: [`${import.meta.dirname}/../tokens/src/styles`] } } },
   plugins: [angular({ tsconfig: `${import.meta.dirname}/tsconfig.spec.json` })],
   test: {
     name: 'ui-atoms',

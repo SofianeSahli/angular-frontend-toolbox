@@ -1,0 +1,22 @@
+@use 'sass:map';
+
+$breakpoints-medium: 820px;
+$breakpoints-wide: 1100px;
+$breakpoints-below-offset: 0.02px;
+
+$breakpoints-by-name: (
+  medium: $breakpoints-medium,
+  wide: $breakpoints-wide,
+);
+
+@mixin up($name) {
+  @media (min-width: map.get($breakpoints-by-name, $name)) {
+    @content;
+  }
+}
+
+@mixin down($name) {
+  @media (max-width: map.get($breakpoints-by-name, $name) - $breakpoints-below-offset) {
+    @content;
+  }
+}

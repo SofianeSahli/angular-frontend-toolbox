@@ -34,8 +34,14 @@
         ],
         "styles": [
           "shared/ui/tokens/src/styles/ui.scss",
-          "shared/themes/olivier/src/olivier.generated.css"
-        ]
+          "shared/themes/olivier/src/olivier.generated.css",
+          "shared/ui/organisms/src/styles/overlays.scss"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "shared/ui/tokens/src/styles"
+          ]
+        }
       },
       "configurations": {
         "production": {

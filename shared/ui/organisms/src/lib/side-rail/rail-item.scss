@@ -1,0 +1,26 @@
+@use 'focus-ring';
+
+@layer ui {
+  :host {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-3);
+    min-block-size: var(--ui-control-height-md);
+    padding-inline: var(--ui-space-3);
+    border-radius: var(--ui-radius-md);
+    color: var(--ui-color-ink);
+    text-decoration: none;
+  }
+
+  :host(:hover) {
+    background: var(--ui-color-surface-sunken);
+  }
+
+  :host([aria-current='page']) {
+    background: var(--ui-color-accent-soft);
+    color: var(--ui-color-accent);
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+
+  @include focus-ring.visible;
+}
