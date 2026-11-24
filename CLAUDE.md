@@ -10,13 +10,17 @@ This repo is a **toolbox plus apps**. `shared/` is the toolbox: brand-free UI an
 
 | Path | Kind | Purpose |
 |---|---|---|
-| `apps/expenses-management` | app | Shell with one placeholder page on the Olivier theme |
+| `apps/expenses-management` | app | Identity pages and signed-in shell on the Olivier theme, fr/en/ar |
 | `apps/ui-catalog` | app | Every atom in every state (owner review) |
 | `shared/stores` (`@shared/stores`) | lib | Generic NgRx Signal Store features and base models |
 | `shared/ui/tokens` (`@shared/ui-tokens`) | lib | Token contract, cascade layers, Bootstrap mapping, theme compiler, `provideUi`, `UiThemeService` |
 | `shared/themes/olivier` (`@shared/theme-olivier`) | lib | Olivier `tokens.json` (source of truth) and generated CSS/TS |
 | `shared/util/format` (`@shared/util-format`) | lib | Money in integer millimes (`fr-TN`, TND), local dates, pipes |
 | `shared/ui/atoms` (`@shared/ui-atoms`) | lib | The 16 Olivier atoms, icon registry |
+| `shared/ui/molecules`, `organisms`, `templates` (`@shared/ui-*`) | lib | Form field, segmented control, menu…; top bar, rail, tabs, dialog, toasts…; app shell, page, auth and flow layouts |
+| `shared/http/data-access`, `feature-errors` (`@shared/http-*`) | lib | `provideApi`, interceptor, `ApiError`, `ErrorBus`; the error presenter |
+| `shared/identity/data-access`, `feature-auth` (`@shared/identity-*`) | lib | `SessionStore`, `AuthApi`, guards, `provideIdentity`; sign-in, sign-up, code, password and account pages |
+| `libs/expenses/shell` (`@expenses/shell`) | lib | The expenses app's signed-in frame |
 
 **Stack:** Angular 22.2 (standalone, signals), Nx 24, TypeScript 6.0, NgRx Signals 22, Bootstrap 5 (Reboot, grid, utilities), ngx-translate (default `fr`), RxJS 7, Vitest 4, Stylelint 17.
 
@@ -28,7 +32,7 @@ This repo is a **toolbox plus apps**. `shared/` is the toolbox: brand-free UI an
 | Spec phases, EARS format, testing and commit rules in full | `docs/WORKFLOW.md` |
 | Detailed coding conventions | `docs/CONVENTIONS.md` |
 | Roadmap, known issues, Windows note | `docs/ROADMAP.md` |
-| What each finished spec delivered | `specs/README.md` (read this instead of the full 001–003 spec files) |
+| What each finished spec delivered | `specs/README.md` (read this instead of the full spec files) |
 
 ## Commands
 
@@ -52,7 +56,7 @@ Keep command output short: add `--output-style=static` to Nx and show only the l
 - Every project has `scope:*` and `type:*` tags (UI libs also `layer:*`); ESLint enforces them.
 - Toolbox UI is presentational: signal inputs/outputs, no store, HTTP, router or translation keys.
 - Data-access never imports UI. Libraries never import apps.
-- Import shared code only through `@shared/...` aliases.
+- Import shared code only through `@shared/...` aliases, app libraries through `@expenses/...` (one prefix per app).
 - Styling reads only `var(--ui-*)` tokens; no raw colours, sizes or fonts.
 - Native elements use attribute selectors (`button[uiButton]`); ControlValueAccessor only for custom controls.
 

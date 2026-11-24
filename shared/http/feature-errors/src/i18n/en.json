@@ -1,0 +1,24 @@
+{
+  "errors": {
+    "meta": {
+      "reviewStatus": "reviewed"
+    },
+    "sessionExpired": "Your session has expired. Sign in again to continue.",
+    "offline": "Connection lost. Check your network and try again.",
+    "kinds": {
+      "forbidden": "You don't have access to this action.",
+      "not-found": "This item doesn't exist or no longer exists.",
+      "conflict": "This action conflicts with a recent change. Reload the page.",
+      "throttled": "Too many attempts. Try again in {{seconds}} s.",
+      "throttledLater": "Too many attempts. Try again in a moment."
+    },
+    "codes": {},
+    "server": {
+      "title": "Something went wrong",
+      "text": "The service couldn't handle the request. Try again; if the problem continues, give this code to support.",
+      "requestId": "Request code:",
+      "close": "Close",
+      "retry": "Try again"
+    }
+  }
+}

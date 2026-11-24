@@ -1,0 +1,21 @@
+{
+  "name": "identity-feature-auth",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/identity/feature-auth/src",
+  "prefix": "identity",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "type:feature"
+  ],
+  "targets": {
+    "stylelint": {
+      "command": "stylelint \"shared/identity/feature-auth/**/*.{css,scss}\" --allow-empty-input"
+    },
+    "lint": {
+      "dependsOn": [
+        "stylelint"
+      ]
+    }
+  }
+}

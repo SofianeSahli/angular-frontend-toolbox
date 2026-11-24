@@ -1,0 +1,33 @@
+@layer ui {
+  :host {
+    --ui-brand-mark-logo-size: 32px;
+    --ui-brand-mark-glyph-size: 20px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ui-space-2);
+    font-size: var(--ui-text-title-2-size);
+    font-weight: var(--ui-text-title-2-weight);
+    line-height: var(--ui-text-title-2-line-height);
+  }
+
+  .brand-mark__logo {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--ui-brand-mark-logo-size);
+    block-size: var(--ui-brand-mark-logo-size);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-brand);
+    color: var(--ui-color-on-brand);
+  }
+
+  .brand-mark__logo svg {
+    inline-size: var(--ui-brand-mark-glyph-size);
+    block-size: var(--ui-brand-mark-glyph-size);
+  }
+
+  :host(.brand-mark--on-brand) .brand-mark__logo {
+    background: var(--ui-color-on-brand);
+    color: var(--ui-color-brand);
+  }
+}

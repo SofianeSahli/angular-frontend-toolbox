@@ -18,6 +18,21 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@expenses/shell": [
+        "libs/expenses/shell/src/index.ts"
+      ],
+      "@shared/http-data-access": [
+        "shared/http/data-access/src/index.ts"
+      ],
+      "@shared/http-feature-errors": [
+        "shared/http/feature-errors/src/index.ts"
+      ],
+      "@shared/identity-data-access": [
+        "shared/identity/data-access/src/index.ts"
+      ],
+      "@shared/identity-feature-auth": [
+        "shared/identity/feature-auth/src/index.ts"
+      ],
       "@shared/stores": [
         "shared/stores/src/index.ts"
       ],

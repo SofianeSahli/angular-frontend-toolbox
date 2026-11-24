@@ -1,0 +1,141 @@
+{
+  "identity": {
+    "meta": {
+      "reviewStatus": "reviewed"
+    },
+    "common": {
+      "back": "Retour"
+    },
+    "fields": {
+      "name": "Prénom",
+      "nameHint": "Visible par les membres de votre foyer.",
+      "email": "E-mail",
+      "emailPlaceholder": "vous@exemple.com",
+      "password": "Mot de passe",
+      "newPassword": "Nouveau mot de passe",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe",
+      "newPasswordHint": "8 caractères minimum. Une phrase facile à retenir fonctionne bien.",
+      "phone": "Téléphone",
+      "phonePlaceholder": "20 123 456",
+      "code": "Code reçu"
+    },
+    "signIn": {
+      "title": "Se connecter",
+      "lead": "Retrouvez le carnet de votre foyer.",
+      "invalidCredentials": "E-mail ou mot de passe incorrect.",
+      "forgotPassword": "Mot de passe oublié ?",
+      "submit": "Se connecter",
+      "noAccount": "Pas encore de compte ?",
+      "createAccount": "Créer un compte"
+    },
+    "signUp": {
+      "title": "Créer un compte",
+      "lead": "Gratuit. Vous créerez votre foyer ou votre carnet juste après.",
+      "signInInstead": "Se connecter avec cette adresse",
+      "termsBefore": "J'accepte les",
+      "terms": "conditions d'utilisation",
+      "termsBetween": "et la",
+      "privacy": "politique de confidentialité",
+      "termsAfter": ".",
+      "submit": "Créer mon compte",
+      "haveAccount": "Déjà un compte ?",
+      "signIn": "Se connecter"
+    },
+    "google": {
+      "or": "ou",
+      "termsLead": "Pour créer votre compte avec Google, acceptez les conditions.",
+      "continue": "Continuer"
+    },
+    "emailCode": {
+      "title": "Vérifiez votre e-mail",
+      "sentTo": "Nous avons envoyé un code à 6 chiffres à",
+      "validity": ". Il est valable 15 minutes.",
+      "hint": "Collez le code ou tapez-le : la confirmation part toute seule au 6ᵉ chiffre.",
+      "submit": "Confirmer",
+      "notReceived": "Pas reçu ? Vérifiez vos spams.",
+      "resendIn": "Nouveau code possible dans {{time}}.",
+      "resend": "Renvoyer le code",
+      "wrongAddress": "Ce n'est pas la bonne adresse"
+    },
+    "errors": {
+      "generic": "Cette valeur n'est pas acceptée.",
+      "retryIn": "Trop de tentatives. Réessayez dans {{seconds}} s.",
+      "termsRequired": "Acceptez les conditions pour créer votre compte.",
+      "fields": {
+        "name": "Saisissez votre prénom (120 caractères maximum).",
+        "email": "Saisissez une adresse e-mail valide.",
+        "password": "8 caractères minimum.",
+        "phone": "Saisissez les 8 chiffres de votre numéro.",
+        "code": "Le code n'est pas valide.",
+        "locale": "Cette langue n'est pas prise en charge.",
+        "terms_version": "Les conditions ont changé : rechargez la page."
+      },
+      "code": {
+        "incomplete": "Saisissez les 6 chiffres du code.",
+        "invalid": "Code incorrect ou expiré. Vérifiez-le ou demandez-en un nouveau."
+      },
+      "email": {
+        "taken": "Un compte existe déjà avec cette adresse.",
+        "email": "Saisissez une adresse e-mail valide."
+      },
+      "password": {
+        "min": "8 caractères minimum."
+      },
+      "name": {
+        "max": "120 caractères maximum."
+      },
+      "auth": {
+        "google_invalid": "La connexion avec Google a échoué. Réessayez.",
+        "google_unavailable": "Google ne répond pas pour le moment. Réessayez plus tard ou utilisez votre e-mail.",
+        "google_email_conflict": "Un compte existe déjà avec cette adresse. Connectez-vous avec votre e-mail et votre mot de passe."
+      }
+    },
+    "twoFactor": {
+      "title": "Code de connexion",
+      "sentTo": "Nous avons envoyé un code à 6 chiffres à",
+      "sent": "Nous vous avons envoyé un code à 6 chiffres par e-mail.",
+      "expired": "Votre connexion a expiré, recommencez."
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "lead": "Saisissez votre e-mail : si un compte existe, nous vous enverrons un code pour choisir un nouveau mot de passe.",
+      "submit": "Recevoir un code"
+    },
+    "resetPassword": {
+      "title": "Nouveau mot de passe",
+      "sentTo": "Si un compte existe pour",
+      "ifAccount": ", un code à 6 chiffres vient de lui être envoyé.",
+      "submit": "Changer le mot de passe",
+      "done": "Mot de passe modifié. Connectez-vous."
+    },
+    "unavailable": {
+      "title": "Service indisponible",
+      "text": "Nous n'arrivons pas à joindre le service pour le moment. Vérifiez votre connexion puis réessayez.",
+      "retry": "Réessayer"
+    },
+    "account": {
+      "title": "Compte",
+      "signOut": "Se déconnecter",
+      "profile": "Profil",
+      "notProvided": "Non renseigné",
+      "language": "Langue",
+      "languages": {
+        "fr": "Français",
+        "en": "English"
+      },
+      "readOnly": "La modification du profil arrive bientôt.",
+      "twoFactor": "Connexion en deux étapes",
+      "on": "Activée",
+      "off": "Désactivée",
+      "twoFactorText": "À chaque connexion, un code envoyé par e-mail vous sera demandé en plus du mot de passe.",
+      "enable": "Activer",
+      "disable": "Désactiver",
+      "disableCodeSent": "Nous vous avons envoyé un code par e-mail pour confirmer.",
+      "confirmDisable": "Désactiver la connexion en deux étapes",
+      "cancel": "Annuler",
+      "twoFactorEnabled": "Connexion en deux étapes activée.",
+      "twoFactorDisabled": "Connexion en deux étapes désactivée."
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "reviewStatus": "draft: to be reviewed by a native reader"
+  },
+  "app": {
+    "name": "إدارة المصاريف"
+  },
+  "home": {
+    "title": "الرئيسية",
+    "text": "مرحبًا {{name}}. دفترك قادم قريبًا."
+  },
+  "shell": {
+    "navigation": "التنقّل الرئيسي",
+    "addExpense": "إضافة مصروف",
+    "addExpenseSoon": "قريبًا",
+    "home": "الرئيسية",
+    "account": "الحساب",
+    "signOut": "تسجيل الخروج"
+  },
+  "brand": {
+    "promise": "مصاريف البيت، معًا، بلا عناء.",
+    "benefits": {
+      "quick": "تسجيل مصروف في لمستين، حتى لو دفعت نقدًا.",
+      "remaining": "ما تبقّى للإنفاق هذا الشهر، بنظرة واحدة.",
+      "shared": "دفتر مشترك مع شريك حياتك: كلٌّ منكما يرى كل شيء."
+    },
+    "note": "بالدينار التونسي افتراضيًا · بيانات مستضافة بأمان"
+  },
+  "language": {
+    "label": "اللغة"
+  },
+  "legal": {
+    "terms": "شروط الاستخدام",
+    "privacy": "سياسة الخصوصية",
+    "comingSoon": "سيُنشر هذا النص قبل الإطلاق.",
+    "back": "العودة إلى الرئيسية"
+  },
+  "ui": {
+    "loading": "جارٍ التحميل",
+    "optional": "(اختياري)",
+    "close": "إغلاق",
+    "cancel": "إلغاء",
+    "undo": "تراجع",
+    "clear": "مسح",
+    "back": "رجوع",
+    "previousMonth": "الشهر السابق",
+    "nextMonth": "الشهر التالي",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "moreActions": "إجراءات أخرى",
+    "step": "الخطوة {{current}} من {{total}}",
+    "errors": {
+      "required": "هذا الحقل مطلوب.",
+      "email": "أدخل عنوان بريد إلكتروني صالحًا.",
+      "minlength": "{{requiredLength}} أحرف على الأقل.",
+      "maxlength": "{{requiredLength}} حرفًا على الأكثر.",
+      "pattern": "الصيغة غير صالحة."
+    }
+  }
+}

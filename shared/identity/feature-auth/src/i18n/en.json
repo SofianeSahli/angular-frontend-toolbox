@@ -1,0 +1,141 @@
+{
+  "identity": {
+    "meta": {
+      "reviewStatus": "reviewed"
+    },
+    "common": {
+      "back": "Back"
+    },
+    "fields": {
+      "name": "First name",
+      "nameHint": "Visible to the members of your household.",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "newPassword": "New password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "newPasswordHint": "At least 8 characters. A sentence that's easy to remember works well.",
+      "phone": "Phone",
+      "phonePlaceholder": "20 123 456",
+      "code": "Code received"
+    },
+    "signIn": {
+      "title": "Sign in",
+      "lead": "Get back to your household's book.",
+      "invalidCredentials": "Wrong email or password.",
+      "forgotPassword": "Forgot your password?",
+      "submit": "Sign in",
+      "noAccount": "No account yet?",
+      "createAccount": "Create an account"
+    },
+    "signUp": {
+      "title": "Create an account",
+      "lead": "Free. You'll create your household or your book right after.",
+      "signInInstead": "Sign in with this address",
+      "termsBefore": "I accept the",
+      "terms": "terms of use",
+      "termsBetween": "and the",
+      "privacy": "privacy policy",
+      "termsAfter": ".",
+      "submit": "Create my account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "google": {
+      "or": "or",
+      "termsLead": "To create your account with Google, accept the terms.",
+      "continue": "Continue"
+    },
+    "emailCode": {
+      "title": "Check your email",
+      "sentTo": "We sent a 6-digit code to",
+      "validity": ". It's valid for 15 minutes.",
+      "hint": "Paste the code or type it: it's confirmed automatically at the 6th digit.",
+      "submit": "Confirm",
+      "notReceived": "Didn't get it? Check your spam folder.",
+      "resendIn": "New code possible in {{time}}.",
+      "resend": "Send the code again",
+      "wrongAddress": "That's not the right address"
+    },
+    "errors": {
+      "generic": "This value isn't accepted.",
+      "retryIn": "Too many attempts. Try again in {{seconds}} s.",
+      "termsRequired": "Accept the terms to create your account.",
+      "fields": {
+        "name": "Enter your first name (120 characters at most).",
+        "email": "Enter a valid email address.",
+        "password": "At least 8 characters.",
+        "phone": "Enter the 8 digits of your number.",
+        "code": "The code isn't valid.",
+        "locale": "This language isn't supported.",
+        "terms_version": "The terms have changed: reload the page."
+      },
+      "code": {
+        "incomplete": "Enter the 6 digits of the code.",
+        "invalid": "Wrong or expired code. Check it or ask for a new one."
+      },
+      "email": {
+        "taken": "An account already exists with this address.",
+        "email": "Enter a valid email address."
+      },
+      "password": {
+        "min": "At least 8 characters."
+      },
+      "name": {
+        "max": "120 characters at most."
+      },
+      "auth": {
+        "google_invalid": "Signing in with Google failed. Try again.",
+        "google_unavailable": "Google isn't responding right now. Try again later or use your email.",
+        "google_email_conflict": "An account already exists with this address. Sign in with your email and password."
+      }
+    },
+    "twoFactor": {
+      "title": "Sign-in code",
+      "sentTo": "We sent a 6-digit code to",
+      "sent": "We emailed you a 6-digit code.",
+      "expired": "Your sign-in has expired, start again."
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "lead": "Enter your email: if an account exists, we'll send you a code to choose a new password.",
+      "submit": "Get a code"
+    },
+    "resetPassword": {
+      "title": "New password",
+      "sentTo": "If an account exists for",
+      "ifAccount": ", a 6-digit code has just been sent to it.",
+      "submit": "Change the password",
+      "done": "Password changed. Sign in."
+    },
+    "unavailable": {
+      "title": "Service unavailable",
+      "text": "We can't reach the service right now. Check your connection and try again.",
+      "retry": "Try again"
+    },
+    "account": {
+      "title": "Account",
+      "signOut": "Sign out",
+      "profile": "Profile",
+      "notProvided": "Not provided",
+      "language": "Language",
+      "languages": {
+        "fr": "Français",
+        "en": "English"
+      },
+      "readOnly": "Editing the profile is coming soon.",
+      "twoFactor": "Two-step sign-in",
+      "on": "On",
+      "off": "Off",
+      "twoFactorText": "Each time you sign in, you'll be asked for a code sent by email as well as your password.",
+      "enable": "Turn on",
+      "disable": "Turn off",
+      "disableCodeSent": "We emailed you a code to confirm.",
+      "confirmDisable": "Turn off two-step sign-in",
+      "cancel": "Cancel",
+      "twoFactorEnabled": "Two-step sign-in turned on.",
+      "twoFactorDisabled": "Two-step sign-in turned off."
+    }
+  }
+}

@@ -28,7 +28,7 @@ Made the toolbox brand-free and themeable.
 - Deleted the old apps, `auth` and `ui-components`; kept `shared/stores`; new minimal `apps/expenses-management` shell.
 - Files: `002-tokens-themes/` (requirements 22 KB, design 14 KB, tasks 9 KB).
 
-## 003 — Atoms and catalog (in review)
+## 003 — Atoms and catalog (implemented)
 
 - `@shared/ui-atoms`: one library, one entry point, one folder per atom (16 Olivier atoms), Lucide starter icons (ISC licence), directional icons mirrored in RTL.
 - Raw sizes only as component tokens (`--ui-<component>-*`) declared in each atom's stylesheet; `color-mix()` takes `var(--ui-*)` colours only; Bootstrap radius mapped to `--ui-radius-sm`.
@@ -38,6 +38,25 @@ Made the toolbox brand-free and themeable.
 - Non-goals: molecules, organisms and templates (spec 004), screens in `expenses-management`, multi-currency amounts.
 - Files: `003-atoms-catalog/` (requirements 17 KB, design 17 KB, tasks 7 KB).
 
+## 004 — Molecules, organisms and templates (in review)
+
+- `@shared/ui-molecules`: 15 molecules (form field, alert, segmented control, chip group, option cards and code input as form controls, stat, list, section header, month switcher, search field, empty state, CDK menu, stepper, avatar group).
+- `@shared/ui-organisms`: top bar, side rail, bottom tabs, `UiDialog` (dialog and sheet), `UiConfirm`, `UiToast`, filter bar, grouped list, table; `styles/overlays.scss`.
+- `@shared/ui-templates`: app shell, page layout, auth layout, flow layout.
+- Breakpoints (`@use 'breakpoints' as bp;`), shared focus-ring mixin, more `UI_TEXT` keys, `isRtl`; `ui-catalog` routes per level.
+- Files: `004-molecules-organisms-templates/`.
+
+## 005 — Identity (in review)
+
+First spec that ships a toolbox part and a working app screen together.
+
+- `@shared/http-data-access`: `provideApi`, interceptor (credentials, request id, XSRF header, one retry on 419), `ApiError` kinds, `ErrorBus`, `handling(...codes)`, `SESSION_EXPIRY`.
+- `@shared/http-feature-errors`: `<shared-error-presenter />` (session expiry, offline, status toasts, server-error dialog), fr/en/ar.
+- `@shared/identity-data-access`: `SessionStore` (async methods returning `AuthResult`), `AuthApi`, cookie strategy and token stub, `authGuard` / `guestGuard`, `provideIdentity`, `safeReturnUrl`.
+- `@shared/identity-feature-auth`: sign-in, sign-up, email code, two-factor, forgot and reset password, unavailable and account pages; Google button (hidden while `googleClientId` is empty); fr/en/ar.
+- `@expenses/shell` and the app: signed-in shell, `AuthFrame` with brand panel and FR / EN / ع switch, `LanguageService` (RTL for Arabic), merged translation loader, `UI_TEXT` from translations.
+- Arabic texts are a draft for a native reader. Files: `005-identity/`.
+
 ## Next
 
-004 Molecules, organisms and templates (CDK overlays, app shell). See [docs/ROADMAP.md](../docs/ROADMAP.md).
+006 Households and books. See [docs/ROADMAP.md](../docs/ROADMAP.md).

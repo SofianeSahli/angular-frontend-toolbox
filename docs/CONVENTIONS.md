@@ -29,15 +29,16 @@ Moved from `CLAUDE.md`. Read it before writing or reviewing code; the checklist 
 ## Libraries and boundaries
 
 - Which library may import which is defined by tags and `depConstraints`: see [ARCHITECTURE.md](ARCHITECTURE.md) §2–3.
-- Import shared code only through its `@shared/...` alias, never through deep paths like `shared/stores/src/lib/...` or `apps/<app>/src/...`.
+- Import shared code only through its `@shared/...` alias, and app libraries through their `@expenses/...` alias (one prefix per app), never through deep paths like `shared/stores/src/lib/...` or `apps/<app>/src/...`.
 - Libraries never import from apps. App config reaches libraries through injection tokens and `provideX({...})` (see `provideUi` in `@shared/ui-tokens`).
 
 ## i18n, dates, HTTP
 
 - All user-visible text goes through ngx-translate keys; add keys to `public/i18n/fr.json`.
+- No ngx-translate in toolbox UI (`ui-*` libraries): pages pass translated text in, built-in strings come from `UI_TEXT`. Shared `feature` libraries (for example `identity/feature-auth`) may use ngx-translate and ship their own fr/en/ar files under their namespace, which the app merges.
 - Dates sent to the API as local `YYYY-MM-DD` — never `toISOString().split('T')[0]` (shifts the day in UTC+1/+2).
 - URLs come from environment/config; no hard-coded `localhost`.
 
 ## Style
 
-Prettier (`.prettierrc`, single quotes), SCSS. Use Bootstrap grid and utility classes for layout; components read only `var(--ui-*)` tokens (Stylelint refuses raw colours, fonts and lengths; a raw length is allowed only in a component's own `--ui-<component>-*` tokens; `color-mix()` takes tokens only); logical properties only, so layouts mirror in RTL; overrides go in the `app` cascade layer, never with `!important`. Never edit `*.generated.*` files: change `tokens.json` or `contract.json` and run `compile-tokens`. Money is integer millimes, formatted with `@shared/util-format`.
+Prettier (`.prettierrc`, single quotes), SCSS. Use Bootstrap grid and utility classes for layout; components read only `var(--ui-*)` tokens (Stylelint refuses raw colours, fonts and lengths; a raw length is allowed only in a component's own `--ui-<component>-*` tokens; `color-mix()` takes tokens only); logical properties only, so layouts mirror in RTL; breakpoints from `@use 'breakpoints' as bp;` only; `::ng-deep` only in the two forms ARCHITECTURE §5 allows; overrides go in the `app` cascade layer, never with `!important`. Never edit `*.generated.*` files: change `tokens.json` or `contract.json` and run `compile-tokens`. Money is integer millimes, formatted with `@shared/util-format`.

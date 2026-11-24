@@ -1,0 +1,19 @@
+@layer ui {
+  :host {
+    --ui-or-divider-hairline: 1px;
+
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-3);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-caption-size);
+    line-height: var(--ui-text-caption-line-height);
+  }
+
+  :host::before,
+  :host::after {
+    content: '';
+    flex: 1;
+    border-block-start: var(--ui-or-divider-hairline) solid var(--ui-color-line);
+  }
+}

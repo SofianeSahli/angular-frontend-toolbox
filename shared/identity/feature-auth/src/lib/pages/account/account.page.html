@@ -1,0 +1,70 @@
+<ui-page [title]="'identity.account.title' | translate">
+  <button uiPageActions uiButton type="button" [loading]="signingOut()" (click)="signOut()">{{ 'identity.account.signOut' | translate }}</button>
+
+  @if (account(); as current) {
+    <section class="d-flex flex-column gap-3 mb-4" aria-labelledby="identity-account-profile">
+      <ui-section-header id="identity-account-profile" [title]="'identity.account.profile' | translate" />
+      <ui-list>
+        <li uiListItem>
+          <span uiTitle>{{ 'identity.fields.name' | translate }}</span>
+          <span uiTrailing>{{ current.name }}</span>
+        </li>
+        <li uiListItem>
+          <span uiTitle>{{ 'identity.fields.email' | translate }}</span>
+          <span uiTrailing dir="ltr">{{ current.email }}</span>
+        </li>
+        <li uiListItem>
+          <span uiTitle>{{ 'identity.fields.phone' | translate }}</span>
+          @if (current.phone; as phone) {
+            <span uiTrailing dir="ltr">{{ phone }}</span>
+          } @else {
+            <span uiTrailing>{{ 'identity.account.notProvided' | translate }}</span>
+          }
+        </li>
+        <li uiListItem>
+          <span uiTitle>{{ 'identity.account.language' | translate }}</span>
+          <span uiTrailing>{{ 'identity.account.languages.' + current.locale | translate }}</span>
+        </li>
+      </ui-list>
+      <p class="identity-lead">{{ 'identity.account.readOnly' | translate }}</p>
+    </section>
+
+    <section class="d-flex flex-column gap-3" aria-labelledby="identity-account-security">
+      <ui-section-header id="identity-account-security" [title]="'identity.account.twoFactor' | translate" />
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        @if (current.twoFactorEnabled) {
+          <ui-badge tone="success">{{ 'identity.account.on' | translate }}</ui-badge>
+        } @else {
+          <ui-badge>{{ 'identity.account.off' | translate }}</ui-badge>
+        }
+        <p class="mb-0 flex-grow-1">{{ 'identity.account.twoFactorText' | translate }}</p>
+      </div>
+
+      @if (!current.twoFactorEnabled) {
+        <button uiButton variant="primary" type="button" class="align-self-start" [loading]="busy()" (click)="enableTwoFactor()">
+          {{ 'identity.account.enable' | translate }}
+        </button>
+      } @else if (!askingDisableCode()) {
+        <button uiButton type="button" class="align-self-start" [loading]="busy()" (click)="requestDisableCode()">
+          {{ 'identity.account.disable' | translate }}
+        </button>
+      } @else {
+        <form class="d-flex flex-column gap-3" [formGroup]="disableForm" (ngSubmit)="disableTwoFactor()" novalidate>
+          <div class="d-flex flex-column gap-2">
+            <span class="fw-semibold">{{ 'identity.fields.code' | translate }}</span>
+            <ui-code-input [length]="codeLength" [ariaLabel]="'identity.fields.code' | translate" formControlName="code" (completed)="disableTwoFactor()" />
+            @if (codeError(); as message) {
+              <ui-field-message tone="error" role="alert">{{ message }}</ui-field-message>
+            } @else {
+              <ui-field-message>{{ 'identity.account.disableCodeSent' | translate }}</ui-field-message>
+            }
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <button uiButton variant="danger" type="submit" [loading]="busy()">{{ 'identity.account.confirmDisable' | translate }}</button>
+            <button uiButton variant="ghost" type="button" (click)="cancelDisable()">{{ 'identity.account.cancel' | translate }}</button>
+          </div>
+        </form>
+      }
+    </section>
+  }
+</ui-page>

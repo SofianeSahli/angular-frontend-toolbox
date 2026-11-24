@@ -1,0 +1,40 @@
+@layer app {
+  :host {
+    display: contents;
+  }
+
+  .brand-panel__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-6);
+  }
+
+  .brand-panel__promise {
+    margin: 0;
+    font-size: var(--ui-text-title-1-size);
+    font-weight: var(--ui-text-title-1-weight);
+    line-height: var(--ui-text-title-1-line-height);
+    letter-spacing: var(--ui-text-title-1-tracking);
+  }
+
+  .brand-panel__benefits {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .brand-panel__benefits li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ui-space-2);
+  }
+
+  .brand-panel__note {
+    margin: 0;
+    font-size: var(--ui-text-small-size);
+    line-height: var(--ui-text-small-line-height);
+  }
+}

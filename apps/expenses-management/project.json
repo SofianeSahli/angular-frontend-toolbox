@@ -30,11 +30,22 @@
           {
             "glob": "**/*",
             "input": "apps/expenses-management/public"
+          },
+          {
+            "glob": "*.json",
+            "input": "shared/identity/feature-auth/src/i18n",
+            "output": "i18n/identity"
+          },
+          {
+            "glob": "*.json",
+            "input": "shared/http/feature-errors/src/i18n",
+            "output": "i18n/errors"
           }
         ],
         "styles": [
           "shared/ui/tokens/src/styles/ui.scss",
-          "shared/themes/olivier/src/olivier.generated.css"
+          "shared/themes/olivier/src/olivier.generated.css",
+          "shared/ui/organisms/src/styles/overlays.scss"
         ],
         "stylePreprocessorOptions": {
           "includePaths": [

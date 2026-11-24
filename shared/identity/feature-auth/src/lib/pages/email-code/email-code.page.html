@@ -1,0 +1,41 @@
+<button uiButton variant="ghost" size="sm" type="button" class="align-self-start" (click)="changeAddress()">
+  <ui-icon name="arrow-left" />
+  {{ 'identity.common.back' | translate }}
+</button>
+
+<h1 class="identity-title">{{ 'identity.emailCode.title' | translate }}</h1>
+<p class="identity-lead">
+  {{ 'identity.emailCode.sentTo' | translate }}&ngsp;<strong dir="ltr">{{ email() }}</strong>{{ 'identity.emailCode.validity' | translate }}
+</p>
+
+<form class="d-flex flex-column gap-3" [formGroup]="form" (ngSubmit)="confirm()" novalidate>
+  <div class="d-flex flex-column gap-2">
+    <span class="fw-semibold">{{ 'identity.fields.code' | translate }}</span>
+    <ui-code-input
+      [length]="codeLength"
+      [ariaLabel]="'identity.fields.code' | translate"
+      formControlName="code"
+      (completed)="confirm()"
+    />
+    @if (codeError(); as message) {
+      <ui-field-message tone="error" role="alert">{{ message }}</ui-field-message>
+    } @else {
+      <ui-field-message>{{ 'identity.emailCode.hint' | translate }}</ui-field-message>
+    }
+  </div>
+
+  <button uiButton variant="primary" type="submit" [loading]="confirming()">{{ 'identity.emailCode.submit' | translate }}</button>
+</form>
+
+<p class="identity-lead">
+  {{ 'identity.emailCode.notReceived' | translate }}
+  @if (!canResend()) {
+    &ngsp;{{ 'identity.emailCode.resendIn' | translate: { time: resendWait() } }}
+  }
+</p>
+<div class="identity-actions">
+  <button uiButton size="sm" type="button" [disabled]="!canResend()" [loading]="resending()" (click)="resend()">
+    {{ 'identity.emailCode.resend' | translate }}
+  </button>
+  <button uiButton variant="ghost" size="sm" type="button" (click)="changeAddress()">{{ 'identity.emailCode.wrongAddress' | translate }}</button>
+</div>

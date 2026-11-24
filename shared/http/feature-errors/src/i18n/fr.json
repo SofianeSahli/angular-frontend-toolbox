@@ -1,0 +1,24 @@
+{
+  "errors": {
+    "meta": {
+      "reviewStatus": "reviewed"
+    },
+    "sessionExpired": "Votre session a expiré. Reconnectez-vous pour continuer.",
+    "offline": "Connexion perdue. Vérifiez votre réseau puis réessayez.",
+    "kinds": {
+      "forbidden": "Vous n'avez pas accès à cette action.",
+      "not-found": "Cet élément n'existe pas ou n'existe plus.",
+      "conflict": "Cette action entre en conflit avec une modification récente. Rechargez la page.",
+      "throttled": "Trop de tentatives. Réessayez dans {{seconds}} s.",
+      "throttledLater": "Trop de tentatives. Réessayez dans un moment."
+    },
+    "codes": {},
+    "server": {
+      "title": "Un problème est survenu",
+      "text": "Le service n'a pas pu traiter la demande. Réessayez ; si le problème continue, communiquez ce code au support.",
+      "requestId": "Code de la demande :",
+      "close": "Fermer",
+      "retry": "Réessayer"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "reviewStatus": "reviewed"
+  },
+  "app": {
+    "name": "Expense management"
+  },
+  "home": {
+    "title": "Home",
+    "text": "Welcome {{name}}. Your book is coming soon."
+  },
+  "shell": {
+    "navigation": "Main navigation",
+    "addExpense": "Add an expense",
+    "addExpenseSoon": "Coming soon",
+    "home": "Home",
+    "account": "Account",
+    "signOut": "Sign out"
+  },
+  "brand": {
+    "promise": "Your household's expenses, together, without the hassle.",
+    "benefits": {
+      "quick": "An expense noted in two taps, even in cash.",
+      "remaining": "What's left to spend this month, at a glance.",
+      "shared": "A book shared with your partner: both of you see everything."
+    },
+    "note": "In Tunisian dinars by default · data hosted securely"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "legal": {
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "comingSoon": "This text will be published before launch.",
+    "back": "Back to home"
+  },
+  "ui": {
+    "loading": "Loading",
+    "optional": "(optional)",
+    "close": "Close",
+    "cancel": "Cancel",
+    "undo": "Undo",
+    "clear": "Clear",
+    "back": "Back",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "moreActions": "More actions",
+    "step": "Step {{current}} of {{total}}",
+    "errors": {
+      "required": "This field is required.",
+      "email": "Enter a valid email address.",
+      "minlength": "At least {{requiredLength}} characters.",
+      "maxlength": "{{requiredLength}} characters at most.",
+      "pattern": "The format isn't valid."
+    }
+  }
+}
