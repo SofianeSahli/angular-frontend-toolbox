@@ -38,6 +38,14 @@ describe('app routes', () => {
     expect(await navigateAs('anonymous')('/compte')).toBe('/connexion?returnUrl=%2Fcompte');
   });
 
+  it('sends a signed-out visitor from the root to sign-in instead of an empty auth frame', async () => {
+    expect(await navigateAs('anonymous')('/')).toBe('/connexion?returnUrl=%2F');
+  });
+
+  it('sends a signed-out visitor from an unknown path to sign-in', async () => {
+    expect(await navigateAs('anonymous')('/nulle-part')).toBe('/connexion?returnUrl=%2F');
+  });
+
   it.each(['/connexion', '/inscription', '/mot-de-passe-oublie', '/conditions', '/confidentialite'])('lets a signed-out visitor open %s', async (url) => {
     expect(await navigateAs('anonymous')(url)).toBe(url);
   });
