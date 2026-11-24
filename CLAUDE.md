@@ -66,12 +66,13 @@ Keep specs lean: no restating of earlier specs, link to them instead.
 
 ## Testing rules
 
-- Unit tests only (Vitest), only for changed projects: `npx nx affected -t test` or `npx nx test <project>`. Never `run-many` on the whole repo.
-- Never run Playwright or e2e, never `nx serve`, never open a browser.
-- Verify once at the end of each task: affected lint, affected tests, development build of the affected app. Record the result in `tasks.md`.
+- Claude never runs tests, lint or builds (`nx test`, `nx affected`, `nx build`, `nx lint`, `nx run-many`, `npm run ci`, `vitest`), never runs Playwright or e2e, never `nx serve`, never opens a browser. The owner runs them locally and GitHub Actions runs them on every PR.
+- Write the tests a task needs (Vitest, jsdom), but do not run them. In `tasks.md`, write "verification: left to CI and the owner" instead of a result.
+- Only `compile-tokens` and `check-tokens` may be run, after editing `tokens.json` or `contract.json`, because they generate files.
 
 ## Commits, pushes and pull requests
 
+- Few commits: one commit per PR by default, at most one per spec task. Never commit after each small edit, never add "fix", "wip" or "address review" commits for work not yet pushed (amend instead), and push once at the end.
 - Commit messages reference the spec: `feat(expenses): add category filter [spec 001, REQ-2.1]`.
 - Never mention Claude, Anthropic or AI assistance in anything pushed (messages, trailers, footers, branch names, PR text), unless the owner explicitly asks for a specific title or wording.
 

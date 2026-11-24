@@ -6,7 +6,27 @@
       "Read(./.nx/**)",
       "Read(./.angular/**)",
       "Read(./dist/**)",
-      "Read(./**/favicon.ico)"
+      "Read(./**/favicon.ico)",
+      "Bash(npx nx test:*)",
+      "Bash(npx nx lint:*)",
+      "Bash(npx nx build:*)",
+      "Bash(npx nx affected:*)",
+      "Bash(npx nx run-many:*)",
+      "Bash(npx nx serve:*)",
+      "Bash(npx nx e2e:*)",
+      "Bash(npx nx run:*)",
+      "Bash(npm run ci:*)",
+      "Bash(npm run ci:all:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run test:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm start:*)",
+      "Bash(npx vitest:*)",
+      "Bash(npx playwright:*)",
+      "Bash(npx stylelint:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx ng:*)"
     ]
   }
 }

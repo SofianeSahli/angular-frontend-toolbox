@@ -61,24 +61,21 @@ Number specs sequentially (`001`, `002`, …). One folder per feature. Specs are
 **Phase 4 — Implement**, one task at a time:
 1. Write/adjust the test(s) for the task's acceptance criteria first.
 2. Implement the minimum code to satisfy them.
-3. At the end of the task, run the checks in "Testing rules" (affected lint, affected unit tests, development build of the affected app); fix anything you introduced.
-4. Tick the task in `tasks.md` (`- [x]`) and note any deviation.
+3. Do not run lint, tests or builds: CI and the owner do (see "Testing rules"). Fix what they report.
+4. Tick the task in `tasks.md` (`- [x]`), note any deviation, and write "verification: left to CI and the owner".
 5. If implementation reveals the spec is wrong or incomplete: **stop, update the spec, and get approval** before continuing. Never let code and spec silently diverge.
 
 When all tasks are done, report: which `REQ` IDs are verified and how, anything unverified, and any follow-ups.
 
 ## Testing rules (permanent)
 
-- **Unit tests only** (Vitest), and only for the projects you changed: `npx nx affected -t test` or `npx nx test <project>`. Never `run-many` on the whole repo.
-- **Never run Playwright or any e2e test, never start `nx serve`, and never open a browser to check anything.** The owner checks the app by hand when needed.
+- **Claude does not run tests, lint or builds.** The owner runs them locally (`npx nx affected -t lint`, `npx nx affected -t test`, `npx nx build <app> --configuration=development`) and GitHub Actions runs them on every PR. `.claude/settings.json` denies these commands.
+- **Claude still writes the tests** each task needs (Vitest + TestBed, jsdom), and fixes failures the owner or CI reports.
+- **Never run Playwright or any e2e test, never start `nx serve`, and never open a browser to check anything.**
+- Only `compile-tokens` and `check-tokens` may be run, after editing `tokens.json` or `contract.json`, because they generate files.
 - The old e2e smoke test was deleted with the old app (spec 002). A new one comes with the spec that brings back the first real screen; once it exists, keep it and its CI job, and don't run it.
-- **Per task, verify once at the end of the task** (not after every small edit) with:
-  1. lint of the affected projects: `npx nx affected -t lint`;
-  2. unit tests of the affected projects: `npx nx affected -t test`;
-  3. a development build of the affected app: `npx nx build <app> --configuration=development`.
-
-  Record the result in `tasks.md`.
-- Don't add visual or screenshot tests, and don't add tests that need a real browser. Component behaviour is tested with Vitest + TestBed (jsdom).
+- Don't add visual or screenshot tests, and don't add tests that need a real browser.
+- In `tasks.md`, record "verification: left to CI and the owner" for each task.
 
 ## Traceability rules
 
