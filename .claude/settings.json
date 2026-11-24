@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./package-lock.json)",
+      "Read(./**/*.generated.*)",
+      "Read(./.nx/**)",
+      "Read(./.angular/**)",
+      "Read(./dist/**)",
+      "Read(./**/favicon.ico)"
+    ]
+  }
+}
