@@ -1,0 +1,12 @@
+<ui-page [title]="'home.title' | translate">
+  @if (book(); as current) {
+    <h2 class="h4"><bdi>{{ current.name }}</bdi></h2>
+    <dl class="book-home__facts">
+      <dt>{{ 'home.currency' | translate }}</dt>
+      <dd dir="ltr">{{ current.currency.code }}</dd>
+      <dt>{{ 'home.timezone' | translate }}</dt>
+      <dd dir="ltr">{{ current.timezone }}</dd>
+    </dl>
+    <p class="book-home__text mb-0">{{ 'home.soon' | translate }}</p>
+  }
+</ui-page>

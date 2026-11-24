@@ -20,7 +20,6 @@ This repo is a **toolbox plus apps**. `shared/` is the toolbox: brand-free UI an
 | `shared/ui/molecules`, `organisms`, `templates` (`@shared/ui-*`) | lib | Form field, segmented control, menu…; top bar, rail, tabs, dialog, toasts…; app shell, page, auth and flow layouts |
 | `shared/http/data-access`, `feature-errors` (`@shared/http-*`) | lib | `provideApi`, interceptor, `ApiError`, `ErrorBus`; the error presenter |
 | `shared/identity/data-access`, `feature-auth` (`@shared/identity-*`) | lib | `SessionStore`, `AuthApi`, guards, `provideIdentity`; sign-in, sign-up, code, password and account pages |
-| `libs/expenses/shell` (`@expenses/shell`) | lib | The expenses app's signed-in frame |
 
 **Stack:** Angular 22.2 (standalone, signals), Nx 24, TypeScript 6.0, NgRx Signals 22, Bootstrap 5 (Reboot, grid, utilities), ngx-translate (default `fr`), RxJS 7, Vitest 4, Stylelint 17.
 
@@ -52,11 +51,11 @@ Keep command output short: add `--output-style=static` to Nx and show only the l
 ## Architecture rules
 
 - UI levels: tokens → atoms → molecules → organisms → templates → pages. Each imports only the levels below.
-- If every app does it the same way, it goes in `shared/`; if only one app, in `libs/<app>/`.
+- If every app does it the same way, it goes in `shared/`; if only one app, in that app (`apps/<app>/src/app/`, by feature folder).
 - Every project has `scope:*` and `type:*` tags (UI libs also `layer:*`); ESLint enforces them.
 - Toolbox UI is presentational: signal inputs/outputs, no store, HTTP, router or translation keys.
 - Data-access never imports UI. Libraries never import apps.
-- Import shared code only through `@shared/...` aliases, app libraries through `@expenses/...` (one prefix per app).
+- Import shared code only through `@shared/...` aliases. App code stays in the app: no `libs/<app>/`, no `@expenses/*` alias.
 - Styling reads only `var(--ui-*)` tokens; no raw colours, sizes or fonts.
 - Native elements use attribute selectors (`button[uiButton]`); ControlValueAccessor only for custom controls.
 

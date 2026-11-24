@@ -1,7 +1,11 @@
-import { Route } from '@angular/router';
-import { SHELL_TITLE_KEY, SignedInShell } from '@expenses/shell';
+import { inject } from '@angular/core';
+import { CanActivateFn, Route, Router } from '@angular/router';
+import { SHELL_BOOK_BOUND, SHELL_TITLE_KEY, SignedInShell } from './shell';
 import { authGuard, guestGuard } from '@shared/identity-data-access';
 import { AuthFrame } from './auth-frame/auth-frame';
+import { BooksStore } from './households/data/books.store';
+import { firstRunGuard, householdBookGuard, workspaceGuard } from './households/data/guards';
+import { HouseholdStore } from './households/data/household.store';
 
 export const PATHS = {
   signIn: '/connexion',
@@ -13,18 +17,55 @@ export const PATHS = {
   unavailable: '/indisponible',
   terms: '/conditions',
   privacy: '/confidentialite',
+  welcome: '/bienvenue',
+  household: '/foyer',
+  newHousehold: '/foyer/nouveau',
+  newBook: '/carnets/nouveau',
 } as const;
 
 const identityPages = () => import('@shared/identity-feature-auth');
 const routePath = (path: string) => path.slice(1);
 
+const noHouseholdGuard: CanActivateFn = async () => {
+  const books = inject(BooksStore);
+  const household = inject(HouseholdStore);
+  const router = inject(Router);
+  await books.load();
+  return household.household() === null || router.parseUrl(PATHS.household);
+};
+
 export const appRoutes: Route[] = [
+  {
+    path: routePath(PATHS.welcome),
+    canActivate: [authGuard, firstRunGuard],
+    loadComponent: () => import('./households/pages/welcome.page').then((m) => m.WelcomePage),
+  },
+  {
+    path: routePath(PATHS.newHousehold),
+    canActivate: [authGuard, noHouseholdGuard],
+    loadComponent: () => import('./households/pages/household-new.page').then((m) => m.HouseholdNewPage),
+  },
+  {
+    path: routePath(PATHS.newBook),
+    canActivate: [authGuard, householdBookGuard],
+    loadComponent: () => import('./households/pages/book-new.page').then((m) => m.BookNewPage),
+  },
   {
     path: '',
     component: SignedInShell,
     canActivate: [authGuard],
     children: [
-      { path: '', loadComponent: () => import('./home/home').then((m) => m.Home), data: { [SHELL_TITLE_KEY]: 'home.title' } },
+      {
+        path: '',
+        canActivate: [workspaceGuard],
+        loadComponent: () => import('./home/book-home').then((m) => m.BookHome),
+        data: { [SHELL_TITLE_KEY]: 'home.title', [SHELL_BOOK_BOUND]: true },
+      },
+      {
+        path: routePath(PATHS.household),
+        loadComponent: () => import('./households/pages/household.page').then((m) => m.HouseholdPage),
+        data: { [SHELL_TITLE_KEY]: 'households.household.title' },
+      },
       { path: 'compte', loadComponent: () => identityPages().then((m) => m.AccountPage), data: { [SHELL_TITLE_KEY]: 'identity.account.title' } },
     ],
   },

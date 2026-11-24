@@ -1,0 +1,96 @@
+<ui-page [title]="'households.household.title' | translate">
+  <div class="d-flex flex-column gap-4">
+    @if (message(); as text) {
+      <ui-alert tone="danger">{{ text }}</ui-alert>
+    }
+    @if (!ready()) {
+      <ui-skeleton shape="block" />
+    } @else if (household.household(); as current) {
+      <section class="d-flex flex-column gap-3">
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <h2 class="h4 m-0"><bdi>{{ current.name }}</bdi></h2>
+          <ui-badge [tone]="current.role === 'owner' ? 'accent' : 'neutral'">
+            {{ (current.role === 'owner' ? 'households.household.owner' : 'households.household.member') | translate }}
+          </ui-badge>
+        </div>
+        @if (household.isOwner()) {
+          @if (renaming()) {
+            <app-rename-form
+              [name]="current.name"
+              [busy]="busy() === 'rename'"
+              [serverError]="renameError()"
+              (rename)="rename($event)"
+              (cancelled)="renaming.set(false)"
+            />
+          }
+          <div class="d-flex gap-2 flex-wrap">
+            @if (books.householdBook() === null) {
+              <a uiButton variant="primary" routerLink="/carnets/nouveau" [queryParams]="{ foyer: 1 }">
+                {{ 'households.household.createBook' | translate }}
+              </a>
+            }
+            @if (!renaming()) {
+              <button uiButton type="button" [disabled]="busy() !== null" (click)="startRename()">
+                {{ 'households.household.rename' | translate }}
+              </button>
+            }
+            <button uiButton variant="danger" type="button" [loading]="busy() === 'delete'" [disabled]="busy() !== null" (click)="deleteHousehold()">
+              {{ 'households.household.delete' | translate }}
+            </button>
+          </div>
+        } @else {
+          <div>
+            <button uiButton variant="danger" type="button" [loading]="busy() === 'leave'" [disabled]="busy() !== null" (click)="leave()">
+              {{ 'households.household.leave' | translate }}
+            </button>
+          </div>
+        }
+      </section>
+      <section class="d-flex flex-column gap-2">
+        <ui-section-header [title]="'households.household.members' | translate" [level]="3" />
+        @if (household.loading()) {
+          <ui-skeleton />
+          <ui-skeleton />
+        } @else {
+          <app-members-list
+            [members]="household.members()"
+            [selfId]="selfId()"
+            [canRemove]="household.isOwner()"
+            (remove)="removeMember($event)"
+          />
+        }
+      </section>
+      @if (household.isOwner()) {
+        <section class="d-flex flex-column gap-2">
+          <ui-section-header [title]="'households.household.sent' | translate" [level]="3" />
+          @if (household.loading()) {
+            <ui-skeleton />
+          } @else {
+            <app-sent-invitations [invitations]="household.sent()" (cancelInvitation)="cancelInvitation($event)" />
+          }
+        </section>
+        <section class="d-flex flex-column gap-2">
+          <ui-section-header [title]="'households.household.invite.title' | translate" [level]="3" />
+          <app-invite-form [busy]="busy() === 'invite'" [serverError]="inviteError()" (invite)="invite($event)" />
+        </section>
+      }
+    } @else {
+      <ui-empty-state icon="house" [title]="'households.household.empty.title' | translate" [text]="'households.household.empty.text' | translate">
+        <a uiButton variant="primary" routerLink="/foyer/nouveau">{{ 'households.household.empty.create' | translate }}</a>
+      </ui-empty-state>
+      @if (invitations.received().length > 0) {
+        <section class="d-flex flex-column gap-3">
+          <ui-section-header [title]="'households.welcome.invitations' | translate" [level]="3" />
+          @for (invitation of invitations.received(); track invitation.id) {
+            <app-received-invitation-card
+              [invitation]="invitation"
+              [busy]="answerFor(invitation.id)"
+              (accept)="answer(invitation.id, 'accept')"
+              (decline)="answer(invitation.id, 'decline')"
+            />
+          }
+        </section>
+      }
+    }
+  </div>
+</ui-page>

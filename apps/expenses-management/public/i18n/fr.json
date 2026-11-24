@@ -7,7 +7,9 @@
   },
   "home": {
     "title": "Accueil",
-    "text": "Bienvenue {{name}}. Votre carnet arrive bientôt."
+    "currency": "Devise",
+    "timezone": "Fuseau horaire",
+    "soon": "Le tableau de bord arrive bientôt."
   },
   "shell": {
     "navigation": "Navigation principale",
@@ -15,7 +17,13 @@
     "addExpenseSoon": "Bientôt disponible",
     "home": "Accueil",
     "account": "Compte",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "household": "Foyer",
+    "books": {
+      "switcher": "Changer de carnet",
+      "new": "Nouveau carnet",
+      "limit": "Vous avez déjà 5 carnets personnels."
+    }
   },
   "brand": {
     "promise": "Vos dépenses du foyer, à deux, sans prise de tête.",
@@ -55,6 +63,157 @@
       "minlength": "{{requiredLength}} caractères minimum.",
       "maxlength": "{{requiredLength}} caractères maximum.",
       "pattern": "Le format n'est pas valide."
+    }
+  },
+  "households": {
+    "welcome": {
+      "title": "Bienvenue",
+      "lead": "Par où voulez-vous commencer ?",
+      "legend": "Votre espace",
+      "loading": "Chargement",
+      "invitations": "Invitations reçues",
+      "continue": "Continuer",
+      "household": {
+        "title": "Créer un foyer",
+        "description": "Partagez un carnet avec les personnes de votre foyer."
+      },
+      "personal": {
+        "title": "Carnet personnel seulement",
+        "description": "Un carnet rien que pour vous."
+      },
+      "resume": {
+        "title": "Votre foyer « {{name}} » n'a pas encore de carnet",
+        "action": "Créer le carnet du foyer"
+      },
+      "memberWaiting": "Le propriétaire de votre foyer n'a pas encore créé le carnet du foyer."
+    },
+    "invitation": {
+      "invitedBy": "Invité par",
+      "expires": "Expire le",
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "declined": "Invitation refusée"
+    },
+    "retry": {
+      "seconds": "{{n}} s",
+      "minutes": "{{n}} min",
+      "hours": "{{n}} h"
+    },
+    "newBook": {
+      "limitReached": "Vous avez déjà 5 carnets personnels.",
+      "titleHousehold": "Carnet du foyer",
+      "titlePersonal": "Carnet personnel",
+      "lead": "Choisissez le nom, la devise et le fuseau horaire.",
+      "name": "Nom du carnet",
+      "currency": "Devise",
+      "currencyFinal": "Devise définitive : elle ne pourra plus être changée.",
+      "otherCurrency": "Autre…",
+      "otherCurrencyField": "Code de la devise (3 lettres)",
+      "timezone": "Fuseau horaire",
+      "submit": "Créer le carnet"
+    },
+    "errors": {
+      "generic": "Une erreur est survenue. Réessayez.",
+      "household": {
+        "limit_reached": "Vous avez atteint la limite de foyers.",
+        "forbidden": "Seul le propriétaire du foyer peut faire cela.",
+        "not_found": "Ce foyer n'existe plus.",
+        "already_joined": "Vous appartenez déjà à un foyer.",
+        "member_limit": "Ce foyer est complet.",
+        "owner_cannot_leave": "Vous êtes maintenant propriétaire : supprimez le foyer au lieu de le quitter."
+      },
+      "request": {
+        "throttled": "Trop de tentatives. Réessayez dans {{retry}}."
+      },
+      "book": {
+        "limit_reached": "Vous avez atteint la limite de carnets personnels.",
+        "household_has_book": "Le foyer a déjà un carnet."
+      },
+      "invitation": {
+        "not_found": "Cette invitation n'est plus valide (expirée, annulée ou déjà traitée).",
+        "self": "Vous ne pouvez pas vous inviter vous-même.",
+        "already_member": "Cette personne fait déjà partie du foyer.",
+        "already_pending": "Une invitation est déjà en attente pour cette adresse.",
+        "limit_reached": "Limite d'invitations atteinte. Réessayez plus tard."
+      },
+      "member": {
+        "not_found": "Ce membre n'existe plus."
+      }
+    },
+    "newHousehold": {
+      "title": "Créer un foyer",
+      "lead": "Donnez un nom à votre foyer. Vous inviterez ses membres ensuite.",
+      "name": "Nom du foyer",
+      "submit": "Continuer",
+      "alreadyJoined": "Vous appartenez déjà à un foyer."
+    },
+    "fields": {
+      "generic": "Cette valeur n'est pas acceptée.",
+      "name": {
+        "required": "Saisissez un nom.",
+        "string": "Saisissez un nom valide.",
+        "max": "60 caractères maximum."
+      },
+      "currency": {
+        "supported_currency": "Cette devise n'est pas prise en charge."
+      },
+      "timezone": {
+        "iana_timezone": "Ce fuseau horaire n'est pas pris en charge."
+      },
+      "email": {
+        "required": "Saisissez une adresse e-mail.",
+        "string": "Saisissez une adresse e-mail valide.",
+        "email": "Saisissez une adresse e-mail valide.",
+        "max": "255 caractères maximum."
+      }
+    },
+    "household": {
+      "title": "Foyer",
+      "name": "Nom du foyer",
+      "owner": "Propriétaire",
+      "member": "Membre",
+      "you": "(vous)",
+      "members": "Membres",
+      "createBook": "Créer le carnet du foyer",
+      "rename": "Renommer",
+      "renameSave": "Enregistrer",
+      "renameCancel": "Annuler",
+      "renamed": "Foyer renommé.",
+      "delete": "Supprimer le foyer",
+      "leave": "Quitter le foyer",
+      "remove": "Retirer",
+      "removed": "Membre retiré.",
+      "gone": "Vous ne faites plus partie de ce foyer.",
+      "empty": {
+        "title": "Pas encore de foyer",
+        "text": "Créez un foyer ou acceptez une invitation pour partager un carnet.",
+        "create": "Créer un foyer"
+      },
+      "deleteConfirm": {
+        "title": "Supprimer le foyer ?",
+        "message": "Les membres quittent le foyer tout de suite, le carnet du foyer est supprimé et les invitations sont annulées.",
+        "confirm": "Supprimer"
+      },
+      "removeConfirm": {
+        "title": "Retirer ce membre ?",
+        "message": "{{name}} n'aura plus accès au carnet du foyer.",
+        "confirm": "Retirer"
+      },
+      "leaveConfirm": {
+        "title": "Quitter le foyer ?",
+        "message": "Votre accès au carnet du foyer prend fin tout de suite.",
+        "confirm": "Quitter"
+      },
+      "sent": "Invitations en attente",
+      "noInvitations": "Aucune invitation en attente",
+      "cancelInvitation": "Annuler",
+      "invite": {
+        "title": "Inviter un membre",
+        "email": "Adresse e-mail",
+        "submit": "Inviter",
+        "sent": "Invitation envoyée. Un e-mail de notification a été envoyé.",
+        "throttled": "Limite d'invitations atteinte, réessayez dans {{retry}}."
+      }
     }
   }
 }

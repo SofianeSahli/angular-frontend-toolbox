@@ -7,7 +7,9 @@
   },
   "home": {
     "title": "Home",
-    "text": "Welcome {{name}}. Your book is coming soon."
+    "currency": "Currency",
+    "timezone": "Time zone",
+    "soon": "The dashboard is coming soon."
   },
   "shell": {
     "navigation": "Main navigation",
@@ -15,7 +17,13 @@
     "addExpenseSoon": "Coming soon",
     "home": "Home",
     "account": "Account",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "household": "Household",
+    "books": {
+      "switcher": "Switch book",
+      "new": "New book",
+      "limit": "You already have 5 personal books."
+    }
   },
   "brand": {
     "promise": "Your household's expenses, together, without the hassle.",
@@ -55,6 +63,157 @@
       "minlength": "At least {{requiredLength}} characters.",
       "maxlength": "{{requiredLength}} characters at most.",
       "pattern": "The format isn't valid."
+    }
+  },
+  "households": {
+    "welcome": {
+      "title": "Welcome",
+      "lead": "Where would you like to start?",
+      "legend": "Your space",
+      "loading": "Loading",
+      "invitations": "Invitations received",
+      "continue": "Continue",
+      "household": {
+        "title": "Create a household",
+        "description": "Share a book with the people in your household."
+      },
+      "personal": {
+        "title": "Personal book only",
+        "description": "A book just for you."
+      },
+      "resume": {
+        "title": "Your household \"{{name}}\" has no book yet",
+        "action": "Create the household book"
+      },
+      "memberWaiting": "The owner of your household has not created the household book yet."
+    },
+    "invitation": {
+      "invitedBy": "Invited by",
+      "expires": "Expires on",
+      "accept": "Accept",
+      "decline": "Decline",
+      "declined": "Invitation declined"
+    },
+    "retry": {
+      "seconds": "{{n}} s",
+      "minutes": "{{n}} min",
+      "hours": "{{n}} h"
+    },
+    "newBook": {
+      "limitReached": "You already have 5 personal books.",
+      "titleHousehold": "Household book",
+      "titlePersonal": "Personal book",
+      "lead": "Choose the name, currency and time zone.",
+      "name": "Book name",
+      "currency": "Currency",
+      "currencyFinal": "Final currency: it cannot be changed later.",
+      "otherCurrency": "Other…",
+      "otherCurrencyField": "Currency code (3 letters)",
+      "timezone": "Time zone",
+      "submit": "Create the book"
+    },
+    "errors": {
+      "generic": "Something went wrong. Try again.",
+      "household": {
+        "limit_reached": "You have reached the household limit.",
+        "forbidden": "Only the household owner can do this.",
+        "not_found": "This household no longer exists.",
+        "already_joined": "You already belong to a household.",
+        "member_limit": "This household is full.",
+        "owner_cannot_leave": "You are now the owner: delete the household instead of leaving it."
+      },
+      "request": {
+        "throttled": "Too many attempts. Try again in {{retry}}."
+      },
+      "book": {
+        "limit_reached": "You have reached the personal book limit.",
+        "household_has_book": "The household already has a book."
+      },
+      "invitation": {
+        "not_found": "This invitation is no longer valid (expired, cancelled or already answered).",
+        "self": "You cannot invite yourself.",
+        "already_member": "This person is already in the household.",
+        "already_pending": "An invitation is already pending for this address.",
+        "limit_reached": "Invitation limit reached. Try again later."
+      },
+      "member": {
+        "not_found": "This member no longer exists."
+      }
+    },
+    "newHousehold": {
+      "title": "Create a household",
+      "lead": "Name your household. You will invite its members next.",
+      "name": "Household name",
+      "submit": "Continue",
+      "alreadyJoined": "You already belong to a household."
+    },
+    "fields": {
+      "generic": "This value is not accepted.",
+      "name": {
+        "required": "Enter a name.",
+        "string": "Enter a valid name.",
+        "max": "60 characters maximum."
+      },
+      "currency": {
+        "supported_currency": "This currency is not supported."
+      },
+      "timezone": {
+        "iana_timezone": "This time zone is not supported."
+      },
+      "email": {
+        "required": "Enter an email address.",
+        "string": "Enter a valid email address.",
+        "email": "Enter a valid email address.",
+        "max": "255 characters maximum."
+      }
+    },
+    "household": {
+      "title": "Household",
+      "name": "Household name",
+      "owner": "Owner",
+      "member": "Member",
+      "you": "(you)",
+      "members": "Members",
+      "createBook": "Create the household book",
+      "rename": "Rename",
+      "renameSave": "Save",
+      "renameCancel": "Cancel",
+      "renamed": "Household renamed.",
+      "delete": "Delete the household",
+      "leave": "Leave the household",
+      "remove": "Remove",
+      "removed": "Member removed.",
+      "gone": "You are no longer part of this household.",
+      "empty": {
+        "title": "No household yet",
+        "text": "Create a household or accept an invitation to share a book.",
+        "create": "Create a household"
+      },
+      "deleteConfirm": {
+        "title": "Delete the household?",
+        "message": "Members leave at once, the household book is deleted and invitations are cancelled.",
+        "confirm": "Delete"
+      },
+      "removeConfirm": {
+        "title": "Remove this member?",
+        "message": "{{name}} will lose access to the household book.",
+        "confirm": "Remove"
+      },
+      "leaveConfirm": {
+        "title": "Leave the household?",
+        "message": "Your access to the household book ends at once.",
+        "confirm": "Leave"
+      },
+      "sent": "Pending invitations",
+      "noInvitations": "No pending invitation",
+      "cancelInvitation": "Cancel",
+      "invite": {
+        "title": "Invite a member",
+        "email": "Email address",
+        "submit": "Invite",
+        "sent": "Invitation sent. A notice email was sent.",
+        "throttled": "Invitation limit reached, try again in {{retry}}."
+      }
     }
   }
 }
