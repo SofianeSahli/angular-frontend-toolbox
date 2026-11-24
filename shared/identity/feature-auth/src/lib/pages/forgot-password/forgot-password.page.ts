@@ -42,8 +42,8 @@ export class ForgotPasswordPage {
     this.submitting.set(true);
     const result = await this.store.forgotPassword(this.form.getRawValue().email.trim(), HANDLED_CODES);
     if (result.outcome === 'done') await this.navigation.go(this.paths.resetPassword);
-    else if (result.error.kind === 'throttled') this.lock.start(result.error.retryAfterSeconds ?? 0);
-    else if (result.error.kind === 'validation') applyServerErrors(this.form, result.error, this.translate);
+    else if (result.outcome === 'error' && result.error.kind === 'throttled') this.lock.start(result.error.retryAfterSeconds ?? 0);
+    else if (result.outcome === 'error' && result.error.kind === 'validation') applyServerErrors(this.form, result.error, this.translate);
     this.submitting.set(false);
   }
 }

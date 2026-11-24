@@ -71,8 +71,8 @@ export class TwoFactorPage {
     this.resending.set(true);
     const result = await this.store.resendTwoFactor(HANDLED_CODES);
     if (result.outcome === 'done') this.resendLock.start(RESEND_DELAY_SECONDS);
-    else if (result.error.kind === 'throttled') this.resendLock.start(result.error.retryAfterSeconds ?? RESEND_DELAY_SECONDS);
-    else await this.handleError(result.error);
+    else if (result.outcome === 'error' && result.error.kind === 'throttled') this.resendLock.start(result.error.retryAfterSeconds ?? RESEND_DELAY_SECONDS);
+    else if (result.outcome === 'error') await this.handleError(result.error);
     this.resending.set(false);
   }
 

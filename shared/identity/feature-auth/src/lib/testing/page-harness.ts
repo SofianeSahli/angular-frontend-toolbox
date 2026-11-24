@@ -34,6 +34,10 @@ export function failed(kind: ApiErrorKind, status: number, code: string, fields:
   return { outcome: 'error', error: new ApiError(kind, status, code, fields, retryAfterSeconds, 'req-1') };
 }
 
+function authCall() {
+  return vi.fn<(...args: unknown[]) => Promise<AuthResult>>().mockResolvedValue(DONE);
+}
+
 export function fakeSessionStore() {
   return {
     pendingEmail: signal<string | null>(null),
@@ -45,21 +49,21 @@ export function fakeSessionStore() {
     restoring: signal(false),
     unavailable: signal(false),
     rememberReturnUrl: vi.fn(),
-    restore: vi.fn(async () => undefined),
-    refreshAccount: vi.fn(async () => DONE),
-    register: vi.fn(async () => DONE),
-    resendCode: vi.fn(async () => DONE),
-    confirmEmail: vi.fn(async () => DONE),
-    signIn: vi.fn(async () => DONE),
-    signInWithGoogle: vi.fn(async () => DONE),
-    confirmTwoFactor: vi.fn(async () => DONE),
-    resendTwoFactor: vi.fn(async () => DONE),
-    forgotPassword: vi.fn(async () => DONE),
-    resetPassword: vi.fn(async () => DONE),
-    signOut: vi.fn(async () => DONE),
-    enableTwoFactor: vi.fn(async () => DONE),
-    requestDisableCode: vi.fn(async () => DONE),
-    disableTwoFactor: vi.fn(async () => DONE),
+    restore: vi.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    refreshAccount: authCall(),
+    register: authCall(),
+    resendCode: authCall(),
+    confirmEmail: authCall(),
+    signIn: authCall(),
+    signInWithGoogle: authCall(),
+    confirmTwoFactor: authCall(),
+    resendTwoFactor: authCall(),
+    forgotPassword: authCall(),
+    resetPassword: authCall(),
+    signOut: authCall(),
+    enableTwoFactor: authCall(),
+    requestDisableCode: authCall(),
+    disableTwoFactor: authCall(),
     expire: vi.fn(),
   };
 }

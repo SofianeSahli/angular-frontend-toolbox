@@ -1,0 +1,26 @@
+@if (clientId) {
+  <identity-or-divider>{{ 'identity.google.or' | translate }}</identity-or-divider>
+
+  @if (termsRequired()) {
+    <div class="identity-google__terms">
+      <p class="identity-google__lead">{{ 'identity.google.termsLead' | translate }}</p>
+      <label uiCheckRow>
+        <input type="checkbox" uiCheckbox [checked]="termsChecked()" (change)="onTermsChange($event)" />
+        <span>
+          {{ 'identity.signUp.termsBefore' | translate }}&ngsp;<a class="identity-google__link" [routerLink]="paths.terms" target="_blank">{{
+            'identity.signUp.terms' | translate
+          }}</a
+          >&ngsp;{{ 'identity.signUp.termsBetween' | translate }}&ngsp;<a class="identity-google__link" [routerLink]="paths.privacy" target="_blank">{{
+            'identity.signUp.privacy' | translate
+          }}</a
+          >{{ 'identity.signUp.termsAfter' | translate }}
+        </span>
+      </label>
+      <button uiButton variant="primary" type="button" [disabled]="!termsChecked()" [loading]="submitting()" (click)="continueWithTerms()">
+        {{ 'identity.google.continue' | translate }}
+      </button>
+    </div>
+  }
+
+  <div #googleHost class="identity-google__button" [hidden]="termsRequired()"></div>
+}

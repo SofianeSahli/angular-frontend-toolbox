@@ -70,7 +70,7 @@ export class EmailCodePage {
     this.resending.set(true);
     const result = await this.store.resendCode(email, HANDLED_CODES);
     if (result.outcome === 'done') this.resendLock.start(RESEND_DELAY_SECONDS);
-    else if (result.error.kind === 'throttled') this.resendLock.start(result.error.retryAfterSeconds ?? RESEND_DELAY_SECONDS);
+    else if (result.outcome === 'error' && result.error.kind === 'throttled') this.resendLock.start(result.error.retryAfterSeconds ?? RESEND_DELAY_SECONDS);
     this.resending.set(false);
   }
 

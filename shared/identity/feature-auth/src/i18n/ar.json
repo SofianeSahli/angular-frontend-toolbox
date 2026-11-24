@@ -1,5 +1,8 @@
 {
   "identity": {
+    "meta": {
+      "reviewStatus": "draft: to be reviewed by a native reader"
+    },
     "common": {
       "back": "رجوع"
     },
@@ -39,6 +42,11 @@
       "haveAccount": "لديك حساب؟",
       "signIn": "تسجيل الدخول"
     },
+    "google": {
+      "or": "أو",
+      "termsLead": "لإنشاء حسابك عبر Google، وافق على الشروط.",
+      "continue": "متابعة"
+    },
     "emailCode": {
       "title": "تحقّق من بريدك الإلكتروني",
       "sentTo": "أرسلنا رمزًا من 6 أرقام إلى",
@@ -76,6 +84,11 @@
       },
       "name": {
         "max": "120 حرفًا على الأكثر."
+      },
+      "auth": {
+        "google_invalid": "تعذّر تسجيل الدخول عبر Google. أعد المحاولة.",
+        "google_unavailable": "خدمة Google لا تستجيب حاليًا. أعد المحاولة لاحقًا أو استخدم بريدك الإلكتروني.",
+        "google_email_conflict": "يوجد حساب بهذا العنوان. سجّل الدخول ببريدك الإلكتروني وكلمة المرور."
       }
     },
     "twoFactor": {

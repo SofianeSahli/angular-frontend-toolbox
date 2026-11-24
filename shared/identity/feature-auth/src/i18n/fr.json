@@ -1,5 +1,8 @@
 {
   "identity": {
+    "meta": {
+      "reviewStatus": "reviewed"
+    },
     "common": {
       "back": "Retour"
     },
@@ -39,6 +42,11 @@
       "haveAccount": "Déjà un compte ?",
       "signIn": "Se connecter"
     },
+    "google": {
+      "or": "ou",
+      "termsLead": "Pour créer votre compte avec Google, acceptez les conditions.",
+      "continue": "Continuer"
+    },
     "emailCode": {
       "title": "Vérifiez votre e-mail",
       "sentTo": "Nous avons envoyé un code à 6 chiffres à",
@@ -76,6 +84,11 @@
       },
       "name": {
         "max": "120 caractères maximum."
+      },
+      "auth": {
+        "google_invalid": "La connexion avec Google a échoué. Réessayez.",
+        "google_unavailable": "Google ne répond pas pour le moment. Réessayez plus tard ou utilisez votre e-mail.",
+        "google_email_conflict": "Un compte existe déjà avec cette adresse. Connectez-vous avec votre e-mail et votre mot de passe."
       }
     },
     "twoFactor": {

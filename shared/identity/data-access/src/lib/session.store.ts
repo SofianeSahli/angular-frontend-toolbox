@@ -159,13 +159,13 @@ export const SessionStore = signalStore(
         return signInWith(() => api.google(request, strategy.signInExtras(), handling(...codes)), null);
       },
 
-      confirmTwoFactor(code: string, codes: readonly string[] = []): Promise<AuthResult> {
+      async confirmTwoFactor(code: string, codes: readonly string[] = []): Promise<AuthResult> {
         const pending = store.pendingTwoFactor();
         if (!pending) return missingPendingSignIn();
         return signInWith(() => api.confirmTwoFactor(pending.pendingSignIn, code, handling(...codes)), pending.email);
       },
 
-      resendTwoFactor(codes: readonly string[] = []): Promise<AuthResult> {
+      async resendTwoFactor(codes: readonly string[] = []): Promise<AuthResult> {
         const pending = store.pendingTwoFactor();
         if (!pending) return missingPendingSignIn();
         return attempt(() => api.resendTwoFactor(pending.pendingSignIn, handling(...codes)));
@@ -185,7 +185,7 @@ export const SessionStore = signalStore(
 
       async signOut(): Promise<AuthResult> {
         const result = await attempt(() => api.logout(handling('auth.unauthenticated')));
-        if (result.outcome === 'done' || isUnauthenticated(result.error)) {
+        if (result.outcome === 'done' || (result.outcome === 'error' && isUnauthenticated(result.error))) {
           clearSession();
           return DONE;
         }

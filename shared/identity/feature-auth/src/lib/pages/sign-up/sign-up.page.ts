@@ -5,9 +5,10 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ApiError } from '@shared/http-data-access';
 import { RegisterRequest, SessionStore } from '@shared/identity-data-access';
 import { UiButton, UiCheckRow, UiCheckbox, UiFieldMessage, UiIcon, UiInput } from '@shared/ui-atoms';
-import { UiFieldAction, UiFieldAffix, UiFormField } from '@shared/ui-molecules';
+import { UiAlert, UiFieldAction, UiFieldAffix, UiFormField } from '@shared/ui-molecules';
 import { accountLocaleOf } from '../../shared/account-locale';
 import { AuthNavigation } from '../../shared/auth-navigation';
+import { GoogleButton } from '../../shared/google-button';
 import { SERVER_ERROR_TEMPLATE, applyServerErrors, serverMessage, showOnField } from '../../shared/server-errors';
 import { SignUpDraft, SignUpDraftValues } from '../../shared/sign-up-draft';
 
@@ -25,9 +26,11 @@ interface SignUpValues extends SignUpDraftValues {
 @Component({
   selector: 'identity-sign-up-page',
   imports: [
+    GoogleButton,
     ReactiveFormsModule,
     RouterLink,
     TranslatePipe,
+    UiAlert,
     UiButton,
     UiCheckRow,
     UiCheckbox,
@@ -63,6 +66,7 @@ export class SignUpPage {
   protected readonly submitting = signal(false);
   protected readonly showPassword = signal(false);
   protected readonly emailTaken = signal(false);
+  protected readonly googleProblem = signal<string | null>(null);
 
   constructor() {
     this.navigation.rememberReturnUrl(inject(ActivatedRoute).snapshot.queryParamMap.get('returnUrl'));

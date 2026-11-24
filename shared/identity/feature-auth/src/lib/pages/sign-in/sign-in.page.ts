@@ -8,13 +8,14 @@ import { UiButton, UiIcon, UiInput } from '@shared/ui-atoms';
 import { UiAlert, UiFieldAction, UiFormField } from '@shared/ui-molecules';
 import { AuthNavigation } from '../../shared/auth-navigation';
 import { countdown } from '../../shared/countdown';
+import { GoogleButton } from '../../shared/google-button';
 import { SERVER_ERROR_TEMPLATE, applyServerErrors } from '../../shared/server-errors';
 
 const HANDLED_CODES = ['auth.invalid_credentials', 'auth.email_unconfirmed', 'auth.password_locked', 'request.throttled'];
 
 @Component({
   selector: 'identity-sign-in-page',
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, UiAlert, UiButton, UiFieldAction, UiFormField, UiIcon, UiInput],
+  imports: [GoogleButton, ReactiveFormsModule, RouterLink, TranslatePipe, UiAlert, UiButton, UiFieldAction, UiFormField, UiIcon, UiInput],
   templateUrl: './sign-in.page.html',
   styleUrl: '../../shared/identity-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +35,7 @@ export class SignInPage {
   protected readonly submitting = signal(false);
   protected readonly showPassword = signal(false);
   protected readonly invalidCredentials = signal(false);
+  protected readonly googleProblem = signal<string | null>(null);
   private readonly lock = countdown();
   protected readonly lockedSeconds = this.lock.remaining;
   protected readonly locked = computed(() => this.lockedSeconds() > 0);

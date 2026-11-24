@@ -1,5 +1,8 @@
 {
   "identity": {
+    "meta": {
+      "reviewStatus": "reviewed"
+    },
     "common": {
       "back": "Back"
     },
@@ -39,6 +42,11 @@
       "haveAccount": "Already have an account?",
       "signIn": "Sign in"
     },
+    "google": {
+      "or": "or",
+      "termsLead": "To create your account with Google, accept the terms.",
+      "continue": "Continue"
+    },
     "emailCode": {
       "title": "Check your email",
       "sentTo": "We sent a 6-digit code to",
@@ -76,6 +84,11 @@
       },
       "name": {
         "max": "120 characters at most."
+      },
+      "auth": {
+        "google_invalid": "Signing in with Google failed. Try again.",
+        "google_unavailable": "Google isn't responding right now. Try again later or use your email.",
+        "google_email_conflict": "An account already exists with this address. Sign in with your email and password."
       }
     },
     "twoFactor": {

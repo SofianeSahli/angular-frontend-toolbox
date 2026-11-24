@@ -13,7 +13,8 @@
   "include": [
     "vite.config.mts",
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "src/lib/testing/**/*.ts"
   ],
   "files": [
     "src/test-setup.ts"

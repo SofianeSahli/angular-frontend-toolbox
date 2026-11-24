@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, booleanAttribute, input } from '@angular/core';
 
 @Component({
   selector: 'expenses-brand-mark',
@@ -11,5 +11,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     <span class="brand-mark__name" dir="ltr" lang="fr">Olivier</span>`,
   styleUrl: './brand-mark.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.brand-mark--on-brand]': 'onBrand()',
+  },
 })
-export class BrandMark {}
+export class BrandMark {
+  readonly onBrand = input(false, { transform: booleanAttribute });
+}

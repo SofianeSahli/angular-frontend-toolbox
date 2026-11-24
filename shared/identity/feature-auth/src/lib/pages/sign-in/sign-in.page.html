@@ -4,6 +4,9 @@
 @if (invalidCredentials()) {
   <ui-alert tone="danger">{{ 'identity.signIn.invalidCredentials' | translate }}</ui-alert>
 }
+@if (googleProblem(); as message) {
+  <ui-alert tone="danger">{{ message }}</ui-alert>
+}
 @if (locked()) {
   <ui-alert tone="danger">{{ 'identity.errors.retryIn' | translate: { seconds: lockedSeconds() } }}</ui-alert>
 }
@@ -31,6 +34,8 @@
     {{ 'identity.signIn.submit' | translate }}
   </button>
 </form>
+
+<identity-google-button (problem)="googleProblem.set($event)" />
 
 <p class="identity-switch">
   {{ 'identity.signIn.noAccount' | translate }}&ngsp;<a class="identity-link" [routerLink]="paths.signUp">{{ 'identity.signIn.createAccount' | translate }}</a>

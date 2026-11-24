@@ -1,8 +1,60 @@
 {
+  "meta": {
+    "reviewStatus": "reviewed"
+  },
   "app": {
     "name": "Gestion des dépenses"
   },
   "home": {
-    "text": "La nouvelle version arrive bientôt."
+    "title": "Accueil",
+    "text": "Bienvenue {{name}}. Votre carnet arrive bientôt."
+  },
+  "shell": {
+    "navigation": "Navigation principale",
+    "addExpense": "Ajouter une dépense",
+    "addExpenseSoon": "Bientôt disponible",
+    "home": "Accueil",
+    "account": "Compte",
+    "signOut": "Se déconnecter"
+  },
+  "brand": {
+    "promise": "Vos dépenses du foyer, à deux, sans prise de tête.",
+    "benefits": {
+      "quick": "Une dépense notée en deux gestes, même en espèces.",
+      "remaining": "Ce qu'il reste à dépenser ce mois, d'un coup d'œil.",
+      "shared": "Un carnet partagé avec votre conjoint·e : chacun voit tout."
+    },
+    "note": "En dinars tunisiens par défaut · données hébergées de façon sécurisée"
+  },
+  "language": {
+    "label": "Langue"
+  },
+  "legal": {
+    "terms": "Conditions d'utilisation",
+    "privacy": "Politique de confidentialité",
+    "comingSoon": "Ce texte sera publié avant le lancement.",
+    "back": "Retour à l'accueil"
+  },
+  "ui": {
+    "loading": "Chargement",
+    "optional": "(facultatif)",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "undo": "Annuler",
+    "clear": "Effacer",
+    "back": "Retour",
+    "previousMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "moreActions": "Plus d'actions",
+    "step": "Étape {{current}} sur {{total}}",
+    "errors": {
+      "required": "Ce champ est obligatoire.",
+      "email": "Saisissez une adresse e-mail valide.",
+      "minlength": "{{requiredLength}} caractères minimum.",
+      "maxlength": "{{requiredLength}} caractères maximum.",
+      "pattern": "Le format n'est pas valide."
+    }
   }
 }

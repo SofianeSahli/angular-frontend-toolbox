@@ -1,5 +1,8 @@
 {
   "errors": {
+    "meta": {
+      "reviewStatus": "reviewed"
+    },
     "sessionExpired": "Votre session a expiré. Reconnectez-vous pour continuer.",
     "offline": "Connexion perdue. Vérifiez votre réseau puis réessayez.",
     "kinds": {

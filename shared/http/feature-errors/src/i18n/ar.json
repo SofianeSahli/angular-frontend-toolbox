@@ -1,5 +1,8 @@
 {
   "errors": {
+    "meta": {
+      "reviewStatus": "draft: to be reviewed by a native reader"
+    },
     "sessionExpired": "انتهت صلاحية الجلسة. سجّل الدخول من جديد للمتابعة.",
     "offline": "انقطع الاتصال. تحقّق من الشبكة ثم أعد المحاولة.",
     "kinds": {

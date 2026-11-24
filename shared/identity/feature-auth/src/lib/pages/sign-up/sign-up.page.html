@@ -1,6 +1,10 @@
 <h1 class="identity-title">{{ 'identity.signUp.title' | translate }}</h1>
 <p class="identity-lead">{{ 'identity.signUp.lead' | translate }}</p>
 
+@if (googleProblem(); as message) {
+  <ui-alert tone="danger">{{ message }}</ui-alert>
+}
+
 <form class="d-flex flex-column gap-3" [formGroup]="form" (ngSubmit)="submit()" novalidate>
   <ui-form-field
     [label]="'identity.fields.name' | translate"
@@ -74,6 +78,8 @@
 
   <button uiButton variant="primary" type="submit" [loading]="submitting()">{{ 'identity.signUp.submit' | translate }}</button>
 </form>
+
+<identity-google-button [termsAccepted]="form.controls.terms.value" (problem)="googleProblem.set($event)" />
 
 <p class="identity-switch">
   {{ 'identity.signUp.haveAccount' | translate }}&ngsp;<a class="identity-link" [routerLink]="paths.signIn">{{

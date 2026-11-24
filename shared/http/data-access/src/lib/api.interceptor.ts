@@ -24,7 +24,7 @@ class ApiRequestSender {
     private readonly document: Document,
   ) {}
 
-  send<T>(request: HttpRequest<T>): Observable<HttpEvent<T>> {
+  send(request: HttpRequest<unknown>): Observable<HttpEvent<unknown>> {
     this.lastRequestId = crypto.randomUUID();
     const xsrfToken = readCookie(this.document, XSRF_COOKIE);
     return this.next(
