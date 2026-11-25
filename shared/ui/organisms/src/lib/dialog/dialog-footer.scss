@@ -1,6 +1,7 @@
 @layer ui {
   :host {
     display: flex;
+    flex: none;
     justify-content: flex-end;
     gap: var(--ui-space-3);
     padding-block: var(--ui-space-4);
@@ -8,10 +9,16 @@
   }
 
   :host(.ui-dialog-footer--sheet) {
-    flex-direction: column-reverse;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-block-end: calc(var(--ui-space-4) + env(safe-area-inset-bottom));
   }
 
   :host(.ui-dialog-footer--sheet) ::ng-deep > * {
     inline-size: 100%;
+  }
+
+  :host(.ui-dialog-footer--sheet) ::ng-deep > :first-child:nth-last-child(odd) {
+    grid-column: 1 / -1;
   }
 }

@@ -1,7 +1,7 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, TouchedChangeEvent, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ApiError } from '@shared/http-data-access';
 import { SessionStore } from '@shared/identity-data-access';
@@ -9,7 +9,7 @@ import { UiBadge, UiButton, UiChip, UiFieldMessage, UiInput } from '@shared/ui-a
 import { UiAlert, UiFormField } from '@shared/ui-molecules';
 import { UI_DIALOG_CONTEXT, UiConfirm, UiDialog, UiDialogBody, UiDialogContext, UiDialogFooter, UiDialogHeader, UiToast } from '@shared/ui-organisms';
 import { addDays, addYears, formatMinor, parseMajor, todayIn } from '@shared/util-format';
-import { firstValueFrom, map, startWith } from 'rxjs';
+import { filter, firstValueFrom, map, startWith } from 'rxjs';
 import { CategoriesStore } from '../../categories/data/categories.store';
 import { CategoryLabels } from '../../categories/data/category-labels';
 import { pushRecentCategory, readRecentCategories } from '../../categories/data/recent-categories';
@@ -157,6 +157,7 @@ export class EntrySheet {
     }),
   });
 
+  private submitted = false;
   private readonly value = toSignal(this.form.valueChanges.pipe(map(() => this.form.getRawValue())), { initialValue: this.form.getRawValue() });
 
   protected readonly id = signal(crypto.randomUUID());
@@ -212,6 +213,16 @@ export class EntrySheet {
     }
 
     const destroyRef = inject(DestroyRef);
+    for (const control of Object.values(this.form.controls)) {
+      control.events
+        .pipe(
+          filter((event) => event instanceof TouchedChangeEvent && event.touched),
+          takeUntilDestroyed(destroyRef),
+        )
+        .subscribe(() => {
+          if (!this.submitted && control.pristine) control.markAsUntouched();
+        });
+    }
     this.form.controls.amount.valueChanges.pipe(takeUntilDestroyed(destroyRef)).subscribe(() => this.confirmFor.set(null));
     this.form.controls.category.valueChanges
       .pipe(startWith(this.form.controls.category.value), takeUntilDestroyed(destroyRef))
@@ -275,6 +286,7 @@ export class EntrySheet {
 
   protected async save(): Promise<void> {
     if (this.saving() || this.deleting()) return;
+    this.submitted = true;
     this.form.markAllAsTouched();
     if (this.category() === null) this.categoryError.set(this.translate.instant('operations.fields.category.required'));
     if (this.form.invalid || this.unavailable()) return;

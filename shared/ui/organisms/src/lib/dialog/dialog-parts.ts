@@ -30,6 +30,7 @@ export class UiDialogHeader {
   template: '<ng-content />',
   styleUrl: './dialog-body.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'ui-dialog-body' },
 })
 export class UiDialogBody {}
 
@@ -39,6 +40,7 @@ export class UiDialogBody {}
   styleUrl: './dialog-footer.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    class: 'ui-dialog-footer',
     '[class.ui-dialog-footer--sheet]': 'context?.sheet === true',
   },
 })

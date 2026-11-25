@@ -133,6 +133,17 @@ describe('EntrySheet add mode (REQ-4.2–4.10, 7.1–7.8)', () => {
     expect(view.container.textContent).toContain('Trop de décimales pour cette devise');
   });
 
+  it('shows the amount error only after a save attempt or after typing and leaving the field', async () => {
+    const view = await renderSheet();
+    fireEvent.focus(amountInput());
+    fireEvent.blur(amountInput());
+    view.detectChanges();
+    expect(view.container.textContent).not.toContain('Saisissez un montant');
+    expect(amountInput().getAttribute('aria-invalid')).toBeNull();
+    await save(view);
+    expect(view.container.textContent).toContain('Saisissez un montant');
+  });
+
   it('asks to confirm an amount at or above 1 000, then saves on the second press', async () => {
     const view = await renderSheet();
     typeAmount(view, '1500');
