@@ -13,7 +13,10 @@ One spec each, approved before any code (ARCHITECTURE §8). From spec 005 on, ev
 5. **005 Identity** ← done: HTTP layer + session + sign-in screens + the signed-in app shell.
 6. **006 Households and books** ← done (in review): first-run choice, create household, create book, invitations, members, book switcher (backend specs 003–004).
 7. **007 Categories and operations** ← done (in review): any-currency money, category tree and picker, quick add, operations list with filters, edit and delete (backend specs 005–006).
-8. **008 Dashboard and budget:** month summary, plan vs actual (backend spec 007).
+8. **008 Dashboard, budget and recurring operations** ← spec drafted, awaiting approval: dashboard, monthly budget, recurring rules (backend specs 006 recurring rules, 007, 008).
+9. **009 Production readiness.**
+10. **010 Capacitor.**
+11. **011 Public launch.**
 
 ## Known issues (do not "fix" silently — open or update a spec)
 

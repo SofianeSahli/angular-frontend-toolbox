@@ -77,4 +77,4 @@ First spec whose domain code lives in the app only; the toolbox gets nothing new
 
 ## Next
 
-008 Dashboard and budget. See [docs/ROADMAP.md](../docs/ROADMAP.md).
+008 Dashboard, budget and recurring operations (draft, awaiting approval: [008-dashboard-budget-recurring/](./008-dashboard-budget-recurring/requirements.md)). See [docs/ROADMAP.md](../docs/ROADMAP.md).
