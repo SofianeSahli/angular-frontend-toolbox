@@ -1,0 +1,82 @@
+<ui-dialog-header [title]="(filterMode ? 'categories.picker.filterTitle' : 'categories.picker.title') | translate" />
+<div uiDialogBody class="d-flex flex-column gap-3">
+  @if (unavailable()) {
+    <ui-alert tone="danger" [title]="'categories.picker.unavailable' | translate">
+      <div uiAlertActions>
+        <button uiButton size="sm" type="button" (click)="retry()">{{ 'categories.picker.retry' | translate }}</button>
+      </div>
+    </ui-alert>
+  }
+
+  <ui-search-field
+    [(value)]="query"
+    [debounce]="150"
+    [ariaLabel]="'categories.picker.search' | translate"
+    [placeholder]="'categories.picker.search' | translate"
+  />
+
+  @if (query().trim()) {
+    @if (results().length === 0) {
+      <p class="m-0" role="status">{{ 'categories.picker.noResult' | translate }}</p>
+    } @else {
+      <ui-list>
+        @for (result of results(); track result.code) {
+          <li>
+            <button uiListItem type="button" (click)="pick(result.code)">
+              <span uiLeading aria-hidden="true">{{ result.emoji }}</span>
+              <span uiTitle><bdi>{{ result.path }}</bdi></span>
+              @if (result.retired) {
+                <ui-badge uiTrailing tone="warning">{{ 'categories.picker.retired' | translate }}</ui-badge>
+              }
+            </button>
+          </li>
+        }
+      </ui-list>
+    }
+  } @else {
+    @if (step().top === null && recents().length > 0) {
+      <div class="d-flex flex-wrap gap-2" role="group" [attr.aria-label]="'categories.picker.recents' | translate">
+        @for (recent of recents(); track recent.code) {
+          <button uiChip type="button" (click)="pick(recent.code)">
+            <span aria-hidden="true">{{ recent.emoji }}</span>&ngsp;<bdi>{{ recent.name }}</bdi>
+          </button>
+        }
+      </div>
+    }
+
+    @if (headingText(); as text) {
+      <div class="d-flex align-items-center gap-2">
+        <button uiButton variant="ghost" size="sm" iconOnly type="button" [attr.aria-label]="'categories.picker.back' | translate" (click)="back()">
+          <ui-icon name="chevron-left" />
+        </button>
+        <h3 #heading class="h6 m-0" tabindex="-1"><bdi>{{ text }}</bdi></h3>
+      </div>
+    }
+
+    <ui-list>
+      @if (filterMode && current(); as code) {
+        <li>
+          <button uiListItem type="button" (click)="pick(code)">
+            <span uiTitle>{{ 'categories.picker.all' | translate }}</span>
+          </button>
+        </li>
+      }
+      @for (choice of choices(); track choice.code) {
+        <li>
+          <button uiListItem type="button" (click)="open(choice)">
+            <span uiLeading aria-hidden="true">{{ choice.emoji }}</span>
+            <span uiTitle><bdi>{{ choice.name }}</bdi></span>
+            <span uiTrailing class="d-flex align-items-center gap-2">
+              @if (choice.retired) {
+                <ui-badge tone="warning">{{ 'categories.picker.retired' | translate }}</ui-badge>
+              }
+              @if (choice.opens) {
+                <ui-icon name="chevron-right" />
+              }
+            </span>
+          </button>
+        </li>
+      }
+    </ui-list>
+  }
+</div>

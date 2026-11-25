@@ -185,6 +185,11 @@
         <ui-amount [millimes]="2800000" tone="income" />
         <ui-amount [millimes]="500" />
       </div>
+      <div class="d-flex flex-wrap gap-4">
+        <ui-amount [millimes]="1250" [currency]="{ code: 'EUR', exponent: 2 }" />
+        <ui-amount [millimes]="150000" [currency]="{ code: 'EUR', exponent: 2 }" tone="income" />
+        <ui-amount [millimes]="1500" [currency]="{ code: 'JPY', exponent: 0 }" />
+      </div>
     </div>
 
     <h3 class="catalog-subheading">Progression</h3>

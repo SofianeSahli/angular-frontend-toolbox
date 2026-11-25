@@ -15,6 +15,16 @@ export const SHELL_ICONS: Readonly<Record<string, UiIconDefinition>> = {
       ['path', { d: 'M16 3.13a4 4 0 0 1 0 7.75' }],
     ],
   },
+  list: {
+    nodes: [
+      ['path', { d: 'M3 6h.01' }],
+      ['path', { d: 'M3 12h.01' }],
+      ['path', { d: 'M3 18h.01' }],
+      ['path', { d: 'M8 6h13' }],
+      ['path', { d: 'M8 12h13' }],
+      ['path', { d: 'M8 18h13' }],
+    ],
+  },
   'chevron-down': {
     nodes: [['path', { d: 'm6 9 6 6 6-6' }]],
   },

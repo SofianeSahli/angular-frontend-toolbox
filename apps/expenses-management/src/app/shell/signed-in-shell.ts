@@ -8,6 +8,7 @@ import { UiBottomTabs, UiRailItem, UiSideRail, UiTab, UiTopBar, UiTopBarTitle } 
 import { UiAppShell } from '@shared/ui-templates';
 import { filter, map } from 'rxjs';
 import { BooksStore } from '../households/data/books.store';
+import { EntrySheetService } from '../operations/entry-sheet.service';
 import { BookSwitcher } from './book-switcher';
 import { BrandMark } from './brand-mark';
 
@@ -54,6 +55,7 @@ export class SignedInShell {
   private readonly router = inject(Router);
   private readonly signInPath = inject(IDENTITY_CONFIG).paths.signIn;
   private readonly books = inject(BooksStore);
+  private readonly sheets = inject(EntrySheetService);
 
   protected readonly account = this.store.account;
   protected readonly signingOut = signal(false);
@@ -66,6 +68,11 @@ export class SignedInShell {
   );
   protected readonly titleKey = computed(() => this.routeData().titleKey);
   protected readonly showSwitcher = computed(() => this.routeData().bookBound && this.books.selectedBook() !== null);
+  protected readonly canAdd = this.showSwitcher;
+
+  protected add(): void {
+    this.sheets.openNew();
+  }
 
   protected async signOut(): Promise<void> {
     if (this.signingOut()) return;

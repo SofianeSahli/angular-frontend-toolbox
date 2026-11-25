@@ -12,7 +12,7 @@ One spec each, approved before any code (ARCHITECTURE §8). From spec 005 on, ev
 4. **004 Molecules, organisms and templates** ← done: 15 molecules, 8 organisms, 4 templates, CDK menu and dialog, breakpoints, catalog routes.
 5. **005 Identity** ← done: HTTP layer + session + sign-in screens + the signed-in app shell.
 6. **006 Households and books** ← done (in review): first-run choice, create household, create book, invitations, members, book switcher (backend specs 003–004).
-7. **007 Categories and operations:** category picker, quick add, operations list (backend specs 005–006).
+7. **007 Categories and operations** ← done (in review): any-currency money, category tree and picker, quick add, operations list with filters, edit and delete (backend specs 005–006).
 8. **008 Dashboard and budget:** month summary, plan vs actual (backend spec 007).
 
 ## Known issues (do not "fix" silently — open or update a spec)

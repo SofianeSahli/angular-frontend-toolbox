@@ -68,6 +68,13 @@ First spec whose domain code lives in the app only; the toolbox gets nothing new
 - Shell: `BookSwitcher` (`ui-menu`) in the rail and the top bar on `bookBound` routes, "Foyer" destination.
 - fr/en/ar `households.*`, `shell.*`, `home.*` keys; Arabic is a draft. Files: `006-households-books/`.
 
+## 007 — Categories and operations (in review)
+
+- Toolbox: `@shared/util-format` `formatMinor` (any currency, options `display`/`signed`), `parseMajor` (major-unit text to minor units, with reasons), `todayIn`, `addDays`, `addYears`, `minor` pipe; millimes helpers delegate to `formatMinor`. `ui-amount` gets `currency` (default TND). No new component.
+- App `categories/`: `CategoriesApi` (ETag, `304`), `localStorage` copy `expenses.categories`, `CategoriesStore` (hydrate then revalidate once per session), `CategoryLabels` (fallbacks, accent-insensitive search), recents per account and book, `CategoryPicker` (drill-down, search, entry and filter modes), `CategoryChip`.
+- App `operations/`: `EntriesApi`, `OtherNamesApi`, `entry-draft` (request and PATCH diff), `OperationsStore` (pages of 25, stale answers dropped, book switch, reset on account change) with `provideOperations`; `EntrySheet` (add and edit, big-amount confirmation, client `id` kept on retry, every handled code) opened by `EntrySheetService`; `/operations` page with day groups and filters (month, type, category, author).
+- Shell: add buttons enabled (rail, top bar), "Opérations" destination, `list` icon. Backend category labels merged into `public/i18n/{fr,en,ar}.json`; Arabic is a draft. Files: `007-categories-operations/`.
+
 ## Next
 
-007 Categories and operations. See [docs/ROADMAP.md](../docs/ROADMAP.md).
+008 Dashboard and budget. See [docs/ROADMAP.md](../docs/ROADMAP.md).

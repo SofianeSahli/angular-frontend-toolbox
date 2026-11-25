@@ -21,6 +21,7 @@ export const PATHS = {
   household: '/foyer',
   newHousehold: '/foyer/nouveau',
   newBook: '/carnets/nouveau',
+  operations: '/operations',
 } as const;
 
 const identityPages = () => import('@shared/identity-feature-auth');
@@ -60,6 +61,12 @@ export const appRoutes: Route[] = [
         canActivate: [workspaceGuard],
         loadComponent: () => import('./home/book-home').then((m) => m.BookHome),
         data: { [SHELL_TITLE_KEY]: 'home.title', [SHELL_BOOK_BOUND]: true },
+      },
+      {
+        path: routePath(PATHS.operations),
+        canActivate: [workspaceGuard],
+        loadComponent: () => import('./operations/pages/operations-page').then((m) => m.OperationsPage),
+        data: { [SHELL_TITLE_KEY]: 'operations.title', [SHELL_BOOK_BOUND]: true },
       },
       {
         path: routePath(PATHS.household),

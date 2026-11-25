@@ -14,7 +14,6 @@
   "shell": {
     "navigation": "التنقّل الرئيسي",
     "addExpense": "إضافة مصروف",
-    "addExpenseSoon": "قريبًا",
     "home": "الرئيسية",
     "account": "الحساب",
     "signOut": "تسجيل الخروج",
@@ -23,7 +22,8 @@
       "switcher": "تغيير الدفتر",
       "new": "دفتر جديد",
       "limit": "لديك بالفعل 5 دفاتر شخصية."
-    }
+    },
+    "operations": "العمليات"
   },
   "brand": {
     "promise": "مصاريف البيت، معًا، بلا عناء.",
@@ -215,5 +215,662 @@
         "throttled": "تم بلوغ حد الدعوات، أعد المحاولة بعد {{retry}}."
       }
     }
+  },
+  "operations": {
+    "title": "العمليات",
+    "add": "إضافة مصروف",
+    "type": {
+      "expense": "مصروف",
+      "income": "دخل",
+      "saving": "ادخار"
+    },
+    "filters": {
+      "label": "عوامل التصفية",
+      "type": "النوع",
+      "all": "الكل",
+      "types": {
+        "expense": "المصاريف",
+        "income": "المداخيل",
+        "saving": "الادخار"
+      },
+      "category": "الفئة",
+      "removeCategory": "إزالة تصفية {{name}}",
+      "author": "صاحب العملية",
+      "allAuthors": "الجميع",
+      "me": "أنا",
+      "clear": "مسح عوامل التصفية"
+    },
+    "empty": {
+      "title": "لا توجد عمليات هذا الشهر",
+      "filteredTitle": "لا توجد عملية مطابقة"
+    },
+    "list": {
+      "today": "اليوم",
+      "yesterday": "أمس",
+      "by": "بواسطة {{name}}",
+      "end": "تم عرض كل العمليات",
+      "error": "تعذّر تحميل العمليات.",
+      "retry": "إعادة المحاولة",
+      "row": "{{category}}، {{amount}}، {{date}}"
+    },
+    "sheet": {
+      "addTitle": "عملية جديدة",
+      "editTitle": "تعديل العملية",
+      "book": "الدفتر:",
+      "meta": "أنشأها {{created}} · عدّلها {{updated}}",
+      "amount": "المبلغ",
+      "preview": "=",
+      "bigWarning": "مبلغ كبير: {{amount}}. اضغط مرة أخرى للتأكيد.",
+      "confirmBig": "تأكيد {{amount}}",
+      "category": "الفئة",
+      "chooseCategory": "اختر فئة",
+      "changeCategory": "تغيير الفئة",
+      "otherName": "حدّد",
+      "suggestions": "اقتراحات",
+      "date": "التاريخ",
+      "today": "اليوم",
+      "yesterday": "أمس",
+      "comment": "تعليق",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "discard": {
+        "title": "التخلي عن الإدخال؟",
+        "message": "ستفقد المعلومات المدخلة.",
+        "confirm": "تخلٍّ",
+        "cancel": "مواصلة الإدخال"
+      },
+      "delete": {
+        "action": "حذف",
+        "title": "حذف هذه العملية؟",
+        "message": "لا يمكن التراجع عن هذا الإجراء.",
+        "confirm": "حذف",
+        "cancel": "إلغاء"
+      }
+    },
+    "toasts": {
+      "created": {
+        "expense": "تم تسجيل المصروف",
+        "income": "تم تسجيل الدخل",
+        "saving": "تم تسجيل الادخار"
+      },
+      "updated": "تم تعديل العملية",
+      "deleted": "تم حذف العملية",
+      "bookGone": "لم يعد هذا الدفتر متاحًا",
+      "entryGone": "تم حذف هذه العملية",
+      "bookChanged": "تم تغيير الدفتر، أُلغي الإدخال",
+      "filtersReset": "تمت إعادة ضبط عوامل التصفية"
+    },
+    "errors": {
+      "offline": "فشل التسجيل، تحقّق من الاتصال",
+      "generic": "فشل التسجيل. أعد المحاولة.",
+      "throttled": "أعد المحاولة بعد {{retry}}"
+    },
+    "amount": {
+      "empty": "أدخل مبلغًا",
+      "invalid": "مبلغ غير صالح",
+      "too_many_decimals": "عدد كبير من الأرقام العشرية لهذه العملة",
+      "zero": "يجب أن يكون المبلغ أكبر من صفر",
+      "too_large": "المبلغ كبير جدًا"
+    },
+    "fields": {
+      "generic": "قيمة مرفوضة",
+      "amount": {
+        "required": "أدخل مبلغًا",
+        "integer": "مبلغ غير صالح",
+        "min": "يجب أن يكون المبلغ أكبر من صفر",
+        "max": "المبلغ كبير جدًا"
+      },
+      "date": {
+        "required": "اختر تاريخًا",
+        "date_format": "تاريخ غير صالح",
+        "after_or_equal": "يجب أن يكون التاريخ في 1 جانفي 2000 أو بعده",
+        "before_or_equal": "لا يمكن أن يتجاوز التاريخ سنة من اليوم"
+      },
+      "category": {
+        "required": "اختر فئة",
+        "string": "فئة غير صالحة",
+        "not_found": "هذه الفئة لم تعد موجودة",
+        "not_leaf": "اختر فئة فرعية",
+        "retired": "تم سحب هذه الفئة"
+      },
+      "other_name": {
+        "required": "حدّد الاسم",
+        "prohibited": "هذا الحقل غير متوقع لهذه الفئة",
+        "string": "اسم غير صالح",
+        "max": "60 حرفًا على الأكثر"
+      },
+      "comment": {
+        "string": "تعليق غير صالح",
+        "max": "200 حرف على الأكثر"
+      },
+      "id": {
+        "uuid": "معرّف غير صالح، أعد المحاولة"
+      }
+    }
+  },
+  "categories": {
+    "food": {
+      "label": "الطعام",
+      "groceries": {
+        "label": "البقالة",
+        "supermarket": {
+          "label": "السوبرماركت"
+        },
+        "meat_fish": {
+          "label": "اللحوم والأسماك"
+        },
+        "fruit_vegetables": {
+          "label": "الفواكه والخضروات"
+        },
+        "bakery": {
+          "label": "المخبز"
+        },
+        "dairy": {
+          "label": "منتجات الألبان"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "eating_out": {
+        "label": "الأكل خارج المنزل",
+        "cafes": {
+          "label": "المقاهي"
+        },
+        "restaurants": {
+          "label": "المطاعم"
+        },
+        "takeaway": {
+          "label": "الطلبات الخارجية والتوصيل"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "home": {
+      "label": "السكن والفواتير",
+      "housing": {
+        "label": "السكن",
+        "rent": {
+          "label": "الإيجار"
+        },
+        "mortgage": {
+          "label": "القرض العقاري"
+        },
+        "building_charges": {
+          "label": "رسوم الملكية المشتركة"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "utilities": {
+        "label": "الطاقة والمياه",
+        "electricity": {
+          "label": "الكهرباء"
+        },
+        "water": {
+          "label": "الماء"
+        },
+        "gas_heating": {
+          "label": "الغاز والتدفئة"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "telecom": {
+        "label": "الاتصالات",
+        "internet": {
+          "label": "الإنترنت"
+        },
+        "mobile_phone": {
+          "label": "الهاتف الجوال"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "family": {
+      "label": "العائلة والحيوانات والمنزل",
+      "children": {
+        "label": "الأطفال",
+        "baby_supplies": {
+          "label": "مستلزمات الرضّع"
+        },
+        "toys": {
+          "label": "الألعاب"
+        },
+        "childcare": {
+          "label": "رعاية الأطفال"
+        },
+        "pocket_money": {
+          "label": "مصروف الجيب"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "education": {
+        "label": "التعليم",
+        "school_fees": {
+          "label": "الرسوم المدرسية"
+        },
+        "supplies_books": {
+          "label": "الأدوات المدرسية والكتب"
+        },
+        "tutoring": {
+          "label": "الدروس الخصوصية"
+        },
+        "university": {
+          "label": "الجامعة"
+        },
+        "activities": {
+          "label": "الأنشطة"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "pets": {
+        "label": "الحيوانات الأليفة",
+        "pet_food": {
+          "label": "طعام الحيوانات"
+        },
+        "vet": {
+          "label": "الطبيب البيطري"
+        },
+        "accessories": {
+          "label": "المستلزمات"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "household": {
+        "label": "المنزل",
+        "cleaning": {
+          "label": "مواد التنظيف"
+        },
+        "repairs": {
+          "label": "الإصلاحات والصيانة"
+        },
+        "furniture_appliances": {
+          "label": "الأثاث والأجهزة المنزلية"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "transport": {
+      "label": "النقل",
+      "car": {
+        "label": "السيارة",
+        "fuel": {
+          "label": "الوقود"
+        },
+        "maintenance": {
+          "label": "الصيانة"
+        },
+        "parking_tolls": {
+          "label": "مواقف السيارات ورسوم الطرق"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "getting_around": {
+        "label": "التنقلات",
+        "taxi": {
+          "label": "سيارات الأجرة والنقل عبر التطبيقات"
+        },
+        "public_transport": {
+          "label": "النقل العام"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "personal": {
+      "label": "الصحة والعناية الشخصية",
+      "health": {
+        "label": "الصحة",
+        "pharmacy": {
+          "label": "الصيدلية"
+        },
+        "doctor": {
+          "label": "الطبيب"
+        },
+        "dentist": {
+          "label": "طبيب الأسنان"
+        },
+        "lab_tests": {
+          "label": "التحاليل الطبية"
+        },
+        "optician": {
+          "label": "أخصائي النظارات"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "care": {
+        "label": "العناية الشخصية",
+        "toiletries": {
+          "label": "مستحضرات النظافة"
+        },
+        "hairdresser_beauty": {
+          "label": "الحلاقة والتجميل"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "clothing": {
+        "label": "الملابس",
+        "clothes": {
+          "label": "الملابس"
+        },
+        "shoes": {
+          "label": "الأحذية"
+        },
+        "children_clothes": {
+          "label": "ملابس الأطفال"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "entertainment": {
+      "label": "الترفيه والهوايات",
+      "outings": {
+        "label": "النزهات",
+        "cinema_shows": {
+          "label": "السينما والعروض"
+        },
+        "events": {
+          "label": "الفعاليات والأنشطة"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "sport_hobbies": {
+        "label": "الرياضة والهوايات",
+        "gym_sport": {
+          "label": "النادي الرياضي والرياضة"
+        },
+        "games_hobbies": {
+          "label": "الألعاب والهوايات"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "subscriptions": {
+        "label": "الاشتراكات",
+        "streaming": {
+          "label": "خدمات البث"
+        },
+        "apps_services": {
+          "label": "التطبيقات والخدمات"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "travel": {
+        "label": "السفر",
+        "tickets": {
+          "label": "التذاكر"
+        },
+        "accommodation": {
+          "label": "الإقامة"
+        },
+        "activities": {
+          "label": "الأنشطة"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "celebrations": {
+      "label": "المناسبات والعطاء",
+      "muslim_holidays": {
+        "label": "الأعياد الإسلامية",
+        "ramadan": {
+          "label": "رمضان"
+        },
+        "eid_al_fitr": {
+          "label": "عيد الفطر"
+        },
+        "eid_al_adha": {
+          "label": "عيد الأضحى"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "christian_holidays": {
+        "label": "الأعياد المسيحية",
+        "christmas": {
+          "label": "عيد الميلاد المجيد"
+        },
+        "easter": {
+          "label": "عيد الفصح"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "jewish_holidays": {
+        "label": "الأعياد اليهودية",
+        "hanukkah": {
+          "label": "حانوكا"
+        },
+        "passover": {
+          "label": "عيد الفصح اليهودي"
+        },
+        "rosh_hashanah": {
+          "label": "رأس السنة العبرية"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "family_events": {
+        "label": "المناسبات العائلية",
+        "birthdays": {
+          "label": "أعياد الميلاد"
+        },
+        "weddings": {
+          "label": "الأعراس"
+        },
+        "new_year": {
+          "label": "رأس السنة"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "gifts_giving": {
+        "label": "الهدايا والتبرعات",
+        "gifts_given": {
+          "label": "الهدايا المقدّمة"
+        },
+        "charity": {
+          "label": "الصدقات والتبرعات"
+        },
+        "family_help": {
+          "label": "مساعدة العائلة"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "finance": {
+      "label": "المالية والشؤون الإدارية",
+      "banking": {
+        "label": "البنك",
+        "bank_fees": {
+          "label": "الرسوم البنكية"
+        },
+        "loan_repayment": {
+          "label": "سداد القروض"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "insurance": {
+        "label": "التأمين",
+        "home": {
+          "label": "تأمين المسكن"
+        },
+        "car": {
+          "label": "تأمين السيارة"
+        },
+        "health": {
+          "label": "التأمين الصحي"
+        },
+        "life": {
+          "label": "التأمين على الحياة"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "taxes_paperwork": {
+        "label": "الضرائب والوثائق الإدارية",
+        "taxes": {
+          "label": "الضرائب"
+        },
+        "official_fees": {
+          "label": "الرسوم الإدارية"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "misc": {
+      "label": "متفرقات",
+      "tobacco_alcohol": {
+        "label": "التبغ والكحول",
+        "cigarettes": {
+          "label": "السجائر والتبغ"
+        },
+        "vaping": {
+          "label": "السجائر الإلكترونية"
+        },
+        "shisha": {
+          "label": "الشيشة"
+        },
+        "alcohol": {
+          "label": "الكحول"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "other": {
+        "label": "أخرى",
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "income": {
+      "label": "الدخل",
+      "work": {
+        "label": "العمل",
+        "salary": {
+          "label": "الراتب"
+        },
+        "bonus": {
+          "label": "المكافأة"
+        },
+        "freelance": {
+          "label": "العمل الحر والمداخيل الإضافية"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "assets": {
+        "label": "الممتلكات",
+        "rental_income": {
+          "label": "مداخيل الإيجار"
+        },
+        "investment_income": {
+          "label": "عائدات الاستثمار"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "other_income": {
+        "label": "مداخيل أخرى",
+        "gifts_received": {
+          "label": "الهدايا المستلمة"
+        },
+        "benefits": {
+          "label": "المنح والإعانات"
+        },
+        "refunds": {
+          "label": "المبالغ المستردة"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "savings": {
+      "label": "الادخار",
+      "reserves": {
+        "label": "الاحتياطي",
+        "emergency_fund": {
+          "label": "صندوق الطوارئ"
+        },
+        "savings_goal": {
+          "label": "هدف الادخار"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      },
+      "long_term": {
+        "label": "ادخار طويل المدى",
+        "investments": {
+          "label": "الاستثمارات"
+        },
+        "retirement": {
+          "label": "التقاعد"
+        },
+        "other": {
+          "label": "أخرى"
+        }
+      }
+    },
+    "picker": {
+      "title": "اختر فئة",
+      "filterTitle": "التصفية حسب الفئة",
+      "search": "ابحث عن فئة",
+      "back": "رجوع",
+      "recents": "الأخيرة",
+      "noResult": "لا توجد فئة مطابقة.",
+      "retired": "فئة مسحوبة",
+      "unavailable": "الفئات غير متاحة",
+      "retry": "إعادة المحاولة",
+      "all": "الفئة كاملة"
+    },
+    "unknown": "أخرى"
   }
 }

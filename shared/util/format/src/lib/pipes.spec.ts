@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { LocalIsoDatePipe, MillimesHeadlinePipe, MillimesPipe, SignedMillimesPipe } from './pipes';
+import { LocalIsoDatePipe, MillimesHeadlinePipe, MillimesPipe, MinorPipe, SignedMillimesPipe } from './pipes';
 
 @Component({
   imports: [MillimesPipe, MillimesHeadlinePipe, SignedMillimesPipe, LocalIsoDatePipe],
@@ -25,5 +25,25 @@ describe('format pipes (REQ-6.7)', () => {
 
   it('refuses non-integer millimes like the functions', () => {
     expect(() => new MillimesPipe().transform(1.5)).toThrow(RangeError);
+  });
+});
+
+@Component({
+  imports: [MinorPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<span>{{ 48350 | minor: tnd }}</span><span>{{ 1250 | minor: eur }}</span>`,
+})
+class MinorHost {
+  readonly tnd = { code: 'TND', exponent: 3 };
+  readonly eur = { code: 'EUR', exponent: 2 };
+}
+
+describe('minor pipe (spec 007 REQ-1.1)', () => {
+  it('formats in the given currency', () => {
+    const fixture = TestBed.createComponent(MinorHost);
+    fixture.detectChanges();
+    const [tnd, eur] = Array.from(fixture.nativeElement.querySelectorAll('span') as NodeListOf<HTMLElement>, (s) => s.textContent?.replace(SPACES, ' '));
+    expect(tnd).toBe('48,350 DT');
+    expect(eur).toMatch(/^12,50 /);
   });
 });
