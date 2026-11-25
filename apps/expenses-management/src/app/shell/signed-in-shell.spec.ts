@@ -90,10 +90,18 @@ describe('SignedInShell', () => {
     expect(adds).toHaveLength(2);
     for (const add of adds) expect(add).toHaveProperty('disabled', false);
     await userEvent.click(adds[0]);
-    expect(sheets.openNew).toHaveBeenCalled();
+    await userEvent.click(adds[1]);
+    expect(sheets.openNew).toHaveBeenCalledTimes(2);
   });
 
-  it('disables the rail add button and hides the top-bar one without a selected book', async () => {
+  it('puts the phone add action in the bottom tabs, not in the top bar', async () => {
+    const { view } = await renderShell();
+    const tabs = view.container.querySelector('ui-bottom-tabs') as HTMLElement;
+    expect(within(tabs).getByRole('button', { name: 'Ajouter une dépense', hidden: true }).hasAttribute('uiTabAction')).toBe(true);
+    expect(within(view.container.querySelector('ui-top-bar') as HTMLElement).queryByRole('button', { name: 'Ajouter une dépense', hidden: true })).toBeNull();
+  });
+
+  it('disables the rail add button and hides the tab action without a selected book', async () => {
     await renderShell('/', []);
     const adds = screen.getAllByRole('button', { name: 'Ajouter une dépense', hidden: true });
     expect(adds).toHaveLength(1);

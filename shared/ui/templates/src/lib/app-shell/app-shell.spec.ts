@@ -1,3 +1,5 @@
+import { signal } from '@angular/core';
+import { UiBottomTabs, UiTabAction } from '@shared/ui-organisms';
 import { render, screen } from '@testing-library/angular';
 import { UiAppShell } from './app-shell';
 
@@ -17,5 +19,25 @@ describe('ui-app-shell', () => {
     expect(container.querySelector('.ui-app-shell__top [uiShellTop]')).toBeTruthy();
     expect(container.querySelector('.ui-app-shell__tabs [uiShellTabs]')).toBeTruthy();
     expect(container.querySelectorAll('ui-toast-region')).toHaveLength(1);
+    expect(container.querySelector('ui-app-shell')?.classList).not.toContain('ui-app-shell--tab-action');
+  });
+
+  it('marks itself when the tabs hold an action, so the page keeps clear of it', async () => {
+    const withAction = signal(true);
+    const { container, detectChanges } = await render(
+      `<ui-app-shell>
+         <ui-bottom-tabs uiShellTabs ariaLabel="Onglets">
+           @if (withAction()) {
+             <button uiTabAction aria-label="Ajouter une dépense">+</button>
+           }
+         </ui-bottom-tabs>
+       </ui-app-shell>`,
+      { imports: [UiAppShell, UiBottomTabs, UiTabAction], componentProperties: { withAction } },
+    );
+    const shell = () => container.querySelector('ui-app-shell');
+    expect(shell()?.classList).toContain('ui-app-shell--tab-action');
+    withAction.set(false);
+    detectChanges();
+    expect(shell()?.classList).not.toContain('ui-app-shell--tab-action');
   });
 });

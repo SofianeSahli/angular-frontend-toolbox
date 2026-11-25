@@ -42,11 +42,6 @@
     @if (!showSwitcher()) {
       <span uiTopBarTitle>{{ titleKey() ? (titleKey() | translate) : '' }}</span>
     }
-    @if (canAdd()) {
-      <button uiTopBarTrailing uiButton variant="ghost" iconOnly type="button" [attr.aria-label]="'shell.addExpense' | translate" (click)="add()">
-        <ui-icon name="plus" />
-      </button>
-    }
   </ui-top-bar>
 
   <router-outlet />
@@ -68,5 +63,10 @@
       <ui-icon name="user" />
       {{ 'shell.account' | translate }}
     </a>
+    @if (canAdd()) {
+      <button uiTabAction [attr.aria-label]="'shell.addExpense' | translate" (click)="add()">
+        <ui-icon name="plus" />
+      </button>
+    }
   </ui-bottom-tabs>
 </ui-app-shell>

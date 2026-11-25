@@ -4,6 +4,7 @@
   :host {
     --ui-app-shell-min-block-size: 100dvh;
     --ui-app-shell-bar-layer: 10;
+    --ui-app-shell-tab-action-clearance: var(--ui-space-8);
 
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
@@ -52,6 +53,10 @@
       z-index: var(--ui-app-shell-bar-layer);
       display: block;
       margin-block-start: auto;
+    }
+
+    :host(.ui-app-shell--tab-action) .ui-app-shell__main {
+      padding-block-end: var(--ui-app-shell-tab-action-clearance);
     }
   }
 }
