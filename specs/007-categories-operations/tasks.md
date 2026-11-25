@@ -85,3 +85,11 @@ Each task is at most ~150 lines of diff (i18n JSON aside), with its tests writte
 | 8.3 | `categories-api.spec.ts`, `entries-api.spec.ts` | left to CI and the owner |
 | 8.6 | the specs above (written, not run) | left to CI and the owner |
 | 8.7 | `docs/ROADMAP.md`, `specs/README.md` | done |
+
+## Follow-up fixes (post-merge)
+
+Mobile polish found after the merge, shipped in [#11](https://github.com/SofianeSahli/angular-frontend-toolbox/pull/11) without a new spec. Verification: left to CI and the owner.
+
+1. **Dialog body scrolls on phones** (toolbox Dialog organism). The CDK injects its overlay and dialog-container styles at runtime outside any cascade layer (`.cdk-overlay-pane { max-height: 100% }`, `.cdk-dialog-container { display: block; max-height: inherit }`), and these beat every rule in `@layer ui`. The pane's own cap never applied, and the container inherited a bare `100%` that resolved against a parent with no definite height. `UiDialog` now passes the cap as CDK `maxHeight` (inline, `var(--ui-overlays-pane-max-block-size)`, set per variant in `overlays.scss`), and the content host and an optional `<form>` inherit it as a flex column. Only `[uiDialogBody]` scrolls, the footer stays visible with the safe-area inset, and sheet footers put two buttons side by side. The entry sheet shows field errors only after a save attempt or after typing in and leaving a field. Specs: `dialog.spec.ts`, `entry-sheet.spec.ts`.
+2. **Add action in the phone bottom tabs.** The shell uses the existing toolbox `uiTabAction` on Accueil and Opérations, in place of the top-bar "+". The app shell pads its main area while the tabs hold an action. Specs: `app-shell.spec.ts`, `signed-in-shell.spec.ts`.
+3. **Category picker accordion.** Tops and groups expand in place (one open at a time) with a `grid-template-rows` animation, in place of the drill-down. Filter mode starts each open branch with an "All of" row (`categories.picker.allOf`). Spec: `category-picker.spec.ts`.

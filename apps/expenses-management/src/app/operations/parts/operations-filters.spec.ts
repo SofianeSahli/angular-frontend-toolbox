@@ -69,10 +69,12 @@ describe('OperationsFilters (REQ-5.4)', () => {
     expect(view.changed).toHaveBeenCalledWith({ category: null });
   });
 
-  it('offers "Effacer les filtres" only when a filter narrows the list', async () => {
-    const plain = await renderFilters(NOVEMBER);
+  it('hides "Effacer les filtres" when no filter narrows the list', async () => {
+    await renderFilters(NOVEMBER);
     expect(screen.queryByRole('button', { name: 'Effacer les filtres' })).toBeNull();
-    plain.fixture.destroy();
+  });
+
+  it('offers "Effacer les filtres" when a filter narrows the list', async () => {
     const narrowed = await renderFilters({ ...NOVEMBER, author: 'u2' });
     fireEvent.click(screen.getByRole('button', { name: 'Effacer les filtres' }));
     expect(narrowed.clear).toHaveBeenCalled();

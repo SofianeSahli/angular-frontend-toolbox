@@ -34,7 +34,7 @@
       </ui-list>
     }
   } @else {
-    @if (step().top === null && recents().length > 0) {
+    @if (recents().length > 0) {
       <div class="d-flex flex-wrap gap-2" role="group" [attr.aria-label]="'categories.picker.recents' | translate">
         @for (recent of recents(); track recent.code) {
           <button uiChip type="button" (click)="pick(recent.code)">
@@ -44,37 +44,96 @@
       </div>
     }
 
-    @if (headingText(); as text) {
-      <div class="d-flex align-items-center gap-2">
-        <button uiButton variant="ghost" size="sm" iconOnly type="button" [attr.aria-label]="'categories.picker.back' | translate" (click)="back()">
-          <ui-icon name="chevron-left" />
-        </button>
-        <h3 #heading class="h6 m-0" tabindex="-1"><bdi>{{ text }}</bdi></h3>
-      </div>
-    }
-
     <ui-list>
-      @if (filterMode && current(); as code) {
+      @for (top of tops(); track top.code) {
+        @let topOpen = openTop() === top.code;
         <li>
-          <button uiListItem type="button" (click)="pick(code)">
-            <span uiTitle>{{ 'categories.picker.all' | translate }}</span>
-          </button>
-        </li>
-      }
-      @for (choice of choices(); track choice.code) {
-        <li>
-          <button uiListItem type="button" (click)="open(choice)">
-            <span uiLeading aria-hidden="true">{{ choice.emoji }}</span>
-            <span uiTitle><bdi>{{ choice.name }}</bdi></span>
+          <button
+            uiListItem
+            type="button"
+            class="category-picker__toggle"
+            [attr.aria-expanded]="topOpen"
+            [attr.aria-controls]="panelId(top.code)"
+            (click)="toggleTop(top.code)"
+          >
+            <span uiLeading aria-hidden="true">{{ top.emoji }}</span>
+            <span uiTitle><bdi>{{ top.name }}</bdi></span>
             <span uiTrailing class="d-flex align-items-center gap-2">
-              @if (choice.retired) {
+              @if (top.retired) {
                 <ui-badge tone="warning">{{ 'categories.picker.retired' | translate }}</ui-badge>
               }
-              @if (choice.opens) {
-                <ui-icon name="chevron-right" />
-              }
+              <ui-icon class="category-picker__chevron" name="chevron-right" />
             </span>
           </button>
+          <div
+            class="category-picker__panel"
+            [id]="panelId(top.code)"
+            [class.category-picker__panel--open]="topOpen"
+            [attr.inert]="topOpen ? null : ''"
+            [attr.aria-hidden]="topOpen ? null : 'true'"
+            (transitionend)="settled($event, top.code)"
+          >
+            <ul class="category-picker__children" role="list">
+              @if (filterMode) {
+                <li>
+                  <button uiListItem type="button" (click)="pick(top.code)">
+                    <span uiTitle><bdi>{{ 'categories.picker.allOf' | translate: { name: top.name } }}</bdi></span>
+                  </button>
+                </li>
+              }
+              @for (group of top.groups; track group.code) {
+                @let groupOpen = topOpen && openGroup() === group.code;
+                <li>
+                  <button
+                    uiListItem
+                    type="button"
+                    class="category-picker__toggle"
+                    [attr.aria-expanded]="groupOpen"
+                    [attr.aria-controls]="panelId(group.code)"
+                    (click)="toggleGroup(group.code)"
+                  >
+                    <span uiLeading aria-hidden="true">{{ group.emoji }}</span>
+                    <span uiTitle><bdi>{{ group.name }}</bdi></span>
+                    <span uiTrailing class="d-flex align-items-center gap-2">
+                      @if (group.retired) {
+                        <ui-badge tone="warning">{{ 'categories.picker.retired' | translate }}</ui-badge>
+                      }
+                      <ui-icon class="category-picker__chevron" name="chevron-right" />
+                    </span>
+                  </button>
+                  <div
+                    class="category-picker__panel"
+                    [id]="panelId(group.code)"
+                    [class.category-picker__panel--open]="groupOpen"
+                    [attr.inert]="groupOpen ? null : ''"
+                    [attr.aria-hidden]="groupOpen ? null : 'true'"
+                    (transitionend)="settled($event, group.code)"
+                  >
+                    <ul class="category-picker__children" role="list">
+                      @if (filterMode) {
+                        <li>
+                          <button uiListItem type="button" (click)="pick(group.code)">
+                            <span uiTitle><bdi>{{ 'categories.picker.allOf' | translate: { name: group.name } }}</bdi></span>
+                          </button>
+                        </li>
+                      }
+                      @for (leaf of group.leaves; track leaf.code) {
+                        <li>
+                          <button uiListItem type="button" (click)="pick(leaf.code)">
+                            <span uiLeading aria-hidden="true">{{ leaf.emoji }}</span>
+                            <span uiTitle><bdi>{{ leaf.name }}</bdi></span>
+                            @if (leaf.retired) {
+                              <ui-badge uiTrailing tone="warning">{{ 'categories.picker.retired' | translate }}</ui-badge>
+                            }
+                          </button>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
         </li>
       }
     </ui-list>

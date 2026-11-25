@@ -1,4 +1,4 @@
-import { DIALOG_DATA } from '@angular/cdk/dialog';
+import { DIALOG_DATA, Dialog } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { UiButton } from '@shared/ui-atoms';
@@ -69,6 +69,14 @@ describe('UiDialog', () => {
     expect(header.compareDocumentPosition(body) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(body.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(document.querySelectorAll('.ui-dialog-body')).toHaveLength(1);
+  });
+
+  it('caps the pane inline, because the CDK pane styles would override a layered cap', async () => {
+    stubDevice(true);
+    await render('<button type="button">Ouvrir</button>');
+    const open = vi.spyOn(TestBed.inject(Dialog), 'open');
+    TestBed.inject(UiDialog).open(ExpenseDialog, { data: 'Carrefour Market' });
+    expect(open).toHaveBeenCalledWith(ExpenseDialog, expect.objectContaining({ maxHeight: 'var(--ui-overlays-pane-max-block-size)' }));
   });
 
   it('closes with its close button and returns focus to the opener', async () => {

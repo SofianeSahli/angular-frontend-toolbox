@@ -2,7 +2,8 @@ import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { TestBed } from '@angular/core/testing';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { UI_DIALOG_CONTEXT } from '@shared/ui-organisms';
-import { fireEvent, render, screen } from '@testing-library/angular';
+import { fireEvent, render, screen, within } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import fr from '../../../../public/i18n/fr.json';
 import { CategoriesApi, TreeAnswer } from '../data/categories-api';
@@ -39,6 +40,12 @@ async function renderPicker(data: CategoryPickerData) {
 }
 
 const item = (name: string | RegExp) => screen.getByRole('button', { name });
+const panelOf = (toggle: HTMLElement) => document.getElementById(toggle.getAttribute('aria-controls') ?? '') as HTMLElement;
+
+function expand(view: { detectChanges(): void }, toggle: HTMLElement) {
+  fireEvent.click(toggle);
+  view.detectChanges();
+}
 
 async function search(view: { detectChanges(): void }, text: string) {
   fireEvent.input(screen.getByRole('searchbox'), { target: { value: text } });
@@ -49,48 +56,67 @@ async function search(view: { detectChanges(): void }, text: string) {
 describe('CategoryPicker (REQ-3.1–3.5)', () => {
   afterEach(() => localStorage.clear());
 
-  it('lists tops expense first, drills down to a leaf and returns its code', async () => {
+  it('lists tops expense first, expands them in place and picks a leaf', async () => {
     const view = await renderPicker({ mode: 'entry' });
     const tops = screen.getAllByRole('listitem').map((li) => li.textContent?.trim());
     expect(tops[0]).toContain('Alimentation');
-    fireEvent.click(item(/Alimentation/));
-    view.detectChanges();
-    fireEvent.click(item(/Courses/));
-    view.detectChanges();
-    expect(screen.getByRole('heading', { level: 3 }).textContent).toContain('Alimentation › Courses');
-    fireEvent.click(item(/Boulangerie/));
+    const food = item(/^Alimentation/);
+    expect(food.getAttribute('aria-expanded')).toBe('false');
+    expect(screen.queryByRole('button', { name: /^Courses/ })).toBeNull();
+    expand(view, food);
+    expect(food.getAttribute('aria-expanded')).toBe('true');
+    expect(panelOf(food).hasAttribute('inert')).toBe(false);
+    expect(item(/^Salaire/)).toBeTruthy();
+    expand(view, item(/^Courses/));
+    fireEvent.click(item(/^Boulangerie/));
     expect(view.close).toHaveBeenCalledWith('food.groceries.bakery');
   });
 
-  it('moves focus to the new heading and goes back one level', async () => {
+  it('keeps a single top open and its panel hidden from assistive tech once closed', async () => {
     const view = await renderPicker({ mode: 'entry' });
-    fireEvent.click(item(/Alimentation/));
+    expand(view, item(/^Alimentation/));
+    expand(view, item(/^Salaire/));
+    expect(item(/^Alimentation/).getAttribute('aria-expanded')).toBe('false');
+    expect(panelOf(item(/^Alimentation/)).getAttribute('aria-hidden')).toBe('true');
+    expect(panelOf(item(/^Alimentation/)).hasAttribute('inert')).toBe(true);
+    expect(screen.queryByRole('button', { name: /^Courses/ })).toBeNull();
+    expect(item(/^Salaire/).getAttribute('aria-expanded')).toBe('true');
+    expect(item(/^Paie/)).toBeTruthy();
+    expand(view, item(/^Salaire/));
+    expect(item(/^Salaire/).getAttribute('aria-expanded')).toBe('false');
+    expect(screen.queryByRole('button', { name: /^Paie/ })).toBeNull();
+  });
+
+  it('keeps focus on the toggled header and closes the open group with its top', async () => {
+    const view = await renderPicker({ mode: 'entry' });
+    const food = item(/^Alimentation/);
+    await userEvent.click(food);
     view.detectChanges();
-    await view.fixture.whenStable();
-    expect(document.activeElement).toBe(screen.getByRole('heading', { level: 3 }));
-    fireEvent.click(screen.getByRole('button', { name: 'Retour' }));
-    view.detectChanges();
-    expect(screen.queryByRole('heading', { level: 3 })).toBeNull();
-    expect(item(/Salaire/)).toBeTruthy();
+    expect(document.activeElement).toBe(food);
+    expand(view, item(/^Courses/));
+    expect(item(/^Courses/).getAttribute('aria-expanded')).toBe('true');
+    expand(view, food);
+    expand(view, food);
+    expect(item(/^Courses/).getAttribute('aria-expanded')).toBe('false');
+    expect(screen.queryByRole('button', { name: /^Boulangerie/ })).toBeNull();
   });
 
   it('hides retired leaves in entry mode', async () => {
     const view = await renderPicker({ mode: 'entry' });
-    fireEvent.click(item(/Alimentation/));
-    view.detectChanges();
-    fireEvent.click(item(/Courses/));
-    view.detectChanges();
+    expand(view, item(/^Alimentation/));
+    expand(view, item(/^Courses/));
     expect(screen.queryByRole('button', { name: /Ancienne/ })).toBeNull();
   });
 
-  it('lets a group or a retired leaf be picked in filter mode', async () => {
+  it('starts each open branch with an "All of" row in filter mode', async () => {
     const view = await renderPicker({ mode: 'filter' });
-    fireEvent.click(item(/Alimentation/));
-    view.detectChanges();
-    fireEvent.click(item(/Courses/));
-    view.detectChanges();
+    const food = item(/^Alimentation/);
+    expand(view, food);
+    expect(within(panelOf(food)).getAllByRole('button')[0].textContent).toContain('Tout dans Alimentation');
+    expand(view, item(/^Courses/));
+    expect(within(panelOf(item(/^Courses/))).getAllByRole('button')[0].textContent).toContain('Tout dans Courses');
     expect(item(/Ancienne/).textContent).toContain('Catégorie retirée');
-    fireEvent.click(item('Toute la catégorie'));
+    fireEvent.click(item('Tout dans Courses'));
     expect(view.close).toHaveBeenCalledWith('food.groceries');
   });
 

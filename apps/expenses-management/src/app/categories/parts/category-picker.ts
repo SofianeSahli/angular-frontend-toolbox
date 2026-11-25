@@ -1,5 +1,5 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, ElementRef, Injector, afterNextRender, computed, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Injector, afterNextRender, computed, inject, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { UiBadge, UiButton, UiChip, UiIcon } from '@shared/ui-atoms';
 import { UiAlert, UiList, UiListItem, UiSearchField } from '@shared/ui-molecules';
@@ -16,26 +16,29 @@ export interface CategoryPickerData {
   readonly recents?: readonly string[];
 }
 
-interface Step {
-  readonly top: string | null;
-  readonly group: string | null;
-}
-
 interface Choice {
   readonly code: string;
   readonly emoji: string;
   readonly name: string;
   readonly path: string | null;
   readonly retired: boolean;
-  readonly opens: boolean;
 }
 
-const ROOT: Step = { top: null, group: null };
+interface GroupChoice extends Choice {
+  readonly leaves: readonly Choice[];
+}
+
+interface TopChoice extends Choice {
+  readonly groups: readonly GroupChoice[];
+}
+
+const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
 
 @Component({
   selector: 'app-category-picker',
   imports: [TranslatePipe, UiAlert, UiBadge, UiButton, UiChip, UiDialogBody, UiDialogHeader, UiIcon, UiList, UiListItem, UiSearchField],
   templateUrl: './category-picker.html',
+  styleUrl: './category-picker.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryPicker {
@@ -45,10 +48,10 @@ export class CategoryPicker {
   private readonly context = inject(UI_DIALOG_CONTEXT);
   private readonly injector = inject(Injector);
   private readonly host: HTMLElement = inject(ElementRef).nativeElement;
-  private readonly heading = viewChild<ElementRef<HTMLElement>>('heading');
 
   protected readonly filterMode = this.data.mode === 'filter';
-  protected readonly step = signal<Step>(ROOT);
+  protected readonly openTop = signal<string | null>(null);
+  protected readonly openGroup = signal<string | null>(null);
   protected readonly query = signal('');
 
   protected readonly unavailable = computed(() => this.store.status() === 'error' && this.store.tops().length === 0);
@@ -63,29 +66,19 @@ export class CategoryPicker {
       })),
   );
 
-  protected readonly headingText = computed(() => {
-    const { top, group } = this.step();
-    if (group !== null) return this.labels.path(group);
-    if (top !== null) return this.labels.name(top);
-    return null;
-  });
-
-  protected readonly current = computed(() => {
-    const { top, group } = this.step();
-    return group ?? top;
-  });
-
-  protected readonly choices = computed<readonly Choice[]>(() => {
-    const { top, group } = this.step();
-    const topNode = top === null ? null : this.store.node(top);
-    const groupNode = group === null ? null : this.store.node(group);
-    if (groupNode?.group) return groupNode.group.leaves.map((leaf) => this.choice(leaf.code, false)).filter((c): c is Choice => c !== null);
-    if (topNode) return topNode.top.groups.map((g) => this.choice(g.code, true)).filter((c): c is Choice => c !== null);
-    return this.store
-      .orderedTops()
-      .map((t) => this.choice(t.code, true))
-      .filter((c): c is Choice => c !== null);
-  });
+  protected readonly tops = computed<readonly TopChoice[]>(() =>
+    this.store.orderedTops().flatMap((top) => {
+      const choice = this.choice(top.code);
+      if (choice === null) return [];
+      const groups = top.groups.flatMap((group) => {
+        const groupChoice = this.choice(group.code);
+        if (groupChoice === null) return [];
+        const leaves = group.leaves.map((leaf) => this.choice(leaf.code)).filter((c): c is Choice => c !== null);
+        return [{ ...groupChoice, leaves }];
+      });
+      return [{ ...choice, groups }];
+    }),
+  );
 
   protected readonly results = computed<readonly Choice[]>(() =>
     this.labels
@@ -93,26 +86,33 @@ export class CategoryPicker {
         branches: this.filterMode,
         retired: this.filterMode,
       })
-      .map((node) => this.toChoice(node, false, this.labels.path(node.code))),
+      .map((node) => this.toChoice(node, this.labels.path(node.code))),
   );
 
   constructor() {
     void this.store.load();
   }
 
-  protected open(choice: Choice): void {
-    if (!choice.opens) {
-      this.pick(choice.code);
-      return;
-    }
-    const node = this.store.node(choice.code);
-    if (node === null) return;
-    this.moveTo(node.level === 'top' ? { top: node.code, group: null } : { top: node.top.code, group: node.code });
+  protected panelId(code: string): string {
+    return `category-picker-panel-${code.replaceAll('.', '-')}`;
   }
 
-  protected back(): void {
-    const { top, group } = this.step();
-    this.moveTo(group !== null ? { top, group: null } : ROOT);
+  protected toggleTop(code: string): void {
+    const opening = this.openTop() !== code;
+    this.openTop.set(opening ? code : null);
+    this.openGroup.set(null);
+    if (opening) this.revealWithoutMotion(code);
+  }
+
+  protected toggleGroup(code: string): void {
+    const opening = this.openGroup() !== code;
+    this.openGroup.set(opening ? code : null);
+    if (opening) this.revealWithoutMotion(code);
+  }
+
+  protected settled(event: TransitionEvent, code: string): void {
+    if (event.target !== event.currentTarget || event.propertyName !== 'grid-template-rows') return;
+    if (this.openTop() === code || this.openGroup() === code) this.reveal(event.currentTarget as HTMLElement, false);
   }
 
   protected pick(code: string): void {
@@ -123,31 +123,42 @@ export class CategoryPicker {
     void this.store.load({ force: true });
   }
 
-  private moveTo(step: Step): void {
-    this.step.set(step);
+  private revealWithoutMotion(code: string): void {
+    if (!this.reducedMotion()) return;
     afterNextRender(
       () => {
-        const target = this.heading()?.nativeElement ?? this.host.querySelector<HTMLElement>('ui-search-field input');
-        target?.focus();
+        const panel = this.host.querySelector<HTMLElement>(`[id="${this.panelId(code)}"]`);
+        if (panel) this.reveal(panel, true);
       },
       { injector: this.injector },
     );
   }
 
-  private choice(code: string, opens: boolean): Choice | null {
-    const node = this.store.node(code);
-    if (node === null || (node.retired && !this.filterMode)) return null;
-    return this.toChoice(node, opens, null);
+  private reveal(panel: HTMLElement, instant: boolean): void {
+    const scroller = panel.closest<HTMLElement>('.ui-dialog-body');
+    const header = panel.previousElementSibling;
+    if (scroller === null || header === null) return;
+    if (panel.getBoundingClientRect().bottom <= scroller.getBoundingClientRect().bottom) return;
+    header.scrollIntoView({ block: 'start', behavior: instant ? 'auto' : 'smooth' });
   }
 
-  private toChoice(node: CategoryNode, opens: boolean, path: string | null): Choice {
+  private reducedMotion(): boolean {
+    return this.host.ownerDocument.defaultView?.matchMedia?.(REDUCED_MOTION).matches ?? false;
+  }
+
+  private choice(code: string): Choice | null {
+    const node = this.store.node(code);
+    if (node === null || (node.retired && !this.filterMode)) return null;
+    return this.toChoice(node, null);
+  }
+
+  private toChoice(node: CategoryNode, path: string | null): Choice {
     return {
       code: node.code,
       emoji: node.emoji,
       name: this.labels.name(node.code),
       path,
       retired: node.retired,
-      opens,
     };
   }
 }
