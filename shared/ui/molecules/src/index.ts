@@ -17,3 +17,7 @@ export * from './lib/month-switcher/month-switcher';
 export * from './lib/search-field/search-field';
 export * from './lib/avatar-group/avatar-group';
 export * from './lib/menu/menu';
+export * from './lib/meter/meter';
+export * from './lib/bar-list/bar-list';
+export * from './lib/pace-chart/pace-chart';
+export * from './lib/trend-bars/trend-bars';

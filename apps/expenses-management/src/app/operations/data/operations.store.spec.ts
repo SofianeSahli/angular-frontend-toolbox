@@ -7,6 +7,7 @@ import { UiToast } from '@shared/ui-organisms';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { BooksStore } from '../../households/data/books.store';
 import { book } from '../../households/testing';
+import { LedgerChanges } from '../../ledger/ledger-changes';
 import { NOVEMBER, entry } from '../testing';
 import { EntriesApi } from './entries-api';
 import { Entry, EntryPage } from './models';
@@ -152,6 +153,57 @@ describe('OperationsStore (REQ-5.5, 5.6, 5.8, 5.9, 4.9, 6.5, 7.4, 7.9)', () => {
     api.remove.mockReturnValue(of(undefined));
     await store.remove('b1', 'e1');
     expect(store.entries()).toEqual([]);
+  });
+
+  it('opens with filters asked by a drill-down in place of the defaults (spec 008 REQ-1.3)', async () => {
+    const { api, store } = setup(() => of({ items: [], nextCursor: null }));
+    await store.open('b1');
+    await store.setFilters({ type: 'income', author: 'u2' });
+    await store.open('b1', { from: '2026-10-01', to: '2026-10-31', category: 'food' });
+    expect(store.filters()).toEqual({ from: '2026-10-01', to: '2026-10-31', type: null, category: 'food', author: null });
+    expect(api.page).toHaveBeenLastCalledWith('b1', store.filters());
+  });
+
+  describe('ledger changes (spec 008 REQ-8.3)', () => {
+    const input = { id: 'n1', amount: 1, date: '2026-11-12', category: 'x', otherName: null, comment: null };
+
+    it('signals the month of a created entry', async () => {
+      const { api, store } = setup(() => of({ items: [], nextCursor: null }));
+      await store.open('b1');
+      api.create.mockReturnValue(of(entry('n1', { date: '2026-10-31' })));
+      await store.create('b1', input);
+      expect(TestBed.inject(LedgerChanges).last()).toMatchObject({ kind: 'ledger', bookId: 'b1', months: ['2026-10'] });
+    });
+
+    it('signals both months when an edit moves an entry across months', async () => {
+      const { api, store } = setup(() => of({ items: [entry('e1', { date: '2026-11-20' })], nextCursor: null }));
+      await store.open('b1');
+      api.update.mockReturnValue(of(entry('e1', { date: '2026-10-02' })));
+      await store.update('b1', 'e1', { date: '2026-10-02' });
+      expect(TestBed.inject(LedgerChanges).last()?.months).toEqual(['2026-10', '2026-11']);
+      api.update.mockReturnValue(of(entry('e1', { date: '2026-10-02', amount: 5 })));
+      await store.update('b1', 'e1', { amount: 5 });
+      expect(TestBed.inject(LedgerChanges).last()?.months).toEqual(['2026-10']);
+    });
+
+    it('signals every month when the previous date is unknown', async () => {
+      const { api, store } = setup(() => of({ items: [], nextCursor: null }));
+      await store.open('b1');
+      api.update.mockReturnValue(of(entry('far', { date: '2026-10-02' })));
+      await store.update('b1', 'far', { date: '2026-10-02' });
+      expect(TestBed.inject(LedgerChanges).last()?.months).toBe('all');
+    });
+
+    it('signals the month of a removed entry, and nothing on failure', async () => {
+      const { api, store } = setup(() => of({ items: [entry('e1', { date: '2026-11-20' })], nextCursor: null }));
+      await store.open('b1');
+      api.remove.mockReturnValue(throwError(() => error('request.throttled', 429)));
+      await store.remove('b1', 'e1');
+      expect(TestBed.inject(LedgerChanges).last()).toBeNull();
+      api.remove.mockReturnValue(of(undefined));
+      await store.remove('b1', 'e1');
+      expect(TestBed.inject(LedgerChanges).last()?.months).toEqual(['2026-11']);
+    });
   });
 
   it('removes the row when the entry is gone', async () => {

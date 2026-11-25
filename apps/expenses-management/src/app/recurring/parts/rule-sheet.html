@@ -1,0 +1,113 @@
+<ui-dialog-header [title]="(editing ? 'recurring.sheet.editTitle' : 'recurring.sheet.addTitle') | translate" />
+<form [formGroup]="form" (ngSubmit)="save()" novalidate>
+  <div uiDialogBody class="d-flex flex-column gap-3">
+    <p class="m-0">{{ 'operations.sheet.book' | translate }} <bdi>{{ book.name }}</bdi></p>
+
+    @if (editing) {
+      <ui-alert tone="info">{{ 'recurring.sheet.editNote' | translate }}</ui-alert>
+    }
+
+    @if (unavailable()) {
+      <ui-alert tone="danger" [title]="'categories.picker.unavailable' | translate">
+        <div uiAlertActions>
+          <button uiButton size="sm" type="button" (click)="categories.load({ force: true })">{{ 'categories.picker.retry' | translate }}</button>
+        </div>
+      </ui-alert>
+    }
+
+    <ui-form-field [label]="'operations.sheet.amount' | translate" required [errors]="errorTemplates">
+      <input uiInput id="rule-amount" type="text" inputmode="decimal" autocomplete="off" dir="ltr" formControlName="amount" />
+    </ui-form-field>
+    <p class="m-0" aria-live="polite">
+      @if (preview(); as text) {
+        {{ 'operations.sheet.preview' | translate }} <bdi dir="ltr">{{ text }}</bdi>
+      }
+    </p>
+    @if (confirmText(); as text) {
+      <ui-alert tone="warning">{{ 'operations.sheet.bigWarning' | translate: { amount: text } }}</ui-alert>
+    }
+
+    <div class="d-flex flex-column gap-2">
+      <span id="rule-category-label">{{ 'operations.sheet.category' | translate }}</span>
+      @if (recentChips().length > 0) {
+        <div class="d-flex flex-wrap gap-2" role="group" [attr.aria-label]="'categories.picker.recents' | translate">
+          @for (recent of recentChips(); track recent.code) {
+            <button uiChip type="button" [pressed]="category() === recent.code" (click)="setCategory(recent.code)">
+              <span aria-hidden="true">{{ recent.emoji }}</span>&ngsp;<bdi>{{ recent.name }}</bdi>
+            </button>
+          }
+        </div>
+      }
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        @if (category(); as code) {
+          <app-category-chip [code]="code" />
+          @if (retired()) {
+            <ui-badge tone="warning">{{ 'categories.picker.retired' | translate }}</ui-badge>
+          }
+        }
+        <button uiButton variant="secondary" size="sm" type="button" aria-describedby="rule-category-label" [disabled]="unavailable()" (click)="chooseCategory()">
+          {{ (category() ? 'operations.sheet.changeCategory' : 'operations.sheet.chooseCategory') | translate }}
+        </button>
+      </div>
+      @if (categoryError(); as message) {
+        <ui-field-message tone="error">{{ message }}</ui-field-message>
+      }
+    </div>
+
+    @if (isOther()) {
+      <ui-form-field [label]="'operations.sheet.otherName' | translate" required [maxLength]="otherNameMax" [errors]="errorTemplates">
+        <input uiInput type="text" autocomplete="off" formControlName="otherName" [attr.maxlength]="otherNameMax" />
+      </ui-form-field>
+      @if (suggestions().length > 0) {
+        <div class="d-flex flex-wrap gap-2" role="group" [attr.aria-label]="'operations.sheet.suggestions' | translate">
+          @for (name of suggestions(); track name) {
+            <button uiChip type="button" (click)="useSuggestion(name)"><bdi>{{ name }}</bdi></button>
+          }
+        </div>
+      }
+    }
+
+    <div class="d-flex flex-column gap-2">
+      <span id="rule-frequency-label">{{ 'recurring.sheet.frequency' | translate }}</span>
+      <ui-segmented-control formControlName="frequency" [options]="frequencyOptions" [ariaLabel]="'recurring.sheet.frequency' | translate" />
+    </div>
+
+    <ui-form-field [label]="'recurring.sheet.interval' | translate" required [errors]="errorTemplates">
+      <select uiSelect formControlName="interval">
+        @for (value of intervals; track value) {
+          <option [ngValue]="value">{{ value }}</option>
+        }
+      </select>
+    </ui-form-field>
+
+    <ui-form-field [label]="'recurring.sheet.startsOn' | translate" required [errors]="errorTemplates">
+      <input uiInput type="date" formControlName="startsOn" [min]="minStart" [max]="maxStart" />
+    </ui-form-field>
+    @if (pastStart()) {
+      <ui-alert tone="warning">{{ 'recurring.sheet.pastStart' | translate }}</ui-alert>
+    }
+
+    <ui-form-field [label]="'recurring.sheet.endsOn' | translate" optional [errors]="errorTemplates">
+      <input uiInput type="date" formControlName="endsOn" [min]="endMin()" />
+    </ui-form-field>
+
+    <ui-form-field [label]="'operations.sheet.comment' | translate" optional [maxLength]="commentMax" [errors]="errorTemplates">
+      <textarea uiInput rows="2" formControlName="comment" [attr.maxlength]="commentMax"></textarea>
+    </ui-form-field>
+
+    @if (notice(); as text) {
+      <ui-alert tone="danger">{{ text }}</ui-alert>
+    }
+  </div>
+
+  <div uiDialogFooter>
+    <button uiButton variant="ghost" type="button" (click)="requestClose()">{{ 'operations.sheet.cancel' | translate }}</button>
+    <button uiButton variant="primary" type="submit" [loading]="saving()">
+      @if (confirmText(); as text) {
+        {{ 'operations.sheet.confirmBig' | translate: { amount: text } }}
+      } @else {
+        {{ 'operations.sheet.save' | translate }}
+      }
+    </button>
+  </div>
+</form>

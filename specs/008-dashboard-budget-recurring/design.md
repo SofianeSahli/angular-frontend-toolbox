@@ -1,6 +1,6 @@
 # 008 — Dashboard, budget and recurring operations: Design
 
-> Status: Draft — awaiting approval
+> Status: Implemented — in review (charts amendment 2026-11-25: section "Charts")
 > Requirements: [requirements.md](./requirements.md)
 
 ## Overview
@@ -94,7 +94,7 @@ interface BudgetInput { expectedIncome: number | null; plannedSaving: number | n
 interface SummaryNode { category: string; type: CategoryType; total: number; entries: number; children: readonly SummaryNode[] }
 interface MemberTotals { account: Person; income: number; expense: number; saving: number; balance: number; entries: number }
 interface Summary { from: string; to: string; currency: string; totals: { income; expense; saving; balance; entries }; categories: readonly SummaryNode[]; members: readonly MemberTotals[] }
-// (days, months and other_names are not mapped: no card uses them)
+// (other_names is not mapped; days and months are mapped by the charts amendment, see "Charts")
 
 // recurring/data/models.ts
 type Frequency = 'weekly' | 'monthly' | 'yearly';
@@ -168,6 +168,94 @@ Support: `watch-list.ts` (`warning|over`, sort by `percent` with `null`+`over` f
 
 `dashboard.*` (hero, perDay, spentThisMonth, exhausted, manageBudget, noPlan.*, compare.*, watch.title/empty, categories.title/others, members.title, upcoming.title/empty/seeAll, recent.title/seeAll, firstUse.*, cardError, retry), `budget.*` (title, expectedIncome, plannedSaving, addLine, offPlan, remaining, totals.*, status.ok/warning/over, retired, copy.*, replaceConfirm, nothingToCopy, saved, leaveConfirm, clearConfirm, errors by contract code: `lines.category.*`, `lines.planned.*`, `expected_income.*`, `planned_saving.*`, `lines.max`, `throttled`), `recurring.*` (title, add, empty, frequency.weekly/monthly/yearly with plural interval, nextDate, ended, form.*, pastStartWarning, editNote, deleteConfirm, limit, errors by code), `operations.recurringBadge`, `categories.picker.plan*`, `shell.nav.budget`. Added to `public/i18n/{fr,en,ar}.json`; Arabic is a draft (`meta.reviewStatus`).
 
+## Charts (amendment, 2026-11-25)
+
+Fulfils REQ-9.1–9.17. Two molecules, one new data path, a few dashboard and budget pieces. No library, no endpoint, no new token: Olivier already has `accent`, `warning`, `danger`, `ink-muted`, `line-strong` and `surface-sunken`; each chart has one series colour plus the state colours, so the `data-1…10` palette is not needed.
+
+### Toolbox: `@shared/ui-molecules` (layer:molecule)
+
+```ts
+interface UiPacePoint { day: number; value: number }                       // cumulative
+// <ui-pace-chart [days]="…" [daysInMonth]="30" [today]="12" [target]="600000" [reference]="[…]" label="…" summaryText="…" />
+class UiPaceChart { days = input.required<readonly UiPacePoint[]>(); daysInMonth = input.required<number>(); today = input<number>();
+  target = input<number>(); reference = input<readonly number[]>(); label = input.required<string>(); summaryText = input.required<string>(); }
+
+interface UiTrendItem { id: string; label: string; value: number; valueText: string; current?: boolean }
+// <ui-trend-bars [items]="…" averageText="…" label="…" (itemSelect)="open($event)" />
+class UiTrendBars { items = input.required<readonly UiTrendItem[]>(); averageText = input<string>(); label = input.required<string>(); itemSelect = output<string>(); }
+```
+
+Placement: `shared/ui/molecules/src/lib/pace-chart/{pace-geometry.ts, pace-chart.ts, pace-chart.scss, *.spec.ts}` and `lib/trend-bars/{trend-bars.ts, trend-bars.scss, trend-bars.spec.ts}`, exported from `index.ts`. Toolbox because any app with a monthly budget draws the same two charts, and they are presentational (REQ-9.1, 9.3).
+
+- **Geometry** (`pace-geometry.ts`, pure, REQ-9.1, 9.2): fixed `viewBox` (`0 0 320 140`; text sizes are in viewBox units so the chart scales as one picture). X = `day / daysInMonth`; Y = `value / max`, `max` being the largest of the line, `target` and `reference` (an all-zero month draws a flat line at the bottom). Functions: `linePath(points, today)` (cuts at `today`), `straightPath(target)`, `referencePath(values, daysInMonth)`, `paceState(value, target, today, daysInMonth)` → `ok | warning | over`, `overPoints(points, target)` (from the first point above `target`, drawn dashed). Tested without a DOM.
+- **Pace chart**: one `<svg role="img" [attr.aria-label]="summaryText()">` with a baseline, three x ticks (`1`, middle, last day), the reference path (muted, dotted), the target path (`ink-muted`, a different dash), the line (stroke = state colour token; `over` also gets the dashed over-segment), the `today` marker (vertical line and a dot on the line) and the end dot. A visually hidden `<table>` with `label` as caption lists `day` and `value`.
+- **Trend bars**: the `<svg>` is `role="group"` with `aria-label=label` (not `img`: its children are buttons); one `<g role="button" tabindex="0" [attr.aria-label]>` per item with a `rect` (current: `--ui-color-accent`; others: accent mixed 35 % into `--ui-color-surface` with `color-mix()`), the `valueText` above the bar, the `label` under it, and `(click)`, `(keydown.enter)`, `(keydown.space)` emitting `itemSelect`, with a focus ring from `--ui-color-focus-ring`. Bar height is `value / max(values)`, at least 2 units for a non-zero value, none for `0` (its text still shows). `averageText` is an HTML `<p>` under the SVG. A hidden `<table>` lists `label` and `valueText`.
+- **RTL (REQ-9.4)**: the plot group gets `transform: scaleX(-1)` under `:host-context([dir='rtl'])`, and each `text` inside it flips back (`transform-box: fill-box; transform-origin: center; transform: scaleX(-1)`, `text-anchor: middle`): time runs right to left, numbers stay readable. DOM and keyboard order stay in time order.
+- **Motion and numbers**: the line and bars get a short entrance (`stroke-dashoffset`, `transform: scaleY`) only inside `@media (prefers-reduced-motion: no-preference)`. `font-variant-numeric: tabular-nums` on every text. Component tokens (`--ui-pace-chart-*`, `--ui-trend-bars-*`) stay local to the stylesheet (spec 003 rule).
+
+### Data: `Summary` keeps `days` and `months` (REQ-9.6)
+
+```ts
+interface DayTotals { date: string; income: number; expense: number; saving: number; balance: number; entries: number }
+interface MonthTotals { month: string; income: number; expense: number; saving: number; balance: number; entries: number }
+// Summary gains: days: readonly DayTotals[]; months: readonly MonthTotals[]
+```
+
+The contract lists only the days and months that have entries, oldest first; the app fills the gaps. `toSummary` maps both lists; `summaryDto()` in `dashboard/testing.ts` gets `days: []`, `months: []` by default.
+
+### Dashboard (REQ-9.7–9.11)
+
+Support in `dashboard/support/`:
+- `pace-series.ts`: `cumulativeByDay(summary, month, todayDay | null)` → one cumulative `{ day, value }` per day from 1 up to `todayDay` (current month) or the last day (past month), `[]` for a future month; `cumulativeValues(summary, month)` → the previous month's cumulative numbers for `reference`.
+- `trend-series.ts`: `trendMonths(month)` → the six `YYYY-MM` ending at `month` (`addMonths`); `trendItems(summary, month)` → six `{ month, expense, entries }` with `0` for missing months; `averageOf(items)` over the months with `entries > 0`, `null` when none.
+
+`DashboardStore` gains two cards, independent of the others (REQ-9.11):
+
+| Card | Request | Notes |
+|---|---|---|
+| `previous` | `SummaryApi.get(bookId, { month: addMonths(month, -1) })` | Reference of the pace chart. A failure only removes the reference. |
+| `trend` | `SummaryApi.get(bookId, { from: firstDay(addMonths(month, -5)), to: lastDay(month) })` | One call, at most six months (the contract allows one year). |
+
+`CardName` gains `'previous' | 'trend'`; `loadMonth` starts both beside `loadBudget`, `loadSummary` and `loadRecent`; each has its own `generation`, a `reload(card)` entry and a quiet refresh on `LedgerChanges`. The existing `run` helper writes only its own card, so a failure never reaches the hero.
+
+| Component | Inputs | Notes |
+|---|---|---|
+| `PaceCard` (new) | `summary`, `previous`, `budget`, `month`, `today`, `currency`, `status`, `error` | `CardFrame` + `ui-pace-chart`. Target `budget.expenses.planned` when `hasPlan`, else `reference` from `previous`. `today` (day number) only for the current month. Empty state for a future month or no entries. Note `dashboard.pace.fixedIncluded`. `summaryText` from `dashboard.pace.summary`. Status follows the `summary` card. |
+| `TrendCard` (new) | `summary`, `month`, `currency`, `locale`, `status`, `error` | `CardFrame` + `ui-trend-bars`. Short month names in the UI locale; values and average through `formatWhole`; `itemSelect(id)` → `router.navigate(['/'], { queryParams: { mois: id } })`. |
+| `CategoriesCard` (changed) | — | Bars are already `clickable`. REQ-9.9: with fewer than two rows it renders a plain row (name and amount) instead of `ui-bar-list`. |
+| `RecentCard` (changed) | — | The day heading gets `.dashboard-card__day`, smaller than `.dashboard-card__title`. |
+| `DashboardPage` (changed) | — | Order: hero or no-plan and watch list; **pace card**; categories and members; **trend card**; upcoming and recent. Without a book it shows skeleton `CardFrame`s instead of nothing. |
+
+The page was blank only while `BooksStore.selectedBook` was `null` (every card already has a loading state once a book exists), so the `@else` of `@if (book())` renders loading frames.
+
+### Budget (REQ-9.12–9.15)
+
+`budget/` imports `dashboard/data/summary-api` and its models. This relaxes the rule "nothing imports `dashboard/` except routes" to "except the summary `data/` files", the same kind of feature-to-feature import as `dashboard/` importing `budget/data/budget-api`.
+
+`BudgetStore` gains `summary: Summary | null` (the month) and `previous: Summary | null` (the month before). `load()` starts both requests beside the budget; each has its own `try/catch` that sets `null` on failure (no error state: the page degrades, REQ-9.13, 9.14) and drops stale answers with the same generation. A quiet reload after `LedgerChanges` refreshes them; a save or copy does not (no entry changed).
+
+Support in `budget/support/`:
+- `off-plan.ts`: `offPlanCategories(summary, plannedCodes)` → `{ code, total }[]`, largest first. A top whose code is planned is skipped; otherwise its total minus the totals of planned descendants (a planned group under it); rows at `0` or below are dropped. The rows add up to `expenses.off_plan`.
+- `last-month.ts`: `lastMonthActual(previous, code)` → total of the node with that `category` anywhere in the tree, `0` when absent, `null` when `previous` is `null`.
+- `overview.ts`: `overviewLines(lines)` → sorted by `percent` descending, `null` with `over` first (`percentRank`, now shared with `watch-list.ts`); `overallState(actual, planned)` → `ok | warning (≥ 85 %) | over (> 100 %)`.
+
+| Component | Inputs | Notes |
+|---|---|---|
+| `BudgetOverview` (new part) | `budget`, `currency` | Hidden when `lines` is empty. Big `ui-meter` for the total, then one row per line (name, `ui-meter`, "X / Y", percent). Read-only. First block under the month switcher. |
+| `OffPlanList` (replaces `OffPlanRow`) | `budget`, `rows`, `canAdd(code)`, `currency` | An expander (`button[aria-expanded]` and a list) when `rows` is not empty; the single total otherwise. Output `add({ code, total })`. |
+| `PlanLineRow` (changed) | + `lastMonth: number \| null` | Text `budget.lastMonth` under the meter when not `null`. |
+| `BudgetTotals` (changed) | — | `ui-meter` for income and saving when the planned amount is above `0`; the text stays. |
+| `BudgetDraft` (changed) | `addLine(code, minor?)` | With `minor` the line starts at `minorToMajorText(minor, exponent)`; the draft is dirty, so the unsaved guard applies (REQ-5.8). |
+| `BudgetPage` (changed) | — | Passes `store.summary()` and `store.previous()`; `addFromOffPlan({ code, total })` calls `draft.addLine(code, total)`. |
+
+### Risks / alternatives (amendment)
+
+- **Fixed bills in the pace line.** The summary does not say which entries a rule made, so they cannot be left out; the card says they are included (non-goal).
+- **Donut chart rejected.** The ranked bar list already answers "where does the money go" and is easier to make accessible.
+- **Chart library rejected.** Two simple charts, no dependency, full control of RTL and tokens.
+- **Previous month fetched even with a plan.** The plan is only known once the budget answers; one more small request is cheaper than waiting, and the budget page needs the same data.
+- **Pace colours.** `warning` and `over` compare with the straight target line and the total target, not with the 85 % rule of a budget line, because a cumulative line would sit near 85 % of a prorated target in most normal months.
+
 ## Requirement coverage
 
 | REQ | Covered by |
@@ -180,6 +268,10 @@ Support: `watch-list.ts` (`warning|over`, sort by `percent` with `null`+`over` f
 | 6.1–6.9 | `RecurringPage`, `RuleSheet`, `RecurringStore`, `rule-draft.ts`, `rule-errors.ts`, `EntryRow` badge |
 | 7.1–7.4 | `ui-meter`, `ui-bar-list`, `parseMajor`, `ui-catalog` |
 | 8.1–8.10 | routes and shell, `LedgerChanges`, `provide*`, generations, `todayIn`, translations, a11y in components |
+| 9.1–9.5 | `ui-pace-chart`, `ui-trend-bars`, `pace-geometry.ts`, `ui-catalog` |
+| 9.6–9.11 | `Summary` mapper, `pace-series.ts`, `trend-series.ts`, `DashboardStore` (`previous`, `trend`), `PaceCard`, `TrendCard`, `CategoriesCard`, `RecentCard`, `DashboardPage` |
+| 9.12–9.15 | `BudgetStore` (`summary`, `previous`), `overview.ts`, `off-plan.ts`, `last-month.ts`, `BudgetOverview`, `OffPlanList`, `PlanLineRow`, `BudgetTotals`, `BudgetDraft` |
+| 9.16–9.17 | i18n files, `@shared/util-format` |
 
 ## Risks / alternatives considered
 

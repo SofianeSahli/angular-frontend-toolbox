@@ -1,0 +1,57 @@
+@layer ui {
+  :host {
+    --ui-meter-block-size: 8px;
+    --ui-meter-stripe: 6px;
+    --ui-meter-stripe-gap: 12px;
+    --ui-meter-stripe-light-mix: 65%;
+
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-2);
+    min-inline-size: 0;
+  }
+
+  .ui-meter__track {
+    position: relative;
+    display: block;
+    flex: 1 1 auto;
+    block-size: var(--ui-meter-block-size);
+    overflow: hidden;
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-surface-sunken);
+  }
+
+  .ui-meter__fill {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    display: block;
+    border-radius: inherit;
+    background: var(--ui-color-accent);
+  }
+
+  .ui-meter__icon {
+    flex: none;
+  }
+
+  :host(.ui-meter--warning) .ui-meter__fill {
+    background: var(--ui-color-warning);
+  }
+
+  :host(.ui-meter--warning) .ui-meter__icon {
+    color: var(--ui-color-warning);
+  }
+
+  :host(.ui-meter--over) .ui-meter__fill {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--ui-color-danger) 0 var(--ui-meter-stripe),
+      color-mix(in srgb, var(--ui-color-danger) var(--ui-meter-stripe-light-mix), var(--ui-color-surface)) var(--ui-meter-stripe)
+        var(--ui-meter-stripe-gap)
+    );
+  }
+
+  :host(.ui-meter--over) .ui-meter__icon {
+    color: var(--ui-color-danger);
+  }
+}

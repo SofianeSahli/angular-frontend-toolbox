@@ -1,8 +1,8 @@
 # 008 — Dashboard, budget and recurring operations: Requirements
 
-> Status: Draft — awaiting approval
+> Status: Implemented — in review (charts added by amendment, 2026-11-25: US-9)
 > Scope:
-> - **Toolbox (`scope:shared`):** `ui-meter` and `ui-bar-list` molecules; `parseMajor` gets an `allowZero` option. No chart, DateField, AmountKeypad or Combobox.
+> - **Toolbox (`scope:shared`):** `ui-meter` and `ui-bar-list` molecules; `parseMajor` gets an `allowZero` option; amendment: `ui-pace-chart` and `ui-trend-bars` molecules (hand-written SVG, no chart library). No DateField, AmountKeypad or Combobox.
 > - **App (`scope:expenses`):** `apps/expenses-management/src/app/dashboard/`, `budget/`, `recurring/`, small changes in `operations/`, `categories/` (picker "plan" mode) and `shell/`. Layout as in [spec 006](../006-households-books/design.md#placement) and [spec 007](../007-categories-operations/design.md#placement).
 >
 > Backend contracts (not restated here; the app follows them):
@@ -26,6 +26,7 @@ After spec 007 a user can record and list entries, but `/` is still a placeholde
 - **US-6 — Recurring operations.** As a member, I want to manage the rules that record rent, bills and salary by themselves, and recognise the entries they made.
 - **US-7 — Toolbox.** As a developer, I want a meter and a bar list in the toolbox, so that every app shows progress and rankings the same way.
 - **US-8 — Quality.** As a user, I want these screens in French, English and Arabic (RTL), accessible, in any currency, with clear messages when something fails.
+- **US-9 — Charts.** As a member, I want to see the month's spending pace and the last six months as charts, and a budget overview that shows where I stand, so that I understand the numbers without reading every row.
 
 ## Acceptance criteria (EARS)
 
@@ -100,6 +101,33 @@ After spec 007 a user can record and list entries, but `/` is still a placeholde
 - **REQ-8.9** THE SYSTEM SHALL be usable with keyboard and screen reader: cards have headings, meters and bars have accessible names and values, status is never colour alone, focus returns to the opener when a dialog closes.
 - **REQ-8.10** IF a request answers `422 validation.failed` for `month` (for example a month typed in the URL too far ahead) THEN THE SYSTEM SHALL fall back to the current month.
 
+### US-9 — Charts (amendment, 2026-11-25)
+
+Toolbox
+- **REQ-9.1** THE SYSTEM SHALL provide `ui-pace-chart` in `@shared/ui-molecules`, drawn as inline SVG (no chart library, no new dependency), with signal inputs only: `days` (`{ day, value }[]`, cumulative values), `daysInMonth`, `today?` (day number), `target?` (total at the last day), `reference?` (`number[]`, cumulative values indexed from day 1), `label` and `summaryText`. It draws the cumulative line over the days of the month. WHEN `today` is given it draws a vertical marker there and the line stops there. WHEN `target` is given it draws a dotted straight line from `0` to `target` at the last day. WHEN `reference` is given it draws a second dotted series, in a different tone from the target line. All labels arrive already translated.
+- **REQ-9.2** THE SYSTEM SHALL colour the line with the `ok`, `warning` or `over` colours of `ui-meter`, from the actual value at `today` (the last point when `today` is absent) against `target`: `ok` up to the target line at `today`, `warning` above it but within `target`, `over` above `target`. Without `target` the line is `ok`. WHILE `over`, the part of the line above `target` SHALL also be dashed, so the state never relies on colour alone.
+- **REQ-9.3** THE SYSTEM SHALL provide `ui-trend-bars` in `@shared/ui-molecules`, drawn as inline SVG, with inputs `items` (`{ id, label, value, valueText, current? }[]`, in time order), `averageText?` and `label`, and the output `itemSelect(id)`. One vertical bar per item, scaled to the largest value; the `current` item is highlighted and the others muted; the `valueText` is written directly on each bar (no legend); `averageText`, when given, is written under the chart. A bar is a keyboard-focusable button that emits `itemSelect`.
+- **REQ-9.4** Both charts SHALL: read only `var(--ui-*)` tokens (data colours from the theme contract; the Olivier theme already has what is needed); use `font-variant-numeric: tabular-nums`; mirror the time axis in RTL so that time runs right to left, without mirroring the text; expose an `aria-label` (pace chart: `role="img"` with `summaryText`; trend bars: `role="group"` with `label`, because its bars are buttons and a `role="img"` would hide them from assistive technology) and a visually hidden `<table>` with the same values; draw no animation under `prefers-reduced-motion: reduce`; and need no store, translation keys or currency logic.
+- **REQ-9.5** THE SYSTEM SHALL show both charts in `apps/ui-catalog` in these states: empty, normal, over target, and RTL.
+
+Dashboard
+- **REQ-9.6** THE SYSTEM SHALL keep `days` and `months` of the summary answer in the `Summary` model (`DayTotals`, `MonthTotals`, same fields as the contract), so that charts need no other request.
+- **REQ-9.7** THE SYSTEM SHALL show a **"Rythme du mois"** card right after the hero, with `ui-pace-chart` fed by the month summary already fetched: the cumulative expense per day. WHEN the month has a plan THE SYSTEM SHALL use `expenses.planned` as `target`; WHEN it has none it SHALL use no target and show as `reference` the cumulative expense of the previous month, from a summary of that month. IF the previous-month request fails THEN the card shows no reference and no error. `today` is passed only for the current month. A past month shows the whole line; a future month, and a month without entries, show the card's empty state. A small note under the chart says that fixed bills are included.
+- **REQ-9.8** THE SYSTEM SHALL show a **"6 derniers mois"** card with `ui-trend-bars`, from one summary call with `from`/`to` covering the selected month and the five months before it, plotting the `expense` of `months`. Months without entries count as `0`, so the series always has six bars, the selected month being the `current` one. It shows "Moyenne : {{amount}}" over the months that have entries (none: no average). WHEN a bar is selected THE SYSTEM SHALL navigate to `/?mois=YYYY-MM` for that month.
+- **REQ-9.9** WHEN the user taps a bar of "Où va l'argent" THE SYSTEM SHALL open `/operations?mois=…&categorie=<code>` (REQ-1.3, REQ-3.3). WHEN fewer than two rows qualify THE SYSTEM SHALL show the single category as a row with its amount and no bar.
+- **REQ-9.10** WHILE the dashboard has no book yet THE SYSTEM SHALL show skeleton cards, never a blank page. THE SYSTEM SHALL show the day heading inside "Récent" smaller than the card titles.
+- **REQ-9.11** THE SYSTEM SHALL load the previous-month summary and the six-month summary in parallel with the existing requests (REQ-3.8), each with its own card state and generation. IF one of them fails THEN the hero and the other cards stay shown, and the failing card shows its own error (REQ-3.7) or, for the reference, nothing (REQ-9.7).
+
+Budget
+- **REQ-9.12** THE SYSTEM SHALL show a **"Vue d'ensemble"** block at the top of `/budget`, under the month switcher: one large `ui-meter` of `expenses.actual` over `expenses.planned`, then the plan lines sorted by `percent` descending (`null` with `over` first), each with its `ui-meter`, "X / Y" and its percent. States are the budget states of REQ-3.1 (`warning` from 85 %, `over` above 100 %). The block is read-only (editing stays in "Lignes du budget"), reads the last answer, and is hidden when the plan has no lines.
+- **REQ-9.13** THE SYSTEM SHALL replace the single "Hors budget" total by an expandable list of the unplanned expense categories with their totals, largest first. The list is computed from the month summary's category tree minus the categories and groups of the plan lines; its rows add up to `expenses.off_plan`. IF the summary request fails THEN the single total stays. Each row has an **"Ajouter au budget"** action that adds a draft line for that category prefilled with the amount spent, which marks the draft dirty (REQ-5.8). The action is absent for a row that overlaps a line already in the draft (REQ-5.3).
+- **REQ-9.14** THE SYSTEM SHALL show under each plan line "Le mois dernier : {{amount}}", the previous month's expense of that category (children included), from a summary of the previous month. IF that request fails THEN the text is hidden.
+- **REQ-9.15** WHEN income expected (or saving planned) is above `0` THE SYSTEM SHALL show a `ui-meter` of received over expected (saved over planned) in "Totaux", besides the text; otherwise it keeps the text only.
+
+i18n and rules
+- **REQ-9.16** THE SYSTEM SHALL add the keys `dashboard.pace.*`, `dashboard.trend.*`, `budget.overview.*`, `budget.offPlan.*` and `budget.lastMonth` to `public/i18n/{fr,en,ar}.json`; Arabic is a draft.
+- **REQ-9.17** THE SYSTEM SHALL keep money in integer millimes through `@shared/util-format`: hero-style numbers on the dashboard are rounded down to whole units, budget lines keep full precision. No new backend endpoint: everything comes from `GET books/{book}/summary` and the existing budget endpoints.
+
 Checklist — covered?
 - [x] Loading state (REQ-3.7)
 - [x] Empty state (REQ-3.2, 4.1, 4.4, 5.11)
@@ -110,7 +138,8 @@ Checklist — covered?
 - [x] i18n (REQ-8.8)
 
 ## Non-goals
-- Pace chart and any other chart; DateField, AmountKeypad and Combobox stay deferred (spec 004).
+- DateField, AmountKeypad and Combobox stay deferred (spec 004).
+- Charts beyond US-9: leaving fixed bills out of the pace line (the summary does not say which entries came from a rule, so the card says they are included), insight cards, a category detail page, and a donut chart.
 - Insights ("+18 % vs ta moyenne"), provisions and sinking funds, pay-day months, notifications and reminders, exports, Capacitor widgets.
 - Pause and resume of rules (no backend support), a "Répéter" option in the entry sheet, repeated occurrences of one rule in "À venir".
 - Budget lines on leaves or on income and saving categories (the backend refuses them).

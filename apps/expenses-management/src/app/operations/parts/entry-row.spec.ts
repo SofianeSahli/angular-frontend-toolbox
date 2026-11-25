@@ -80,4 +80,15 @@ describe('EntryRow (REQ-5.3, 8.2, 8.4)', () => {
     const shared = await renderRow(entry('e1', { created_by: { id: 'u2', name: 'Sami' } }), true);
     expect(shared.container.textContent).toContain('par Sami');
   });
+
+  it('marks an entry made by a recurring rule (spec 008 REQ-6.7)', async () => {
+    await renderRow(entry('e1', { recurring_rule_id: 'r1' }));
+    expect(screen.getByText('récurrent')).toBeTruthy();
+    expect(screen.getByRole('button').getAttribute('aria-label')).toMatch(/, récurrent$/);
+  });
+
+  it('shows no badge on an entry typed by hand', async () => {
+    await renderRow(entry('e1'));
+    expect(screen.queryByText('récurrent')).toBeNull();
+  });
 });

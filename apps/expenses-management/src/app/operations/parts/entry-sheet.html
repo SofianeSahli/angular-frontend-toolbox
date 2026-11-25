@@ -6,6 +6,9 @@
     @if (editing) {
       <p class="m-0">
         {{ 'operations.sheet.meta' | translate: { created: editing.createdBy.name, updated: editing.updatedBy.name } }}
+        @if (editing.recurringRuleId) {
+          &ngsp;<ui-badge>{{ 'operations.recurringBadge' | translate }}</ui-badge>
+        }
       </p>
     }
 

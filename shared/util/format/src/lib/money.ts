@@ -49,7 +49,11 @@ export function formatMinor(value: number, currency: CurrencyFormat, options: Fo
   return formatterFor(currency, options.display === 'rounded', options.signed === true).format(value / 10 ** currency.exponent);
 }
 
-export function parseMajor(text: string, exponent: number): ParseResult {
+export interface ParseMajorOptions {
+  readonly allowZero?: boolean;
+}
+
+export function parseMajor(text: string, exponent: number, options: ParseMajorOptions = {}): ParseResult {
   const compact = text.replace(SPACES, '');
   if (compact === '') return { ok: false, reason: 'empty' };
   const match = MAJOR_TEXT.exec(compact);
@@ -58,7 +62,7 @@ export function parseMajor(text: string, exponent: number): ParseResult {
   if (!match || whole + fraction === '') return { ok: false, reason: 'invalid' };
   if (fraction.length > exponent) return { ok: false, reason: 'too_many_decimals' };
   const digits = (whole + fraction.padEnd(exponent, '0')).replace(/^0+/, '');
-  if (digits === '') return { ok: false, reason: 'zero' };
+  if (digits === '') return options.allowZero ? { ok: true, minor: 0 } : { ok: false, reason: 'zero' };
   if (digits.length > MAX_MINOR_DIGITS || Number(digits) > MAX_MINOR) return { ok: false, reason: 'too_large' };
   return { ok: true, minor: Number(digits) };
 }

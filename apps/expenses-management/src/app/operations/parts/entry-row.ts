@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { UiAmount } from '@shared/ui-atoms';
+import { UiAmount, UiBadge } from '@shared/ui-atoms';
 import { UiListItem } from '@shared/ui-molecules';
 import { CurrencyFormat, formatMinor } from '@shared/util-format';
 import { CategoryLabels } from '../../categories/data/category-labels';
@@ -10,13 +10,16 @@ import { longDate, uiLocale } from '../support/day-groups';
 
 @Component({
   selector: 'app-entry-row',
-  imports: [TranslatePipe, UiAmount, UiListItem],
+  imports: [TranslatePipe, UiAmount, UiBadge, UiListItem],
   template: `
     <button uiListItem type="button" class="w-100" [attr.aria-label]="accessibleName()" (click)="open.emit(entry())">
       <span uiLeading aria-hidden="true">{{ emoji() }}</span>
       <span uiTitle
-        ><bdi>{{ name() }}</bdi></span
-      >
+        ><bdi>{{ name() }}</bdi>
+        @if (entry().recurringRuleId) {
+          &ngsp;<ui-badge>{{ 'operations.recurringBadge' | translate }}</ui-badge>
+        }
+      </span>
       @if (entry().comment || showAuthor()) {
       <span uiSubtitle>
         @if (entry().comment; as comment) {
@@ -48,10 +51,11 @@ export class EntryRow {
 
   protected readonly accessibleName = computed(() => {
     this.revision();
-    return this.translate.instant('operations.list.row', {
+    const row = this.translate.instant('operations.list.row', {
       category: this.name(),
       amount: formatMinor(this.entry().amount, this.currency()),
       date: longDate(this.entry().date, uiLocale(this.translate.getCurrentLang())),
     });
+    return this.entry().recurringRuleId === null ? row : `${row}, ${this.translate.instant('operations.recurringBadge')}`;
   });
 }

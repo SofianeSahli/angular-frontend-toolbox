@@ -40,7 +40,7 @@ const ERROR_TEMPLATES: Readonly<Record<string, string>> = {
   date: '{{message}}',
 };
 
-function amountValidator(exponent: number, translate: TranslateService): ValidatorFn {
+export function amountValidator(exponent: number, translate: TranslateService): ValidatorFn {
   return (control: AbstractControl<string>): ValidationErrors | null => {
     const parsed = parseMajor(control.value ?? '', exponent);
     return parsed.ok

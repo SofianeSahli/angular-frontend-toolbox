@@ -1,0 +1,39 @@
+<ui-page [title]="'recurring.title' | translate">
+  <button uiPageActions uiButton variant="primary" type="button" [disabled]="!book()" (click)="add()">
+    <ui-icon name="plus" />
+    {{ 'recurring.add' | translate }}
+  </button>
+
+  @if (book(); as current) {
+    @switch (store.status()) {
+      @case ('error') {
+        <ui-alert tone="danger">
+          {{ (store.error()?.code === 'http.offline' ? 'recurring.loadOffline' : 'recurring.loadError') | translate }}
+          <div uiAlertActions>
+            <button uiButton size="sm" type="button" (click)="retry()">{{ 'recurring.retry' | translate }}</button>
+          </div>
+        </ui-alert>
+      }
+      @case ('ready') {
+        @if (store.rules().length === 0) {
+          <ui-empty-state icon="repeat" [title]="'recurring.empty.title' | translate" [text]="'recurring.empty.text' | translate">
+            <button uiButton variant="primary" type="button" (click)="add()">{{ 'recurring.add' | translate }}</button>
+          </ui-empty-state>
+        } @else {
+          <ui-list>
+            @for (rule of store.rules(); track rule.id) {
+              <li><app-rule-row [rule]="rule" [currency]="current.currency" (edit)="edit($event)" (remove)="remove($event)" /></li>
+            }
+          </ui-list>
+        }
+      }
+      @default {
+        <div class="d-flex flex-column gap-2" role="status" [attr.aria-label]="'recurring.loading' | translate">
+          <ui-skeleton />
+          <ui-skeleton />
+          <ui-skeleton />
+        </div>
+      }
+    }
+  }
+</ui-page>

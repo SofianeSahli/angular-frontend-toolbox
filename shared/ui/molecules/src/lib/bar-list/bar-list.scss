@@ -1,0 +1,99 @@
+@layer ui {
+  :host {
+    --ui-bar-list-block-size: 8px;
+    --ui-bar-list-label-weight: 500;
+
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .ui-bar-list__rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ui-bar-list__row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-1);
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding-block: var(--ui-space-2);
+    padding-inline: 0;
+    border: 0;
+    border-radius: var(--ui-radius-sm);
+    background: transparent;
+    color: var(--ui-color-ink);
+    font: inherit;
+    text-align: start;
+  }
+
+  .ui-bar-list__row--button {
+    cursor: pointer;
+
+    &:hover {
+      background: var(--ui-color-surface-sunken);
+    }
+
+    &:focus-visible {
+      outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+      outline-offset: var(--ui-focus-ring-offset);
+    }
+  }
+
+  .ui-bar-list__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--ui-space-3);
+    min-inline-size: 0;
+  }
+
+  .ui-bar-list__label {
+    overflow: hidden;
+    font-weight: var(--ui-bar-list-label-weight);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ui-bar-list__value {
+    display: flex;
+    flex: none;
+    gap: var(--ui-space-2);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .ui-bar-list__share,
+  .ui-bar-list__empty {
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+    line-height: var(--ui-text-small-line-height);
+  }
+
+  .ui-bar-list__empty {
+    margin: 0;
+  }
+
+  .ui-bar-list__track {
+    position: relative;
+    display: block;
+    block-size: var(--ui-bar-list-block-size);
+    overflow: hidden;
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-color-surface-sunken);
+  }
+
+  .ui-bar-list__bar {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    display: block;
+    border-radius: inherit;
+    background: var(--ui-color-ink-muted);
+  }
+}

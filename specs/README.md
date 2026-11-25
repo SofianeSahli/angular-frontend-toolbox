@@ -75,6 +75,16 @@ First spec whose domain code lives in the app only; the toolbox gets nothing new
 - App `operations/`: `EntriesApi`, `OtherNamesApi`, `entry-draft` (request and PATCH diff), `OperationsStore` (pages of 25, stale answers dropped, book switch, reset on account change) with `provideOperations`; `EntrySheet` (add and edit, big-amount confirmation, client `id` kept on retry, every handled code) opened by `EntrySheetService`; `/operations` page with day groups and filters (month, type, category, author).
 - Shell: add buttons enabled (rail, top bar), "Opérations" destination, `list` icon. Backend category labels merged into `public/i18n/{fr,en,ar}.json`; Arabic is a draft. Files: `007-categories-operations/`.
 
+## 008 — Dashboard, budget and recurring operations (in review)
+
+- Toolbox: `ui-meter` and `ui-bar-list` in `@shared/ui-molecules` (catalog states); `parseMajor` option `allowZero`.
+- App `ledger/`: `LedgerChanges` (entry, rule and budget writes mark the affected months stale) and `month-context` (`?mois`, clamp to `2000-01` … current + 12).
+- App `dashboard/`: `SummaryApi`, `DashboardStore` (one state and generation per card, comparison only without a plan, first-use check), `/` with hero, watch list, categories, members, upcoming, recent, no-plan and first-use cards. `BookHome` removed.
+- App `budget/`: `BudgetApi` (`get`, `save`, `copy`), `BudgetStore`, `BudgetDraft` (local totals, overlap rule), `/budget` with month switcher, lines, off-plan row, totals, copy with confirmations and an unsaved-changes guard; category picker `plan` mode.
+- App `recurring/`: `RecurringApi`, `rule-draft`, `RecurringStore`, `RuleSheet`, `/operations/recurrentes`; "récurrent" badge on entries; operations page reads `?mois`/`?categorie`.
+- Shell: "Budget" rail destination (`wallet` icon); `dashboard.*`, `budget.*`, `recurring.*` keys in fr/en/ar (Arabic draft). Files: `008-dashboard-budget-recurring/`.
+- Charts (amendment, 2026-11-25, US-9): `ui-pace-chart` and `ui-trend-bars` in `@shared/ui-molecules` (inline SVG, RTL-mirrored time axis, hidden data table, catalog states); `Summary` keeps `days` and `months`; dashboard "Rythme du mois" and "6 derniers mois" cards, clickable category bars, skeleton cards; budget "Vue d'ensemble", expandable "Hors budget" with "Ajouter au budget", "Le mois dernier" per line, income and saving meters. Tasks T25–T44.
+
 ## Next
 
-008 Dashboard, budget and recurring operations (draft, awaiting approval: [008-dashboard-budget-recurring/](./008-dashboard-budget-recurring/requirements.md)). See [docs/ROADMAP.md](../docs/ROADMAP.md).
+009 Production readiness. See [docs/ROADMAP.md](../docs/ROADMAP.md).

@@ -1,4 +1,8 @@
 <ui-page [title]="'operations.title' | translate">
+  <a uiPageActions uiButton variant="secondary" routerLink="/operations/recurrentes">
+    <ui-icon name="repeat" />
+    {{ 'operations.recurringLink' | translate }}
+  </a>
   <button uiPageActions uiButton variant="primary" type="button" [disabled]="!book()" (click)="add()">
     <ui-icon name="plus" />
     {{ 'operations.add' | translate }}

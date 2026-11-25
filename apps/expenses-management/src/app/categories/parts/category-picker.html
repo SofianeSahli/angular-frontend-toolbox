@@ -1,4 +1,4 @@
-<ui-dialog-header [title]="(filterMode ? 'categories.picker.filterTitle' : 'categories.picker.title') | translate" />
+<ui-dialog-header [title]="title | translate" />
 <div uiDialogBody class="d-flex flex-column gap-3">
   @if (unavailable()) {
     <ui-alert tone="danger" [title]="'categories.picker.unavailable' | translate">
@@ -34,7 +34,11 @@
       </ui-list>
     }
   } @else {
-    @if (recents().length > 0) {
+    @if (planMode && tops().length === 0) {
+      <p class="m-0" role="status">{{ 'categories.picker.planEmpty' | translate }}</p>
+    }
+
+    @if (!planMode && recents().length > 0) {
       <div class="d-flex flex-wrap gap-2" role="group" [attr.aria-label]="'categories.picker.recents' | translate">
         @for (recent of recents(); track recent.code) {
           <button uiChip type="button" (click)="pick(recent.code)">
@@ -74,7 +78,7 @@
             (transitionend)="settled($event, top.code)"
           >
             <ul class="category-picker__children" role="list">
-              @if (filterMode) {
+              @if (top.pickable) {
                 <li>
                   <button uiListItem type="button" (click)="pick(top.code)">
                     <span uiTitle><bdi>{{ 'categories.picker.allOf' | translate: { name: top.name } }}</bdi></span>
@@ -83,6 +87,14 @@
               }
               @for (group of top.groups; track group.code) {
                 @let groupOpen = topOpen && openGroup() === group.code;
+                @if (planMode) {
+                  <li>
+                    <button uiListItem type="button" (click)="pick(group.code)">
+                      <span uiLeading aria-hidden="true">{{ group.emoji }}</span>
+                      <span uiTitle><bdi>{{ group.name }}</bdi></span>
+                    </button>
+                  </li>
+                } @else {
                 <li>
                   <button
                     uiListItem
@@ -131,6 +143,7 @@
                     </ul>
                   </div>
                 </li>
+                }
               }
             </ul>
           </div>

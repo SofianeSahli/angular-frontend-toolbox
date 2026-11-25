@@ -6,10 +6,7 @@
     "name": "Gestion des dépenses"
   },
   "home": {
-    "title": "Accueil",
-    "currency": "Devise",
-    "timezone": "Fuseau horaire",
-    "soon": "Le tableau de bord arrive bientôt."
+    "title": "Accueil"
   },
   "shell": {
     "navigation": "Navigation principale",
@@ -23,7 +20,8 @@
       "new": "Nouveau carnet",
       "limit": "Vous avez déjà 5 carnets personnels."
     },
-    "operations": "Opérations"
+    "operations": "Opérations",
+    "budget": "Budget"
   },
   "brand": {
     "promise": "Vos dépenses du foyer, à deux, sans prise de tête.",
@@ -346,7 +344,9 @@
       "id": {
         "uuid": "Identifiant invalide, réessayez"
       }
-    }
+    },
+    "recurringBadge": "récurrent",
+    "recurringLink": "Récurrentes"
   },
   "categories": {
     "food": {
@@ -868,8 +868,287 @@
       "retired": "Catégorie retirée",
       "unavailable": "Catégories indisponibles",
       "retry": "Réessayer",
-      "allOf": "Tout dans {{name}}"
+      "allOf": "Tout dans {{name}}",
+      "planTitle": "Ajouter une ligne au budget",
+      "planEmpty": "Toutes les catégories de dépenses ont déjà une ligne."
     },
     "unknown": "Autre"
+  },
+  "dashboard": {
+    "loading": "Chargement…",
+    "offline": "Hors connexion. Vérifiez votre connexion et réessayez.",
+    "cardError": "Impossible de charger cette carte.",
+    "retry": "Réessayer",
+    "percent": "{{percent}} %",
+    "hero": {
+      "title": "Reste à dépenser",
+      "exhausted": "Budget épuisé",
+      "perDay": "{{amount}} par jour",
+      "perDayLow": "moins de {{amount}} par jour",
+      "spent": "Dépensé ce mois :",
+      "manage": "Gérer le budget"
+    },
+    "noPlan": {
+      "title": "Dépensé ce mois",
+      "previousSameDay": "Le mois dernier à la même date :",
+      "previousWhole": "Le mois précédent :",
+      "more": "{{amount}} de plus",
+      "less": "{{amount}} de moins",
+      "same": "Autant que le mois précédent",
+      "invite": "Fixez un budget pour savoir ce qu'il vous reste à dépenser.",
+      "setBudget": "Fixer un budget"
+    },
+    "watch": {
+      "title": "À surveiller",
+      "empty": "Tout est dans les clous ce mois-ci",
+      "unplanned": "Hors plan",
+      "of": "{{actual}} sur {{planned}}"
+    },
+    "categories": {
+      "title": "Où va l'argent",
+      "empty": "Aucune dépense ce mois-ci",
+      "others": "Autres catégories"
+    },
+    "members": {
+      "title": "Par membre"
+    },
+    "upcoming": {
+      "title": "À venir",
+      "empty": "Rien de prévu d'ici la fin du mois",
+      "seeAll": "Voir les récurrentes"
+    },
+    "recent": {
+      "title": "Récent",
+      "empty": "Aucune opération ce mois-ci",
+      "seeAll": "Tout voir"
+    },
+    "firstUse": {
+      "title": "Bienvenue dans votre carnet",
+      "text": "Notez une première opération ou préparez le budget du mois.",
+      "add": "Ajouter une opération",
+      "budget": "Préparer le budget"
+    },
+    "pace": {
+      "title": "Rythme du mois",
+      "label": "Dépenses cumulées par jour",
+      "target": "Prévu",
+      "lastMonth": "Le mois dernier",
+      "today": "Aujourd'hui",
+      "fixedIncluded": "Dépenses fixes incluses",
+      "empty": "Pas encore de dépenses à suivre ce mois-ci.",
+      "summary": "{{spent}} dépensés en {{days}} jours",
+      "summaryTarget": "{{spent}} dépensés sur {{target}} prévus, après {{days}} jours",
+      "summaryReference": "{{spent}} dépensés après {{days}} jours, contre {{reference}} le mois dernier"
+    },
+    "trend": {
+      "title": "6 derniers mois",
+      "label": "Dépenses des 6 derniers mois",
+      "average": "Moyenne : {{amount}}"
+    }
+  },
+  "budget": {
+    "title": "Budget",
+    "loading": "Chargement du budget…",
+    "loadError": "Impossible de charger le budget.",
+    "loadOffline": "Hors connexion. Le budget n'a pas pu être chargé.",
+    "retry": "Réessayer",
+    "noPlan": "Ce mois n'a pas encore de budget. Ajoutez des lignes ou copiez le mois dernier.",
+    "expectedIncome": "Revenu prévu",
+    "plannedSaving": "Épargne prévue",
+    "retired": "Retirée",
+    "offPlan": {
+      "title": "Hors budget",
+      "add": "Ajouter au budget",
+      "addNamed": "Ajouter {{name}} au budget",
+      "show": "Voir le détail",
+      "hide": "Masquer le détail"
+    },
+    "save": "Enregistrer",
+    "saved": "Budget enregistré",
+    "cleared": "Budget effacé",
+    "cancel": "Annuler",
+    "lines": {
+      "title": "Lignes du budget",
+      "add": "Ajouter une ligne",
+      "empty": "Aucune ligne pour l'instant.",
+      "planned": "Prévu",
+      "actual": "Dépensé : {{amount}}",
+      "percent": "{{percent}} %",
+      "remove": "Retirer {{name}}"
+    },
+    "status": {
+      "ok": "Dans le budget",
+      "warning": "Presque atteint",
+      "over": "Dépassé"
+    },
+    "totals": {
+      "title": "Totaux",
+      "planned": "Prévu",
+      "actual": "Dépensé",
+      "remaining": "Reste à dépenser",
+      "income": "Revenus (reçus / prévus)",
+      "expected_remaining_income": "Revenus restants prévus après dépenses prévues",
+      "saving": "Épargne (mise de côté / prévue)"
+    },
+    "copy": {
+      "action": "Copier le mois dernier",
+      "done": "Budget du mois dernier copié",
+      "replaceTitle": "Remplacer le budget de ce mois ?",
+      "replaceMessage": "Le budget de ce mois sera remplacé par celui du mois précédent.",
+      "replaceConfirm": "Remplacer",
+      "nothing": "Le mois précédent n'a pas de budget"
+    },
+    "leave": {
+      "title": "Quitter sans enregistrer ?",
+      "message": "Les modifications du budget seront perdues.",
+      "confirm": "Quitter",
+      "cancel": "Rester"
+    },
+    "clear": {
+      "title": "Effacer le budget de ce mois ?",
+      "message": "Les lignes, le revenu et l'épargne prévus seront supprimés.",
+      "confirm": "Effacer"
+    },
+    "errors": {
+      "generic": "L'enregistrement a échoué. Réessayez.",
+      "offline": "Échec de l'enregistrement, vérifiez la connexion. Vos saisies sont conservées.",
+      "throttled": "Réessayez dans {{retry}}",
+      "bookGone": "Ce carnet n'est plus accessible"
+    },
+    "amount": {
+      "empty": "Saisissez un montant",
+      "invalid": "Montant invalide",
+      "too_many_decimals": "Trop de décimales pour cette devise",
+      "zero": "Montant invalide",
+      "too_large": "Montant trop élevé"
+    },
+    "fields": {
+      "generic": "Valeur refusée",
+      "month": {
+        "date_format": "Mois invalide",
+        "after_or_equal": "Le mois doit être postérieur à janvier 2000",
+        "before_or_equal": "Le mois ne peut pas dépasser 12 mois à partir d'aujourd'hui"
+      },
+      "expected_income": {
+        "integer": "Montant invalide",
+        "min": "Le montant ne peut pas être négatif",
+        "max": "Montant trop élevé"
+      },
+      "planned_saving": {
+        "integer": "Montant invalide",
+        "min": "Le montant ne peut pas être négatif",
+        "max": "Montant trop élevé"
+      },
+      "lines": {
+        "present": "Les lignes du budget sont manquantes",
+        "array": "Les lignes du budget sont invalides",
+        "max": "100 lignes au maximum",
+        "category": {
+          "required": "Choisissez une catégorie",
+          "string": "Catégorie invalide",
+          "distinct": "Cette catégorie a déjà une ligne",
+          "not_found": "Cette catégorie n'existe plus",
+          "not_plannable": "Choisissez une catégorie ou un groupe, pas une sous-catégorie",
+          "not_expense": "Seules les dépenses peuvent avoir une ligne",
+          "overlaps": "Cette catégorie chevauche une autre ligne",
+          "retired": "Cette catégorie a été retirée"
+        },
+        "planned": {
+          "required": "Saisissez un montant",
+          "integer": "Montant invalide",
+          "min": "Le montant ne peut pas être négatif",
+          "max": "Montant trop élevé"
+        }
+      },
+      "replace": {
+        "boolean": "Valeur refusée"
+      }
+    },
+    "overview": {
+      "title": "Vue d'ensemble",
+      "total": "Dépensé / prévu",
+      "amounts": "{{spent}} / {{planned}}"
+    },
+    "lastMonth": "Le mois dernier : {{amount}}"
+  },
+  "recurring": {
+    "title": "Opérations récurrentes",
+    "add": "Ajouter une récurrente",
+    "loading": "Chargement des récurrentes…",
+    "loadError": "Impossible de charger les récurrentes.",
+    "loadOffline": "Hors connexion. Les récurrentes n'ont pas pu être chargées.",
+    "retry": "Réessayer",
+    "empty": {
+      "title": "Aucune opération récurrente",
+      "text": "Le loyer, les factures ou le salaire peuvent s'enregistrer tout seuls."
+    },
+    "next": "Prochaine : {{date}}",
+    "ended": "Terminée",
+    "editRule": "Modifier {{name}}",
+    "deleteRule": "Supprimer {{name}}",
+    "frequency": {
+      "weekly": "Chaque semaine",
+      "monthly": "Chaque mois",
+      "yearly": "Chaque année",
+      "every": {
+        "weekly": "Toutes les {{n}} semaines",
+        "monthly": "Tous les {{n}} mois",
+        "yearly": "Tous les {{n}} ans"
+      }
+    },
+    "sheet": {
+      "addTitle": "Nouvelle récurrente",
+      "editTitle": "Modifier la récurrente",
+      "editNote": "Les opérations déjà créées ne changent pas. Un nouveau calendrier s'applique à partir d'aujourd'hui.",
+      "pastStart": "Les opérations échues jusqu'à aujourd'hui seront créées tout de suite",
+      "frequency": "Fréquence",
+      "frequencies": {
+        "weekly": "Semaine",
+        "monthly": "Mois",
+        "yearly": "Année"
+      },
+      "interval": "Tous les (nombre de semaines, mois ou années)",
+      "startsOn": "Première date",
+      "endsOn": "Dernière date"
+    },
+    "delete": {
+      "title": "Supprimer cette récurrente ?",
+      "message": "Les opérations déjà créées restent dans le carnet.",
+      "confirm": "Supprimer",
+      "cancel": "Annuler"
+    },
+    "toasts": {
+      "created": "Récurrente créée",
+      "updated": "Récurrente modifiée",
+      "deleted": "Récurrente supprimée",
+      "gone": "Cette récurrente a été supprimée"
+    },
+    "errors": {
+      "limit": "100 récurrentes au maximum",
+      "offline": "Échec, vérifiez la connexion",
+      "generic": "L'opération a échoué. Réessayez."
+    },
+    "fields": {
+      "frequency": {
+        "required": "Choisissez une fréquence",
+        "in": "Fréquence invalide"
+      },
+      "interval": {
+        "required": "Choisissez un intervalle",
+        "integer": "Intervalle invalide",
+        "min": "L'intervalle doit être d'au moins 1",
+        "max": "L'intervalle ne peut pas dépasser 12"
+      },
+      "starts_on": {
+        "required": "Choisissez une première date",
+        "date_format": "Date invalide",
+        "after_or_equal": "La première date ne peut pas remonter à plus d'un an",
+        "before_or_equal": "La première date ne peut pas dépasser un an à partir d'aujourd'hui"
+      },
+      "ends_on": {
+        "date_format": "Date invalide",
+        "after_or_equal": "La dernière date doit suivre la première"
+      }
+    }
   }
 }
