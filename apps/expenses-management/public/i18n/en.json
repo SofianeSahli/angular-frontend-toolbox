@@ -863,13 +863,12 @@
       "title": "Choose a category",
       "filterTitle": "Filter by category",
       "search": "Search a category",
-      "back": "Back",
       "recents": "Recent",
       "noResult": "No category matches.",
       "retired": "Retired category",
       "unavailable": "Categories unavailable",
       "retry": "Retry",
-      "all": "The whole category"
+      "allOf": "All of {{name}}"
     },
     "unknown": "Other"
   }

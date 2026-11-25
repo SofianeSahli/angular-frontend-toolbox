@@ -1,7 +1,7 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslationObject, provideTranslateLoader, provideTranslateService } from '@ngx-translate/core';
 import { ApiError } from '@shared/http-data-access';
 import { SessionStore } from '@shared/identity-data-access';
 import { UI_DIALOG_CONTEXT, UiConfirm, UiToast } from '@shared/ui-organisms';
@@ -22,6 +22,13 @@ import { entry } from '../testing';
 import { EntrySheet } from './entry-sheet';
 
 const B1 = book('b1');
+
+// Validators translate their message when the form is built, so translations must exist before render.
+class FrLoader implements TranslateLoader {
+  getTranslation(): Observable<TranslationObject> {
+    return of({ ...fr, categories: { ...fr.categories, ...LABELS.categories } });
+  }
+}
 const failure = (code: string, status = 422, fields: Record<string, string[]> = {}, retry: number | null = null): WriteResult => ({
   outcome: 'error',
   error: new ApiError(status === 422 ? 'validation' : 'conflict', status, code, fields, retry, 'r1'),
@@ -60,7 +67,7 @@ async function renderSheet(
   const categoriesApi = { tree: vi.fn(() => of<TreeAnswer>('notModified')) };
   const view = await render(EntrySheet, {
     providers: [
-      provideTranslateService({ lang: 'fr' }),
+      provideTranslateService({ lang: 'fr', loader: provideTranslateLoader(FrLoader) }),
       { provide: DIALOG_DATA, useValue: { book: B1, entry: options.editing } },
       {
         provide: UI_DIALOG_CONTEXT,
@@ -76,10 +83,6 @@ async function renderSheet(
       { provide: OtherNamesApi, useValue: otherNames },
       { provide: CategoriesApi, useValue: categoriesApi },
     ],
-  });
-  TestBed.inject(TranslateService).setTranslation('fr', {
-    ...fr,
-    categories: { ...fr.categories, ...LABELS.categories },
   });
   await settle(view);
   return {
@@ -131,6 +134,17 @@ describe('EntrySheet add mode (REQ-4.2–4.10, 7.1–7.8)', () => {
     expect(view.container.querySelector('[aria-live="polite"]')?.textContent?.replace(/[\u202f\u00a0]/g, ' ')).toContain('1 500,000 DT');
     typeAmount(view, '1,2345');
     expect(view.container.textContent).toContain('Trop de décimales pour cette devise');
+  });
+
+  it('shows the amount error only after a save attempt or after typing and leaving the field', async () => {
+    const view = await renderSheet();
+    fireEvent.focus(amountInput());
+    fireEvent.blur(amountInput());
+    view.detectChanges();
+    expect(view.container.textContent).not.toContain('Saisissez un montant');
+    expect(amountInput().getAttribute('aria-invalid')).toBeNull();
+    await save(view);
+    expect(view.container.textContent).toContain('Saisissez un montant');
   });
 
   it('asks to confirm an amount at or above 1 000, then saves on the second press', async () => {

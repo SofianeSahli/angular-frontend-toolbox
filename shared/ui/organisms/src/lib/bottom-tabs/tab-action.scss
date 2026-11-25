@@ -6,6 +6,7 @@
     --ui-tab-action-shadow-mix: 18%;
     --ui-tab-action-shadow-offset: 8px;
     --ui-tab-action-shadow-blur: 24px;
+    --ui-tab-action-enter-scale: 0.6;
 
     display: flex;
     align-items: center;
@@ -21,7 +22,21 @@
     box-shadow: 0 var(--ui-tab-action-shadow-offset) var(--ui-tab-action-shadow-blur)
       color-mix(in srgb, var(--ui-color-ink) var(--ui-tab-action-shadow-mix), transparent);
     cursor: pointer;
+    animation: ui-tab-action-enter var(--ui-duration-base) var(--ui-easing-standard);
   }
 
   @include focus-ring.visible;
+
+  @keyframes ui-tab-action-enter {
+    from {
+      opacity: 0;
+      transform: scale(var(--ui-tab-action-enter-scale));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      animation: none;
+    }
+  }
 }

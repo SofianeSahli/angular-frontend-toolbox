@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { UiToastRegion } from '@shared/ui-organisms';
+import { ChangeDetectionStrategy, Component, contentChild } from '@angular/core';
+import { UiTabAction, UiToastRegion } from '@shared/ui-organisms';
 
 @Component({
   selector: 'ui-app-shell',
@@ -13,5 +13,8 @@ import { UiToastRegion } from '@shared/ui-organisms';
     <ui-toast-region />`,
   styleUrl: './app-shell.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class.ui-app-shell--tab-action]': 'tabAction() !== undefined' },
 })
-export class UiAppShell {}
+export class UiAppShell {
+  protected readonly tabAction = contentChild(UiTabAction);
+}

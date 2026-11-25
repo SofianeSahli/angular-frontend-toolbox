@@ -24,6 +24,9 @@ export interface UiDialogContext {
 
 export const UI_DIALOG_CONTEXT = new InjectionToken<UiDialogContext>('UI_DIALOG_CONTEXT');
 
+// The CDK injects unlayered pane styles (max-height: 100%) at runtime that beat @layer ui, so the cap goes inline.
+const PANE_MAX_BLOCK_SIZE = 'var(--ui-overlays-pane-max-block-size)';
+
 let nextTitleId = 0;
 
 @Injectable({ providedIn: 'root' })
@@ -40,6 +43,7 @@ export class UiDialog {
       role: config.role ?? 'dialog',
       ariaLabelledBy: titleId,
       autoFocus: config.autoFocus ?? 'first-tabbable',
+      maxHeight: PANE_MAX_BLOCK_SIZE,
       restoreFocus: true,
       panelClass: ['ui-dialog-pane', `ui-dialog-pane--${config.size ?? 'md'}`, ...(sheet ? ['ui-dialog-pane--sheet'] : [])],
       backdropClass: 'ui-overlay-backdrop',

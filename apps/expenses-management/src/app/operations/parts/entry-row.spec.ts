@@ -61,18 +61,22 @@ describe('EntryRow (REQ-5.3, 8.2, 8.4)', () => {
     expect(screen.getByRole('button').querySelector('bdi')?.textContent).toBe('Épicerie du coin');
   });
 
-  it('uses the income tone for income only, never a danger colour', async () => {
+  it('uses the income tone for income', async () => {
     const income = await renderRow(entry('e1', { type: 'income', category: 'salary.pay.monthly' }));
     expect(income.container.querySelector('ui-amount')?.classList).toContain('ui-amount--income');
-    income.fixture.destroy();
+  });
+
+  it('never uses the income tone or a danger colour for a saving', async () => {
     const saving = await renderRow(entry('e2', { type: 'saving', category: 'savings.account.deposit' }));
     expect(saving.container.querySelector('ui-amount')?.classList).not.toContain('ui-amount--income');
   });
 
-  it('shows the author only on household books', async () => {
+  it('hides the author on a personal book', async () => {
     const own = await renderRow(entry('e1', { created_by: { id: 'u2', name: 'Sami' } }));
     expect(own.container.textContent).not.toContain('par Sami');
-    own.fixture.destroy();
+  });
+
+  it('shows the author on a household book', async () => {
     const shared = await renderRow(entry('e1', { created_by: { id: 'u2', name: 'Sami' } }), true);
     expect(shared.container.textContent).toContain('par Sami');
   });

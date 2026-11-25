@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, NavigationEnd, Router, RouterLink, RouterLinkAc
 import { TranslatePipe } from '@ngx-translate/core';
 import { IDENTITY_CONFIG, SessionStore } from '@shared/identity-data-access';
 import { UiButton, UiIcon } from '@shared/ui-atoms';
-import { UiBottomTabs, UiRailItem, UiSideRail, UiTab, UiTopBar, UiTopBarTitle } from '@shared/ui-organisms';
+import { UiBottomTabs, UiRailItem, UiSideRail, UiTab, UiTabAction, UiTopBar, UiTopBarTitle } from '@shared/ui-organisms';
 import { UiAppShell } from '@shared/ui-templates';
 import { filter, map } from 'rxjs';
 import { BooksStore } from '../households/data/books.store';
@@ -43,6 +43,7 @@ function deepestData(router: Router): ShellRouteData {
     UiRailItem,
     UiSideRail,
     UiTab,
+    UiTabAction,
     UiTopBar,
     UiTopBarTitle,
   ],

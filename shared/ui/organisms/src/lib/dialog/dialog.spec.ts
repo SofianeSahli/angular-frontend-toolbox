@@ -1,4 +1,4 @@
-import { DIALOG_DATA } from '@angular/cdk/dialog';
+import { DIALOG_DATA, Dialog } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { UiButton } from '@shared/ui-atoms';
@@ -54,6 +54,29 @@ describe('UiDialog', () => {
     expect(pane()?.classList).toContain('ui-dialog-pane--sheet');
     expect(document.querySelector('.ui-dialog-header__handle')).toBeTruthy();
     expect(document.querySelector('[uiDialogFooter]')?.classList).toContain('ui-dialog-footer--sheet');
+  });
+
+  it('scrolls only its body: the header and the footer sit outside it, in that order', async () => {
+    stubDevice(true);
+    await openFromButton();
+    const header = document.querySelector('ui-dialog-header') as HTMLElement;
+    const body = document.querySelector('.ui-dialog-body') as HTMLElement;
+    const footer = document.querySelector('.ui-dialog-footer') as HTMLElement;
+    expect(pane()?.contains(body)).toBe(true);
+    expect(body.contains(header)).toBe(false);
+    expect(body.contains(footer)).toBe(false);
+    expect(body.contains(screen.getByRole('button', { name: 'Enregistrer' }))).toBe(false);
+    expect(header.compareDocumentPosition(body) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(body.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(document.querySelectorAll('.ui-dialog-body')).toHaveLength(1);
+  });
+
+  it('caps the pane inline, because the CDK pane styles would override a layered cap', async () => {
+    stubDevice(true);
+    await render('<button type="button">Ouvrir</button>');
+    const open = vi.spyOn(TestBed.inject(Dialog), 'open');
+    TestBed.inject(UiDialog).open(ExpenseDialog, { data: 'Carrefour Market' });
+    expect(open).toHaveBeenCalledWith(ExpenseDialog, expect.objectContaining({ maxHeight: 'var(--ui-overlays-pane-max-block-size)' }));
   });
 
   it('closes with its close button and returns focus to the opener', async () => {
