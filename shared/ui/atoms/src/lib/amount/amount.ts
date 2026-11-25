@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input, isDevMode } from '@angular/core';
-import { formatMillimes, formatMillimesHeadline, formatSignedMillimes, formatSignedMillimesHeadline } from '@shared/util-format';
+import { CurrencyFormat, TND, formatMinor } from '@shared/util-format';
 
 export type UiAmountDisplay = 'full' | 'rounded';
 export type UiAmountTone = 'neutral' | 'income';
@@ -8,11 +8,6 @@ export type UiAmountSize = 'md' | 'hero';
 const SPACE_BEFORE_CURRENCY = String.fromCharCode(0x00a0);
 
 type Formatted = { readonly value: string; readonly unit: string } | { readonly error: unknown };
-
-function formatterFor(display: UiAmountDisplay, tone: UiAmountTone): (millimes: number) => string {
-  if (display === 'rounded') return tone === 'income' ? formatSignedMillimesHeadline : formatMillimesHeadline;
-  return tone === 'income' ? formatSignedMillimes : formatMillimes;
-}
 
 function splitUnit(text: string): { value: string; unit: string } {
   const unitStart = text.lastIndexOf(SPACE_BEFORE_CURRENCY);
@@ -36,10 +31,11 @@ export class UiAmount {
   readonly display = input<UiAmountDisplay>('full');
   readonly tone = input<UiAmountTone>('neutral');
   readonly size = input<UiAmountSize>('md');
+  readonly currency = input<CurrencyFormat>(TND);
 
   private readonly formatted = computed<Formatted>(() => {
     try {
-      return splitUnit(formatterFor(this.display(), this.tone())(this.millimes()));
+      return splitUnit(formatMinor(this.millimes(), this.currency(), { display: this.display(), signed: this.tone() === 'income' }));
     } catch (error) {
       return { error };
     }

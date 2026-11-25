@@ -4,7 +4,7 @@
     @if (showSwitcher()) {
       <app-book-switcher uiRailAction variant="rail" />
     }
-    <button uiRailAction uiButton variant="primary" type="button" disabled [attr.title]="'shell.addExpenseSoon' | translate">
+    <button uiRailAction uiButton variant="primary" type="button" [disabled]="!canAdd()" (click)="add()">
       <ui-icon name="plus" />
       {{ 'shell.addExpense' | translate }}
     </button>
@@ -12,6 +12,10 @@
     <a uiRailItem routerLink="/" routerLinkActive ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }">
       <ui-icon name="house" />
       {{ 'shell.home' | translate }}
+    </a>
+    <a uiRailItem routerLink="/operations" routerLinkActive ariaCurrentWhenActive="page">
+      <ui-icon name="list" />
+      {{ 'shell.operations' | translate }}
     </a>
     <a uiRailItem routerLink="/foyer" routerLinkActive ariaCurrentWhenActive="page">
       <ui-icon name="users" />
@@ -38,6 +42,11 @@
     @if (!showSwitcher()) {
       <span uiTopBarTitle>{{ titleKey() ? (titleKey() | translate) : '' }}</span>
     }
+    @if (canAdd()) {
+      <button uiTopBarTrailing uiButton variant="ghost" iconOnly type="button" [attr.aria-label]="'shell.addExpense' | translate" (click)="add()">
+        <ui-icon name="plus" />
+      </button>
+    }
   </ui-top-bar>
 
   <router-outlet />
@@ -46,6 +55,10 @@
     <a uiTab routerLink="/" routerLinkActive ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }">
       <ui-icon name="house" />
       {{ 'shell.home' | translate }}
+    </a>
+    <a uiTab routerLink="/operations" routerLinkActive ariaCurrentWhenActive="page">
+      <ui-icon name="list" />
+      {{ 'shell.operations' | translate }}
     </a>
     <a uiTab routerLink="/foyer" routerLinkActive ariaCurrentWhenActive="page">
       <ui-icon name="users" />

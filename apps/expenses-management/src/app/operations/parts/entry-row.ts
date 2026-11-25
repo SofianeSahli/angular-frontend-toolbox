@@ -1,0 +1,57 @@
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { UiAmount } from '@shared/ui-atoms';
+import { UiListItem } from '@shared/ui-molecules';
+import { CurrencyFormat, formatMinor } from '@shared/util-format';
+import { CategoryLabels } from '../../categories/data/category-labels';
+import { injectTranslationRevision } from '../../i18n/translation-revision';
+import { Entry } from '../data/models';
+import { longDate, uiLocale } from '../support/day-groups';
+
+@Component({
+  selector: 'app-entry-row',
+  imports: [TranslatePipe, UiAmount, UiListItem],
+  template: `
+    <button uiListItem type="button" class="w-100" [attr.aria-label]="accessibleName()" (click)="open.emit(entry())">
+      <span uiLeading aria-hidden="true">{{ emoji() }}</span>
+      <span uiTitle
+        ><bdi>{{ name() }}</bdi></span
+      >
+      @if (entry().comment || showAuthor()) {
+      <span uiSubtitle>
+        @if (entry().comment; as comment) {
+        <bdi>{{ comment }}</bdi>
+        } @if (entry().comment && showAuthor()) { &ngsp;·&ngsp; } @if (showAuthor()) {
+        {{ 'operations.list.by' | translate : { name: entry().createdBy.name } }}
+        }
+      </span>
+      }
+      <bdi uiTrailing dir="ltr">
+        <ui-amount [millimes]="entry().amount" [currency]="currency()" [tone]="entry().type === 'income' ? 'income' : 'neutral'" />
+      </bdi>
+    </button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class EntryRow {
+  readonly entry = input.required<Entry>();
+  readonly currency = input.required<CurrencyFormat>();
+  readonly showAuthor = input(false);
+  readonly open = output<Entry>();
+
+  private readonly labels = inject(CategoryLabels);
+  private readonly translate = inject(TranslateService);
+
+  protected readonly emoji = computed(() => this.labels.emoji(this.entry().category));
+  protected readonly name = computed(() => this.entry().otherName || this.labels.name(this.entry().category));
+  private readonly revision = injectTranslationRevision();
+
+  protected readonly accessibleName = computed(() => {
+    this.revision();
+    return this.translate.instant('operations.list.row', {
+      category: this.name(),
+      amount: formatMinor(this.entry().amount, this.currency()),
+      date: longDate(this.entry().date, uiLocale(this.translate.getCurrentLang())),
+    });
+  });
+}

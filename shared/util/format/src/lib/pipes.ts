@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { toLocalIsoDate } from './dates';
-import { formatMillimes, formatMillimesHeadline, formatSignedMillimes } from './money';
+import { CurrencyFormat, formatMillimes, formatMillimesHeadline, formatMinor, formatSignedMillimes } from './money';
 
 @Pipe({ name: 'uiMillimes' })
 export class MillimesPipe implements PipeTransform {
@@ -27,5 +27,12 @@ export class SignedMillimesPipe implements PipeTransform {
 export class LocalIsoDatePipe implements PipeTransform {
   transform(value: Date): string {
     return toLocalIsoDate(value);
+  }
+}
+
+@Pipe({ name: 'minor' })
+export class MinorPipe implements PipeTransform {
+  transform(value: number, currency: CurrencyFormat): string {
+    return formatMinor(value, currency);
   }
 }

@@ -8,6 +8,9 @@ import { BooksStore } from './households/data/books.store';
 import { HouseholdStore } from './households/data/household.store';
 import { InvitationsStore } from './households/data/invitations.store';
 import { FakeStores, book, fakeStores } from './households/testing';
+import { of } from 'rxjs';
+import { CategoriesApi } from './categories/data/categories-api';
+import { EntriesApi } from './operations/data/entries-api';
 
 function navigateAs(status: 'anonymous' | 'authenticated', unavailable = false, stores: FakeStores = withBook()) {
   TestBed.configureTestingModule({
@@ -31,6 +34,8 @@ function navigateAs(status: 'anonymous' | 'authenticated', unavailable = false, 
       { provide: BooksStore, useValue: stores.books },
       { provide: HouseholdStore, useValue: stores.household },
       { provide: InvitationsStore, useValue: stores.invitations },
+      { provide: CategoriesApi, useValue: { tree: () => of('notModified') } },
+      { provide: EntriesApi, useValue: { page: () => of({ items: [], nextCursor: null }) } },
     ],
   });
   const router = TestBed.inject(Router);
@@ -114,12 +119,20 @@ describe('app routes', () => {
       expect(await navigateAs('authenticated')('/carnets/nouveau')).toBe('/carnets/nouveau');
     });
 
-    it.each(['/bienvenue', '/foyer', '/foyer/nouveau', '/carnets/nouveau'])('sends a signed-out visitor from %s to sign-in', async (url) => {
+    it('opens the operations page in the shell (spec 007 REQ-5.1)', async () => {
+      expect(await navigateAs('authenticated')('/operations')).toBe('/operations');
+    });
+
+    it('sends a user without a book from the operations page to the welcome page', async () => {
+      expect(await navigateAs('authenticated', false, fakeStores())('/operations')).toBe('/bienvenue');
+    });
+
+    it.each(['/bienvenue', '/foyer', '/foyer/nouveau', '/carnets/nouveau', '/operations'])('sends a signed-out visitor from %s to sign-in', async (url) => {
       expect(await navigateAs('anonymous')(url)).toBe(`/connexion?returnUrl=${encodeURIComponent(url)}`);
     });
 
     it('lists the new paths', () => {
-      expect(PATHS).toMatchObject({ welcome: '/bienvenue', household: '/foyer', newHousehold: '/foyer/nouveau', newBook: '/carnets/nouveau' });
+      expect(PATHS).toMatchObject({ welcome: '/bienvenue', household: '/foyer', newHousehold: '/foyer/nouveau', newBook: '/carnets/nouveau', operations: '/operations' });
     });
   });
 });

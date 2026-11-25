@@ -1,0 +1,64 @@
+<ui-page [title]="'operations.title' | translate">
+  <button uiPageActions uiButton variant="primary" type="button" [disabled]="!book()" (click)="add()">
+    <ui-icon name="plus" />
+    {{ 'operations.add' | translate }}
+  </button>
+
+  @if (categoriesUnavailable()) {
+    <ui-alert tone="warning" [title]="'categories.picker.unavailable' | translate">
+      <div uiAlertActions>
+        <button uiButton size="sm" type="button" (click)="categories.load({ force: true })">{{ 'categories.picker.retry' | translate }}</button>
+      </div>
+    </ui-alert>
+  }
+
+  @if (operations.filters(); as filters) {
+    <app-operations-filters
+      [filters]="filters"
+      [authors]="authors()"
+      [locale]="locale()"
+      (changed)="operations.setFilters($event)"
+      (clear)="operations.clearFilters()"
+    />
+  }
+
+  @if (failed()) {
+    <ui-alert tone="danger">
+      {{ 'operations.list.error' | translate }}
+      <div uiAlertActions>
+        <button uiButton size="sm" type="button" (click)="retry()">{{ 'operations.list.retry' | translate }}</button>
+      </div>
+    </ui-alert>
+  }
+
+  @if (book(); as current) {
+    <ui-grouped-list
+      [groups]="groups()"
+      [itemTemplate]="row"
+      [loading]="loading()"
+      [empty]="operations.status() === 'ready' ? emptyState : undefined"
+      (endReached)="operations.loadMore()"
+    />
+    <ng-template #row let-entry>
+      <li>
+        <app-entry-row [entry]="entry" [currency]="current.currency" [showAuthor]="isHouseholdBook()" (open)="edit($event)" />
+      </li>
+    </ng-template>
+  }
+
+  <ng-template #emptyState>
+    @if (narrowed()) {
+      <ui-empty-state icon="inbox" [title]="'operations.empty.filteredTitle' | translate">
+        <button uiButton variant="secondary" type="button" (click)="operations.clearFilters()">{{ 'operations.filters.clear' | translate }}</button>
+      </ui-empty-state>
+    } @else {
+      <ui-empty-state icon="inbox" [title]="'operations.empty.title' | translate">
+        <button uiButton variant="primary" type="button" (click)="add()">{{ 'operations.add' | translate }}</button>
+      </ui-empty-state>
+    }
+  </ng-template>
+
+  @if (endReached()) {
+    <p class="text-center mt-3 mb-0" role="status">{{ 'operations.list.end' | translate }}</p>
+  }
+</ui-page>

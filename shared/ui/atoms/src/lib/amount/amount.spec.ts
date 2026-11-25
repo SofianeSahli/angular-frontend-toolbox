@@ -21,6 +21,16 @@ describe('ui-amount', () => {
     expect((await shownText(`<ui-amount ${inputs} />`)).text).toBe(expected);
   });
 
+  it('formats in the given currency (spec 007 REQ-1.4)', async () => {
+    const { text } = await shownText(`<ui-amount [millimes]="1250" [currency]="{ code: 'EUR', exponent: 2 }" />`);
+    expect(text).toMatch(/^12,50 /);
+    expect(text).not.toContain('DT');
+  });
+
+  it('shows no decimals for JPY', async () => {
+    expect((await shownText(`<ui-amount [millimes]="1500" [currency]="{ code: 'JPY', exponent: 0 }" />`)).text).toMatch(/^1 500 /);
+  });
+
   it('keeps spending neutral', async () => {
     expect((await shownText('<ui-amount [millimes]="500" />')).host?.classList).not.toContain('ui-amount--income');
   });

@@ -8,6 +8,7 @@ import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { BooksStore } from '../households/data/books.store';
 import { book, fakeStores } from '../households/testing';
+import { EntrySheetService } from '../operations/entry-sheet.service';
 import { SHELL_ICONS } from './shell-icons';
 import { SHELL_BOOK_BOUND, SHELL_TITLE_KEY, SignedInShell } from './signed-in-shell';
 
@@ -15,7 +16,7 @@ import { SHELL_BOOK_BOUND, SHELL_TITLE_KEY, SignedInShell } from './signed-in-sh
 class Page {}
 
 const TEXT = {
-  shell: { navigation: 'Navigation principale', addExpense: 'Ajouter une dépense', addExpenseSoon: 'Bientôt', home: 'Accueil', household: 'Foyer', account: 'Compte', signOut: 'Se déconnecter',
+  shell: { navigation: 'Navigation principale', addExpense: 'Ajouter une dépense', home: 'Accueil', operations: 'Opérations', household: 'Foyer', account: 'Compte', signOut: 'Se déconnecter',
     books: { switcher: 'Changer de carnet', new: 'Nouveau carnet', limit: 'Limite atteinte' } },
   home: { title: 'Accueil' },
   households: { household: { title: 'Foyer' } },
@@ -34,6 +35,7 @@ async function renderShell(url = '/', books = [book('a')]) {
     account: signal<Account | null>(ACCOUNT),
     signOut: vi.fn(async (): Promise<AuthResult> => ({ outcome: 'done' })),
   };
+  const sheets = { openNew: vi.fn() };
   const view = await render('<router-outlet />', {
     imports: [RouterOutlet],
     providers: [
@@ -54,6 +56,7 @@ async function renderShell(url = '/', books = [book('a')]) {
       { provide: SessionStore, useValue: store },
       { provide: BooksStore, useValue: stores.books },
       { provide: IDENTITY_CONFIG, useValue: { paths: { signIn: '/connexion' } } },
+      { provide: EntrySheetService, useValue: sheets },
     ],
   });
   TestBed.inject(TranslateService).setTranslation('fr', TEXT);
@@ -61,20 +64,47 @@ async function renderShell(url = '/', books = [book('a')]) {
   await router.navigateByUrl(url);
   await settle();
   view.detectChanges();
-  return { store, router, view };
+  return { store, router, view, sheets };
 }
 
 describe('SignedInShell', () => {
-  it('shows the brand, a disabled add button, Accueil and Compte in the rail and the tabs', async () => {
+  it('shows the brand, the add button, Accueil, Opérations, Foyer and Compte in the rail and the tabs', async () => {
     await renderShell();
     expect(screen.getByText('Olivier')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Ajouter une dépense' })).toHaveProperty('disabled', true);
     const navigations = screen.getAllByRole('navigation', { name: 'Navigation principale', hidden: true });
     expect(navigations).toHaveLength(2);
     for (const navigation of navigations) {
-      expect(within(navigation).getAllByRole('link', { hidden: true }).map((link) => link.textContent?.trim())).toEqual(['Accueil', 'Foyer', 'Compte']);
+      expect(within(navigation).getAllByRole('link', { hidden: true }).map((link) => link.textContent?.trim())).toEqual([
+        'Accueil',
+        'Opérations',
+        'Foyer',
+        'Compte',
+      ]);
     }
-    expect(screen.queryByText(/Opérations|Budget/)).toBeNull();
+    expect(screen.queryByText(/Budget/)).toBeNull();
+  });
+
+  it('enables the add buttons on a book-bound route with a selected book and opens the sheet (spec 007 REQ-4.1)', async () => {
+    const { sheets } = await renderShell();
+    const adds = screen.getAllByRole('button', { name: 'Ajouter une dépense', hidden: true });
+    expect(adds).toHaveLength(2);
+    for (const add of adds) expect(add).toHaveProperty('disabled', false);
+    await userEvent.click(adds[0]);
+    expect(sheets.openNew).toHaveBeenCalled();
+  });
+
+  it('disables the rail add button and hides the top-bar one without a selected book', async () => {
+    await renderShell('/', []);
+    const adds = screen.getAllByRole('button', { name: 'Ajouter une dépense', hidden: true });
+    expect(adds).toHaveLength(1);
+    expect(adds[0]).toHaveProperty('disabled', true);
+  });
+
+  it('disables the add button on a route that is not book-bound', async () => {
+    await renderShell('/foyer');
+    const adds = screen.getAllByRole('button', { name: 'Ajouter une dépense', hidden: true });
+    expect(adds).toHaveLength(1);
+    expect(adds[0]).toHaveProperty('disabled', true);
   });
 
   it('marks the current destination and shows its title in the top bar', async () => {
