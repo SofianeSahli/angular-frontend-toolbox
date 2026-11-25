@@ -11,6 +11,11 @@ import { FakeStores, book, fakeStores } from './households/testing';
 import { of } from 'rxjs';
 import { CategoriesApi } from './categories/data/categories-api';
 import { EntriesApi } from './operations/data/entries-api';
+import { BudgetApi } from './budget/data/budget-api';
+import { NO_PLAN } from './budget/testing';
+import { SummaryApi } from './dashboard/data/summary-api';
+import { summary } from './dashboard/testing';
+import { RecurringApi } from './recurring/data/recurring-api';
 
 function navigateAs(status: 'anonymous' | 'authenticated', unavailable = false, stores: FakeStores = withBook()) {
   TestBed.configureTestingModule({
@@ -36,6 +41,9 @@ function navigateAs(status: 'anonymous' | 'authenticated', unavailable = false, 
       { provide: InvitationsStore, useValue: stores.invitations },
       { provide: CategoriesApi, useValue: { tree: () => of('notModified') } },
       { provide: EntriesApi, useValue: { page: () => of({ items: [], nextCursor: null }) } },
+      { provide: BudgetApi, useValue: { get: () => of(NO_PLAN) } },
+      { provide: SummaryApi, useValue: { get: () => of(summary()) } },
+      { provide: RecurringApi, useValue: { list: () => of([]) } },
     ],
   });
   const router = TestBed.inject(Router);
@@ -127,12 +135,47 @@ describe('app routes', () => {
       expect(await navigateAs('authenticated', false, fakeStores())('/operations')).toBe('/bienvenue');
     });
 
-    it.each(['/bienvenue', '/foyer', '/foyer/nouveau', '/carnets/nouveau', '/operations'])('sends a signed-out visitor from %s to sign-in', async (url) => {
+    it('opens the dashboard with a month (spec 008 REQ-1.1)', async () => {
+      expect(await navigateAs('authenticated')('/?mois=2026-10')).toBe('/?mois=2026-10');
+    });
+
+    it('opens the budget in the shell (spec 008 REQ-5.1)', async () => {
+      expect(await navigateAs('authenticated')('/budget?mois=2026-11')).toBe('/budget?mois=2026-11');
+    });
+
+    it('opens the recurring operations, not the operations page (spec 008 REQ-6.1)', async () => {
+      const navigate = navigateAs('authenticated');
+      expect(await navigate('/operations/recurrentes')).toBe('/operations/recurrentes');
+      const route = TestBed.inject(Router).routerState.snapshot.root.firstChild?.firstChild;
+      expect(route?.routeConfig?.path).toBe('operations/recurrentes');
+      expect(route?.data['titleKey']).toBe('recurring.title');
+    });
+
+    it('declares the recurring operations before the operations page', () => {
+      const children = appRoutes.find((route) => route.children?.some((child) => child.path === 'operations'))?.children ?? [];
+      const paths = children.map((child) => child.path);
+      expect(paths.indexOf('operations/recurrentes')).toBeLessThan(paths.indexOf('operations'));
+      expect(paths).toContain('budget');
+    });
+
+    it('sends a user without a book from the budget to the welcome page', async () => {
+      expect(await navigateAs('authenticated', false, fakeStores())('/budget')).toBe('/bienvenue');
+    });
+
+    it.each(['/bienvenue', '/foyer', '/foyer/nouveau', '/carnets/nouveau', '/operations', '/budget', '/operations/recurrentes'])('sends a signed-out visitor from %s to sign-in', async (url) => {
       expect(await navigateAs('anonymous')(url)).toBe(`/connexion?returnUrl=${encodeURIComponent(url)}`);
     });
 
     it('lists the new paths', () => {
-      expect(PATHS).toMatchObject({ welcome: '/bienvenue', household: '/foyer', newHousehold: '/foyer/nouveau', newBook: '/carnets/nouveau', operations: '/operations' });
+      expect(PATHS).toMatchObject({
+        welcome: '/bienvenue',
+        household: '/foyer',
+        newHousehold: '/foyer/nouveau',
+        newBook: '/carnets/nouveau',
+        operations: '/operations',
+        recurring: '/operations/recurrentes',
+        budget: '/budget',
+      });
     });
   });
 });

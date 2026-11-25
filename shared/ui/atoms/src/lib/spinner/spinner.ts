@@ -5,7 +5,7 @@ export type UiSpinnerSize = 18 | 24;
 
 @Component({
   selector: 'ui-spinner',
-  template: '',
+  templateUrl: './spinner.html',
   styleUrl: './spinner.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

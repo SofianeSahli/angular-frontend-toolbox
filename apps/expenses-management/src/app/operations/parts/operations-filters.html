@@ -1,0 +1,47 @@
+<ui-filter-bar>
+  <ui-month-switcher variant="plain" [month]="month()" [locale]="locale()" (monthChange)="setMonth($event)" />
+  <ui-segmented-control
+    [options]="typeOptions()"
+    [ariaLabel]="'operations.filters.type' | translate"
+    [ngModel]="typeChoice()"
+    (ngModelChange)="setType($event)"
+  />
+  @if (filters().category; as code) {
+  <button
+    uiChip
+    pressed
+    type="button"
+    [attr.aria-label]="'operations.filters.removeCategory' | translate : { name: categoryName() }"
+    (click)="changed.emit({ category: null })"
+  >
+    <app-category-chip [code]="code" />
+    <ui-icon name="x" />
+  </button>
+  } @else {
+  <button uiButton variant="secondary" size="sm" type="button" (click)="pickCategory()">
+    {{ 'operations.filters.category' | translate }}
+  </button>
+  }
+  <button uiButton variant="secondary" size="sm" type="button" [uiMenuTriggerFor]="authorMenu">
+    <span class="visually-hidden">{{ 'operations.filters.author' | translate }} :</span>
+    <bdi>{{ authorLabel() }}</bdi>
+    <ui-icon name="chevron-down" />
+  </button>
+  <ng-template #authorMenu>
+    <ui-menu>
+      <button uiMenuItem [checked]="filters().author === null" (triggered)="changed.emit({ author: null })">
+        {{ 'operations.filters.allAuthors' | translate }}
+      </button>
+      @for (person of authors(); track person.id) {
+      <button uiMenuItem [checked]="filters().author === person.id" (triggered)="changed.emit({ author: person.id })">
+        <bdi>{{ person.name }}</bdi>
+      </button>
+      }
+    </ui-menu>
+  </ng-template>
+  @if (narrowed()) {
+  <button uiFilterReset uiButton variant="ghost" size="sm" type="button" (click)="clear.emit()">
+    {{ 'operations.filters.clear' | translate }}
+  </button>
+  }
+</ui-filter-bar>

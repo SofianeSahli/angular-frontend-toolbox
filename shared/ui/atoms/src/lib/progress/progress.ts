@@ -4,7 +4,7 @@ export type UiProgressTone = 'accent' | 'warning' | 'danger';
 
 @Component({
   selector: 'ui-progress',
-  template: '<span class="ui-progress__bar" [style.inline-size.%]="filledPercent()"></span>',
+  templateUrl: './progress.html',
   styleUrl: './progress.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

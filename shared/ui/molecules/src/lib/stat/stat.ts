@@ -7,9 +7,7 @@ let nextStatId = 0;
 
 @Component({
   selector: 'ui-stat',
-  template: `<span class="ui-stat__label" [id]="labelId">{{ label() }}</span>
-    <span class="ui-stat__value"><ng-content /></span>
-    <span class="ui-stat__meta"><ng-content select="[uiStatMeta]" /></span>`,
+  templateUrl: './stat.html',
   styleUrl: './stat.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

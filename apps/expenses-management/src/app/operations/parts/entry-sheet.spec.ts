@@ -379,4 +379,9 @@ describe('EntrySheet edit mode (REQ-6.1–6.5, 7.4)', () => {
     expect(view.close).toHaveBeenCalled();
     expect(view.toasts().map((t) => t.message)).toContain('Cette opération a été supprimée');
   });
+
+  it('shows the recurring badge in the header of an entry made by a rule (spec 008 REQ-6.7)', async () => {
+    await renderSheet({ editing: entry('e1', { recurring_rule_id: 'r1' }) });
+    expect(screen.getByText('récurrent')).toBeTruthy();
+  });
 });

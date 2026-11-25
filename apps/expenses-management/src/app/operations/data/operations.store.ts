@@ -6,6 +6,7 @@ import { UiToast } from '@shared/ui-organisms';
 import { firstValueFrom } from 'rxjs';
 import { BooksStore } from '../../households/data/books.store';
 import { DONE, StoreResult, toApiError } from '../../households/data/store-result';
+import { LedgerChanges } from '../../ledger/ledger-changes';
 import { EntriesApi } from './entries-api';
 import { defaultFilters, insertInOrder, matches } from './filters';
 import { Entry, EntryFilters, EntryInput, EntryPatch } from './models';
@@ -42,7 +43,15 @@ const DEFAULT_TIMEZONE = 'Africa/Tunis';
 export const OperationsStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withMethods((store, api = inject(EntriesApi), books = inject(BooksStore), toast = inject(UiToast), translate = inject(TranslateService)) => {
+  withMethods(
+    (
+      store,
+      api = inject(EntriesApi),
+      books = inject(BooksStore),
+      toast = inject(UiToast),
+      translate = inject(TranslateService),
+      ledger = inject(LedgerChanges),
+    ) => {
     let generation = 0;
 
     const failed = (error: unknown): { outcome: 'error'; error: ApiError } => ({
@@ -101,12 +110,26 @@ export const OperationsStore = signalStore(
       return store.bookId() === bookId && store.status() === 'ready';
     }
 
+    function knownMonth(id: string): string | null {
+      return store.entries().find((row) => row.id === id)?.date.slice(0, 7) ?? null;
+    }
+
+    function signalChange(bookId: string, months: readonly (string | null)[]): void {
+      ledger.changed(bookId, months.some((month) => month === null) ? 'all' : (months as string[]));
+    }
+
     return {
-      open(bookId: string): Promise<StoreResult> {
+      open(bookId: string, requested: Partial<EntryFilters> | null = null): Promise<StoreResult> {
         const current = store.filters();
         const timezone = books.books().find((book) => book.id === bookId)?.timezone ?? DEFAULT_TIMEZONE;
         const filters =
-          current === null ? defaultFilters(timezone) : store.bookId() === bookId ? current : { ...current, category: null, author: null };
+          requested !== null
+            ? { ...defaultFilters(timezone), ...requested }
+            : current === null
+              ? defaultFilters(timezone)
+              : store.bookId() === bookId
+                ? current
+                : { ...current, category: null, author: null };
         patchState(store, { bookId, filters });
         return loadFirst();
       },
@@ -158,6 +181,7 @@ export const OperationsStore = signalStore(
       async create(bookId: string, input: EntryInput): Promise<WriteResult> {
         try {
           const saved = await firstValueFrom(api.create(bookId, input));
+          signalChange(bookId, [saved.date.slice(0, 7)]);
           const filters = store.filters();
           if (isShown(bookId) && filters !== null && matches(saved, filters) && !store.entries().some((row) => row.id === saved.id)) {
             const entries = insertInOrder(store.entries(), saved);
@@ -172,7 +196,10 @@ export const OperationsStore = signalStore(
 
       async update(bookId: string, id: string, patch: EntryPatch): Promise<WriteResult> {
         try {
+          const before = knownMonth(id);
           const saved = await firstValueFrom(api.update(bookId, id, patch));
+          const after = saved.date.slice(0, 7);
+          signalChange(bookId, patch.date === undefined ? [after] : [after, before]);
           const filters = store.filters();
           if (isShown(bookId)) {
             if (filters !== null && !matches(saved, filters)) removeRow(id);
@@ -191,9 +218,11 @@ export const OperationsStore = signalStore(
 
       async remove(bookId: string, id: string): Promise<WriteResult> {
         try {
+          const month = knownMonth(id);
           await firstValueFrom(api.remove(bookId, id), {
             defaultValue: undefined,
           });
+          signalChange(bookId, [month]);
           removeRow(id);
           return { outcome: 'done', entry: null };
         } catch (error) {
@@ -212,5 +241,6 @@ export const OperationsStore = signalStore(
         patchState(store, initialState);
       },
     };
-  }),
+    },
+  ),
 );

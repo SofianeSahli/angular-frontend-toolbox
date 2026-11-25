@@ -12,22 +12,7 @@ type Step = 1 | -1;
 
 @Component({
   selector: 'ui-segmented-control',
-  template: `@for (option of options(); track $index) {
-    <button
-      #item
-      type="button"
-      role="radio"
-      class="ui-segmented-control__item"
-      [attr.aria-checked]="selectedIndex() === $index"
-      [attr.tabindex]="focusableIndex() === $index ? 0 : -1"
-      [disabled]="isDisabled() || option.disabled"
-      (click)="select($index)"
-      (keydown)="onKeydown($event, $index)"
-      (blur)="markTouched()"
-    >
-      {{ option.label }}
-    </button>
-  }`,
+  templateUrl: './segmented-control.html',
   styleUrl: './segmented-control.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideValueAccessor(() => UiSegmentedControl)],

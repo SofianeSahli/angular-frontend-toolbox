@@ -3,13 +3,7 @@ import { UI_TEXT } from '@shared/ui-tokens';
 
 @Component({
   selector: 'label[uiLabel]',
-  template: `<ng-content />
-    @if (optional()) {
-      &ngsp;<span class="ui-label__optional">{{ text.optional }}</span>
-    }
-    @if (required()) {
-      <span class="ui-label__required" aria-hidden="true">*</span>
-    }`,
+  templateUrl: './label.html',
   styleUrl: './label.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

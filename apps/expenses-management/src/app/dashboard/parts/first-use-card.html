@@ -1,0 +1,7 @@
+<app-card-frame [heading]="'dashboard.firstUse.title' | translate">
+    <p class="dashboard-card__muted">{{ 'dashboard.firstUse.text' | translate }}</p>
+    <div class="dashboard-card__actions">
+      <button uiButton variant="primary" type="button" (click)="add.emit()"><ui-icon name="plus" />{{ 'dashboard.firstUse.add' | translate }}</button>
+      <a uiButton variant="secondary" routerLink="/budget">{{ 'dashboard.firstUse.budget' | translate }}</a>
+    </div>
+  </app-card-frame>

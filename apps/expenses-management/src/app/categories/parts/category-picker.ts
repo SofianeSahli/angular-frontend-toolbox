@@ -8,12 +8,14 @@ import { firstValueFrom } from 'rxjs';
 import { CategoriesStore } from '../data/categories.store';
 import { CategoryLabels } from '../data/category-labels';
 import { CategoryNode } from '../data/models';
+import { overlaps } from '../data/overlap';
 
-export type CategoryPickerMode = 'entry' | 'filter';
+export type CategoryPickerMode = 'entry' | 'filter' | 'plan';
 
 export interface CategoryPickerData {
   readonly mode: CategoryPickerMode;
   readonly recents?: readonly string[];
+  readonly excluded?: readonly string[];
 }
 
 interface Choice {
@@ -30,6 +32,7 @@ interface GroupChoice extends Choice {
 
 interface TopChoice extends Choice {
   readonly groups: readonly GroupChoice[];
+  readonly pickable: boolean;
 }
 
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
@@ -50,6 +53,8 @@ export class CategoryPicker {
   private readonly host: HTMLElement = inject(ElementRef).nativeElement;
 
   protected readonly filterMode = this.data.mode === 'filter';
+  protected readonly planMode = this.data.mode === 'plan';
+  private readonly excluded = this.data.excluded ?? [];
   protected readonly openTop = signal<string | null>(null);
   protected readonly openGroup = signal<string | null>(null);
   protected readonly query = signal('');
@@ -66,8 +71,23 @@ export class CategoryPicker {
       })),
   );
 
-  protected readonly tops = computed<readonly TopChoice[]>(() =>
-    this.store.orderedTops().flatMap((top) => {
+  protected readonly tops = computed<readonly TopChoice[]>(() => (this.planMode ? this.planTops() : this.browseTops()));
+
+  private planTops(): readonly TopChoice[] {
+    return this.store.orderedTops().flatMap((top) => {
+      const choice = this.choice(top.code);
+      if (choice === null || top.type !== 'expense') return [];
+      const groups = top.groups.filter((group) => this.plannable(group.code)).flatMap((group) => {
+        const groupChoice = this.choice(group.code);
+        return groupChoice === null ? [] : [{ ...groupChoice, leaves: [] }];
+      });
+      const pickable = this.plannable(top.code);
+      return pickable || groups.length > 0 ? [{ ...choice, groups, pickable }] : [];
+    });
+  }
+
+  private browseTops(): readonly TopChoice[] {
+    return this.store.orderedTops().flatMap((top) => {
       const choice = this.choice(top.code);
       if (choice === null) return [];
       const groups = top.groups.flatMap((group) => {
@@ -76,18 +96,21 @@ export class CategoryPicker {
         const leaves = group.leaves.map((leaf) => this.choice(leaf.code)).filter((c): c is Choice => c !== null);
         return [{ ...groupChoice, leaves }];
       });
-      return [{ ...choice, groups }];
-    }),
-  );
+      return [{ ...choice, groups, pickable: this.filterMode }];
+    });
+  }
 
   protected readonly results = computed<readonly Choice[]>(() =>
     this.labels
       .search(this.query(), {
-        branches: this.filterMode,
+        branches: this.filterMode || this.planMode,
         retired: this.filterMode,
       })
+      .filter((node) => !this.planMode || this.plannable(node.code))
       .map((node) => this.toChoice(node, this.labels.path(node.code))),
   );
+
+  protected readonly title = this.filterMode ? 'categories.picker.filterTitle' : this.planMode ? 'categories.picker.planTitle' : 'categories.picker.title';
 
   constructor() {
     void this.store.load();
@@ -144,6 +167,17 @@ export class CategoryPicker {
 
   private reducedMotion(): boolean {
     return this.host.ownerDocument.defaultView?.matchMedia?.(REDUCED_MOTION).matches ?? false;
+  }
+
+  private plannable(code: string): boolean {
+    const node = this.store.node(code);
+    return (
+      node !== null &&
+      node.level !== 'leaf' &&
+      node.type === 'expense' &&
+      !node.retired &&
+      !this.excluded.some((line) => overlaps(line, code))
+    );
   }
 
   private choice(code: string): Choice | null {

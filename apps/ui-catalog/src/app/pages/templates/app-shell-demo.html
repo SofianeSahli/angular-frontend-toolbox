@@ -1,0 +1,19 @@
+<ui-app-shell>
+      <ui-side-rail uiShellRail ariaLabel="Navigation principale">
+        <strong uiRailBrand>Olivier</strong>
+        <button uiRailAction uiButton variant="primary"><ui-icon name="plus" />Ajouter</button>
+        <a uiRailItem href="#accueil" aria-current="page"><ui-icon name="house" />Accueil</a>
+        <a uiRailItem href="#operations"><ui-icon name="repeat" />Opérations</a>
+        <span uiRailFooter>Sofiane</span>
+      </ui-side-rail>
+      <ui-top-bar uiShellTop title="Accueil" />
+      <ui-bottom-tabs uiShellTabs ariaLabel="Navigation principale">
+        <a uiTab href="#accueil" aria-current="page"><ui-icon name="house" />Accueil</a>
+        <a uiTab href="#operations"><ui-icon name="repeat" />Opérations</a>
+        <button uiTabAction aria-label="Ajouter une dépense"><ui-icon name="plus" /></button>
+      </ui-bottom-tabs>
+      <ui-page title="Novembre 2026" eyebrow="Carnet du foyer">
+        <ui-stat label="Reste à dépenser" size="hero" tone="accent"><ui-amount [millimes]="1843000" display="rounded" /></ui-stat>
+      </ui-page>
+    </ui-app-shell>
+    <app-catalog-toolbar floating />

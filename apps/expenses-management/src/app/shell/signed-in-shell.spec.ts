@@ -16,7 +16,7 @@ import { SHELL_BOOK_BOUND, SHELL_TITLE_KEY, SignedInShell } from './signed-in-sh
 class Page {}
 
 const TEXT = {
-  shell: { navigation: 'Navigation principale', addExpense: 'Ajouter une dépense', home: 'Accueil', operations: 'Opérations', household: 'Foyer', account: 'Compte', signOut: 'Se déconnecter',
+  shell: { navigation: 'Navigation principale', addExpense: 'Ajouter une dépense', home: 'Accueil', operations: 'Opérations', budget: 'Budget', household: 'Foyer', account: 'Compte', signOut: 'Se déconnecter',
     books: { switcher: 'Changer de carnet', new: 'Nouveau carnet', limit: 'Limite atteinte' } },
   home: { title: 'Accueil' },
   households: { household: { title: 'Foyer' } },
@@ -68,20 +68,15 @@ async function renderShell(url = '/', books = [book('a')]) {
 }
 
 describe('SignedInShell', () => {
-  it('shows the brand, the add button, Accueil, Opérations, Foyer and Compte in the rail and the tabs', async () => {
+  it('shows the brand, the add button, Accueil, Opérations, Budget (rail only), Foyer and Compte (spec 008 REQ-8.1)', async () => {
     await renderShell();
     expect(screen.getByText('Olivier')).toBeTruthy();
     const navigations = screen.getAllByRole('navigation', { name: 'Navigation principale', hidden: true });
     expect(navigations).toHaveLength(2);
-    for (const navigation of navigations) {
-      expect(within(navigation).getAllByRole('link', { hidden: true }).map((link) => link.textContent?.trim())).toEqual([
-        'Accueil',
-        'Opérations',
-        'Foyer',
-        'Compte',
-      ]);
-    }
-    expect(screen.queryByText(/Budget/)).toBeNull();
+    const names = navigations.map((navigation) => within(navigation).getAllByRole('link', { hidden: true }).map((link) => link.textContent?.trim()));
+    expect(names).toContainEqual(['Accueil', 'Opérations', 'Budget', 'Foyer', 'Compte']);
+    expect(names).toContainEqual(['Accueil', 'Opérations', 'Foyer', 'Compte']);
+    expect(screen.getAllByRole('link', { name: 'Budget', hidden: true })).toHaveLength(1);
   });
 
   it('enables the add buttons on a book-bound route with a selected book and opens the sheet (spec 007 REQ-4.1)', async () => {

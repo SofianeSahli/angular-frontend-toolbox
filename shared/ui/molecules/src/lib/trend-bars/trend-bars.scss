@@ -1,0 +1,116 @@
+@layer ui {
+  :host {
+    --ui-trend-bars-text-size: 10px;
+    --ui-trend-bars-muted-mix: 35%;
+    --ui-trend-bars-hidden-size: 1px;
+    --ui-trend-bars-focus-width: 2px;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-2);
+    min-inline-size: 0;
+    color: var(--ui-color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ui-trend-bars__svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  :host-context([dir='rtl']) .ui-trend-bars__plot {
+    transform: scaleX(-1);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  :host-context([dir='rtl']) .ui-trend-bars__value,
+  :host-context([dir='rtl']) .ui-trend-bars__label {
+    transform: scaleX(-1);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .ui-trend-bars__axis {
+    stroke: var(--ui-color-line-strong);
+    stroke-width: 1;
+  }
+
+  .ui-trend-bars__bar {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .ui-trend-bars__hit {
+    fill: transparent;
+  }
+
+  .ui-trend-bars__bar:focus-visible .ui-trend-bars__hit {
+    stroke: var(--ui-color-focus-ring);
+    stroke-width: var(--ui-trend-bars-focus-width);
+    rx: 4;
+  }
+
+  .ui-trend-bars__fill {
+    fill: color-mix(in srgb, var(--ui-color-accent) var(--ui-trend-bars-muted-mix), var(--ui-color-surface));
+  }
+
+  .ui-trend-bars__bar--current .ui-trend-bars__fill {
+    fill: var(--ui-color-accent);
+  }
+
+  .ui-trend-bars__value,
+  .ui-trend-bars__label {
+    font-size: var(--ui-trend-bars-text-size);
+    font-variant-numeric: tabular-nums;
+    text-anchor: middle;
+  }
+
+  .ui-trend-bars__value {
+    fill: var(--ui-color-ink);
+  }
+
+  .ui-trend-bars__label {
+    fill: var(--ui-color-ink-muted);
+  }
+
+  .ui-trend-bars__bar--current .ui-trend-bars__value,
+  .ui-trend-bars__bar--current .ui-trend-bars__label {
+    font-weight: 700;
+    fill: var(--ui-color-ink);
+  }
+
+  .ui-trend-bars__average {
+    margin: 0;
+    color: var(--ui-color-ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ui-trend-bars__table {
+    position: absolute;
+    inline-size: var(--ui-trend-bars-hidden-size);
+    block-size: var(--ui-trend-bars-hidden-size);
+    margin: calc(var(--ui-trend-bars-hidden-size) * -1);
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ui-trend-bars__fill {
+      transform-box: fill-box;
+      transform-origin: bottom;
+      animation: ui-trend-bars-grow var(--ui-duration-slow) ease-out;
+    }
+
+    @keyframes ui-trend-bars-grow {
+      from {
+        transform: scaleY(0);
+      }
+    }
+  }
+}

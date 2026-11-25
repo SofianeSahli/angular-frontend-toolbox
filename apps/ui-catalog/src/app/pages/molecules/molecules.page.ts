@@ -6,6 +6,8 @@ import { UiAmount, UiAvatar, UiButton, UiIcon, UiInput, UiSelect } from '@shared
 import {
   UiAlert,
   UiAvatarGroup,
+  UiBarItem,
+  UiBarList,
   UiChipGroup,
   UiCodeInput,
   UiEmptyState,
@@ -18,13 +20,18 @@ import {
   UiMenuItem,
   UiMenuItemRadio,
   UiMenuTrigger,
+  UiMeter,
   UiMonthSwitcher,
   UiOptionCards,
+  UiPaceChart,
   UiSearchField,
   UiSectionHeader,
   UiSegmentedControl,
   UiStat,
   UiStepper,
+  UiTrendBars,
+  UiTrendItem,
+  UiPacePoint,
 } from '@shared/ui-molecules';
 
 const TYPE_OPTIONS = [
@@ -44,7 +51,33 @@ const START_OPTIONS = [
   { value: 'solo', title: 'Moi seulement', description: 'Suivez vos dépenses personnelles.' },
 ];
 
+const BARS: readonly UiBarItem[] = [
+  { id: 'food', label: 'Alimentation', value: 540000, valueText: '540 DT', shareText: '45 %', clickable: true },
+  { id: 'home', label: 'Maison', value: 400000, valueText: '400 DT', shareText: '33 %', clickable: true },
+  { id: 'transport', label: 'Transport', value: 160000, valueText: '160 DT', shareText: '13 %', clickable: true },
+  { id: 'others', label: 'Autres catégories', value: 100000, valueText: '100 DT', shareText: '8 %' },
+];
+
+const LONG_BARS: readonly UiBarItem[] = [
+  { id: 'a', label: 'Abonnements numériques, logiciels et services en ligne de toute la famille', value: 85000, valueText: '85 DT' },
+  { id: 'b', label: 'Sofiane', value: 1250000, valueText: '1 250 DT' },
+];
+
 const MEMBERS = [{ name: 'Sofiane' }, { name: 'Amira', member: 2 as const }, { name: 'Youssef', member: 3 as const }, { name: 'Leïla' }];
+
+const cumulative = (daily: readonly number[]): UiPacePoint[] =>
+  daily.reduce<UiPacePoint[]>((points, amount, index) => [...points, { day: index + 1, value: (points[index - 1]?.value ?? 0) + amount }], []);
+
+const PACE_NORMAL = cumulative([40, 0, 120, 60, 0, 80, 150, 20, 0, 90, 60, 100]);
+const PACE_OVER = cumulative([200, 150, 300, 0, 250, 180, 120, 0, 200, 150, 100, 160]);
+const TREND_ITEMS: UiTrendItem[] = [
+  { id: '2026-06', label: 'juin', value: 1250, valueText: '1 250 DT' },
+  { id: '2026-07', label: 'juil.', value: 980, valueText: '980 DT' },
+  { id: '2026-08', label: 'août', value: 0, valueText: '0 DT' },
+  { id: '2026-09', label: 'sept.', value: 1430, valueText: '1 430 DT' },
+  { id: '2026-10', label: 'oct.', value: 1100, valueText: '1 100 DT' },
+  { id: '2026-11', label: 'nov.', value: 760, valueText: '760 DT', current: true },
+];
 
 @Component({
   selector: 'app-molecules-page',
@@ -59,6 +92,7 @@ const MEMBERS = [{ name: 'Sofiane' }, { name: 'Amira', member: 2 as const }, { n
     UiSelect,
     UiAlert,
     UiAvatarGroup,
+    UiBarList,
     UiChipGroup,
     UiCodeInput,
     UiEmptyState,
@@ -71,13 +105,16 @@ const MEMBERS = [{ name: 'Sofiane' }, { name: 'Amira', member: 2 as const }, { n
     UiMenuItem,
     UiMenuItemRadio,
     UiMenuTrigger,
+    UiMeter,
     UiMonthSwitcher,
     UiOptionCards,
+    UiPaceChart,
     UiSearchField,
     UiSectionHeader,
     UiSegmentedControl,
     UiStat,
     UiStepper,
+    UiTrendBars,
   ],
   templateUrl: './molecules.page.html',
   styleUrl: '../catalog-section.scss',
@@ -88,6 +125,15 @@ export class MoleculesPage {
   protected readonly filterOptions = FILTER_OPTIONS;
   protected readonly startOptions = START_OPTIONS;
   protected readonly members = MEMBERS;
+  protected readonly bars = BARS;
+  protected readonly singleBar = BARS.slice(0, 1);
+  protected readonly longBars = LONG_BARS;
+  protected readonly selectedBar = signal<string | null>(null);
+  protected readonly paceNormal = PACE_NORMAL;
+  protected readonly paceOver = PACE_OVER;
+  protected readonly paceReference = PACE_NORMAL.map((point) => Math.round(point.value * 1.1));
+  protected readonly trendItems = TREND_ITEMS;
+  protected readonly selectedTrend = signal<string | null>(null);
   protected readonly month = signal('2026-11');
   protected readonly query = signal('');
   protected readonly showPassword = signal(false);

@@ -6,10 +6,7 @@
     "name": "Expense management"
   },
   "home": {
-    "title": "Home",
-    "currency": "Currency",
-    "timezone": "Time zone",
-    "soon": "The dashboard is coming soon."
+    "title": "Home"
   },
   "shell": {
     "navigation": "Main navigation",
@@ -23,7 +20,8 @@
       "new": "New book",
       "limit": "You already have 5 personal books."
     },
-    "operations": "Operations"
+    "operations": "Operations",
+    "budget": "Budget"
   },
   "brand": {
     "promise": "Your household's expenses, together, without the hassle.",
@@ -346,7 +344,9 @@
       "id": {
         "uuid": "Invalid identifier, try again"
       }
-    }
+    },
+    "recurringBadge": "recurring",
+    "recurringLink": "Recurring"
   },
   "categories": {
     "food": {
@@ -868,8 +868,287 @@
       "retired": "Retired category",
       "unavailable": "Categories unavailable",
       "retry": "Retry",
-      "allOf": "All of {{name}}"
+      "allOf": "All of {{name}}",
+      "planTitle": "Add a budget line",
+      "planEmpty": "Every expense category already has a line."
     },
     "unknown": "Other"
+  },
+  "dashboard": {
+    "loading": "Loading…",
+    "offline": "You are offline. Check your connection and try again.",
+    "cardError": "This card could not be loaded.",
+    "retry": "Retry",
+    "percent": "{{percent}}%",
+    "hero": {
+      "title": "Left to spend",
+      "exhausted": "Budget used up",
+      "perDay": "{{amount}} per day",
+      "perDayLow": "less than {{amount}} per day",
+      "spent": "Spent this month:",
+      "manage": "Manage the budget"
+    },
+    "noPlan": {
+      "title": "Spent this month",
+      "previousSameDay": "Last month on the same day:",
+      "previousWhole": "Previous month:",
+      "more": "{{amount}} more",
+      "less": "{{amount}} less",
+      "same": "As much as the previous month",
+      "invite": "Set a budget to know what you have left to spend.",
+      "setBudget": "Set a budget"
+    },
+    "watch": {
+      "title": "To watch",
+      "empty": "Everything is on track this month",
+      "unplanned": "Not planned",
+      "of": "{{actual}} of {{planned}}"
+    },
+    "categories": {
+      "title": "Where the money goes",
+      "empty": "No expense this month",
+      "others": "Other categories"
+    },
+    "members": {
+      "title": "By member"
+    },
+    "upcoming": {
+      "title": "Coming up",
+      "empty": "Nothing planned until the end of the month",
+      "seeAll": "See recurring operations"
+    },
+    "recent": {
+      "title": "Recent",
+      "empty": "No operation this month",
+      "seeAll": "See all"
+    },
+    "firstUse": {
+      "title": "Welcome to your book",
+      "text": "Record a first operation or prepare this month's budget.",
+      "add": "Add an operation",
+      "budget": "Prepare the budget"
+    },
+    "pace": {
+      "title": "Month pace",
+      "label": "Cumulative spending per day",
+      "target": "Planned",
+      "lastMonth": "Last month",
+      "today": "Today",
+      "fixedIncluded": "Fixed bills included",
+      "empty": "No spending to track yet this month.",
+      "summary": "{{spent}} spent in {{days}} days",
+      "summaryTarget": "{{spent}} spent of {{target}} planned, after {{days}} days",
+      "summaryReference": "{{spent}} spent after {{days}} days, against {{reference}} last month"
+    },
+    "trend": {
+      "title": "Last 6 months",
+      "label": "Spending over the last 6 months",
+      "average": "Average: {{amount}}"
+    }
+  },
+  "budget": {
+    "title": "Budget",
+    "loading": "Loading the budget…",
+    "loadError": "The budget could not be loaded.",
+    "loadOffline": "You are offline. The budget could not be loaded.",
+    "retry": "Retry",
+    "noPlan": "This month has no budget yet. Add lines or copy last month.",
+    "expectedIncome": "Expected income",
+    "plannedSaving": "Planned saving",
+    "retired": "Retired",
+    "offPlan": {
+      "title": "Off budget",
+      "add": "Add to budget",
+      "addNamed": "Add {{name}} to budget",
+      "show": "Show details",
+      "hide": "Hide details"
+    },
+    "save": "Save",
+    "saved": "Budget saved",
+    "cleared": "Budget cleared",
+    "cancel": "Cancel",
+    "lines": {
+      "title": "Budget lines",
+      "add": "Add a line",
+      "empty": "No line yet.",
+      "planned": "Planned",
+      "actual": "Spent: {{amount}}",
+      "percent": "{{percent}}%",
+      "remove": "Remove {{name}}"
+    },
+    "status": {
+      "ok": "Within budget",
+      "warning": "Almost reached",
+      "over": "Over budget"
+    },
+    "totals": {
+      "title": "Totals",
+      "planned": "Planned",
+      "actual": "Spent",
+      "remaining": "Left to spend",
+      "income": "Income (received / expected)",
+      "expected_remaining_income": "Expected net income",
+      "saving": "Saving (put aside / planned)"
+    },
+    "copy": {
+      "action": "Copy last month",
+      "done": "Last month's budget copied",
+      "replaceTitle": "Replace this month's budget?",
+      "replaceMessage": "This month's budget will be replaced by the previous month's.",
+      "replaceConfirm": "Replace",
+      "nothing": "The previous month has no budget"
+    },
+    "leave": {
+      "title": "Leave without saving?",
+      "message": "Your changes to the budget will be lost.",
+      "confirm": "Leave",
+      "cancel": "Stay"
+    },
+    "clear": {
+      "title": "Clear this month's budget?",
+      "message": "The lines, expected income and planned saving will be removed.",
+      "confirm": "Clear"
+    },
+    "errors": {
+      "generic": "Saving failed. Try again.",
+      "offline": "Saving failed, check your connection. Your entries are kept.",
+      "throttled": "Try again in {{retry}}",
+      "bookGone": "This book is no longer available"
+    },
+    "amount": {
+      "empty": "Enter an amount",
+      "invalid": "Invalid amount",
+      "too_many_decimals": "Too many decimals for this currency",
+      "zero": "Invalid amount",
+      "too_large": "Amount too large"
+    },
+    "fields": {
+      "generic": "Value refused",
+      "month": {
+        "date_format": "Invalid month",
+        "after_or_equal": "The month must be January 2000 or later",
+        "before_or_equal": "The month cannot be more than 12 months ahead"
+      },
+      "expected_income": {
+        "integer": "Invalid amount",
+        "min": "The amount cannot be negative",
+        "max": "Amount too large"
+      },
+      "planned_saving": {
+        "integer": "Invalid amount",
+        "min": "The amount cannot be negative",
+        "max": "Amount too large"
+      },
+      "lines": {
+        "present": "The budget lines are missing",
+        "array": "The budget lines are invalid",
+        "max": "100 lines at most",
+        "category": {
+          "required": "Choose a category",
+          "string": "Invalid category",
+          "distinct": "This category already has a line",
+          "not_found": "This category no longer exists",
+          "not_plannable": "Choose a category or a group, not a subcategory",
+          "not_expense": "Only expenses can have a line",
+          "overlaps": "This category overlaps another line",
+          "retired": "This category has been retired"
+        },
+        "planned": {
+          "required": "Enter an amount",
+          "integer": "Invalid amount",
+          "min": "The amount cannot be negative",
+          "max": "Amount too large"
+        }
+      },
+      "replace": {
+        "boolean": "Value refused"
+      }
+    },
+    "overview": {
+      "title": "Overview",
+      "total": "Spent / planned",
+      "amounts": "{{spent}} / {{planned}}"
+    },
+    "lastMonth": "Last month: {{amount}}"
+  },
+  "recurring": {
+    "title": "Recurring operations",
+    "add": "Add a recurring operation",
+    "loading": "Loading recurring operations…",
+    "loadError": "The recurring operations could not be loaded.",
+    "loadOffline": "You are offline. The recurring operations could not be loaded.",
+    "retry": "Retry",
+    "empty": {
+      "title": "No recurring operation",
+      "text": "Rent, bills or salary can be recorded by themselves."
+    },
+    "next": "Next: {{date}}",
+    "ended": "Ended",
+    "editRule": "Edit {{name}}",
+    "deleteRule": "Delete {{name}}",
+    "frequency": {
+      "weekly": "Every week",
+      "monthly": "Every month",
+      "yearly": "Every year",
+      "every": {
+        "weekly": "Every {{n}} weeks",
+        "monthly": "Every {{n}} months",
+        "yearly": "Every {{n}} years"
+      }
+    },
+    "sheet": {
+      "addTitle": "New recurring operation",
+      "editTitle": "Edit the recurring operation",
+      "editNote": "Operations already made do not change. A new schedule applies from today.",
+      "pastStart": "Operations due up to today will be created at once",
+      "frequency": "Frequency",
+      "frequencies": {
+        "weekly": "Week",
+        "monthly": "Month",
+        "yearly": "Year"
+      },
+      "interval": "Every (number of weeks, months or years)",
+      "startsOn": "First date",
+      "endsOn": "Last date"
+    },
+    "delete": {
+      "title": "Delete this recurring operation?",
+      "message": "Operations already made stay in the book.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "toasts": {
+      "created": "Recurring operation created",
+      "updated": "Recurring operation updated",
+      "deleted": "Recurring operation deleted",
+      "gone": "This recurring operation has been deleted"
+    },
+    "errors": {
+      "limit": "100 recurring operations at most",
+      "offline": "Failed, check your connection",
+      "generic": "The action failed. Try again."
+    },
+    "fields": {
+      "frequency": {
+        "required": "Choose a frequency",
+        "in": "Invalid frequency"
+      },
+      "interval": {
+        "required": "Choose an interval",
+        "integer": "Invalid interval",
+        "min": "The interval must be at least 1",
+        "max": "The interval cannot exceed 12"
+      },
+      "starts_on": {
+        "required": "Choose a first date",
+        "date_format": "Invalid date",
+        "after_or_equal": "The first date cannot be more than a year ago",
+        "before_or_equal": "The first date cannot be more than a year ahead"
+      },
+      "ends_on": {
+        "date_format": "Invalid date",
+        "after_or_equal": "The last date must come after the first"
+      }
+    }
   }
 }

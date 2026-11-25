@@ -82,6 +82,7 @@ Keep specs lean: no restating of earlier specs, link to them instead.
 ## Code checklist (full list in `docs/CONVENTIONS.md`)
 
 - Standalone components, `inject()`, signals, built-in control flow, `OnPush`; no `any`.
+- Component templates live in a sibling `.html` file via `templateUrl`; never an inline `template:` in a component `.ts`.
 - Every `rxMethod` inner observable has `catchError`.
 - No comments unless a *why* the code cannot express.
 - User-visible text via ngx-translate keys in `public/i18n/fr.json`.

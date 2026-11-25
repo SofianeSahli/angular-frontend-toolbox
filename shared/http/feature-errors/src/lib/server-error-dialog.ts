@@ -12,21 +12,7 @@ export type ServerErrorDialogResult = 'retry' | undefined;
 
 @Component({
   imports: [UiDialogHeader, UiDialogBody, UiDialogFooter, UiButton, TranslatePipe],
-  template: `<ui-dialog-header [title]="'errors.server.title' | translate" />
-    <div uiDialogBody>
-      <p>{{ 'errors.server.text' | translate }}</p>
-      @if (data.requestId) {
-        <p>
-          {{ 'errors.server.requestId' | translate }}&ngsp;<code class="server-error-dialog__request-id">{{ data.requestId }}</code>
-        </p>
-      }
-    </div>
-    <div uiDialogFooter>
-      <button uiButton type="button" (click)="context.close()">{{ 'errors.server.close' | translate }}</button>
-      <button uiButton type="button" variant="primary" class="server-error-dialog__retry" (click)="context.close('retry')">
-        {{ 'errors.server.retry' | translate }}
-      </button>
-    </div>`,
+  templateUrl: './server-error-dialog.html',
   styleUrl: './server-error-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

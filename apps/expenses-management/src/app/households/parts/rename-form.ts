@@ -10,19 +10,7 @@ const NAME_MAX_LENGTH = 60;
 @Component({
   selector: 'app-rename-form',
   imports: [ReactiveFormsModule, TranslatePipe, UiButton, UiFormField, UiInput],
-  template: `
-    <form class="d-flex flex-column gap-2" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-      <ui-form-field [label]="'households.household.name' | translate" required [maxLength]="maxLength" [errors]="serverErrors">
-        <input uiInput formControlName="name" type="text" autocomplete="off" [attr.maxlength]="maxLength" />
-      </ui-form-field>
-      <div class="d-flex gap-2">
-        <button uiButton variant="primary" type="submit" [loading]="busy()">{{ 'households.household.renameSave' | translate }}</button>
-        <button uiButton variant="ghost" type="button" [disabled]="busy()" (click)="cancelled.emit()">
-          {{ 'households.household.renameCancel' | translate }}
-        </button>
-      </div>
-    </form>
-  `,
+  templateUrl: './rename-form.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RenameForm implements OnInit {

@@ -1,0 +1,29 @@
+<div class="rule-row">
+    <span class="rule-row__emoji" aria-hidden="true">{{ emoji() }}</span>
+    <div class="rule-row__body">
+      <span class="rule-row__title"><bdi>{{ name() }}</bdi></span>
+      @if (rule().comment; as comment) {
+        <span class="rule-row__meta"><bdi>{{ comment }}</bdi></span>
+      }
+      <span class="rule-row__meta">
+        {{ frequency() }} ·
+        @if (rule().nextDate) {
+          {{ 'recurring.next' | translate: { date: nextDate() } }}
+        } @else {
+          {{ 'recurring.ended' | translate }}
+        }
+        · {{ 'operations.list.by' | translate: { name: rule().createdBy.name } }}
+      </span>
+    </div>
+    <bdi class="rule-row__amount" dir="ltr">
+      <ui-amount [millimes]="rule().amount" [currency]="currency()" [tone]="rule().type === 'income' ? 'income' : 'neutral'" />
+    </bdi>
+    <div class="rule-row__actions">
+      <button uiButton variant="ghost" size="sm" iconOnly type="button" [attr.aria-label]="'recurring.editRule' | translate: { name: name() }" (click)="edit.emit(rule())">
+        <ui-icon name="pencil" />
+      </button>
+      <button uiButton variant="ghost" size="sm" iconOnly type="button" [attr.aria-label]="'recurring.deleteRule' | translate: { name: name() }" (click)="remove.emit(rule())">
+        <ui-icon name="trash" />
+      </button>
+    </div>
+  </div>

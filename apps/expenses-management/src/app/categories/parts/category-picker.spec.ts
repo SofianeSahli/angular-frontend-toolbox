@@ -9,12 +9,13 @@ import fr from '../../../../public/i18n/fr.json';
 import { CategoriesApi, TreeAnswer } from '../data/categories-api';
 import { writeStoredTree } from '../data/categories-storage';
 import { CategoriesStore } from '../data/categories.store';
+import { Top } from '../data/models';
 import { LABELS, TREE } from '../testing';
 import { CategoryPicker, CategoryPickerData } from './category-picker';
 import { CategoryChip } from './category-chip';
 
-async function renderPicker(data: CategoryPickerData) {
-  writeStoredTree({ tops: TREE, etag: null });
+async function renderPicker(data: CategoryPickerData, tops: readonly Top[] = TREE) {
+  writeStoredTree({ tops, etag: null });
   const close = vi.fn();
   const view = await render(CategoryPicker, {
     providers: [
@@ -170,5 +171,58 @@ describe('CategoryChip', () => {
     expect(chips[0].textContent).toContain('🏪');
     expect(chips[0].querySelector('bdi')?.textContent).toBe('Boulangerie');
     expect(chips[1].querySelector('bdi')?.textContent).toBe('Épicerie');
+  });
+
+  describe('plan mode (spec 008 REQ-5.3)', () => {
+    it('offers expense tops and groups only, never leaves, income or saving', async () => {
+      const view = await renderPicker({ mode: 'plan' });
+      expect(screen.getByRole('heading').textContent).toContain('Ajouter une ligne');
+      expect(screen.queryByRole('button', { name: /^Salaire/ })).toBeNull();
+      expect(screen.queryByRole('button', { name: /^Épargne/ })).toBeNull();
+      const food = item(/^Alimentation/);
+      expand(view, food);
+      const buttons = within(panelOf(food)).getAllByRole('button');
+      expect(buttons).toHaveLength(2);
+      expect(buttons[0].textContent).toContain('Tout dans Alimentation');
+      expect(buttons[1].textContent).toContain('Courses');
+      expect(screen.queryByRole('button', { name: /Supermarché/ })).toBeNull();
+      fireEvent.click(item(/^Courses/));
+      expect(view.close).toHaveBeenCalledWith('food.groceries');
+    });
+
+    it('picks a whole top', async () => {
+      const view = await renderPicker({ mode: 'plan' });
+      expand(view, item(/^Alimentation/));
+      fireEvent.click(item('Tout dans Alimentation'));
+      expect(view.close).toHaveBeenCalledWith('food');
+    });
+
+    it('hides categories overlapping a line of the draft', async () => {
+      await renderPicker({ mode: 'plan', excluded: ['food.groceries'] });
+      expect(screen.queryByRole('button', { name: /^Alimentation/ })).toBeNull();
+      expect(screen.getByRole('status').textContent).toContain('Toutes les catégories');
+    });
+
+    it('hides the groups of a planned top', async () => {
+      await renderPicker({ mode: 'plan', excluded: ['food'] });
+      expect(screen.queryByRole('button', { name: /^Alimentation/ })).toBeNull();
+    });
+
+    it('hides retired groups and tops', async () => {
+      const tops = TREE.map((top) => (top.code === 'food' ? { ...top, groups: top.groups.map((group) => ({ ...group, retired: true })) } : top));
+      const view = await renderPicker({ mode: 'plan' }, tops);
+      const food = item(/^Alimentation/);
+      expand(view, food);
+      const buttons = within(panelOf(food)).getAllByRole('button');
+      expect(buttons).toHaveLength(1);
+      expect(buttons[0].textContent).toContain('Tout dans Alimentation');
+    });
+
+    it('searches tops and groups only', async () => {
+      const view = await renderPicker({ mode: 'plan' });
+      await search(view, 'cour');
+      expect(screen.getAllByRole('button').some((button) => button.textContent?.includes('Courses'))).toBe(true);
+      expect(screen.queryByRole('button', { name: /Supermarché/ })).toBeNull();
+    });
   });
 });

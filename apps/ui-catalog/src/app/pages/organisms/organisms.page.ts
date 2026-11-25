@@ -47,15 +47,7 @@ const DAYS: readonly UiListGroup<Operation>[] = [
 
 @Component({
   imports: [UiDialogHeader, UiDialogBody, UiDialogFooter, UiButton, UiLabel, UiInput],
-  template: `<ui-dialog-header title="Nouvelle dépense" />
-    <div uiDialogBody>
-      <label uiLabel for="demo-amount">Montant</label>
-      <input uiInput id="demo-amount" inputmode="decimal" placeholder="ex. 12,500" />
-    </div>
-    <div uiDialogFooter>
-      <button uiButton type="button" (click)="context.close()">Annuler</button>
-      <button uiButton variant="primary" type="button" (click)="context.close('saved')">Enregistrer</button>
-    </div>`,
+  templateUrl: './expense-dialog-demo.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpenseDialogDemo {

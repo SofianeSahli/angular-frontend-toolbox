@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { UiAmount } from '@shared/ui-atoms';
+import { UiAmount, UiBadge } from '@shared/ui-atoms';
 import { UiListItem } from '@shared/ui-molecules';
 import { CurrencyFormat, formatMinor } from '@shared/util-format';
 import { CategoryLabels } from '../../categories/data/category-labels';
@@ -10,27 +10,8 @@ import { longDate, uiLocale } from '../support/day-groups';
 
 @Component({
   selector: 'app-entry-row',
-  imports: [TranslatePipe, UiAmount, UiListItem],
-  template: `
-    <button uiListItem type="button" class="w-100" [attr.aria-label]="accessibleName()" (click)="open.emit(entry())">
-      <span uiLeading aria-hidden="true">{{ emoji() }}</span>
-      <span uiTitle
-        ><bdi>{{ name() }}</bdi></span
-      >
-      @if (entry().comment || showAuthor()) {
-      <span uiSubtitle>
-        @if (entry().comment; as comment) {
-        <bdi>{{ comment }}</bdi>
-        } @if (entry().comment && showAuthor()) { &ngsp;·&ngsp; } @if (showAuthor()) {
-        {{ 'operations.list.by' | translate : { name: entry().createdBy.name } }}
-        }
-      </span>
-      }
-      <bdi uiTrailing dir="ltr">
-        <ui-amount [millimes]="entry().amount" [currency]="currency()" [tone]="entry().type === 'income' ? 'income' : 'neutral'" />
-      </bdi>
-    </button>
-  `,
+  imports: [TranslatePipe, UiAmount, UiBadge, UiListItem],
+  templateUrl: './entry-row.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntryRow {
@@ -48,10 +29,11 @@ export class EntryRow {
 
   protected readonly accessibleName = computed(() => {
     this.revision();
-    return this.translate.instant('operations.list.row', {
+    const row = this.translate.instant('operations.list.row', {
       category: this.name(),
       amount: formatMinor(this.entry().amount, this.currency()),
       date: longDate(this.entry().date, uiLocale(this.translate.getCurrentLang())),
     });
+    return this.entry().recurringRuleId === null ? row : `${row}, ${this.translate.instant('operations.recurringBadge')}`;
   });
 }

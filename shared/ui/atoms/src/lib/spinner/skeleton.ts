@@ -4,7 +4,7 @@ export type UiSkeletonShape = 'line' | 'block' | 'circle';
 
 @Component({
   selector: 'ui-skeleton',
-  template: '',
+  templateUrl: './skeleton.html',
   styleUrl: './skeleton.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

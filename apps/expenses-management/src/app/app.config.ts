@@ -17,6 +17,9 @@ import { environment } from '../environments/environment';
 import { PATHS, appRoutes } from './app.routes';
 import { provideHouseholds } from './households/data/provide-households';
 import { provideOperations } from './operations/data/provide-operations';
+import { provideBudget } from './budget/data/provide-budget';
+import { provideDashboard } from './dashboard/data/provide-dashboard';
+import { provideRecurring } from './recurring/data/provide-recurring';
 import { LanguageService } from './i18n/language.service';
 import { MergedTranslateLoader } from './i18n/merged-translate-loader';
 import { provideTranslatedUiText } from './i18n/translated-ui-text';
@@ -42,6 +45,9 @@ export const appConfig: ApplicationConfig = {
     provideIcons(SHELL_ICONS),
     provideHouseholds(),
     provideOperations(),
+    provideDashboard(),
+    provideBudget(),
+    provideRecurring(),
     provideAppInitializer(() => {
       inject(LanguageService);
       void inject(SessionStore).restore();

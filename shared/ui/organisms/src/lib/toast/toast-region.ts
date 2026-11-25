@@ -10,9 +10,7 @@ const VISIBLE_ON_DESKTOP = 3;
 @Component({
   selector: 'ui-toast-region',
   imports: [UiToastView],
-  template: `@for (toast of visibleToasts(); track toast.id) {
-    <ui-toast [toast]="toast" />
-  }`,
+  templateUrl: './toast-region.html',
   styleUrl: './toast-region.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

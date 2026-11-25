@@ -6,22 +6,7 @@ const NON_DIGITS = /\D/g;
 
 @Component({
   selector: 'ui-code-input',
-  template: `<input
-      class="ui-code-input__native"
-      inputmode="numeric"
-      autocomplete="one-time-code"
-      dir="ltr"
-      [attr.aria-label]="ariaLabel()"
-      [attr.aria-invalid]="showInvalid() ? 'true' : null"
-      [value]="value() ?? ''"
-      [disabled]="isDisabled()"
-      (input)="onInput($event)"
-      (focus)="focused.set(true)"
-      (blur)="focused.set(false); markTouched()"
-    />
-    @for (digit of cells(); track $index) {
-      <span class="ui-code-input__cell" [class.ui-code-input__cell--active]="activeCell() === $index" aria-hidden="true">{{ digit }}</span>
-    }`,
+  templateUrl: './code-input.html',
   styleUrl: './code-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

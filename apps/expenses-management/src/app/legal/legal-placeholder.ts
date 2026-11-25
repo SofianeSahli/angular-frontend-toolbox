@@ -5,11 +5,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 @Component({
   selector: 'app-legal-placeholder',
   imports: [RouterLink, TranslatePipe],
-  template: `<main class="container py-5 d-flex flex-column gap-3">
-    <h1>{{ titleKey | translate }}</h1>
-    <p class="mb-0">{{ 'legal.comingSoon' | translate }}</p>
-    <a routerLink="/">{{ 'legal.back' | translate }}</a>
-  </main>`,
+  templateUrl: './legal-placeholder.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LegalPlaceholder {

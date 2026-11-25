@@ -1,5 +1,6 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { Router, RouterOutlet, provideRouter } from '@angular/router';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { SessionStore } from '@shared/identity-data-access';
 import { fireEvent, render, screen } from '@testing-library/angular';
@@ -32,7 +33,7 @@ function fakeOperations() {
   };
 }
 
-async function renderPage(options: { household?: boolean } = {}) {
+async function renderPage(options: { household?: boolean; url?: string } = {}) {
   const stores = fakeStores();
   const selected = book('b1', options.household ? 'household' : 'account');
   stores.books.books.set([selected]);
@@ -40,8 +41,13 @@ async function renderPage(options: { household?: boolean } = {}) {
   stores.household.members.set([member('u1', 'owner'), member('u2')]);
   const operations = fakeOperations();
   const sheets = { openNew: vi.fn(), openEdit: vi.fn() };
-  const view = await render(OperationsPage, {
+  const view = await render('<router-outlet />', {
+    imports: [RouterOutlet],
     providers: [
+      provideRouter([
+        { path: 'operations', component: OperationsPage },
+        { path: '**', children: [] },
+      ]),
       provideTranslateService({ lang: 'fr' }),
       { provide: BooksStore, useValue: stores.books },
       { provide: HouseholdStore, useValue: stores.household },
@@ -55,6 +61,7 @@ async function renderPage(options: { household?: boolean } = {}) {
     ],
   });
   TestBed.inject(TranslateService).setTranslation('fr', fr);
+  await TestBed.inject(Router).navigateByUrl(options.url ?? '/operations');
   view.detectChanges();
   return { ...view, operations, sheets, stores };
 }
@@ -63,7 +70,7 @@ describe('OperationsPage (REQ-5.1–5.7, 5.9)', () => {
   it('has one h1, opens the selected book and marks itself active', async () => {
     const view = await renderPage();
     expect(screen.getAllByRole('heading', { level: 1 }).map((h) => h.textContent?.trim())).toEqual(['Opérations']);
-    expect(view.operations.open).toHaveBeenCalledWith('b1');
+    expect(view.operations.open).toHaveBeenCalledWith('b1', null);
     expect(view.operations.setActive).toHaveBeenCalledWith(true);
     view.fixture.destroy();
     expect(view.operations.setActive).toHaveBeenLastCalledWith(false);
@@ -139,5 +146,22 @@ describe('OperationsPage (REQ-5.1–5.7, 5.9)', () => {
     const view = await renderPage({ household: true });
     expect(view.stores.household.loadDetail).toHaveBeenCalled();
     expect(view.container.querySelector('app-operations-filters')).not.toBeNull();
+  });
+
+  describe('drill-down (spec 008 REQ-1.3, 6.9)', () => {
+    it('opens with the month and the category of the query', async () => {
+      const view = await renderPage({ url: '/operations?mois=2026-10&categorie=food' });
+      expect(view.operations.open).toHaveBeenCalledWith('b1', { from: '2026-10-01', to: '2026-10-31', category: 'food' });
+    });
+
+    it('opens with the month alone', async () => {
+      const view = await renderPage({ url: '/operations?mois=2026-02' });
+      expect(view.operations.open).toHaveBeenCalledWith('b1', { from: '2026-02-01', to: '2026-02-28' });
+    });
+
+    it('links to the recurring operations', async () => {
+      await renderPage();
+      expect(screen.getByRole('link', { name: /Récurrentes/ }).getAttribute('href')).toBe('/operations/recurrentes');
+    });
   });
 });

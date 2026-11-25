@@ -80,6 +80,18 @@
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true
+        },
+        "lan": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/expenses-management/src/environments/environment.ts",
+              "with": "apps/expenses-management/src/environments/environment.lan.ts"
+            }
+          ]
         }
       }
     },
@@ -93,6 +105,13 @@
         },
         "development": {
           "buildTarget": "expenses-management:build:development"
+        },
+        "lan": {
+          "buildTarget": "expenses-management:build:lan",
+          "host": "0.0.0.0",
+          "port": 4200,
+          "proxyConfig": "apps/expenses-management/proxy.lan.json",
+          "ssl": true
         }
       }
     },

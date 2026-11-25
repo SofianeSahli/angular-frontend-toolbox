@@ -6,6 +6,7 @@ import { AuthFrame } from './auth-frame/auth-frame';
 import { BooksStore } from './households/data/books.store';
 import { firstRunGuard, householdBookGuard, workspaceGuard } from './households/data/guards';
 import { HouseholdStore } from './households/data/household.store';
+import { budgetLeaveGuard } from './budget/pages/budget-leave.guard';
 
 export const PATHS = {
   signIn: '/connexion',
@@ -22,6 +23,8 @@ export const PATHS = {
   newHousehold: '/foyer/nouveau',
   newBook: '/carnets/nouveau',
   operations: '/operations',
+  recurring: '/operations/recurrentes',
+  budget: '/budget',
 } as const;
 
 const identityPages = () => import('@shared/identity-feature-auth');
@@ -59,8 +62,21 @@ export const appRoutes: Route[] = [
       {
         path: '',
         canActivate: [workspaceGuard],
-        loadComponent: () => import('./home/book-home').then((m) => m.BookHome),
+        loadComponent: () => import('./dashboard/pages/dashboard-page').then((m) => m.DashboardPage),
         data: { [SHELL_TITLE_KEY]: 'home.title', [SHELL_BOOK_BOUND]: true },
+      },
+      {
+        path: routePath(PATHS.budget),
+        canActivate: [workspaceGuard],
+        canDeactivate: [budgetLeaveGuard],
+        loadComponent: () => import('./budget/pages/budget-page').then((m) => m.BudgetPage),
+        data: { [SHELL_TITLE_KEY]: 'budget.title', [SHELL_BOOK_BOUND]: true },
+      },
+      {
+        path: routePath(PATHS.recurring),
+        canActivate: [workspaceGuard],
+        loadComponent: () => import('./recurring/pages/recurring-page').then((m) => m.RecurringPage),
+        data: { [SHELL_TITLE_KEY]: 'recurring.title', [SHELL_BOOK_BOUND]: true },
       },
       {
         path: routePath(PATHS.operations),

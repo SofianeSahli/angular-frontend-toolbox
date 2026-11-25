@@ -1,0 +1,28 @@
+@if (shown()) {
+    <section class="budget-overview" aria-labelledby="budget-overview-title">
+      <h2 class="budget-parts__title" id="budget-overview-title">{{ 'budget.overview.title' | translate }}</h2>
+      <div class="budget-overview__total">
+        <ui-meter [value]="actual()" [max]="planned()" [state]="state()" [label]="'budget.overview.total' | translate" [valueText]="totalText()" />
+        <p class="plan-line__numbers">
+          <bdi>{{ totalAmounts() }}</bdi>
+          @if (totalPercent() !== null) {
+            · {{ 'budget.lines.percent' | translate: { percent: totalPercent() } }}
+          }
+        </p>
+      </div>
+      <ul class="budget-overview__lines">
+        @for (line of lines(); track line.category) {
+          <li class="budget-overview__line">
+            <span class="plan-line__name"
+              ><span aria-hidden="true">{{ line.emoji }}</span>&ngsp;<bdi>{{ line.label }}</bdi></span
+            >
+            <ui-meter [value]="line.actual" [max]="line.planned" [state]="line.state" [label]="line.label" [valueText]="line.text" />
+            <p class="plan-line__numbers">
+              <bdi>{{ line.amounts }}</bdi>
+              · {{ line.text }}
+            </p>
+          </li>
+        }
+      </ul>
+    </section>
+  }

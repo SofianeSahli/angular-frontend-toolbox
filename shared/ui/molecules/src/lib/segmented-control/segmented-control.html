@@ -1,0 +1,16 @@
+@for (option of options(); track $index) {
+    <button
+      #item
+      type="button"
+      role="radio"
+      class="ui-segmented-control__item"
+      [attr.aria-checked]="selectedIndex() === $index"
+      [attr.tabindex]="focusableIndex() === $index ? 0 : -1"
+      [disabled]="isDisabled() || option.disabled"
+      (click)="select($index)"
+      (keydown)="onKeydown($event, $index)"
+      (blur)="markTouched()"
+    >
+      {{ option.label }}
+    </button>
+  }

@@ -7,8 +7,8 @@ function leaves(value: unknown, prefix = ''): string[] {
   return Object.entries(value).flatMap(([key, child]) => leaves(child, prefix ? `${prefix}.${key}` : key));
 }
 
-describe('translation files (spec 007 REQ-8.1)', () => {
-  it.each(['categories', 'operations', 'shell'] as const)('have the same %s keys in fr, en and ar', (subtree) => {
+describe('translation files (spec 007 REQ-8.1, spec 008 REQ-8.8)', () => {
+  it.each(['categories', 'operations', 'shell', 'home', 'dashboard', 'budget', 'recurring'] as const)('have the same %s keys in fr, en and ar', (subtree) => {
     const keys = leaves(fr[subtree]).sort();
     expect(leaves(en[subtree]).sort()).toEqual(keys);
     expect(leaves(ar[subtree]).sort()).toEqual(keys);
@@ -18,5 +18,9 @@ describe('translation files (spec 007 REQ-8.1)', () => {
     const labels = leaves(fr.categories).filter((key) => key.endsWith('.label'));
     const depth = (n: number) => labels.filter((key) => key.split('.').length === n + 1).length;
     expect([depth(1), depth(2), depth(3)]).toEqual([11, 33, 126]);
+  });
+
+  it('keep Arabic marked as a draft', () => {
+    expect(ar.meta.reviewStatus).toMatch(/^draft/);
   });
 });

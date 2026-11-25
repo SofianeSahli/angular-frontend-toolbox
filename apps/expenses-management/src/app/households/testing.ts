@@ -13,7 +13,7 @@ import { InvitationsStore } from './data/invitations.store';
 import { Book, Household, Invitation, Member, ReceivedInvitation } from './data/models';
 import { DONE, StoreResult } from './data/store-result';
 
-@Component({ template: '' })
+@Component({ templateUrl: './testing.html' })
 class Destination {}
 
 export { DONE };

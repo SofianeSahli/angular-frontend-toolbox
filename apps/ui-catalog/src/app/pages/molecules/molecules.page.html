@@ -97,6 +97,52 @@
     </div>
   </section>
 
+  <section class="catalog-section" aria-labelledby="meters">
+    <h2 class="catalog-heading" id="meters">Jauges et classements</h2>
+    <h3 class="catalog-subheading">Jauge</h3>
+    <div class="d-flex flex-column gap-3 catalog-narrow">
+      <ui-meter [value]="300000" [max]="600000" label="Alimentation" valueText="50 %" />
+      <ui-meter [value]="540000" [max]="600000" state="warning" label="Maison" valueText="90 %" />
+      <ui-meter [value]="160000" [max]="100000" state="over" label="Transport" valueText="160 %" />
+      <ui-meter [value]="0" [max]="200000" label="Santé" valueText="0 %" />
+      <ui-meter [value]="100000" [max]="0" state="over" label="Sorties" valueText="Hors plan" />
+    </div>
+    <h3 class="catalog-subheading">Classement</h3>
+    <div class="d-flex flex-column gap-4 catalog-narrow">
+      <ui-bar-list [items]="[]" emptyText="Aucune dépense ce mois-ci" />
+      <ui-bar-list [items]="singleBar" />
+      <ui-bar-list [items]="bars" (itemSelect)="selectedBar.set($event)" />
+      @if (selectedBar(); as id) {
+        <p>Ligne choisie : {{ id }}</p>
+      }
+      <ui-bar-list [items]="longBars" />
+      <div dir="rtl"><ui-bar-list [items]="bars" /></div>
+    </div>
+  </section>
+
+  <section class="catalog-section" aria-labelledby="charts">
+    <h2 class="catalog-heading" id="charts">Graphiques</h2>
+    <h3 class="catalog-subheading">Rythme du mois</h3>
+    <div class="d-flex flex-column gap-4 catalog-narrow">
+      <ui-pace-chart [days]="[]" [daysInMonth]="30" label="Rythme du mois" summaryText="Aucune dépense ce mois-ci" />
+      <ui-pace-chart [days]="paceNormal" [daysInMonth]="30" [today]="12" [target]="2400" label="Rythme du mois" summaryText="720 DT dépensés sur 2 400 DT prévus, 12 jours écoulés" />
+      <ui-pace-chart [days]="paceNormal" [daysInMonth]="30" [today]="12" [reference]="paceReference" label="Rythme du mois" summaryText="720 DT dépensés, un peu moins que le mois dernier" />
+      <ui-pace-chart [days]="paceOver" [daysInMonth]="30" [today]="12" [target]="1200" label="Rythme du mois" summaryText="1 810 DT dépensés sur 1 200 DT prévus : budget dépassé" />
+      <div dir="rtl">
+        <ui-pace-chart [days]="paceNormal" [daysInMonth]="30" [today]="12" [target]="2400" label="وتيرة الشهر" summaryText="720 دينار من 2400 دينار" />
+      </div>
+    </div>
+    <h3 class="catalog-subheading">6 derniers mois</h3>
+    <div class="d-flex flex-column gap-4 catalog-narrow">
+      <ui-trend-bars [items]="[]" label="6 derniers mois" />
+      <ui-trend-bars [items]="trendItems" averageText="Moyenne : 1 130 DT" label="6 derniers mois" (itemSelect)="selectedTrend.set($event)" />
+      @if (selectedTrend(); as id) {
+        <p>Mois choisi : {{ id }}</p>
+      }
+      <div dir="rtl"><ui-trend-bars [items]="trendItems" averageText="المعدل : 1 130" label="آخر 6 أشهر" /></div>
+    </div>
+  </section>
+
   <section class="catalog-section" aria-labelledby="menus">
     <h2 class="catalog-heading" id="menus">Menu</h2>
     <div class="d-flex gap-3">

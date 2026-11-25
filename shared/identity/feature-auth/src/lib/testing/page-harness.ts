@@ -8,7 +8,7 @@ import { UiToast } from '@shared/ui-organisms';
 import { render } from '@testing-library/angular';
 import fr from '../../i18n/fr.json';
 
-@Component({ template: '' })
+@Component({ templateUrl: './page-harness.html' })
 class Destination {}
 
 export const TEST_CONFIG: IdentityConfig = {

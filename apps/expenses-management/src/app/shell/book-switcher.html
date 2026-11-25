@@ -1,0 +1,27 @@
+@if (books.selectedBook(); as current) {
+  <button uiButton variant="ghost" type="button" [class.w-100]="variant() === 'rail'" [uiMenuTriggerFor]="menu">
+    <span class="visually-hidden">{{ 'shell.books.switcher' | translate }} :</span>
+    <bdi class="text-truncate">{{ current.name }}</bdi>
+    <ui-icon name="chevron-down" />
+  </button>
+  <ng-template #menu>
+    <ui-menu>
+      @for (book of ordered(); track book.id) {
+        <button
+          uiMenuItem
+          [checked]="book.id === current.id"
+          [icon]="book.owner.type === 'household' ? 'house' : undefined"
+          (triggered)="books.select(book.id)"
+        >
+          <bdi>{{ book.name }}</bdi>
+        </button>
+      }
+      <button uiMenuItem icon="plus" [disabled]="!books.canCreatePersonalBook()" (triggered)="newBook()">
+        {{ 'shell.books.new' | translate }}
+        @if (!books.canCreatePersonalBook()) {
+          <span class="d-block small">{{ 'shell.books.limit' | translate }}</span>
+        }
+      </button>
+    </ui-menu>
+  </ng-template>
+}

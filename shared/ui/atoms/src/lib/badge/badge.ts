@@ -4,7 +4,7 @@ export type UiBadgeTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger
 
 @Component({
   selector: 'ui-badge',
-  template: '<ng-content />',
+  templateUrl: './badge.html',
   styleUrl: './badge.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

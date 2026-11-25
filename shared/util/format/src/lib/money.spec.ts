@@ -129,3 +129,32 @@ describe('parseMajor (spec 007 REQ-1.2)', () => {
     expect(parseMajor(text, exponent)).toEqual({ ok: false, reason });
   });
 });
+
+describe('parseMajor with allowZero (spec 008 REQ-7.3)', () => {
+  it.each([
+    ['0', 3],
+    ['0,000', 3],
+    ['0', 0],
+    [' 0,0 ', 2],
+  ])('"%s" with exponent %d → 0', (text, exponent) => {
+    expect(parseMajor(text, exponent, { allowZero: true })).toEqual({ ok: true, minor: 0 });
+  });
+
+  it('still refuses zero without the option', () => {
+    expect(parseMajor('0', 3, { allowZero: false })).toEqual({ ok: false, reason: 'zero' });
+    expect(parseMajor('0', 3, {})).toEqual({ ok: false, reason: 'zero' });
+  });
+
+  it.each([
+    ['', 'empty'],
+    ['abc', 'invalid'],
+    ['1,2345', 'too_many_decimals'],
+    ['1000000000', 'too_large'],
+  ])('keeps the other reasons: "%s" → %s', (text, reason) => {
+    expect(parseMajor(text, 3, { allowZero: true })).toEqual({ ok: false, reason });
+  });
+
+  it('parses other amounts as before', () => {
+    expect(parseMajor('1,5', 3, { allowZero: true })).toEqual({ ok: true, minor: 1500 });
+  });
+});

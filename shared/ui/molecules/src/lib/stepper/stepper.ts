@@ -3,12 +3,7 @@ import { UI_TEXT, fillUiText } from '@shared/ui-tokens';
 
 @Component({
   selector: 'ui-stepper',
-  template: `<span class="ui-stepper__label">{{ label() }}</span>
-    <span class="ui-stepper__bars" aria-hidden="true">
-      @for (done of bars(); track $index) {
-        <span class="ui-stepper__bar" [class.ui-stepper__bar--done]="done"></span>
-      }
-    </span>`,
+  templateUrl: './stepper.html',
   styleUrl: './stepper.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

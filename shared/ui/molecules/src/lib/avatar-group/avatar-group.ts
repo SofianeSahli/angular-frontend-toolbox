@@ -12,12 +12,7 @@ export type UiAvatarGroupSize = 'sm' | 'md';
 @Component({
   selector: 'ui-avatar-group',
   imports: [UiAvatar],
-  template: `@for (person of visible(); track $index) {
-      <ui-avatar decorative [name]="person.name" [src]="person.src" [member]="person.member ?? 1" [size]="size()" />
-    }
-    @if (hiddenCount() > 0) {
-      <span class="ui-avatar-group__more" [class.ui-avatar-group__more--sm]="size() === 'sm'" aria-hidden="true">+{{ hiddenCount() }}</span>
-    }`,
+  templateUrl: './avatar-group.html',
   styleUrl: './avatar-group.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

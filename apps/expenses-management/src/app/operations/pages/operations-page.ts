@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, computed, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SessionStore } from '@shared/identity-data-access';
 import { UiButton, UiIcon } from '@shared/ui-atoms';
@@ -11,8 +12,9 @@ import { injectTranslationRevision } from '../../i18n/translation-revision';
 import { BooksStore } from '../../households/data/books.store';
 import { HouseholdStore } from '../../households/data/household.store';
 import { EntrySheetService } from '../entry-sheet.service';
-import { hasNarrowingFilters } from '../data/filters';
-import { Entry, Person } from '../data/models';
+import { CATEGORY_PARAM, MONTH_PARAM, isMonth, monthFromQuery } from '../../ledger/month-context';
+import { hasNarrowingFilters, monthRange } from '../data/filters';
+import { Entry, EntryFilters, Person } from '../data/models';
 import { OperationsStore } from '../data/operations.store';
 import { EntryRow } from '../parts/entry-row';
 import { OperationsFilters } from '../parts/operations-filters';
@@ -20,7 +22,7 @@ import { dayGroups, uiLocale } from '../support/day-groups';
 
 @Component({
   selector: 'app-operations-page',
-  imports: [EntryRow, OperationsFilters, TranslatePipe, UiAlert, UiButton, UiEmptyState, UiGroupedList, UiIcon, UiPage],
+  imports: [EntryRow, OperationsFilters, RouterLink, TranslatePipe, UiAlert, UiButton, UiEmptyState, UiGroupedList, UiIcon, UiPage],
   templateUrl: './operations-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -32,6 +34,7 @@ export class OperationsPage implements OnInit, OnDestroy {
   private readonly session = inject(SessionStore);
   private readonly sheets = inject(EntrySheetService);
   private readonly translate = inject(TranslateService);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly book = this.books.selectedBook;
   protected readonly locale = computed(() => {
@@ -73,13 +76,24 @@ export class OperationsPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     void this.categories.load();
     const bookId = this.books.selectedBookId();
-    if (bookId !== null) void this.operations.open(bookId);
+    if (bookId !== null) void this.operations.open(bookId, this.requestedFilters());
     this.operations.setActive(true);
     if (this.isHouseholdBook()) void this.household.loadDetail();
   }
 
   ngOnDestroy(): void {
     this.operations.setActive(false);
+  }
+
+  private requestedFilters(): Partial<EntryFilters> | null {
+    const params = this.route.snapshot.queryParamMap;
+    const month = params.get(MONTH_PARAM);
+    const category = params.get(CATEGORY_PARAM);
+    if (!isMonth(month) && !category) return null;
+    return {
+      ...monthRange(monthFromQuery(month, this.today())),
+      ...(category ? { category } : {}),
+    };
   }
 
   protected add(): void {

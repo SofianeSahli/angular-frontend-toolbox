@@ -1,9 +1,9 @@
-import { firstValueFrom, of } from 'rxjs';
+import { Observable, firstValueFrom, of } from 'rxjs';
 import { Page, fetchAll } from './paginate';
 
 describe('fetchAll', () => {
   it('returns a single page without following anything', async () => {
-    const fetchPage = vi.fn((_cursor: string | null) => of<Page<number>>({ data: [1, 2], meta: { next_cursor: null } }));
+    const fetchPage = vi.fn<(cursor: string | null) => Observable<Page<number>>>(() => of<Page<number>>({ data: [1, 2], meta: { next_cursor: null } }));
     expect(await firstValueFrom(fetchAll(fetchPage))).toEqual([1, 2]);
     expect(fetchPage).toHaveBeenCalledTimes(1);
     expect(fetchPage).toHaveBeenCalledWith(null);

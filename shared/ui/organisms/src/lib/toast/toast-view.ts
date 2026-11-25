@@ -11,13 +11,7 @@ const TONE_ICONS: Readonly<Record<UiToastItem['tone'], string | null>> = {
 @Component({
   selector: 'ui-toast',
   imports: [UiIcon],
-  template: `@if (icon(); as name) {
-      <ui-icon class="ui-toast__icon" [name]="name" />
-    }
-    <span class="ui-toast__message">{{ toast().message }}</span>
-    @if (toast().action; as action) {
-      <button type="button" class="ui-toast__action" (click)="runAction()">{{ action.label }}</button>
-    }`,
+  templateUrl: './toast-view.html',
   styleUrl: './toast-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

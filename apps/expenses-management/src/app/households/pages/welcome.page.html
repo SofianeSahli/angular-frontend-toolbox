@@ -1,0 +1,54 @@
+<ui-flow-layout
+  [title]="'households.welcome.title' | translate"
+  [lead]="'households.welcome.lead' | translate"
+  (back)="leave()"
+  (exit)="leave()"
+>
+  @if (loading()) {
+    <div class="d-flex flex-column gap-3" role="status" [attr.aria-label]="'households.welcome.loading' | translate">
+      <ui-skeleton shape="block" />
+      <ui-skeleton shape="block" />
+    </div>
+  } @else {
+    @if (message(); as text) {
+      <ui-alert tone="danger">{{ text }}</ui-alert>
+    }
+    @if (invitations.received().length > 0) {
+      <section class="d-flex flex-column gap-3" [attr.aria-label]="'households.welcome.invitations' | translate">
+        @for (invitation of invitations.received(); track invitation.id) {
+          <app-received-invitation-card
+            [invitation]="invitation"
+            [busy]="busyId() === invitation.id ? busyAnswer() : null"
+            (accept)="answer(invitation.id, 'accept')"
+            (decline)="answer(invitation.id, 'decline')"
+          />
+        }
+      </section>
+    }
+    @switch (state()) {
+      @case ('A') {
+        <ui-option-cards [legend]="'households.welcome.legend' | translate" [options]="options()" [formControl]="choice" />
+      }
+      @case ('B') {
+        <section class="d-flex flex-column gap-2 p-3 border rounded">
+          <h2 class="h5 m-0">{{ 'households.welcome.resume.title' | translate: { name: household.household()?.name } }}</h2>
+          <a uiButton variant="primary" routerLink="/carnets/nouveau" [queryParams]="{ foyer: 1 }">
+            {{ 'households.welcome.resume.action' | translate }}
+          </a>
+        </section>
+      }
+      @case ('C') {
+        <ui-alert tone="info">{{ 'households.welcome.memberWaiting' | translate }}</ui-alert>
+      }
+    }
+  }
+  <div uiFlowFooter>
+    @if (!loading()) {
+      @if (state() === 'A') {
+        <button uiButton variant="primary" type="button" (click)="next()">{{ 'households.welcome.continue' | translate }}</button>
+      } @else {
+        <a uiButton variant="secondary" routerLink="/carnets/nouveau">{{ 'households.welcome.personal.title' | translate }}</a>
+      }
+    }
+  </div>
+</ui-flow-layout>

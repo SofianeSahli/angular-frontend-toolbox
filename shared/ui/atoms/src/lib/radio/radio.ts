@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'input[type=radio][uiRadio]',
-  template: '',
+  templateUrl: './radio.html',
   styleUrl: './radio.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
