@@ -8,7 +8,7 @@ import { ServerErrorDialog, ServerErrorDialogData, ServerErrorDialogResult } fro
 
 @Component({
   selector: 'shared-error-presenter',
-  template: '',
+  templateUrl: './error-presenter.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorPresenter {

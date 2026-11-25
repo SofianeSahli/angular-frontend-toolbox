@@ -6,16 +6,7 @@ import { UiIcon } from '@shared/ui-atoms';
 @Component({
   selector: 'app-brand-panel',
   imports: [BrandMark, TranslatePipe, UiIcon],
-  template: `<app-brand-mark onBrand />
-    <div class="brand-panel__body">
-      <p class="brand-panel__promise">{{ 'brand.promise' | translate }}</p>
-      <ul class="brand-panel__benefits">
-        @for (benefit of benefits; track benefit) {
-          <li><ui-icon name="check" />{{ benefit | translate }}</li>
-        }
-      </ul>
-    </div>
-    <p class="brand-panel__note">{{ 'brand.note' | translate }}</p>`,
+  templateUrl: './brand-panel.html',
   styleUrl: './brand-panel.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

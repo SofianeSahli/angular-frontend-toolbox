@@ -5,23 +5,7 @@ import { UI_TEXT } from '@shared/ui-tokens';
 @Component({
   selector: 'ui-search-field',
   imports: [UiInput, UiIcon, UiButton],
-  template: `<ui-icon class="ui-search-field__icon" name="search" />
-    <input
-      #field
-      uiInput
-      type="search"
-      class="ui-search-field__input"
-      [placeholder]="placeholder() ?? ''"
-      [attr.aria-label]="ariaLabel()"
-      [value]="draft()"
-      (input)="onType($event)"
-      (keydown.escape)="clear()"
-    />
-    @if (draft()) {
-      <button uiButton variant="ghost" size="sm" iconOnly type="button" class="ui-search-field__clear" [attr.aria-label]="text.clear" (click)="clear()">
-        <ui-icon name="x" />
-      </button>
-    }`,
+  templateUrl: './search-field.html',
   styleUrl: './search-field.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

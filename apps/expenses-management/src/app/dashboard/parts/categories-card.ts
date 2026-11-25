@@ -17,22 +17,7 @@ export const OTHERS_ROW = '__others';
 @Component({
   selector: 'app-categories-card',
   imports: [CardFrame, TranslatePipe, UiBarList],
-  template: `<app-card-frame [heading]="'dashboard.categories.title' | translate" [status]="status()" [error]="error()" (retry)="retry.emit()">
-    @if (items().length === 1) {
-      @let row = items()[0];
-      <button type="button" class="dashboard-card__row" (click)="open(row.id)">
-        <span>{{ row.label }}</span>
-        <span class="dashboard-card__numbers"
-          ><bdi>{{ row.valueText }}</bdi
-          >@if (row.shareText) {
-            <span class="dashboard-card__muted"> {{ row.shareText }}</span>
-          }</span
-        >
-      </button>
-    } @else {
-      <ui-bar-list [items]="items()" [emptyText]="'dashboard.categories.empty' | translate" (itemSelect)="open($event)" />
-    }
-  </app-card-frame>`,
+  templateUrl: './categories-card.html',
   styleUrl: './dashboard-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

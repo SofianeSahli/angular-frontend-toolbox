@@ -16,9 +16,7 @@ export function showsMembers(isHousehold: boolean, status: CardStatus, summary: 
 @Component({
   selector: 'app-members-card',
   imports: [CardFrame, TranslatePipe, UiBarList],
-  template: `<app-card-frame [heading]="'dashboard.members.title' | translate" [status]="status()" [error]="error()" (retry)="retry.emit()">
-    <ui-bar-list [items]="items()" />
-  </app-card-frame>`,
+  templateUrl: './members-card.html',
   styleUrl: './dashboard-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,0 +1,19 @@
+<app-card-frame [heading]="'dashboard.upcoming.title' | translate" [status]="status()" [error]="error()" (retry)="retry.emit()">
+    <a cardAside routerLink="/operations/recurrentes">{{ 'dashboard.upcoming.seeAll' | translate }}</a>
+    @if (rows().length === 0) {
+      <p class="dashboard-card__muted">{{ 'dashboard.upcoming.empty' | translate }}</p>
+    } @else {
+      <ui-list>
+        @for (row of rows(); track row.id) {
+          <li uiListItem>
+            <span uiLeading class="dashboard-card__numbers">{{ row.date }}</span>
+            <span uiTitle><span aria-hidden="true">{{ row.emoji }}</span>&ngsp;<bdi>{{ row.name }}</bdi></span>
+            @if (row.comment; as comment) {
+              <span uiSubtitle><bdi>{{ comment }}</bdi></span>
+            }
+            <bdi uiTrailing dir="ltr"><ui-amount [millimes]="row.amount" [currency]="currency()" [tone]="row.type === 'income' ? 'income' : 'neutral'" /></bdi>
+          </li>
+        }
+      </ui-list>
+    }
+  </app-card-frame>

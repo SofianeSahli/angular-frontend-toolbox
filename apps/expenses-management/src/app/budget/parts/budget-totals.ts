@@ -7,38 +7,7 @@ import { Budget } from '../data/models';
 @Component({
   selector: 'app-budget-totals',
   imports: [TranslatePipe, UiMeter],
-  template: `<dl class="budget-totals">
-    <dt>{{ 'budget.totals.planned' | translate }}</dt>
-    <dd><bdi>{{ planned() }}</bdi></dd>
-    <dt>{{ 'budget.totals.actual' | translate }}</dt>
-    <dd><bdi>{{ format(budget().expenses.actual) }}</bdi></dd>
-    @if (budget().expenses.remaining !== null) {
-      <dt>{{ 'budget.totals.remaining' | translate }}</dt>
-      <dd><bdi>{{ format(budget().expenses.remaining ?? 0) }}</bdi></dd>
-    }
-    <dt>{{ 'budget.totals.income' | translate }}</dt>
-    <dd><bdi>{{ pair(budget().income.actual, budget().income.expected) }}</bdi></dd>
-      @if (expectedRemainingIncome(); as left) {
-      <dt>{{ 'budget.totals.expected_remaining_income' | translate }}</dt>
-      <dd><bdi>{{ format(left.amount) }}</bdi></dd>
-      <dd class="budget-totals__meter">
-        <ui-meter [value]="left.meterValue" [max]="left.income" [label]="'budget.totals.expected_remaining_income' | translate" />
-      </dd>
-    }
-    @if (hasPlanned(budget().income.expected)) {
-      <dd class="budget-totals__meter">
-        <ui-meter [value]="budget().income.actual" [max]="budget().income.expected ?? 0" [label]="'budget.totals.income' | translate" />
-      </dd>
-    }
-  
-    <dt>{{ 'budget.totals.saving' | translate }}</dt>
-    <dd><bdi>{{ pair(budget().saving.actual, budget().saving.planned) }}</bdi></dd>
-    @if (hasPlanned(budget().saving.planned)) {
-      <dd class="budget-totals__meter">
-        <ui-meter [value]="budget().saving.actual" [max]="budget().saving.planned ?? 0" [label]="'budget.totals.saving' | translate" />
-      </dd>
-    }
-  </dl>`,
+  templateUrl: './budget-totals.html',
   styleUrl: './budget-parts.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

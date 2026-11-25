@@ -12,10 +12,7 @@ const STATE_ICONS: Readonly<Record<UiMeterState, string | null>> = {
 @Component({
   selector: 'ui-meter',
   imports: [UiIcon],
-  template: `<span class="ui-meter__track"><span class="ui-meter__fill" [style.inline-size.%]="fillPercent()"></span></span>
-    @if (icon(); as name) {
-      <ui-icon class="ui-meter__icon" [name]="name" [size]="16" />
-    }`,
+  templateUrl: './meter.html',
   styleUrl: './meter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

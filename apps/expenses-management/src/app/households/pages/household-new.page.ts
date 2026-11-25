@@ -15,30 +15,7 @@ const NAME_MAX_LENGTH = 60;
 @Component({
   selector: 'app-household-new-page',
   imports: [ReactiveFormsModule, TranslatePipe, UiAlert, UiButton, UiFormField, UiFlowLayout, UiInput],
-  template: `
-    <ui-flow-layout
-      [title]="'households.newHousehold.title' | translate"
-      [lead]="'households.newHousehold.lead' | translate"
-      [step]="1"
-      [steps]="2"
-      (back)="leave('/bienvenue')"
-      (exit)="leave('/')"
-    >
-      <form id="household-form" class="d-flex flex-column gap-3" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-        @if (message(); as text) {
-          <ui-alert tone="danger">{{ text }}</ui-alert>
-        }
-        <ui-form-field [label]="'households.newHousehold.name' | translate" required [maxLength]="maxLength">
-          <input uiInput formControlName="name" type="text" autocomplete="off" [attr.maxlength]="maxLength" />
-        </ui-form-field>
-      </form>
-      <div uiFlowFooter>
-        <button uiButton variant="primary" type="submit" form="household-form" [loading]="submitting()">
-          {{ 'households.newHousehold.submit' | translate }}
-        </button>
-      </div>
-    </ui-flow-layout>
-  `,
+  templateUrl: './household-new.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HouseholdNewPage {

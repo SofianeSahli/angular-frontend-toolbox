@@ -1,0 +1,16 @@
+<header class="catalog-header">
+      <div class="container d-flex flex-wrap gap-3 align-items-end py-3">
+        <p class="catalog-title me-auto mb-0">Olivier · catalogue</p>
+        <app-catalog-toolbar />
+      </div>
+      <nav class="container d-flex flex-wrap gap-3 pb-3" aria-label="Niveaux">
+        <a routerLink="/" routerLinkActive="catalog-level--active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }">Atomes</a>
+        <a routerLink="/molecules" routerLinkActive="catalog-level--active" ariaCurrentWhenActive="page">Molécules</a>
+        <a routerLink="/organisms" routerLinkActive="catalog-level--active" ariaCurrentWhenActive="page">Organismes</a>
+        <a routerLink="/templates/app-shell">Template · App shell</a>
+        <a routerLink="/templates/page">Template · Page</a>
+        <a routerLink="/templates/auth">Template · Auth</a>
+        <a routerLink="/templates/flow">Template · Parcours</a>
+      </nav>
+    </header>
+    <router-outlet />

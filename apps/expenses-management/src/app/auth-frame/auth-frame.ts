@@ -8,12 +8,7 @@ import { LanguageSwitch } from './language-switch';
 @Component({
   selector: 'app-auth-frame',
   imports: [BrandPanel, LanguageSwitch, RouterOutlet, UiAuthLayout, UiToastRegion],
-  template: `<ui-auth-layout>
-      <app-brand-panel uiAuthBrand />
-      <app-language-switch uiAuthToolbar />
-      <router-outlet />
-    </ui-auth-layout>
-    <ui-toast-region />`,
+  templateUrl: './auth-frame.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthFrame {}

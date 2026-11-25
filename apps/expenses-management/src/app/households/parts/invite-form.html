@@ -1,0 +1,8 @@
+<form class="d-flex flex-column gap-2" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <ui-form-field [label]="'households.household.invite.email' | translate" required [errors]="serverErrors">
+    <input uiInput formControlName="email" type="email" dir="ltr" autocomplete="off" [attr.maxlength]="maxLength" />
+  </ui-form-field>
+  <div>
+    <button uiButton variant="primary" type="submit" [loading]="busy()">{{ 'households.household.invite.submit' | translate }}</button>
+  </div>
+</form>

@@ -1,0 +1,12 @@
+@for (option of options(); track $index) {
+    <button
+      uiChip
+      [pressed]="isPressed(option)"
+      [count]="option.count"
+      [disabled]="isDisabled() || option.disabled"
+      (click)="toggle(option)"
+      (blur)="markTouched()"
+    >
+      {{ option.label }}
+    </button>
+  }

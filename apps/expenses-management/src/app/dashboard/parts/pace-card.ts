@@ -24,33 +24,7 @@ interface PaceView {
 @Component({
   selector: 'app-pace-card',
   imports: [CardFrame, TranslatePipe, UiPaceChart],
-  template: `<app-card-frame [heading]="'dashboard.pace.title' | translate" [status]="status()" [error]="error()" (retry)="retry.emit()">
-    @if (view(); as chart) {
-      <ui-pace-chart
-        [days]="chart.days"
-        [daysInMonth]="chart.daysInMonth"
-        [today]="chart.today"
-        [target]="chart.target"
-        [reference]="chart.reference"
-        [label]="'dashboard.pace.label' | translate"
-        [summaryText]="chart.summaryText"
-      />
-      <ul class="dashboard-card__legend">
-        @if (chart.target !== undefined) {
-          <li><span class="dashboard-card__swatch dashboard-card__swatch--target" aria-hidden="true"></span>{{ 'dashboard.pace.target' | translate }}</li>
-        }
-        @if (chart.reference !== undefined) {
-          <li><span class="dashboard-card__swatch dashboard-card__swatch--reference" aria-hidden="true"></span>{{ 'dashboard.pace.lastMonth' | translate }}</li>
-        }
-        @if (chart.today !== undefined) {
-          <li><span class="dashboard-card__swatch dashboard-card__swatch--today" aria-hidden="true"></span>{{ 'dashboard.pace.today' | translate }}</li>
-        }
-      </ul>
-      <p class="dashboard-card__muted dashboard-card__note">{{ 'dashboard.pace.fixedIncluded' | translate }}</p>
-    } @else {
-      <p class="dashboard-card__muted">{{ 'dashboard.pace.empty' | translate }}</p>
-    }
-  </app-card-frame>`,
+  templateUrl: './pace-card.html',
   styleUrl: './dashboard-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

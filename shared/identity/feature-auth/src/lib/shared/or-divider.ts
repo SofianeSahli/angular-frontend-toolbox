@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'identity-or-divider',
-  template: '<span class="identity-or-divider__text"><ng-content /></span>',
+  templateUrl: './or-divider.html',
   styleUrl: './or-divider.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

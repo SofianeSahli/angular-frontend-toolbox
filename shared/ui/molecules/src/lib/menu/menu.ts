@@ -10,11 +10,6 @@ const BELOW_START_THEN_FLIP: ConnectedPosition[] = [
   { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom' },
 ];
 
-const ITEM_TEMPLATE = `@if (icon(); as name) {
-    <ui-icon [name]="name" />
-  }
-  <span class="ui-menu-item__label"><ng-content /></span>`;
-
 @Directive({
   selector: '[uiMenuTriggerFor]',
   hostDirectives: [{ directive: CdkMenuTrigger, inputs: ['cdkMenuTriggerFor: uiMenuTriggerFor', 'cdkMenuTriggerData: uiMenuTriggerData'] }],
@@ -27,7 +22,7 @@ export class UiMenuTrigger {
 
 @Component({
   selector: 'ui-menu',
-  template: '<ng-content />',
+  templateUrl: './ui-menu.html',
   styleUrl: './menu.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [CdkMenu],
@@ -37,7 +32,7 @@ export class UiMenu {}
 @Component({
   selector: 'button[uiMenuItem]:not([checked])',
   imports: [UiIcon],
-  template: ITEM_TEMPLATE,
+  templateUrl: './menu-item.html',
   styleUrl: './menu-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [{ directive: CdkMenuItem, inputs: ['cdkMenuItemDisabled: disabled'], outputs: ['cdkMenuItemTriggered: triggered'] }],
@@ -54,7 +49,7 @@ export class UiMenuItem {
 @Component({
   selector: 'button[uiMenuItem][checked]',
   imports: [UiIcon],
-  template: ITEM_TEMPLATE,
+  templateUrl: './menu-item.html',
   styleUrl: './menu-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [

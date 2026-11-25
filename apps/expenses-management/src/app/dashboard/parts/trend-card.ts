@@ -21,9 +21,7 @@ export function shortMonth(month: string, locale: string): string {
 @Component({
   selector: 'app-trend-card',
   imports: [CardFrame, TranslatePipe, UiTrendBars],
-  template: `<app-card-frame [heading]="'dashboard.trend.title' | translate" [status]="status()" [error]="error()" (retry)="retry.emit()">
-    <ui-trend-bars [items]="items()" [averageText]="averageText()" [label]="'dashboard.trend.label' | translate" (itemSelect)="open($event)" />
-  </app-card-frame>`,
+  templateUrl: './trend-card.html',
   styleUrl: './dashboard-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -8,14 +8,7 @@ import { AuthNavigation } from '../../shared/auth-navigation';
 @Component({
   selector: 'identity-unavailable-page',
   imports: [TranslatePipe, UiButton, UiIcon],
-  template: `<main class="min-vh-100 d-flex flex-column align-items-center justify-content-center gap-3 p-4 text-center">
-    <ui-icon name="circle-exclamation-point" tile [size]="24" />
-    <h1 class="identity-title">{{ 'identity.unavailable.title' | translate }}</h1>
-    <p class="identity-lead">{{ 'identity.unavailable.text' | translate }}</p>
-    <button uiButton variant="primary" type="button" [loading]="retrying()" (click)="retry()">
-      {{ 'identity.unavailable.retry' | translate }}
-    </button>
-  </main>`,
+  templateUrl: './unavailable.page.html',
   styleUrl: '../../shared/identity-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

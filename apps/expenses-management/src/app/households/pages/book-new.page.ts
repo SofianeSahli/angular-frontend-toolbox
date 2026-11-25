@@ -21,54 +21,7 @@ const STALE_CODES = new Set(['household.forbidden', 'book.household_has_book', '
 @Component({
   selector: 'app-book-new-page',
   imports: [ReactiveFormsModule, TranslatePipe, UiAlert, UiButton, UiFormField, UiFlowLayout, UiInput, UiSelect],
-  template: `
-    <ui-flow-layout
-      [title]="(forHousehold ? 'households.newBook.titleHousehold' : 'households.newBook.titlePersonal') | translate"
-      [lead]="'households.newBook.lead' | translate"
-      [step]="forHousehold ? 2 : 1"
-      [steps]="forHousehold ? 2 : 1"
-      (back)="back()"
-      (exit)="exit()"
-    >
-      <form id="book-form" class="d-flex flex-column gap-3" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-        @if (message(); as text) {
-          <ui-alert tone="danger">{{ text }}</ui-alert>
-        }
-        <ui-form-field [label]="'households.newBook.name' | translate" required [maxLength]="maxLength" [errors]="serverErrors">
-          <input uiInput formControlName="name" type="text" autocomplete="off" [attr.maxlength]="maxLength" />
-        </ui-form-field>
-        <ui-form-field
-          [label]="'households.newBook.currency' | translate"
-          [hint]="'households.newBook.currencyFinal' | translate"
-          [errors]="serverErrors"
-        >
-          <select uiSelect formControlName="currency">
-            @for (code of currencies; track code) {
-              <option [value]="code">{{ code }}</option>
-            }
-            <option [value]="otherCurrency">{{ 'households.newBook.otherCurrency' | translate }}</option>
-          </select>
-        </ui-form-field>
-        @if (isOther()) {
-          <ui-form-field [label]="'households.newBook.otherCurrencyField' | translate" required [errors]="serverErrors">
-            <input uiInput formControlName="otherCurrency" type="text" dir="ltr" autocomplete="off" maxlength="3" (input)="upperCase()" />
-          </ui-form-field>
-        }
-        <ui-form-field [label]="'households.newBook.timezone' | translate" [errors]="serverErrors">
-          <select uiSelect formControlName="timezone">
-            @for (zone of timezones; track zone) {
-              <option [value]="zone">{{ zone }}</option>
-            }
-          </select>
-        </ui-form-field>
-      </form>
-      <div uiFlowFooter>
-        <button uiButton variant="primary" type="submit" form="book-form" [loading]="submitting()">
-          {{ 'households.newBook.submit' | translate }}
-        </button>
-      </div>
-    </ui-flow-layout>
-  `,
+  templateUrl: './book-new.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookNewPage {

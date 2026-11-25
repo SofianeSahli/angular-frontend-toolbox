@@ -24,43 +24,7 @@ export type { UiPacePoint, UiPaceState } from './pace-geometry';
 
 @Component({
   selector: 'ui-pace-chart',
-  template: `<svg class="ui-pace-chart__svg" role="img" [attr.aria-label]="summaryText()" [attr.viewBox]="viewBox" focusable="false">
-      <g class="ui-pace-chart__plot">
-        <line class="ui-pace-chart__axis" [attr.x1]="start" [attr.x2]="end" [attr.y1]="bottom" [attr.y2]="bottom" />
-        @for (day of ticks(); track day) {
-          <text class="ui-pace-chart__tick" [attr.x]="xOf(day)" [attr.y]="tickY">{{ day }}</text>
-        }
-        @if (referenceD(); as d) {
-          <path class="ui-pace-chart__reference" [attr.d]="d" />
-        }
-        @if (targetD(); as d) {
-          <path class="ui-pace-chart__target" [attr.d]="d" />
-        }
-        @if (todayX(); as x) {
-          <line class="ui-pace-chart__today" [attr.x1]="x" [attr.x2]="x" [attr.y1]="top" [attr.y2]="bottom" />
-        }
-        @if (lineD(); as d) {
-          <path class="ui-pace-chart__line" pathLength="1" [attr.d]="d" />
-        }
-        @if (overD(); as d) {
-          <path class="ui-pace-chart__over" [attr.d]="d" />
-        }
-        @if (endDot(); as dot) {
-          <circle class="ui-pace-chart__dot" r="3.5" [attr.cx]="dot.x" [attr.cy]="dot.y" />
-        }
-      </g>
-    </svg>
-    <table class="ui-pace-chart__table">
-      <caption>{{ label() }}</caption>
-      <tbody>
-        @for (point of days(); track point.day) {
-          <tr>
-            <th scope="row">{{ point.day }}</th>
-            <td>{{ point.value }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>`,
+  templateUrl: './pace-chart.html',
   styleUrl: './pace-chart.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

@@ -18,14 +18,7 @@ export interface UiConfirmOptions {
 
 @Component({
   imports: [UiDialogHeader, UiDialogBody, UiDialogFooter, UiButton],
-  template: `<ui-dialog-header [title]="options.title" />
-    <p uiDialogBody>{{ options.message }}</p>
-    <div uiDialogFooter>
-      <button uiButton type="button" class="ui-confirm__cancel" (click)="context.close(false)">{{ options.cancelLabel ?? text.cancel }}</button>
-      <button uiButton type="button" class="ui-confirm__confirm" [variant]="options.tone ?? 'primary'" (click)="context.close(true)">
-        {{ options.confirmLabel }}
-      </button>
-    </div>`,
+  templateUrl: './confirm-dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiConfirmContent {

@@ -14,18 +14,7 @@ export type UiChipGroupMode = 'single' | 'multiple';
 @Component({
   selector: 'ui-chip-group',
   imports: [UiChip],
-  template: `@for (option of options(); track $index) {
-    <button
-      uiChip
-      [pressed]="isPressed(option)"
-      [count]="option.count"
-      [disabled]="isDisabled() || option.disabled"
-      (click)="toggle(option)"
-      (blur)="markTouched()"
-    >
-      {{ option.label }}
-    </button>
-  }`,
+  templateUrl: './chip-group.html',
   styleUrl: './chip-group.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideValueAccessor(() => UiChipGroup)],

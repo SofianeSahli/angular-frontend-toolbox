@@ -5,11 +5,7 @@ export type UiAvatarMember = 1 | 2 | 3;
 
 @Component({
   selector: 'ui-avatar',
-  template: `@if (showPhoto()) {
-      <img [src]="src()" alt="" (error)="photoFailed.set(true)" />
-    } @else {
-      {{ initial() }}
-    }`,
+  templateUrl: './avatar.html',
   styleUrl: './avatar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

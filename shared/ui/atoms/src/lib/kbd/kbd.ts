@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, booleanAttribute, input } from '@an
 
 @Component({
   selector: 'kbd[uiKbd]',
-  template: '<ng-content />',
+  templateUrl: './kbd.html',
   styleUrl: './kbd.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

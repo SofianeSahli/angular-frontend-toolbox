@@ -2,10 +2,7 @@ import { ChangeDetectionStrategy, Component, booleanAttribute, input } from '@an
 
 @Component({
   selector: 'button[uiChip]',
-  template: `<ng-content />
-    @if (count() !== undefined) {
-      &ngsp;<span class="ui-chip__count">{{ count() }}</span>
-    }`,
+  templateUrl: './chip.html',
   styleUrl: './chip.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

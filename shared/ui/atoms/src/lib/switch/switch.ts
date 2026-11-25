@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'input[type=checkbox][uiSwitch]',
-  template: '',
+  templateUrl: './switch.html',
   styleUrl: './switch.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

@@ -13,7 +13,7 @@ const LANGUAGE_OPTIONS: readonly UiSegmentedOption<AppLanguage>[] = [
 @Component({
   selector: 'app-language-switch',
   imports: [ReactiveFormsModule, TranslatePipe, UiSegmentedControl],
-  template: `<ui-segmented-control [options]="options" [ariaLabel]="'language.label' | translate" [formControl]="choice" />`,
+  templateUrl: './language-switch.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LanguageSwitch {

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'button[uiFieldAction]',
-  template: '<ng-content />',
+  templateUrl: './field-action.html',
   styleUrl: './field-action.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { type: 'button' },

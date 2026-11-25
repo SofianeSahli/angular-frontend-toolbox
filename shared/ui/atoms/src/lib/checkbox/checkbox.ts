@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, booleanAttribute, input } from '@an
 
 @Component({
   selector: 'input[type=checkbox][uiCheckbox]',
-  template: '',
+  templateUrl: './checkbox.html',
   styleUrl: './checkbox.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

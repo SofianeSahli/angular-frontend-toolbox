@@ -10,32 +10,7 @@ let nextFrameId = 0;
 @Component({
   selector: 'app-card-frame',
   imports: [TranslatePipe, UiAlert, UiButton, UiSkeleton],
-  template: `<section class="dashboard-card" [attr.aria-labelledby]="headingId" [attr.aria-busy]="status() === 'loading'">
-    <header class="dashboard-card__header">
-      <h2 class="dashboard-card__title" [id]="headingId">{{ heading() }}</h2>
-      <div class="dashboard-card__aside"><ng-content select="[cardAside]" /></div>
-    </header>
-    @switch (status()) {
-      @case ('loading') {
-        <div class="d-flex flex-column gap-2" role="status" [attr.aria-label]="'dashboard.loading' | translate">
-          <ui-skeleton />
-          <ui-skeleton />
-          <ui-skeleton />
-        </div>
-      }
-      @case ('error') {
-        <ui-alert tone="danger">
-          {{ (offline() ? 'dashboard.offline' : 'dashboard.cardError') | translate }}
-          <div uiAlertActions>
-            <button uiButton size="sm" type="button" (click)="retry.emit()">{{ 'dashboard.retry' | translate }}</button>
-          </div>
-        </ui-alert>
-      }
-      @default {
-        <ng-content />
-      }
-    }
-  </section>`,
+  templateUrl: './card-frame.html',
   styleUrl: './dashboard-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

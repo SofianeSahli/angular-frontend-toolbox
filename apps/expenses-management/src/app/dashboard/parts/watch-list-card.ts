@@ -13,26 +13,7 @@ import { CardFrame } from './card-frame';
 @Component({
   selector: 'app-watch-list-card',
   imports: [CardFrame, RouterLink, TranslatePipe, UiMeter],
-  template: `<app-card-frame [heading]="'dashboard.watch.title' | translate">
-    @if (rows().length === 0) {
-      <p class="dashboard-card__muted">{{ 'dashboard.watch.empty' | translate }}</p>
-    } @else {
-      <ul class="watch-list">
-        @for (row of rows(); track row.category) {
-          <li>
-            <a class="watch-list__row" routerLink="/operations" [queryParams]="{ mois: month(), categorie: row.category }">
-              <span class="watch-list__head">
-                <span><span aria-hidden="true">{{ row.emoji }}</span>&ngsp;<bdi>{{ row.name }}</bdi></span>
-                <span class="dashboard-card__numbers">{{ row.percentText }}</span>
-              </span>
-              <ui-meter [value]="row.actual" [max]="row.planned" [state]="row.status" [label]="row.name" [valueText]="row.valueText" />
-              <span class="dashboard-card__muted dashboard-card__numbers"><bdi>{{ row.valueText }}</bdi></span>
-            </a>
-          </li>
-        }
-      </ul>
-    }
-  </app-card-frame>`,
+  templateUrl: './watch-list-card.html',
   styleUrls: ['./dashboard-card.scss', './watch-list-card.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

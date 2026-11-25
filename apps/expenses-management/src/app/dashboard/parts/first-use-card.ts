@@ -7,13 +7,7 @@ import { CardFrame } from './card-frame';
 @Component({
   selector: 'app-first-use-card',
   imports: [CardFrame, RouterLink, TranslatePipe, UiButton, UiIcon],
-  template: `<app-card-frame [heading]="'dashboard.firstUse.title' | translate">
-    <p class="dashboard-card__muted">{{ 'dashboard.firstUse.text' | translate }}</p>
-    <div class="dashboard-card__actions">
-      <button uiButton variant="primary" type="button" (click)="add.emit()"><ui-icon name="plus" />{{ 'dashboard.firstUse.add' | translate }}</button>
-      <a uiButton variant="secondary" routerLink="/budget">{{ 'dashboard.firstUse.budget' | translate }}</a>
-    </div>
-  </app-card-frame>`,
+  templateUrl: './first-use-card.html',
   styleUrl: './dashboard-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

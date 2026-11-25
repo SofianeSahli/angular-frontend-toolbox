@@ -8,32 +8,7 @@ import { Invitation } from '../data/models';
 @Component({
   selector: 'app-sent-invitations',
   imports: [LocalIsoDatePipe, TranslatePipe, UiButton, UiList, UiListItem],
-  template: `
-    @if (ordered().length === 0) {
-      <p class="m-0">{{ 'households.household.noInvitations' | translate }}</p>
-    } @else {
-      <ui-list>
-        @for (invitation of ordered(); track invitation.id) {
-          <li uiListItem>
-            <span uiTitle><bdi dir="ltr">{{ invitation.email }}</bdi></span>
-            <span uiSubtitle>{{ 'households.invitation.expires' | translate }} {{ invitation.expiresAt | uiLocalIsoDate }}</span>
-            <span uiTrailing>
-              <button
-                uiButton
-                variant="ghost"
-                size="sm"
-                type="button"
-                [attr.aria-label]="('households.household.cancelInvitation' | translate) + ' ' + invitation.email"
-                (click)="cancelInvitation.emit(invitation)"
-              >
-                {{ 'households.household.cancelInvitation' | translate }}
-              </button>
-            </span>
-          </li>
-        }
-      </ui-list>
-    }
-  `,
+  templateUrl: './sent-invitations.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SentInvitations {

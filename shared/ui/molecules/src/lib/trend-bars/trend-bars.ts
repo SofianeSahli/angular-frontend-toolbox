@@ -27,45 +27,7 @@ const MIN_BAR = 2;
 
 @Component({
   selector: 'ui-trend-bars',
-  template: `<svg class="ui-trend-bars__svg" role="group" [attr.aria-label]="label()" [attr.viewBox]="viewBox" focusable="false">
-      <g class="ui-trend-bars__plot">
-        <line class="ui-trend-bars__axis" [attr.x1]="padX" [attr.x2]="width - padX" [attr.y1]="baseline" [attr.y2]="baseline" />
-        @for (bar of bars(); track bar.item.id) {
-          <g
-            class="ui-trend-bars__bar"
-            [class.ui-trend-bars__bar--current]="bar.item.current"
-            role="button"
-            tabindex="0"
-            [attr.aria-label]="bar.item.label + ', ' + bar.item.valueText"
-            [attr.aria-current]="bar.item.current ? 'true' : null"
-            (click)="itemSelect.emit(bar.item.id)"
-            (keydown.enter)="itemSelect.emit(bar.item.id)"
-            (keydown.space)="select($event, bar.item.id)"
-          >
-            <rect class="ui-trend-bars__hit" [attr.x]="bar.x - gapHalf()" [attr.y]="0" [attr.width]="bar.width + 2 * gapHalf()" [attr.height]="baseline + bottom" />
-            @if (bar.height > 0) {
-              <rect class="ui-trend-bars__fill" rx="3" [attr.x]="bar.x" [attr.y]="bar.y" [attr.width]="bar.width" [attr.height]="bar.height" />
-            }
-            <text class="ui-trend-bars__value" [attr.x]="bar.center" [attr.y]="bar.y - 5">{{ bar.item.valueText }}</text>
-            <text class="ui-trend-bars__label" [attr.x]="bar.center" [attr.y]="height - 7">{{ bar.item.label }}</text>
-          </g>
-        }
-      </g>
-    </svg>
-    @if (averageText(); as text) {
-      <p class="ui-trend-bars__average">{{ text }}</p>
-    }
-    <table class="ui-trend-bars__table">
-      <caption>{{ label() }}</caption>
-      <tbody>
-        @for (item of items(); track item.id) {
-          <tr>
-            <th scope="row">{{ item.label }}</th>
-            <td>{{ item.valueText }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>`,
+  templateUrl: './trend-bars.html',
   styleUrl: './trend-bars.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

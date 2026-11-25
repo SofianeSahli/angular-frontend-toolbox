@@ -3,8 +3,7 @@ import { CategoryLabels } from '../data/category-labels';
 
 @Component({
   selector: 'app-category-chip',
-  template: `<span class="app-category-chip__emoji" aria-hidden="true">{{ emoji() }}</span
-    >&ngsp;<bdi>{{ name() }}</bdi>`,
+  templateUrl: './category-chip.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'd-inline-flex align-items-center gap-1' },
 })

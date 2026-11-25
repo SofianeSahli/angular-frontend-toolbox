@@ -1,0 +1,3 @@
+<app-card-frame [heading]="'dashboard.members.title' | translate" [status]="status()" [error]="error()" (retry)="retry.emit()">
+    <ui-bar-list [items]="items()" />
+  </app-card-frame>

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, inject } from '@angular
 
 @Component({
   selector: '[uiPrefix], [uiSuffix]',
-  template: '<ng-content />',
+  templateUrl: './field-affix.html',
   styleUrl: './field-affix.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

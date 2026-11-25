@@ -1,0 +1,46 @@
+@if (shown()) {
+    <div class="plan-line plan-line--off-list">
+      <p class="plan-line__off-head m-0">
+        <span>{{ 'budget.offPlan.title' | translate }}</span>
+        <bdi class="plan-line__numbers">{{ amount() }}</bdi>
+      </p>
+      @if (rows().length > 0) {
+        <button
+          uiButton
+          variant="ghost"
+          size="sm"
+          type="button"
+          [attr.aria-expanded]="open()"
+          [attr.aria-controls]="listId"
+          (click)="open.set(!open())"
+        >
+          {{ (open() ? 'budget.offPlan.hide' : 'budget.offPlan.show') | translate }}
+        </button>
+        @if (open()) {
+          <ul class="off-plan-list" [id]="listId">
+            @for (row of rows(); track row.code) {
+              <li class="off-plan-list__row">
+                <span class="plan-line__name"
+                  ><span aria-hidden="true">{{ labels.emoji(row.code) }}</span>&ngsp;<bdi>{{ labels.name(row.code) }}</bdi></span
+                >
+                <bdi class="plan-line__numbers">{{ format(row.total) }}</bdi>
+                @if (row.canAdd) {
+                  <button
+                    uiButton
+                    variant="secondary"
+                    size="sm"
+                    type="button"
+                    [attr.aria-label]="'budget.offPlan.addNamed' | translate: { name: labels.name(row.code) }"
+                    (click)="add.emit(row)"
+                  >
+                    <ui-icon name="plus" />
+                    {{ 'budget.offPlan.add' | translate }}
+                  </button>
+                }
+              </li>
+            }
+          </ul>
+        }
+      }
+    </div>
+  }

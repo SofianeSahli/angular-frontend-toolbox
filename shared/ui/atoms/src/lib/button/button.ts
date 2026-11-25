@@ -21,10 +21,7 @@ function hasAccessibleName(element: HTMLElement): boolean {
 @Component({
   selector: 'button[uiButton], a[uiButton]',
   imports: [UiSpinner],
-  template: `@if (loading()) {
-      <ui-spinner aria-hidden="true" />
-    }
-    <ng-content />`,
+  templateUrl: './button.html',
   styleUrl: './button.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

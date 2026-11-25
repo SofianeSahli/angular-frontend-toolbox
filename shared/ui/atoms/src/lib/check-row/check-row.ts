@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'label[uiCheckRow]',
-  template: '<ng-content />',
+  templateUrl: './check-row.html',
   styleUrl: './check-row.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -987,7 +987,7 @@
       "actual": "Dépensé",
       "remaining": "Reste à dépenser",
       "income": "Revenus (reçus / prévus)",
-      "expected_remaining_income": "Revenus restants prévus après dépenses prévues",
+      "expected_remaining_income": "Revenus nette prévue",
       "saving": "Épargne (mise de côté / prévue)"
     },
     "copy": {

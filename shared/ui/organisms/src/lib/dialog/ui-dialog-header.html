@@ -1,0 +1,9 @@
+@if (context.sheet) {
+      <span class="ui-dialog-header__handle" aria-hidden="true"></span>
+    }
+    <div class="ui-dialog-header__row">
+      <h2 class="ui-dialog-header__title" [id]="context.titleId">{{ title() }}</h2>
+      <button uiButton variant="ghost" size="sm" iconOnly type="button" [attr.aria-label]="text.close" (click)="context.close()">
+        <ui-icon name="x" />
+      </button>
+    </div>

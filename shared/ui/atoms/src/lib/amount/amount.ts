@@ -16,9 +16,7 @@ function splitUnit(text: string): { value: string; unit: string } {
 
 @Component({
   selector: 'ui-amount',
-  template: `@if (parts(); as amount) {
-      {{ amount.value }}@if (amount.unit) {&ngsp;<span class="ui-amount__unit">{{ amount.unit }}</span>}
-    }`,
+  templateUrl: './amount.html',
   styleUrl: './amount.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

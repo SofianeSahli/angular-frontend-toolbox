@@ -6,10 +6,7 @@ export type UiFieldMessageTone = 'hint' | 'error';
 @Component({
   selector: 'ui-field-message',
   imports: [UiIcon],
-  template: `@if (tone() === 'error') {
-      <ui-icon name="circle-exclamation-point" [size]="16" />
-    }
-    <span><ng-content /></span>`,
+  templateUrl: './field-message.html',
   styleUrl: './field-message.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

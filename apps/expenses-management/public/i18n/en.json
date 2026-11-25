@@ -987,7 +987,7 @@
       "actual": "Spent",
       "remaining": "Left to spend",
       "income": "Income (received / expected)",
-      "expected_remaining_income": "Expected income left after planned expenses",
+      "expected_remaining_income": "Expected net income",
       "saving": "Saving (put aside / planned)"
     },
     "copy": {

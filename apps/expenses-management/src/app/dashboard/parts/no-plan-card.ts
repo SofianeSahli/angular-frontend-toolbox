@@ -12,27 +12,7 @@ import { CardFrame } from './card-frame';
 @Component({
   selector: 'app-no-plan-card',
   imports: [CardFrame, RouterLink, TranslatePipe, UiButton],
-  template: `<app-card-frame [heading]="'dashboard.noPlan.title' | translate" [status]="status()" [error]="error()" (retry)="retry.emit()">
-    @if (comparison()) {
-      <p class="dashboard-card__amount">
-        <bdi>{{ current() }}</bdi>
-      </p>
-      @if (previous(); as before) {
-        <p class="m-0 dashboard-card__numbers">
-          {{ (sameDay() ? 'dashboard.noPlan.previousSameDay' : 'dashboard.noPlan.previousWhole') | translate }} <bdi>{{ before }}</bdi>
-        </p>
-        @if (difference(); as gap) {
-          <p class="dashboard-card__muted dashboard-card__numbers">
-            <bdi>{{ gap.key | translate: { amount: gap.amount } }}</bdi>
-          </p>
-        }
-      }
-    }
-    <p class="dashboard-card__muted">{{ 'dashboard.noPlan.invite' | translate }}</p>
-    <div class="dashboard-card__actions">
-      <a uiButton variant="primary" size="sm" routerLink="/budget" [queryParams]="{ mois: month() }">{{ 'dashboard.noPlan.setBudget' | translate }}</a>
-    </div>
-  </app-card-frame>`,
+  templateUrl: './no-plan-card.html',
   styleUrl: './dashboard-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

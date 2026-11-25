@@ -1,0 +1,15 @@
+<app-card-frame [heading]="'dashboard.recent.title' | translate" [status]="status()" [error]="error()" (retry)="retry.emit()">
+    <a cardAside routerLink="/operations" [queryParams]="{ mois: month() }">{{ 'dashboard.recent.seeAll' | translate }}</a>
+    @if (groups().length === 0) {
+      <p class="dashboard-card__muted">{{ 'dashboard.recent.empty' | translate }}</p>
+    } @else {
+      @for (group of groups(); track group.key) {
+        <h3 class="dashboard-card__day">{{ group.label }}</h3>
+        <ui-list>
+          @for (entry of group.items; track entry.id) {
+            <li><app-entry-row [entry]="entry" [currency]="currency()" [showAuthor]="true" (open)="open.emit($event)" /></li>
+          }
+        </ui-list>
+      }
+    }
+  </app-card-frame>
