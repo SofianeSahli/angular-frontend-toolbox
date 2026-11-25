@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.book-home__facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--ui-space-2) var(--ui-space-4);
+}
+
+.book-home__text {
+  color: var(--ui-color-ink-muted);
+}

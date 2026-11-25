@@ -4,8 +4,12 @@ import { Router, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { IDENTITY_CONFIG, SessionStore } from '@shared/identity-data-access';
 import { PATHS, appRoutes } from './app.routes';
+import { BooksStore } from './households/data/books.store';
+import { HouseholdStore } from './households/data/household.store';
+import { InvitationsStore } from './households/data/invitations.store';
+import { FakeStores, book, fakeStores } from './households/testing';
 
-function navigateAs(status: 'anonymous' | 'authenticated', unavailable = false) {
+function navigateAs(status: 'anonymous' | 'authenticated', unavailable = false, stores: FakeStores = withBook()) {
   TestBed.configureTestingModule({
     providers: [
       provideRouter(appRoutes),
@@ -24,6 +28,9 @@ function navigateAs(status: 'anonymous' | 'authenticated', unavailable = false) 
           rememberReturnUrl: vi.fn(),
         },
       },
+      { provide: BooksStore, useValue: stores.books },
+      { provide: HouseholdStore, useValue: stores.household },
+      { provide: InvitationsStore, useValue: stores.invitations },
     ],
   });
   const router = TestBed.inject(Router);
@@ -31,6 +38,12 @@ function navigateAs(status: 'anonymous' | 'authenticated', unavailable = false) 
     await router.navigateByUrl(url);
     return router.url;
   };
+}
+
+function withBook(): FakeStores {
+  const stores = fakeStores();
+  stores.books.books.set([book('a')]);
+  return stores;
 }
 
 describe('app routes', () => {
@@ -62,5 +75,51 @@ describe('app routes', () => {
 
   it('shows the unavailable page when the service is down at start', async () => {
     expect(await navigateAs('anonymous', true)('/')).toBe('/indisponible?returnUrl=%2F');
+  });
+
+  describe('workspace', () => {
+    it('sends a signed-in user without a book to the welcome page', async () => {
+      expect(await navigateAs('authenticated', false, fakeStores())('/')).toBe('/bienvenue');
+    });
+
+    it('sends a user who has books away from the welcome page', async () => {
+      expect(await navigateAs('authenticated')('/bienvenue')).toBe('/');
+    });
+
+    it('opens the welcome page for a user without a book', async () => {
+      expect(await navigateAs('authenticated', false, fakeStores())('/bienvenue')).toBe('/bienvenue');
+    });
+
+    it('shows the unavailable page when the workspace fails to load', async () => {
+      const stores = withBook();
+      stores.books.status.set('error');
+      expect(await navigateAs('authenticated', false, stores)('/')).toBe('/indisponible?returnUrl=%2F');
+    });
+
+    it('opens the household page in the shell', async () => {
+      expect(await navigateAs('authenticated')('/foyer')).toBe('/foyer');
+    });
+
+    it('opens the household creation for a user without a household', async () => {
+      expect(await navigateAs('authenticated')('/foyer/nouveau')).toBe('/foyer/nouveau');
+    });
+
+    it('sends a user who has a household from its creation to the household page', async () => {
+      const stores = withBook();
+      stores.household.household.set({ id: 'h1', name: 'Les Martin', role: 'member' });
+      expect(await navigateAs('authenticated', false, stores)('/foyer/nouveau')).toBe('/foyer');
+    });
+
+    it('opens the book creation below the personal book limit', async () => {
+      expect(await navigateAs('authenticated')('/carnets/nouveau')).toBe('/carnets/nouveau');
+    });
+
+    it.each(['/bienvenue', '/foyer', '/foyer/nouveau', '/carnets/nouveau'])('sends a signed-out visitor from %s to sign-in', async (url) => {
+      expect(await navigateAs('anonymous')(url)).toBe(`/connexion?returnUrl=${encodeURIComponent(url)}`);
+    });
+
+    it('lists the new paths', () => {
+      expect(PATHS).toMatchObject({ welcome: '/bienvenue', household: '/foyer', newHousehold: '/foyer/nouveau', newBook: '/carnets/nouveau' });
+    });
   });
 });

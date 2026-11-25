@@ -41,16 +41,12 @@ shared/                           THE TOOLBOX     scope:shared
   stores/                 @shared/stores                 type:data-access   withCrudOperations, withLoader, withQuery (existing)
   util/format/            @shared/util-format            type:util          money (fr-TN, millimes), dates (local YYYY-MM-DD)
   util/forms/             @shared/util-forms             type:util          validators, error keys
-libs/                             app libraries, imported through @expenses/* (one prefix per app)
-  expenses/shell/         @expenses/shell                type:feature       signed-in frame of the expenses app
-  expenses/<domain>/      scope:expenses
-    feature-<screen>/     type:feature
-    data-access/          type:data-access
-    domain/               type:domain
-    ui/                   type:ui layer:organism   app-specific pieces built from toolbox atoms
+apps/expenses-management/src/app/   app-specific code, by feature folder (no libs/<app>/, no @expenses/* alias)
+  shell/                  signed-in frame
+  <feature>/              data/ (APIs, stores, guards), pages/, parts/, support/
 ```
 
-Rule of placement: if every app does it the same way, it goes in `shared/` and is configured with `provideX({...})` and injection tokens. If only one app does it, it goes in that app's `libs/<app>/`. App code moves to the toolbox only when a second app needs it.
+Rule of placement: if every app does it the same way, it goes in `shared/` and is configured with `provideX({...})` and injection tokens. If only one app does it, it goes in that app, in a feature folder under `apps/<app>/src/app/`; boundaries inside the app are by convention, not by lint tags. App code moves to the toolbox only when a second app needs it.
 
 ## 3. Boundaries (eslint.config.mjs)
 
@@ -158,7 +154,7 @@ Spec 002 deleted the old code outright (the old app, its e2e project, `shared/au
 2. **Tokens and themes:** `ui-tokens`, `theme-olivier`, the theme compiler, cascade layers, Bootstrap trim, `util-format`, the Stylelint and contrast checks.
 3. **Atoms and catalog:** the 16 atoms in the Olivier design system, plus `apps/ui-catalog`.
 4. **Molecules, organisms and templates:** the 27 components drawn by the design session (spec 004 `design-reference/`), CDK menu and dialog, app shell. (ng-bootstrap, `moment` and bootstrap-icons were already removed in spec 002.)
-5. **Identity:** HTTP layer, session, sign-in screens and the signed-in app shell (`http/*`, `identity/*`, `libs/expenses/shell`).
+5. **Identity:** HTTP layer, session, sign-in screens and the signed-in app shell (`http/*`, `identity/*`, the app's `shell/` folder).
 6. **Households and books:** first-run choice, create household, create book, invitations, members, book switcher (backend specs 003–004).
 7. **Categories and operations:** category picker, quick add, operations list (backend specs 005–006).
 8. **Dashboard and budget:** month summary, plan vs actual (backend spec 007).

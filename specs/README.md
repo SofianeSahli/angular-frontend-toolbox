@@ -57,6 +57,17 @@ First spec that ships a toolbox part and a working app screen together.
 - `@expenses/shell` and the app: signed-in shell, `AuthFrame` with brand panel and FR / EN / ع switch, `LanguageService` (RTL for Arabic), merged translation loader, `UI_TEXT` from translations.
 - Arabic texts are a draft for a native reader. Files: `005-identity/`.
 
+## 006 — Households and books (in review)
+
+First spec whose domain code lives in the app only; the toolbox gets nothing new.
+
+- App code in `apps/expenses-management/src/app/households/` (`data/`, `pages/`, `parts/`, `support/`); `libs/expenses/shell` moved to `src/app/shell/`. ARCHITECTURE §2–§3: app-specific code stays in the app, no `libs/<app>/`, no `@expenses/*` alias.
+- Data: `HouseholdsApi`, `BooksApi`, `InvitationsApi` (paginated `fetchAll`, mappers); `BooksStore` (selection per account in `localStorage`, fallback), `HouseholdStore`, `InvitationsStore`, all async methods returning `StoreResult`; `provideHouseholds` resets them on account change.
+- Guards: `workspaceGuard` (`/`), `firstRunGuard` (`/bienvenue`), `householdBookGuard` (`/carnets/nouveau`), inline `noHouseholdGuard` (`/foyer/nouveau`).
+- Pages: welcome (first-run choice, received invitations), household and book creation, `/foyer` (owner and member views, members, pending invitations, invite form, rename, delete, leave); `BookHome` placeholder.
+- Shell: `BookSwitcher` (`ui-menu`) in the rail and the top bar on `bookBound` routes, "Foyer" destination.
+- fr/en/ar `households.*`, `shell.*`, `home.*` keys; Arabic is a draft. Files: `006-households-books/`.
+
 ## Next
 
-006 Households and books. See [docs/ROADMAP.md](../docs/ROADMAP.md).
+007 Categories and operations. See [docs/ROADMAP.md](../docs/ROADMAP.md).

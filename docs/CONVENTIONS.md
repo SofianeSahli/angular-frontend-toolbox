@@ -29,7 +29,7 @@ Moved from `CLAUDE.md`. Read it before writing or reviewing code; the checklist 
 ## Libraries and boundaries
 
 - Which library may import which is defined by tags and `depConstraints`: see [ARCHITECTURE.md](ARCHITECTURE.md) §2–3.
-- Import shared code only through its `@shared/...` alias, and app libraries through their `@expenses/...` alias (one prefix per app), never through deep paths like `shared/stores/src/lib/...` or `apps/<app>/src/...`.
+- Import shared code only through its `@shared/...` alias (app code stays in the app, with no `@expenses/...` alias), never through deep paths like `shared/stores/src/lib/...` or `apps/<app>/src/...`.
 - Libraries never import from apps. App config reaches libraries through injection tokens and `provideX({...})` (see `provideUi` in `@shared/ui-tokens`).
 
 ## i18n, dates, HTTP

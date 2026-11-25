@@ -10,8 +10,8 @@ One spec each, approved before any code (ARCHITECTURE §8). From spec 005 on, ev
 2. **002 Tokens and themes** ← done: `ui-tokens`, `theme-olivier`, theme compiler, cascade layers, Bootstrap trim, `util-format`, Stylelint and contrast checks; old apps and libraries deleted, new app shell.
 3. **003 Atoms and catalog** ← done: the 16 Olivier atoms, `UI_TEXT`, component-token and `color-mix()` Stylelint rules, and `apps/ui-catalog`.
 4. **004 Molecules, organisms and templates** ← done: 15 molecules, 8 organisms, 4 templates, CDK menu and dialog, breakpoints, catalog routes.
-5. **005 Identity** ← **in review**: HTTP layer + session + sign-in screens + the signed-in app shell.
-6. **006 Households and books:** first-run choice, create household, create book, invitations, members, book switcher (backend specs 003–004).
+5. **005 Identity** ← done: HTTP layer + session + sign-in screens + the signed-in app shell.
+6. **006 Households and books** ← done (in review): first-run choice, create household, create book, invitations, members, book switcher (backend specs 003–004).
 7. **007 Categories and operations:** category picker, quick add, operations list (backend specs 005–006).
 8. **008 Dashboard and budget:** month summary, plan vs actual (backend spec 007).
 
@@ -26,7 +26,7 @@ Tooling
 - `nx run-many -t lint` has 0 errors but still reports warnings in `shared/stores` (`no-explicit-any`, `no-non-null-assertion`, `no-unused-vars`).
 - Production `apiBaseUrl` is a placeholder (`https://api.example.invalid/api/v1`); replace it before the first deployment.
 - `googleClientId` is empty in both environments, so the Google button is hidden (spec 005, REQ-6.1); set it when the OAuth client exists.
-- The Arabic texts (app, identity and errors) are a draft marked `meta.reviewStatus` for a native reader (spec 005, REQ-10.4).
+- The Arabic texts (app, identity, errors and households) are a draft marked `meta.reviewStatus` for a native reader (spec 005, REQ-10.4).
 
 Code
 - `withCrudOperations` has no `catchError`: one failed request ends the stream for good (documented by a test in `shared/stores`). Fix before a screen uses it.
