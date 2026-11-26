@@ -70,7 +70,7 @@ Keep specs lean: no restating of earlier specs, link to them instead.
 ## Testing rules
 
 - Every time Claude writes or changes code, it runs `npx nx affected -t lint test --base=main --output-style=static` and fixes every failure before committing or pushing.
-- Windows: if component tests fail with "is not resolved" or "failed to find the runner", the drive letter is lowercase. Prefix the command with `NX_DAEMON=false NX_WORKSPACE_ROOT_PATH='C:\projectsngular-frontend-toolbox'`.
+- Windows: if component tests fail with "is not resolved" or "failed to find the runner", the drive letter is lowercase. Prefix the command with `NX_DAEMON=false NX_WORKSPACE_ROOT_PATH='C:\projects\angular-frontend-toolbox'`.
 - Claude never runs builds (`nx build`, `npm run ci`), Playwright or e2e, never `nx serve`, never opens a browser. The owner and GitHub Actions cover builds.
 - Write the tests a task needs (Vitest, jsdom) and run them. In `tasks.md`, record the lint and test result.
 - Run `compile-tokens` and `check-tokens` after editing `tokens.json` or `contract.json`, because they generate files.
