@@ -1,6 +1,6 @@
 export * from './lib/form-field/form-field';
-export * from './lib/form-field/field-affix';
-export * from './lib/form-field/field-action';
+export * from './lib/form-field/field-affix/field-affix';
+export * from './lib/form-field/field-action/field-action';
 export * from './lib/alert/alert';
 export * from './lib/stat/stat';
 export * from './lib/section-header/section-header';
@@ -12,7 +12,7 @@ export * from './lib/chip-group/chip-group';
 export * from './lib/option-cards/option-cards';
 export * from './lib/code-input/code-input';
 export * from './lib/list/list';
-export * from './lib/list/list-item';
+export * from './lib/list/list-item/list-item';
 export * from './lib/month-switcher/month-switcher';
 export * from './lib/search-field/search-field';
 export * from './lib/avatar-group/avatar-group';

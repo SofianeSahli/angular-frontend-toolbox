@@ -4,7 +4,7 @@ import { UiDialog } from '@shared/ui-organisms';
 import { filter, merge, takeUntil } from 'rxjs';
 import { BooksStore } from '../households/data/books.store';
 import { Entry } from './data/models';
-import { EntrySheet, EntrySheetData, EntrySheetMode } from './parts/entry-sheet';
+import { EntrySheet, EntrySheetData, EntrySheetMode } from './parts/entry-sheet/entry-sheet';
 
 @Injectable({ providedIn: 'root' })
 export class EntrySheetService {

@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Route, Router } from '@angular/router';
 import { SHELL_BOOK_BOUND, SHELL_TITLE_KEY, SignedInShell } from './shell';
 import { authGuard, guestGuard } from '@shared/identity-data-access';
-import { AuthFrame } from './auth-frame/auth-frame';
+import { AuthFrame } from './auth-frame/auth-frame/auth-frame';
 import { BooksStore } from './households/data/books.store';
 import { firstRunGuard, householdBookGuard, workspaceGuard } from './households/data/guards';
 import { HouseholdStore } from './households/data/household.store';
@@ -44,17 +44,17 @@ export const appRoutes: Route[] = [
   {
     path: routePath(PATHS.welcome),
     canActivate: [authGuard, firstRunGuard],
-    loadComponent: () => import('./households/pages/welcome.page').then((m) => m.WelcomePage),
+    loadComponent: () => import('./households/pages/welcome-page/welcome.page').then((m) => m.WelcomePage),
   },
   {
     path: routePath(PATHS.newHousehold),
     canActivate: [authGuard, noHouseholdGuard],
-    loadComponent: () => import('./households/pages/household-new.page').then((m) => m.HouseholdNewPage),
+    loadComponent: () => import('./households/pages/household-new-page/household-new.page').then((m) => m.HouseholdNewPage),
   },
   {
     path: routePath(PATHS.newBook),
     canActivate: [authGuard, householdBookGuard],
-    loadComponent: () => import('./households/pages/book-new.page').then((m) => m.BookNewPage),
+    loadComponent: () => import('./households/pages/book-new-page/book-new.page').then((m) => m.BookNewPage),
   },
   {
     path: '',
@@ -64,43 +64,43 @@ export const appRoutes: Route[] = [
       {
         path: '',
         canActivate: [workspaceGuard],
-        loadComponent: () => import('./dashboard/pages/dashboard-page').then((m) => m.DashboardPage),
+        loadComponent: () => import('./dashboard/pages/dashboard-page/dashboard-page').then((m) => m.DashboardPage),
         data: { [SHELL_TITLE_KEY]: 'home.title', [SHELL_BOOK_BOUND]: true },
       },
       {
         path: routePath(PATHS.budget),
         canActivate: [workspaceGuard],
         canDeactivate: [budgetLeaveGuard],
-        loadComponent: () => import('./budget/pages/budget-page').then((m) => m.BudgetPage),
+        loadComponent: () => import('./budget/pages/budget-page/budget-page').then((m) => m.BudgetPage),
         data: { [SHELL_TITLE_KEY]: 'budget.title', [SHELL_BOOK_BOUND]: true },
       },
       { path: 'operations/recurrentes', redirectTo: ({ queryParams }) => inject(Router).createUrlTree([PATHS.recurring], { queryParams }) },
       {
         path: routePath(PATHS.analysis),
         canActivate: [workspaceGuard],
-        loadComponent: () => import('./analysis/pages/analysis-page').then((m) => m.AnalysisPage),
+        loadComponent: () => import('./analysis/pages/analysis-page/analysis-page').then((m) => m.AnalysisPage),
         data: { [SHELL_TITLE_KEY]: 'analysis.title', [SHELL_BOOK_BOUND]: true },
       },
       {
         path: routePath(PATHS.join),
-        loadComponent: () => import('./households/pages/join.page').then((m) => m.JoinPage),
+        loadComponent: () => import('./households/pages/join-page/join.page').then((m) => m.JoinPage),
         data: { [SHELL_TITLE_KEY]: 'households.join.title' },
       },
       {
         path: routePath(PATHS.recurring),
         canActivate: [workspaceGuard],
-        loadComponent: () => import('./recurring/pages/recurring-page').then((m) => m.RecurringPage),
+        loadComponent: () => import('./recurring/pages/recurring-page/recurring-page').then((m) => m.RecurringPage),
         data: { [SHELL_TITLE_KEY]: 'recurring.title', [SHELL_BOOK_BOUND]: true },
       },
       {
         path: routePath(PATHS.operations),
         canActivate: [workspaceGuard],
-        loadComponent: () => import('./operations/pages/operations-page').then((m) => m.OperationsPage),
+        loadComponent: () => import('./operations/pages/operations-page/operations-page').then((m) => m.OperationsPage),
         data: { [SHELL_TITLE_KEY]: 'operations.title', [SHELL_BOOK_BOUND]: true },
       },
       {
         path: routePath(PATHS.household),
-        loadComponent: () => import('./households/pages/household.page').then((m) => m.HouseholdPage),
+        loadComponent: () => import('./households/pages/household-page/household.page').then((m) => m.HouseholdPage),
         data: { [SHELL_TITLE_KEY]: 'households.household.title' },
       },
       { path: 'compte', loadComponent: () => identityPages().then((m) => m.AccountPage), data: { [SHELL_TITLE_KEY]: 'identity.account.title' } },
@@ -122,12 +122,12 @@ export const appRoutes: Route[] = [
   },
   {
     path: routePath(PATHS.terms),
-    loadComponent: () => import('./legal/legal-placeholder').then((m) => m.LegalPlaceholder),
+    loadComponent: () => import('./legal/legal-placeholder/legal-placeholder').then((m) => m.LegalPlaceholder),
     data: { titleKey: 'legal.terms' },
   },
   {
     path: routePath(PATHS.privacy),
-    loadComponent: () => import('./legal/legal-placeholder').then((m) => m.LegalPlaceholder),
+    loadComponent: () => import('./legal/legal-placeholder/legal-placeholder').then((m) => m.LegalPlaceholder),
     data: { titleKey: 'legal.privacy' },
   },
   { path: routePath(PATHS.unavailable), loadComponent: () => identityPages().then((m) => m.UnavailablePage) },

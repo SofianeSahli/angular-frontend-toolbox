@@ -8,7 +8,7 @@ import { UiButton, UiIcon, UiInput } from '@shared/ui-atoms';
 import { UiAlert, UiFieldAction, UiFormField } from '@shared/ui-molecules';
 import { AuthNavigation } from '../../shared/auth-navigation';
 import { countdown } from '../../shared/countdown';
-import { GoogleButton } from '../../shared/google-button';
+import { GoogleButton } from '../../shared/google-button/google-button';
 import { SERVER_ERROR_TEMPLATE, applyServerErrors } from '../../shared/server-errors';
 
 const HANDLED_CODES = ['auth.invalid_credentials', 'auth.email_unconfirmed', 'auth.password_locked', 'request.throttled'];

@@ -5,7 +5,7 @@ import { EMPTY, Subject } from 'rxjs';
 import { BooksStore } from '../households/data/books.store';
 import { book } from '../households/testing';
 import { EntrySheetService } from './entry-sheet.service';
-import { EntrySheet } from './parts/entry-sheet';
+import { EntrySheet } from './parts/entry-sheet/entry-sheet';
 import { entry } from './testing';
 
 describe('EntrySheetService (REQ-4.1, 4.10, 6.1)', () => {

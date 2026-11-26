@@ -69,9 +69,11 @@ Keep specs lean: no restating of earlier specs, link to them instead.
 
 ## Testing rules
 
-- Claude never runs tests, lint or builds (`nx test`, `nx affected`, `nx build`, `nx lint`, `nx run-many`, `npm run ci`, `vitest`), never runs Playwright or e2e, never `nx serve`, never opens a browser. The owner runs them locally and GitHub Actions runs them on every PR.
-- Write the tests a task needs (Vitest, jsdom), but do not run them. In `tasks.md`, write "verification: left to CI and the owner" instead of a result.
-- Only `compile-tokens` and `check-tokens` may be run, after editing `tokens.json` or `contract.json`, because they generate files.
+- Every time Claude writes or changes code, it runs `npx nx affected -t lint test --base=main --output-style=static` and fixes every failure before committing or pushing.
+- Windows: if component tests fail with "is not resolved" or "failed to find the runner", the drive letter is lowercase. Prefix the command with `NX_DAEMON=false NX_WORKSPACE_ROOT_PATH='C:\projects\angular-frontend-toolbox'`.
+- Claude never runs builds (`nx build`, `npm run ci`), Playwright or e2e, never `nx serve`, never opens a browser. The owner and GitHub Actions cover builds.
+- Write the tests a task needs (Vitest, jsdom) and run them. In `tasks.md`, record the lint and test result.
+- Run `compile-tokens` and `check-tokens` after editing `tokens.json` or `contract.json`, because they generate files.
 
 ## Commits, pushes and pull requests
 
@@ -83,6 +85,7 @@ Keep specs lean: no restating of earlier specs, link to them instead.
 
 - Standalone components, `inject()`, signals, built-in control flow, `OnPush`; no `any`.
 - Component templates live in a sibling `.html` file via `templateUrl`; never an inline `template:` in a component `.ts`.
+- One folder per component, named after the file (`parts/hero-card/hero-card.ts`); see `docs/CONVENTIONS.md`.
 - Every `rxMethod` inner observable has `catchError`.
 - No comments unless a *why* the code cannot express.
 - User-visible text via ngx-translate keys in `public/i18n/fr.json`.

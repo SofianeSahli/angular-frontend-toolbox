@@ -11,8 +11,8 @@ import { writeStoredTree } from '../data/categories-storage';
 import { CategoriesStore } from '../data/categories.store';
 import { Top } from '../data/models';
 import { LABELS, TREE } from '../testing';
-import { CategoryPicker, CategoryPickerData } from './category-picker';
-import { CategoryChip } from './category-chip';
+import { CategoryPicker, CategoryPickerData } from './category-picker/category-picker';
+import { CategoryChip } from './category-chip/category-chip';
 
 async function renderPicker(data: CategoryPickerData, tops: readonly Top[] = TREE) {
   writeStoredTree({ tops, etag: null });

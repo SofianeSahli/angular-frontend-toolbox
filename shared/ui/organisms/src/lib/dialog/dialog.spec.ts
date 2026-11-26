@@ -5,7 +5,7 @@ import { UiButton } from '@shared/ui-atoms';
 import { fireEvent, render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { UiDialog } from './dialog';
-import { UiDialogBody, UiDialogFooter, UiDialogHeader } from './dialog-parts';
+import { UiDialogBody, UiDialogFooter, UiDialogHeader } from './dialog-parts/dialog-parts';
 
 @Component({
   imports: [UiDialogHeader, UiDialogBody, UiDialogFooter, UiButton],

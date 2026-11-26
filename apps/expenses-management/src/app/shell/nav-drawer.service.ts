@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { UiDrawer } from '@shared/ui-organisms';
-import { NavDrawer, NavDrawerData, NavDrawerFocus, NavDrawerResult } from './nav-drawer';
+import { NavDrawer, NavDrawerData, NavDrawerFocus, NavDrawerResult } from './nav-drawer/nav-drawer';
 
 @Injectable({ providedIn: 'root' })
 export class NavDrawerService {

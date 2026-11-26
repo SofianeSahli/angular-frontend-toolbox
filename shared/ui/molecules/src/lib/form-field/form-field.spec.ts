@@ -3,8 +3,8 @@ import { UiInput } from '@shared/ui-atoms';
 import { provideUiText } from '@shared/ui-tokens';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { UiFieldAction } from './field-action';
-import { UiFieldAffix } from './field-affix';
+import { UiFieldAction } from './field-action/field-action';
+import { UiFieldAffix } from './field-affix/field-affix';
 import { UiFormField } from './form-field';
 
 const imports = [UiFormField, UiInput, UiFieldAffix, UiFieldAction, ReactiveFormsModule];
