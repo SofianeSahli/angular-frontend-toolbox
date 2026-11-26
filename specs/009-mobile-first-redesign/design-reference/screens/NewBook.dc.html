@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Créer le carnet</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#1D4E89}a:hover{color:#163d6c}
+</style>
+</helmet>
+<div class="o-root" style="width: 390px; height: 900px; box-sizing: border-box; padding: 16px 20px 32px; background: #FBF8F3; display: flex; flex-direction: column; gap: 20px; font-family: Inter, sans-serif; color: #1C1A17">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<a href="NewHousehold.dc.html" aria-label="Retour" style="width: 44px; height: 44px; margin-left: -12px; display: flex; align-items: center; justify-content: center; color: #1C1A17"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<span style="font-size: 13px; color: #6B6358">Étape 2 sur 2</span>
+</div>
+<div role="progressbar" aria-label="Étape 2 sur 2" aria-valuenow="2" aria-valuemin="0" aria-valuemax="2" style="height: 4px; border-radius: 2px; background: #4E6B1F"></div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-size: 28px; line-height: 34px; font-weight: 600">Le carnet du foyer</h1>
+<p style="margin: 0; color: #6B6358; line-height: 22px">C'est là que toute la famille notera ses dépenses.</p>
+</div>
+<form style="display: flex; flex-direction: column; gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Nom du carnet
+<input type="text" value="Dépenses du foyer" maxlength="60" style="height: 52px; box-sizing: border-box; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; font: 400 17px Inter, sans-serif">
+</label>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 14px; font-weight: 500">Devise</span>
+<button type="button" aria-haspopup="listbox" style="min-height: 52px; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 10px; font: 400 16px Inter, sans-serif; color: #1C1A17; text-align: left"><span style="flex: 1">Dinar tunisien (DT)</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6358" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+<p role="note" style="margin: 0; padding: 10px 12px; border-radius: 10px; background: #FDF3E3; color: #7A4A0B; font-size: 13px; line-height: 19px">La devise ne pourra plus être changée ensuite.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 14px; font-weight: 500">Fuseau horaire</span>
+<button type="button" aria-haspopup="listbox" style="min-height: 52px; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 10px; font: 400 16px Inter, sans-serif; color: #1C1A17; text-align: left"><span style="flex: 1">Tunis (UTC+1)</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6358" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+<span style="font-size: 13px; color: #6B6358">Sert à savoir quand commence « aujourd'hui » et le mois.</span>
+</div>
+</form>
+<a href="MobAdd.dc.html" style="margin-top: auto; min-height: 52px; border-radius: 12px; background: #4E6B1F; color: #FFFFFF; font: 600 16px Inter, sans-serif; display: flex; align-items: center; justify-content: center; text-decoration: none">Créer et noter une première dépense</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

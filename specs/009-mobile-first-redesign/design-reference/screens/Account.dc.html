@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Compte</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#1D4E89}a:hover{color:#163d6c}
+</style>
+</helmet>
+<div class="o-root" style="width: 390px; height: 1000px; position: relative; overflow: hidden; background: #FBF8F3; font-family: Inter, sans-serif; color: #1C1A17">
+<dc-import name="TopBar" title="Compte" hint-size="390px,56px"></dc-import>
+<div style="padding: 0 16px 112px; display: flex; flex-direction: column; gap: 20px">
+
+<section style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 0" aria-label="Profil">
+<span aria-hidden="true" style="width: 72px; height: 72px; border-radius: 50%; background: #1D4E89; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600">S</span>
+<span style="font-size: 20px; font-weight: 600">Sofiane</span>
+<span style="font-size: 14px; color: #6B6358">sofiane@exemple.tn</span>
+</section>
+
+<section aria-labelledby="ac-info">
+<h2 id="ac-info" style="margin: 0 4px 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #6B6358">Informations</h2>
+<ul class="ui-card" style="list-style: none; margin: 0; padding: 0">
+<sc-for list="{{info}}" as="r" hint-placeholder-count="3">
+<li style="{{r.border}}"><button type="button" style="width: 100%; min-height: 56px; padding: 0 16px; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; font: 400 15px Inter, sans-serif; color: #1C1A17; text-align: left"><span style="flex: 1"><span style="display: block; font-size: 13px; color: #6B6358">{{r.label}}</span>{{r.value}}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6358" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button></li>
+</sc-for>
+</ul>
+</section>
+
+<section aria-labelledby="ac-pref">
+<h2 id="ac-pref" style="margin: 0 4px 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #6B6358">Préférences</h2>
+<ul class="ui-card" style="list-style: none; margin: 0; padding: 0">
+<li style="border-bottom: 1px solid #E7E0D5"><button type="button" style="width: 100%; min-height: 52px; padding: 0 16px; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; font: 400 15px Inter, sans-serif; color: #1C1A17; text-align: left"><span style="flex: 1">Langue</span><span style="color: #6B6358">Français</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6358" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button></li>
+<li><button type="button" style="width: 100%; min-height: 52px; padding: 0 16px; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; font: 400 15px Inter, sans-serif; color: #1C1A17; text-align: left"><span style="flex: 1">Thème</span><span style="color: #6B6358">Système</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6358" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button></li>
+</ul>
+</section>
+
+<section aria-labelledby="ac-sec">
+<h2 id="ac-sec" style="margin: 0 4px 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #6B6358">Sécurité</h2>
+<ul class="ui-card" style="list-style: none; margin: 0; padding: 0">
+<li style="min-height: 64px; padding: 8px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #E7E0D5"><span style="flex: 1"><span style="display: block">Connexion en deux étapes</span><span style="font-size: 13px; color: #6B6358">Un code par e-mail à chaque connexion</span></span><button type="button" role="switch" aria-checked="true" aria-label="Connexion en deux étapes" style="width: 52px; height: 32px; border: 0; border-radius: 999px; background: #4E6B1F; position: relative; flex: none"><span style="position: absolute; right: 3px; top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #FFFFFF"></span></button></li>
+<li style="border-bottom: 1px solid #E7E0D5"><button type="button" style="width: 100%; min-height: 52px; padding: 0 16px; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; font: 400 15px Inter, sans-serif; color: #1C1A17; text-align: left"><span style="flex: 1">Changer le mot de passe</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6358" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button></li>
+<li style="min-height: 52px; padding: 0 16px; display: flex; align-items: center; gap: 12px"><span style="flex: 1">Compte Google</span><span style="font-size: 14px; color: #6B6358">Non relié</span></li>
+</ul>
+</section>
+
+<a href="SignIn.dc.html" style="min-height: 52px; border-radius: 12px; border: 1px solid #D9D1C4; background: #FFFFFF; color: #1C1A17; font: 500 16px Inter, sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none">Se déconnecter</a>
+</div>
+<div style="position: absolute; left: 0; bottom: 0"><dc-import name="TabBar" active="none" hint-size="390px,84px"></dc-import></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1000}}'>
+class Component extends DCLogic {
+renderVals() {
+var rows = [['Prénom', 'Sofiane'], ['E-mail', 'sofiane@exemple.tn'], ['Téléphone', '+216 20 123 456']];
+return { info: rows.map(function (r, i) { return { label: r[0], value: r[1], border: i < rows.length - 1 ? 'border-bottom: 1px solid #E7E0D5' : '' }; }) };
+}
+}
+</script>
+</body>
+</html>

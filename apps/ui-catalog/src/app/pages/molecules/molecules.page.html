@@ -162,4 +162,30 @@
       </ui-menu>
     </ng-template>
   </section>
+
+  <section class="catalog-section" aria-labelledby="mobile-entry">
+    <h2 class="catalog-heading" id="mobile-entry">Saisie mobile</h2>
+    <div class="row g-4">
+      <div class="col-md-4 d-flex flex-column gap-2">
+        <p class="m-0" aria-live="polite">TND (3 décimales) : <bdi dir="ltr">{{ keypadAmount() || '0' }}</bdi></p>
+        <ui-amount-keypad [(value)]="keypadAmount" [decimals]="3" />
+      </div>
+      <div class="col-md-4 d-flex flex-column gap-2">
+        <p class="m-0" aria-live="polite">Sans décimale : <bdi dir="ltr">{{ keypadWhole() || '0' }}</bdi></p>
+        <ui-amount-keypad [(value)]="keypadWhole" [decimals]="0" />
+      </div>
+      <div class="col-md-4 d-flex flex-column gap-3">
+        <ui-month-strip [months]="stripMonths" [(selected)]="stripMonth" ariaLabel="Mois du budget" />
+        <p class="m-0">Mois choisi : {{ stripMonth() }}</p>
+        <ui-save-bar
+          text="2 modifications · Alimentation 850 DT"
+          primaryLabel="Enregistrer"
+          secondaryLabel="Annuler"
+          [busy]="saveBarBusy()"
+          (primary)="saveBarBusy.set(!saveBarBusy())"
+          (secondary)="saveBarBusy.set(false)"
+        />
+      </div>
+    </div>
+  </section>
 </main>

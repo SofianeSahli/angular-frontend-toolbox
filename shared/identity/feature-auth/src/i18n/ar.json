@@ -100,7 +100,9 @@
     "forgotPassword": {
       "title": "نسيت كلمة المرور",
       "lead": "أدخل بريدك الإلكتروني: إذا كان هناك حساب، سنرسل إليك رمزًا لاختيار كلمة مرور جديدة.",
-      "submit": "استلام رمز"
+      "submit": "استلام رمز",
+      "step": "الخطوة {{current}} من {{total}}",
+      "changeEmail": "تغيير البريد الإلكتروني"
     },
     "resetPassword": {
       "title": "كلمة مرور جديدة",
@@ -135,7 +137,15 @@
       "confirmDisable": "إيقاف تسجيل الدخول بخطوتين",
       "cancel": "إلغاء",
       "twoFactorEnabled": "تم تفعيل تسجيل الدخول بخطوتين.",
-      "twoFactorDisabled": "تم إيقاف تسجيل الدخول بخطوتين."
+      "twoFactorDisabled": "تم إيقاف تسجيل الدخول بخطوتين.",
+      "preferences": "التفضيلات",
+      "languageChoice": "لغة التطبيق",
+      "theme": "المظهر",
+      "themes": {
+        "light": "فاتح",
+        "dark": "داكن",
+        "system": "النظام"
+      }
     }
   }
 }

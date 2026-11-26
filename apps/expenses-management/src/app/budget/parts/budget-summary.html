@@ -1,0 +1,27 @@
+<section class="plan-line" aria-labelledby="budget-summary-title">
+  <h2 class="budget-parts__title" id="budget-summary-title">{{ 'budget.overview.title' | translate }}</h2>
+  <dl class="budget-summary__stats">
+    <div>
+      <dt class="budget-summary__label">{{ 'budget.summary.planned' | translate }}</dt>
+      <dd><bdi>{{ format(plannedTotal()) }}</bdi></dd>
+    </div>
+    <div>
+      <dt class="budget-summary__label">{{ 'budget.summary.spent' | translate }}</dt>
+      <dd><bdi>{{ format(actual()) }}</bdi></dd>
+    </div>
+    <div>
+      <dt class="budget-summary__label">{{ 'budget.summary.left' | translate }}</dt>
+      <dd><bdi>{{ format(remaining()) }}</bdi></dd>
+    </div>
+  </dl>
+  <ui-meter
+    [value]="actual()"
+    [max]="plannedTotal()"
+    [state]="state()"
+    [label]="'budget.overview.total' | translate"
+    [valueText]="percent() === null ? '' : ('budget.lines.percent' | translate: { percent: percent() })"
+  />
+  <button uiButton variant="secondary" type="button" class="align-self-start" [loading]="copying()" [disabled]="busy()" (click)="copyPrevious.emit()">
+    {{ copyLabel() }}
+  </button>
+</section>

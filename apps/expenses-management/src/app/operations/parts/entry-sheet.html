@@ -1,15 +1,18 @@
-<ui-dialog-header [title]="(editing ? 'operations.sheet.editTitle' : 'operations.sheet.addTitle') | translate" />
+<ui-dialog-header [title]="title() | translate" />
 <form [formGroup]="form" (ngSubmit)="save()" novalidate>
   <div uiDialogBody class="d-flex flex-column gap-3">
-    <p class="m-0">{{ 'operations.sheet.book' | translate }} <bdi>{{ book.name }}</bdi></p>
-
     @if (editing) {
-      <p class="m-0">
-        {{ 'operations.sheet.meta' | translate: { created: editing.createdBy.name, updated: editing.updatedBy.name } }}
+      <p class="entry-sheet__meta m-0">
+        {{ 'operations.sheet.addedBy' | translate: { name: editing.createdBy.name } }}
+        @if (editing.updatedBy.id !== editing.createdBy.id || editing.updatedAt.getTime() !== editing.createdAt.getTime()) {
+          · {{ 'operations.sheet.updatedBy' | translate: { name: editing.updatedBy.name } }}
+        }
         @if (editing.recurringRuleId) {
           &ngsp;<ui-badge>{{ 'operations.recurringBadge' | translate }}</ui-badge>
         }
       </p>
+    } @else {
+      <ui-segmented-control [options]="modeOptions" [ariaLabel]="'operations.sheet.mode' | translate" [formControl]="modeControl" />
     }
 
     @if (unavailable()) {
@@ -20,31 +23,57 @@
       </ui-alert>
     }
 
-    <ui-form-field [label]="'operations.sheet.amount' | translate" required [errors]="errorTemplates">
-      <input uiInput id="entry-amount" type="text" inputmode="decimal" autocomplete="off" dir="ltr" formControlName="amount" />
-    </ui-form-field>
-    <p class="m-0" aria-live="polite">
-      @if (preview(); as text) {
-        {{ 'operations.sheet.preview' | translate }} <bdi dir="ltr">{{ text }}</bdi>
+    @if (keypad) {
+      <app-amount-pad
+        inputId="entry-amount"
+        [value]="value().amount"
+        [currency]="book.currency"
+        [label]="'operations.sheet.amount' | translate"
+        [caption]="'operations.sheet.bookCaption' | translate: { book: book.name }"
+        (valueChange)="setAmount($event)"
+      />
+      @if (form.controls.amount.touched && form.controls.amount.errors?.['amount']; as error) {
+        <ui-field-message tone="error">{{ error.message }}</ui-field-message>
       }
-    </p>
+    } @else {
+      <p class="m-0">{{ 'operations.sheet.book' | translate }} <bdi>{{ book.name }}</bdi></p>
+      <ui-form-field [label]="'operations.sheet.amount' | translate" required [errors]="errorTemplates">
+        <input uiInput id="entry-amount" type="text" inputmode="decimal" autocomplete="off" dir="ltr" formControlName="amount" />
+      </ui-form-field>
+      <p class="m-0" aria-live="polite">
+        @if (preview(); as text) {
+          {{ 'operations.sheet.preview' | translate }} <bdi dir="ltr">{{ text }}</bdi>
+        }
+      </p>
+    }
     @if (confirmText(); as text) {
       <ui-alert tone="warning">{{ 'operations.sheet.bigWarning' | translate: { amount: text } }}</ui-alert>
     }
 
+    @if (templates().length > 0) {
+      <div class="entry-sheet__chips" role="group" [attr.aria-label]="'operations.sheet.templates' | translate">
+        @for (template of templates(); track template.label) {
+          <button uiChip type="button" (click)="useTemplate(template)"><bdi>{{ template.label }}</bdi></button>
+        }
+      </div>
+    }
+
     <div class="d-flex flex-column gap-2">
       <span id="entry-category-label">{{ 'operations.sheet.category' | translate }}</span>
-      @if (recentChips().length > 0) {
-        <div class="d-flex flex-wrap gap-2" role="group" [attr.aria-label]="'categories.picker.recents' | translate">
-          @for (recent of recentChips(); track recent.code) {
-            <button uiChip type="button" [pressed]="category() === recent.code" (click)="setCategory(recent.code)">
-              <span aria-hidden="true">{{ recent.emoji }}</span>&ngsp;<bdi>{{ recent.name }}</bdi>
-            </button>
-          }
-        </div>
-      }
-      <div class="d-flex flex-wrap align-items-center gap-2">
-        @if (category(); as code) {
+      <div class="entry-sheet__chips" role="group" aria-labelledby="entry-category-label">
+        @for (option of categoryOptions(); track option.code) {
+          <button uiChip type="button" [pressed]="category() === option.code" [attr.aria-describedby]="option.suggested ? 'entry-suggested' : null" (click)="setCategory(option.code)">
+            <span aria-hidden="true">{{ option.emoji }}</span>&ngsp;<bdi>{{ option.name }}</bdi>
+            @if (option.suggested) {
+              <span class="entry-sheet__suggested" aria-hidden="true">· {{ 'operations.sheet.suggested' | translate }}</span>
+            }
+          </button>
+        }
+        <button uiChip type="button" [disabled]="unavailable()" (click)="chooseCategory()">{{ 'operations.sheet.otherCategory' | translate }}</button>
+      </div>
+      <span id="entry-suggested" class="visually-hidden">{{ 'operations.sheet.suggested' | translate }}</span>
+      @if (category(); as code) {
+        <div class="d-flex flex-wrap align-items-center gap-2">
           <app-category-chip [code]="code" />
           @if (typeKey(); as key) {
             <ui-badge>{{ key | translate }}</ui-badge>
@@ -52,11 +81,8 @@
           @if (retired()) {
             <ui-badge tone="warning">{{ 'categories.picker.retired' | translate }}</ui-badge>
           }
-        }
-        <button uiButton variant="secondary" size="sm" type="button" aria-describedby="entry-category-label" [disabled]="unavailable()" (click)="chooseCategory()">
-          {{ (category() ? 'operations.sheet.changeCategory' : 'operations.sheet.chooseCategory') | translate }}
-        </button>
-      </div>
+        </div>
+      }
       @if (categoryError(); as message) {
         <ui-field-message tone="error">{{ message }}</ui-field-message>
       }
@@ -67,7 +93,7 @@
         <input uiInput type="text" autocomplete="off" formControlName="otherName" [attr.maxlength]="otherNameMax" />
       </ui-form-field>
       @if (suggestions().length > 0) {
-        <div class="d-flex flex-wrap gap-2" role="group" [attr.aria-label]="'operations.sheet.suggestions' | translate">
+        <div class="entry-sheet__chips" role="group" [attr.aria-label]="'operations.sheet.suggestions' | translate">
           @for (name of suggestions(); track name) {
             <button uiChip type="button" (click)="useSuggestion(name)"><bdi>{{ name }}</bdi></button>
           }
@@ -75,17 +101,62 @@
       }
     }
 
-    <ui-form-field [label]="'operations.sheet.date' | translate" required [errors]="errorTemplates">
-      <input uiInput type="date" formControlName="date" [min]="minDate" [max]="maxDate" />
-    </ui-form-field>
-    <div class="d-flex flex-wrap gap-2">
-      <button uiChip type="button" [pressed]="date() === today" (click)="setDate(today)">{{ 'operations.sheet.today' | translate }}</button>
-      <button uiChip type="button" [pressed]="date() === yesterday" (click)="setDate(yesterday)">{{ 'operations.sheet.yesterday' | translate }}</button>
-    </div>
+    @if (isRecurring()) {
+      <div class="d-flex flex-column gap-3" [formGroup]="rule">
+        <div class="d-flex flex-column gap-2">
+          <span>{{ 'recurring.sheet.frequency' | translate }}</span>
+          <ui-segmented-control formControlName="frequency" [options]="frequencyOptions" [ariaLabel]="'recurring.sheet.frequency' | translate" />
+        </div>
+        <ui-form-field [label]="'recurring.sheet.interval' | translate" required [errors]="errorTemplates">
+          <select uiSelect formControlName="interval">
+            @for (value of intervals; track value) {
+              <option [ngValue]="value">{{ value }}</option>
+            }
+          </select>
+        </ui-form-field>
+        <div class="row g-2">
+          <div class="col-6">
+            <ui-form-field [label]="'recurring.sheet.startsOn' | translate" required [errors]="errorTemplates">
+              <input uiInput type="date" formControlName="startsOn" [min]="minStart" [max]="maxStart" />
+            </ui-form-field>
+          </div>
+          <div class="col-6">
+            <ui-form-field [label]="'recurring.sheet.endsOn' | translate" optional [errors]="errorTemplates">
+              <input uiInput type="date" formControlName="endsOn" [min]="endMin()" />
+            </ui-form-field>
+          </div>
+        </div>
+        @if (pastStart()) {
+          <ui-alert tone="warning">{{ 'recurring.sheet.pastStart' | translate }}</ui-alert>
+        }
+      </div>
+    } @else {
+      <div class="entry-sheet__chips" role="group" [attr.aria-label]="'operations.sheet.date' | translate">
+        <button uiChip type="button" [pressed]="date() === today" (click)="setDate(today); showDate.set(false)">{{ 'operations.sheet.today' | translate }}</button>
+        <button uiChip type="button" [pressed]="date() === yesterday" (click)="setDate(yesterday); showDate.set(false)">
+          {{ 'operations.sheet.yesterday' | translate }}
+        </button>
+        <button uiChip type="button" [pressed]="showDate() || otherDate()" [attr.aria-expanded]="showDate()" (click)="showDate.set(!showDate())">
+          {{ 'operations.sheet.otherDate' | translate }}
+        </button>
+        @if (!editing) {
+          <button uiChip type="button" [pressed]="showComment()" [attr.aria-expanded]="showComment()" (click)="showComment.set(!showComment())">
+            {{ 'operations.sheet.note' | translate }}
+          </button>
+        }
+      </div>
+      @if (showDate() || otherDate()) {
+        <ui-form-field [label]="'operations.sheet.date' | translate" required [errors]="errorTemplates">
+          <input uiInput type="date" formControlName="date" [min]="minDate" [max]="maxDate" />
+        </ui-form-field>
+      }
+    }
 
-    <ui-form-field [label]="'operations.sheet.comment' | translate" optional [maxLength]="commentMax" [errors]="errorTemplates">
-      <textarea uiInput rows="2" formControlName="comment" [attr.maxlength]="commentMax"></textarea>
-    </ui-form-field>
+    @if (showComment() || isRecurring()) {
+      <ui-form-field [label]="'operations.sheet.comment' | translate" optional [maxLength]="commentMax" [errors]="errorTemplates">
+        <textarea uiInput rows="2" formControlName="comment" [attr.maxlength]="commentMax"></textarea>
+      </ui-form-field>
+    }
 
     @if (offline()) {
       <ui-alert tone="danger">{{ 'operations.errors.offline' | translate }}</ui-alert>
@@ -93,21 +164,33 @@
     @if (generic()) {
       <ui-alert tone="danger">{{ 'operations.errors.generic' | translate }}</ui-alert>
     }
+    @if (notice(); as text) {
+      <ui-alert tone="danger">{{ text }}</ui-alert>
+    }
     @if (throttled(); as text) {
       <p class="m-0" role="status">{{ text }}</p>
+    }
+
+    @if (editing) {
+      <button uiButton variant="ghost" type="button" class="entry-sheet__delete" [loading]="deleting()" (click)="remove()">
+        {{ 'operations.sheet.delete.action' | translate }}
+      </button>
     }
   </div>
 
   <div uiDialogFooter>
-    @if (editing) {
-      <button uiButton variant="danger" type="button" [loading]="deleting()" (click)="remove()">{{ 'operations.sheet.delete.action' | translate }}</button>
-    }
     <button uiButton variant="ghost" type="button" (click)="requestClose()">{{ 'operations.sheet.cancel' | translate }}</button>
-    <button uiButton variant="primary" type="submit" [loading]="saving()">
+    <button uiButton variant="primary" type="submit" [loading]="saving()" [disabled]="!canSave()">
       @if (confirmText(); as text) {
         {{ 'operations.sheet.confirmBig' | translate: { amount: text } }}
-      } @else {
+      } @else if (editing) {
         {{ 'operations.sheet.save' | translate }}
+      } @else if (!preview()) {
+        {{ 'operations.sheet.enterAmount' | translate }}
+      } @else if (isRecurring()) {
+        {{ 'recurring.sheet.saveAmount' | translate: { amount: preview(), frequency: frequencyLabel() } }}
+      } @else {
+        {{ 'operations.sheet.saveAmount' | translate: { amount: preview() } }}
       }
     </button>
   </div>

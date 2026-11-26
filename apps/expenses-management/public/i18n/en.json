@@ -21,7 +21,33 @@
       "limit": "You already have 5 personal books."
     },
     "operations": "Operations",
-    "budget": "Budget"
+    "budget": "Budget",
+    "menu": "Menu",
+    "recurring": "Recurring",
+    "analysis": "Month analysis",
+    "drawer": {
+      "close": "Close the menu",
+      "books": "Books",
+      "householdBook": "Household",
+      "personalBook": "Personal",
+      "planning": "Plan",
+      "budgets": "Budgets",
+      "householdAndAccount": "Household and account",
+      "appearance": "Appearance",
+      "language": "Language",
+      "themes": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      },
+      "hints": {
+        "budget": "{{month}} · {{amount}} left",
+        "rule": "{{count}} rule",
+        "rules": "{{count}} rules",
+        "member": "{{count}} member",
+        "members": "{{count}} members"
+      }
+    }
   },
   "brand": {
     "promise": "Your household's expenses, together, without the hassle.",
@@ -61,7 +87,10 @@
       "minlength": "At least {{requiredLength}} characters.",
       "maxlength": "{{requiredLength}} characters at most.",
       "pattern": "The format isn't valid."
-    }
+    },
+    "keypad": "Keypad",
+    "keypadDelete": "Delete last digit",
+    "keypadSeparator": "Decimal separator"
   },
   "households": {
     "welcome": {
@@ -108,7 +137,8 @@
       "otherCurrency": "Other…",
       "otherCurrencyField": "Currency code (3 letters)",
       "timezone": "Time zone",
-      "submit": "Create the book"
+      "submit": "Create the book",
+      "submitFirst": "Create and note a first expense"
     },
     "errors": {
       "generic": "Something went wrong. Try again.",
@@ -211,6 +241,41 @@
         "submit": "Invite",
         "sent": "Invitation sent. A notice email was sent.",
         "throttled": "Invitation limit reached, try again in {{retry}}."
+      },
+      "bookName": "· book “{{name}}”",
+      "membersCount": "Members ({{count}})",
+      "memberOptions": "Options for {{name}}",
+      "sensitive": "Sensitive actions"
+    },
+    "invite": {
+      "open": "Invite someone",
+      "title": "Invite to the household",
+      "tabs": "How to invite",
+      "email": "By e-mail",
+      "qr": "QR code, in person",
+      "emailNote": "They see the invitation in the app once signed in with this address; valid for 7 days."
+    },
+    "qr": {
+      "label": "Invitation QR code",
+      "expiresIn": "Expires in {{time}}",
+      "expired": "This code has expired. Create a new one.",
+      "help": "They scan this code with their phone's camera while signed in. It works once.",
+      "newCode": "New code",
+      "offline": "Offline: the code could not be created."
+    },
+    "join": {
+      "title": "Join a household",
+      "invitedBy": "{{name}} invites you to the household",
+      "accept": "Join",
+      "decline": "Decline",
+      "home": "Back home",
+      "joined": "You joined “{{name}}”",
+      "errors": {
+        "notFound": "This code is no longer valid. Ask for a new one.",
+        "alreadyJoined": "You already belong to a household: leave it first.",
+        "memberLimit": "This household is full.",
+        "offline": "Offline: try again once connected.",
+        "throttled": "Too many attempts. Try again in {{retry}}."
       }
     }
   },
@@ -233,7 +298,7 @@
       },
       "category": "Category",
       "removeCategory": "Remove the {{name}} filter",
-      "author": "Author",
+      "author": "Member",
       "allAuthors": "Everyone",
       "me": "Me",
       "clear": "Clear filters"
@@ -278,12 +343,25 @@
         "cancel": "Keep editing"
       },
       "delete": {
-        "action": "Delete",
+        "action": "Delete the entry…",
         "title": "Delete this operation?",
         "message": "This cannot be undone.",
         "confirm": "Delete",
         "cancel": "Cancel"
-      }
+      },
+      "mode": "Kind of entry",
+      "once": "One-off",
+      "recurring": "Recurring",
+      "bookCaption": "Book {{book}}",
+      "suggested": "suggested",
+      "otherCategory": "Other category…",
+      "templates": "Reuse a recent entry",
+      "otherDate": "Other date",
+      "note": "Note",
+      "enterAmount": "Enter an amount",
+      "saveAmount": "Add {{amount}}",
+      "addedBy": "Added by {{name}}",
+      "updatedBy": "changed by {{name}}"
     },
     "toasts": {
       "created": {
@@ -346,7 +424,12 @@
       }
     },
     "recurringBadge": "recurring",
-    "recurringLink": "Recurring"
+    "recurringLink": "Recurring",
+    "search": {
+      "label": "Search entries",
+      "placeholder": "Search (name, note, amount)",
+      "partial": "The search only covers the entries loaded."
+    }
   },
   "categories": {
     "food": {
@@ -918,7 +1001,7 @@
       "seeAll": "See recurring operations"
     },
     "recent": {
-      "title": "Recent",
+      "title": "Latest entries",
       "empty": "No operation this month",
       "seeAll": "See all"
     },
@@ -944,6 +1027,16 @@
       "title": "Last 6 months",
       "label": "Spending over the last 6 months",
       "average": "Average: {{amount}}"
+    },
+    "today": {
+      "title": "Today",
+      "all": "All entries",
+      "empty": "Nothing noted today",
+      "add": "Add an entry"
+    },
+    "analysisLink": {
+      "title": "Month analysis",
+      "text": "Pace, categories, last 6 months, members"
     }
   },
   "budget": {
@@ -968,13 +1061,14 @@
     "cleared": "Budget cleared",
     "cancel": "Cancel",
     "lines": {
-      "title": "Budget lines",
+      "title": "Planned expenses",
       "add": "Add a line",
       "empty": "No line yet.",
       "planned": "Planned",
       "actual": "Spent: {{amount}}",
       "percent": "{{percent}}%",
-      "remove": "Remove {{name}}"
+      "remove": "Remove {{name}}",
+      "rowLabel": "{{name}}, planned {{planned}}, spent {{spent}}"
     },
     "status": {
       "ok": "Within budget",
@@ -996,7 +1090,8 @@
       "replaceTitle": "Replace this month's budget?",
       "replaceMessage": "This month's budget will be replaced by the previous month's.",
       "replaceConfirm": "Replace",
-      "nothing": "The previous month has no budget"
+      "nothing": "The previous month has no budget",
+      "from": "Copy {{month}}'s budget"
     },
     "leave": {
       "title": "Leave without saving?",
@@ -1069,11 +1164,45 @@
       "total": "Spent / planned",
       "amounts": "{{spent}} / {{planned}}"
     },
-    "lastMonth": "Last month: {{amount}}"
+    "lastMonth": "Last month: {{amount}}",
+    "strip": {
+      "label": "Budget months",
+      "closed": "Closed",
+      "current": "Current",
+      "planned": "Planned",
+      "todo": "To do"
+    },
+    "summary": {
+      "planned": "Planned",
+      "spent": "Spent",
+      "left": "Left"
+    },
+    "empty": {
+      "text": "No budget yet. Prepare it now: you can adjust it until the end of the month.",
+      "copy": "Copy {{month}}",
+      "fresh": "Start from zero"
+    },
+    "received": "Received {{amount}}",
+    "savedAmount": "Saved {{amount}}",
+    "saveBar": {
+      "one": "{{count}} change",
+      "many": "{{count}} changes",
+      "discard": "Undo"
+    },
+    "amountSheet": {
+      "apply": "Apply",
+      "remove": "Remove the line"
+    },
+    "known": {
+      "title": "Already known for {{month}}",
+      "link": "Recurring",
+      "total": "{{amount}} of fixed expenses already committed"
+    },
+    "aheadLimit": "A budget can be prepared up to 12 months ahead."
   },
   "recurring": {
     "title": "Recurring operations",
-    "add": "Add a recurring operation",
+    "add": "New recurring entry",
     "loading": "Loading recurring operations…",
     "loadError": "The recurring operations could not be loaded.",
     "loadOffline": "You are offline. The recurring operations could not be loaded.",
@@ -1097,7 +1226,7 @@
       }
     },
     "sheet": {
-      "addTitle": "New recurring operation",
+      "addTitle": "New recurring entry",
       "editTitle": "Edit the recurring operation",
       "editNote": "Operations already made do not change. A new schedule applies from today.",
       "pastStart": "Operations due up to today will be created at once",
@@ -1109,7 +1238,10 @@
       },
       "interval": "Every (number of weeks, months or years)",
       "startsOn": "First date",
-      "endsOn": "Last date"
+      "endsOn": "Last date",
+      "next": "Next: {{date}}.",
+      "stop": "Stop this recurrence…",
+      "saveAmount": "Save · {{amount}} {{frequency}}"
     },
     "delete": {
       "title": "Delete this recurring operation?",
@@ -1149,6 +1281,29 @@
         "date_format": "Invalid date",
         "after_or_equal": "The last date must come after the first"
       }
+    },
+    "rowLabel": "{{name}}, {{frequency}}, {{next}}",
+    "average": {
+      "title": "Each month on average, already planned",
+      "expense": "Fixed expenses",
+      "income": "Income"
+    },
+    "sections": {
+      "expense": "Expenses",
+      "income": "Income",
+      "saving": "Savings",
+      "none": "No rule",
+      "ended": "Ended ({{count}})"
+    }
+  },
+  "analysis": {
+    "title": "Month analysis",
+    "pace": {
+      "fixedExcluded": "Rent and recurring bills left out"
+    },
+    "members": {
+      "title": "Who added what",
+      "note": "What each person entered, not who paid."
     }
   }
 }

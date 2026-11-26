@@ -47,10 +47,16 @@ describe('EntrySheetService (REQ-4.1, 4.10, 6.1)', () => {
     expect(dialog.open).toHaveBeenCalledWith(
       EntrySheet,
       expect.objectContaining({
-        data: { book: book('b1') },
+        data: { book: book('b1'), mode: 'once' },
         autoFocus: '#entry-amount',
       }),
     );
+  });
+
+  it('opens the sheet in recurring mode when asked (spec 009 REQ-3.1)', () => {
+    const { service, dialog } = setup(book('b1'));
+    service.openNew({ mode: 'recurring' });
+    expect(dialog.open).toHaveBeenCalledWith(EntrySheet, expect.objectContaining({ data: { book: book('b1'), mode: 'recurring' } }));
   });
 
   it('opens an entry in edit mode', () => {

@@ -1,26 +1,26 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ApiError } from '@shared/http-data-access';
 import { SessionStore } from '@shared/identity-data-access';
-import { UiBadge, UiButton, UiSkeleton } from '@shared/ui-atoms';
+import { UiBadge, UiButton, UiIcon, UiSkeleton } from '@shared/ui-atoms';
 import { UiAlert, UiEmptyState, UiSectionHeader } from '@shared/ui-molecules';
-import { UiConfirm, UiToast } from '@shared/ui-organisms';
+import { UiConfirm, UiDialog, UiToast } from '@shared/ui-organisms';
+import { firstValueFrom } from 'rxjs';
 import { UiPage } from '@shared/ui-templates';
 import { BooksStore } from '../data/books.store';
 import { HouseholdStore } from '../data/household.store';
 import { InvitationsStore } from '../data/invitations.store';
 import { Invitation, Member } from '../data/models';
 import { StoreResult } from '../data/store-result';
-import { InviteForm } from '../parts/invite-form';
+import { InviteSheet, InviteSheetResult } from '../parts/invite-sheet';
 import { MembersList } from '../parts/members-list';
 import { InvitationAnswer, ReceivedInvitationCard } from '../parts/received-invitation-card';
 import { RenameForm } from '../parts/rename-form';
 import { SentInvitations } from '../parts/sent-invitations';
-import { retryText } from '../support/retry-text';
 import { fieldMessage, householdsMessage } from '../support/server-errors';
 
-type Busy = 'rename' | 'delete' | 'leave' | 'remove' | 'invite' | 'cancel' | null;
+type Busy = 'rename' | 'delete' | 'leave' | 'remove' | 'cancel' | null;
 
 @Component({
   selector: 'app-household-page',
@@ -31,16 +31,17 @@ type Busy = 'rename' | 'delete' | 'leave' | 'remove' | 'invite' | 'cancel' | nul
     UiBadge,
     UiButton,
     UiEmptyState,
+    UiIcon,
     UiPage,
     UiSectionHeader,
     UiSkeleton,
-    InviteForm,
     MembersList,
     ReceivedInvitationCard,
     RenameForm,
     SentInvitations,
   ],
   templateUrl: './household.page.html',
+  styleUrl: './household.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HouseholdPage implements OnInit {
@@ -52,14 +53,13 @@ export class HouseholdPage implements OnInit {
   private readonly router = inject(Router);
   private readonly toast = inject(UiToast);
   private readonly translate = inject(TranslateService);
+  private readonly dialog = inject(UiDialog);
 
   protected readonly ready = signal(false);
   protected readonly busy = signal<Busy>(null);
   protected readonly message = signal<string | null>(null);
   protected readonly renaming = signal(false);
   protected readonly renameError = signal<string | null>(null);
-  protected readonly inviteError = signal<string | null>(null);
-  private readonly inviteForm = viewChild(InviteForm);
   protected readonly answering = signal<{ id: string; answer: InvitationAnswer } | null>(null);
   protected readonly selfId = computed(() => this.session.account()?.id ?? null);
 
@@ -114,19 +114,9 @@ export class HouseholdPage implements OnInit {
     else await this.fail(result.error);
   }
 
-  protected async invite(email: string): Promise<void> {
-    this.inviteError.set(null);
-    const result = await this.run('invite', () => this.household.invite(email));
-    if (result.outcome === 'done') {
-      this.inviteForm()?.clear();
-      this.toast.show({ message: this.translate.instant('households.household.invite.sent') });
-      return;
-    }
-    if (result.error.code === 'household.not_found') {
-      await this.gone();
-      return;
-    }
-    this.inviteError.set(this.inviteMessage(result.error));
+  protected async openInvite(): Promise<void> {
+    const ref = this.dialog.open<InviteSheetResult, undefined, InviteSheet>(InviteSheet, { size: 'md', presentation: 'auto' });
+    if ((await firstValueFrom(ref.closed, { defaultValue: undefined })) === 'gone') await this.gone();
   }
 
   protected async cancelInvitation(invitation: Invitation): Promise<void> {
@@ -159,13 +149,6 @@ export class HouseholdPage implements OnInit {
     const result = await call();
     this.busy.set(null);
     return result;
-  }
-
-  private inviteMessage(error: ApiError): string {
-    if (error.code === 'request.throttled') {
-      return this.translate.instant('households.household.invite.throttled', { retry: retryText(this.translate, error.retryAfterSeconds) });
-    }
-    return fieldMessage(this.translate, error, 'email') ?? householdsMessage(this.translate, error);
   }
 
   private ask(key: string, params: Record<string, string> = {}): Promise<boolean> {

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Inscription</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#1D4E89}a:hover{color:#163d6c}
+</style>
+</helmet>
+<div class="o-root" style="width: 390px; height: 960px; box-sizing: border-box; padding: 16px 20px 32px; background: #FBF8F3; display: flex; flex-direction: column; gap: 20px; font-family: Inter, sans-serif; color: #1C1A17">
+<a href="SignIn.dc.html" aria-label="Retour" style="width: 44px; height: 44px; margin-left: -12px; display: flex; align-items: center; justify-content: center; color: #1C1A17"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; line-height: 34px; font-weight: 600">Créer un compte</h1>
+<p style="margin: 0; color: #6B6358">Gratuit. Vous inviterez votre famille ensuite.</p>
+</div>
+
+<button type="button" style="min-height: 52px; border: 1px solid #D9D1C4; border-radius: 12px; background: #FFFFFF; font: 500 16px Inter, sans-serif; color: #1C1A17; display: flex; align-items: center; justify-content: center; gap: 10px"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #1D4E89; box-sizing: border-box"></span>Continuer avec Google</button>
+<div style="display: flex; align-items: center; gap: 12px; color: #6B6358; font-size: 13px"><span aria-hidden="true" style="flex: 1; height: 1px; background: #E7E0D5"></span>ou avec votre e-mail<span aria-hidden="true" style="flex: 1; height: 1px; background: #E7E0D5"></span></div>
+
+<form style="display: flex; flex-direction: column; gap: 14px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Prénom
+<input type="text" autocomplete="given-name" value="Sofiane" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; font: 400 16px Inter, sans-serif">
+</label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">E-mail
+<input type="email" autocomplete="email" value="sofiane@exemple.tn" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; font: 400 16px Inter, sans-serif">
+</label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Mot de passe
+<input type="password" autocomplete="new-password" value="motdepasse" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; font: 400 16px Inter, sans-serif">
+<span style="font-size: 13px; font-weight: 400; color: #2D7A4C; display: flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>8 caractères minimum</span>
+</label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Téléphone <span style="font-weight: 400; color: #6B6358">(facultatif)</span>
+<input type="tel" autocomplete="tel" placeholder="+216 20 123 456" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; font: 400 16px Inter, sans-serif">
+</label>
+<label style="display: flex; align-items: flex-start; gap: 12px; font-size: 14px; line-height: 20px; min-height: 44px">
+<input type="checkbox" style="width: 22px; height: 22px; margin: 0; accent-color: #4E6B1F; flex: none">
+<span>J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique de confidentialité</a>.</span>
+</label>
+<a href="Code.dc.html" style="min-height: 52px; border-radius: 12px; background: #4E6B1F; color: #FFFFFF; font: 600 16px Inter, sans-serif; display: flex; align-items: center; justify-content: center; text-decoration: none">Créer mon compte</a>
+</form>
+<p style="margin: 0; text-align: center; font-size: 15px; color: #6B6358">Déjà inscrit ? <a href="SignIn.dc.html" style="font-weight: 600">Se connecter</a></p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":960}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

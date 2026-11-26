@@ -51,6 +51,11 @@ export interface EntryPage {
   readonly nextCursor: string | null;
 }
 
+export interface EntryCollection {
+  readonly items: readonly Entry[];
+  readonly complete: boolean;
+}
+
 export interface EntryDto {
   readonly id: string;
   readonly amount: number;

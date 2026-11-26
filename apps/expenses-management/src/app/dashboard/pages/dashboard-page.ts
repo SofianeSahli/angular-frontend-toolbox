@@ -12,39 +12,32 @@ import { BooksStore } from '../../households/data/books.store';
 import { EntrySheetService } from '../../operations/entry-sheet.service';
 import { Entry } from '../../operations/data/models';
 import { uiLocale } from '../../operations/support/day-groups';
-import { CardStatus, DashboardStore } from '../data/dashboard.store';
+import { DashboardStore, showsToday } from '../data/dashboard.store';
+import { shownStatus } from '../data/card';
+import { AnalysisLinkCard } from '../parts/analysis-link-card';
 import { CardFrame } from '../parts/card-frame';
-import { CategoriesCard } from '../parts/categories-card';
 import { FirstUseCard } from '../parts/first-use-card';
 import { HeroCard } from '../parts/hero-card';
-import { MembersCard, showsMembers } from '../parts/members-card';
 import { NoPlanCard } from '../parts/no-plan-card';
-import { PaceCard } from '../parts/pace-card';
 import { RecentCard } from '../parts/recent-card';
-import { TrendCard } from '../parts/trend-card';
 import { UpcomingCard } from '../parts/upcoming-card';
 import { WatchListCard } from '../parts/watch-list-card';
 import { MIN_MONTH, MONTH_PARAM, maxMonth, monthFromQuery, positionOf } from '../../ledger/month-context';
 
 const DEFAULT_TIMEZONE = 'Africa/Tunis';
 
-export function shownStatus(status: CardStatus): CardStatus {
-  return status === 'idle' ? 'loading' : status;
-}
+export { shownStatus };
 
 @Component({
   selector: 'app-dashboard-page',
   imports: [
+    AnalysisLinkCard,
     CardFrame,
-    CategoriesCard,
     FirstUseCard,
     HeroCard,
-    MembersCard,
     NoPlanCard,
-    PaceCard,
     RecentCard,
     TranslatePipe,
-    TrendCard,
     UiMonthSwitcher,
     UiPage,
     UpcomingCard,
@@ -74,8 +67,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.revision();
     return uiLocale(this.translate.getCurrentLang());
   });
-  protected readonly isHousehold = computed(() => this.book()?.owner.type === 'household');
-  protected readonly showMembers = computed(() => showsMembers(this.isHousehold(), this.store.summary().status, this.store.summary().data));
+  protected readonly todayOnly = computed(() => showsToday(this.month(), this.today()));
   protected readonly shownStatus = shownStatus;
 
   private requested: string | null = null;

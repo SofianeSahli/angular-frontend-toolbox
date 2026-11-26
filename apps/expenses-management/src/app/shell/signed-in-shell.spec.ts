@@ -9,6 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { BooksStore } from '../households/data/books.store';
 import { book, fakeStores } from '../households/testing';
 import { EntrySheetService } from '../operations/entry-sheet.service';
+import { NavDrawerService } from './nav-drawer.service';
 import { SHELL_ICONS } from './shell-icons';
 import { SHELL_BOOK_BOUND, SHELL_TITLE_KEY, SignedInShell } from './signed-in-shell';
 
@@ -17,6 +18,8 @@ class Page {}
 
 const TEXT = {
   shell: { navigation: 'Navigation principale', addExpense: 'Ajouter une dépense', home: 'Accueil', operations: 'Opérations', budget: 'Budget', household: 'Foyer', account: 'Compte', signOut: 'Se déconnecter',
+    menu: 'Menu', recurring: 'Récurrentes', analysis: 'Analyse du mois',
+    drawer: { budgets: 'Budgets', planning: 'Prévoir', householdAndAccount: 'Foyer et compte' },
     books: { switcher: 'Changer de carnet', new: 'Nouveau carnet', limit: 'Limite atteinte' } },
   home: { title: 'Accueil' },
   households: { household: { title: 'Foyer' } },
@@ -36,6 +39,7 @@ async function renderShell(url = '/', books = [book('a')]) {
     signOut: vi.fn(async (): Promise<AuthResult> => ({ outcome: 'done' })),
   };
   const sheets = { openNew: vi.fn() };
+  const menu = { open: vi.fn() };
   const view = await render('<router-outlet />', {
     imports: [RouterOutlet],
     providers: [
@@ -57,6 +61,7 @@ async function renderShell(url = '/', books = [book('a')]) {
       { provide: BooksStore, useValue: stores.books },
       { provide: IDENTITY_CONFIG, useValue: { paths: { signIn: '/connexion' } } },
       { provide: EntrySheetService, useValue: sheets },
+      { provide: NavDrawerService, useValue: menu },
     ],
   });
   TestBed.inject(TranslateService).setTranslation('fr', TEXT);
@@ -64,36 +69,33 @@ async function renderShell(url = '/', books = [book('a')]) {
   await router.navigateByUrl(url);
   await settle();
   view.detectChanges();
-  return { store, router, view, sheets };
+  return { store, router, view, sheets, menu };
 }
 
-describe('SignedInShell', () => {
-  it('shows the brand, the add button, Accueil, Opérations, Budget (rail only), Foyer and Compte (spec 008 REQ-8.1)', async () => {
+describe('SignedInShell (spec 009 REQ-1.1, 1.6, 1.8)', () => {
+  it('lists the drawer destinations in the rail and four tabs on the phone', async () => {
     await renderShell();
     expect(screen.getByText('Olivier')).toBeTruthy();
     const navigations = screen.getAllByRole('navigation', { name: 'Navigation principale', hidden: true });
     expect(navigations).toHaveLength(2);
     const names = navigations.map((navigation) => within(navigation).getAllByRole('link', { hidden: true }).map((link) => link.textContent?.trim()));
-    expect(names).toContainEqual(['Accueil', 'Opérations', 'Budget', 'Foyer', 'Compte']);
-    expect(names).toContainEqual(['Accueil', 'Opérations', 'Foyer', 'Compte']);
-    expect(screen.getAllByRole('link', { name: 'Budget', hidden: true })).toHaveLength(1);
+    expect(names).toContainEqual(['Accueil', 'Opérations', 'Budgets', 'Récurrentes', 'Analyse du mois', 'Foyer', 'Compte']);
+    expect(names).toContainEqual(['Accueil', 'Opérations', 'Budget', 'Récurrentes']);
   });
 
-  it('enables the add buttons on a book-bound route with a selected book and opens the sheet (spec 007 REQ-4.1)', async () => {
-    const { sheets } = await renderShell();
+  it('opens the add sheet from the rail and the raised tab action', async () => {
+    const { sheets, view } = await renderShell();
     const adds = screen.getAllByRole('button', { name: 'Ajouter une dépense', hidden: true });
     expect(adds).toHaveLength(2);
-    for (const add of adds) expect(add).toHaveProperty('disabled', false);
-    await userEvent.click(adds[0]);
-    await userEvent.click(adds[1]);
+    for (const add of adds) await userEvent.click(add);
     expect(sheets.openNew).toHaveBeenCalledTimes(2);
-  });
-
-  it('puts the phone add action in the bottom tabs, not in the top bar', async () => {
-    const { view } = await renderShell();
     const tabs = view.container.querySelector('ui-bottom-tabs') as HTMLElement;
     expect(within(tabs).getByRole('button', { name: 'Ajouter une dépense', hidden: true }).hasAttribute('uiTabAction')).toBe(true);
-    expect(within(view.container.querySelector('ui-top-bar') as HTMLElement).queryByRole('button', { name: 'Ajouter une dépense', hidden: true })).toBeNull();
+  });
+
+  it('keeps the add action on a page reached from the drawer', async () => {
+    await renderShell('/foyer');
+    for (const add of screen.getAllByRole('button', { name: 'Ajouter une dépense', hidden: true })) expect(add).toHaveProperty('disabled', false);
   });
 
   it('disables the rail add button and hides the tab action without a selected book', async () => {
@@ -103,32 +105,28 @@ describe('SignedInShell', () => {
     expect(adds[0]).toHaveProperty('disabled', true);
   });
 
-  it('disables the add button on a route that is not book-bound', async () => {
-    await renderShell('/foyer');
-    const adds = screen.getAllByRole('button', { name: 'Ajouter une dépense', hidden: true });
-    expect(adds).toHaveLength(1);
-    expect(adds[0]).toHaveProperty('disabled', true);
+  it('opens the drawer from the menu button, and on its books from the book name', async () => {
+    const { menu } = await renderShell('/');
+    const banner = screen.getByRole('banner', { hidden: true });
+    await userEvent.click(within(banner).getByRole('button', { name: 'Menu', hidden: true }));
+    expect(menu.open).toHaveBeenLastCalledWith(null);
+    const bookButton = within(banner).getByRole('button', { name: /Changer de carnet/, hidden: true });
+    expect(bookButton.textContent).toContain('Carnet a');
+    await userEvent.click(bookButton);
+    expect(menu.open).toHaveBeenLastCalledWith('books');
   });
 
-  it('marks the current destination and shows its title in the top bar', async () => {
-    await renderShell('/compte');
-    for (const link of screen.getAllByRole('link', { name: 'Compte', hidden: true })) expect(link.getAttribute('aria-current')).toBe('page');
-    for (const link of screen.getAllByRole('link', { name: 'Accueil', hidden: true })) expect(link.getAttribute('aria-current')).toBeNull();
-    expect(screen.getByRole('banner', { hidden: true }).textContent).toContain('Mon compte');
-  });
-
-  it('shows the book switcher instead of the title on a book-bound route', async () => {
+  it('links the avatar to the account page', async () => {
     await renderShell('/');
     const banner = screen.getByRole('banner', { hidden: true });
-    expect(within(banner).getByRole('button', { name: /Changer de carnet/, hidden: true }).textContent).toContain('Carnet a');
-    expect(banner.textContent).not.toContain('Accueil');
-    expect(screen.getAllByRole('button', { name: /Changer de carnet/, hidden: true })).toHaveLength(2);
+    expect(within(banner).getByRole('link', { name: 'Compte', hidden: true }).getAttribute('href')).toBe('/compte');
   });
 
-  it('shows the title and no switcher on a route that is not book-bound', async () => {
-    await renderShell('/foyer');
-    expect(screen.getByRole('banner', { hidden: true }).textContent).toContain('Foyer');
-    expect(screen.queryByRole('button', { name: /Changer de carnet/, hidden: true })).toBeNull();
+  it('marks no tab on a page reached only from the drawer, and shows its title', async () => {
+    const { view } = await renderShell('/compte');
+    const tabs = view.container.querySelector('ui-bottom-tabs') as HTMLElement;
+    for (const link of within(tabs).getAllByRole('link', { hidden: true })) expect(link.getAttribute('aria-current')).toBeNull();
+    expect(screen.getByRole('banner', { hidden: true }).textContent).toContain('Mon compte');
   });
 
   it('shows the title when there is no book', async () => {

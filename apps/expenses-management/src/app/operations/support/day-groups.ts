@@ -1,5 +1,5 @@
 import { UiListGroup } from '@shared/ui-organisms';
-import { addDays } from '@shared/util-format';
+import { CurrencyFormat, addDays, formatMinor } from '@shared/util-format';
 import { Entry } from '../data/models';
 
 export interface DayLabels {
@@ -35,8 +35,20 @@ export function dayLabel(iso: string, today: string, labels: DayLabels): string 
   return longDate(iso, labels.locale);
 }
 
-export function dayGroups(entries: readonly Entry[], today: string, labels: DayLabels): UiListGroup<Entry>[] {
-  const groups: { key: string; label: string; items: Entry[] }[] = [];
+export interface DayTotalsOptions {
+  readonly currency: CurrencyFormat;
+  readonly lastDayComplete: boolean;
+}
+
+export function dayTotal(entries: readonly Entry[], currency: CurrencyFormat): string {
+  const income = entries.filter((entry) => entry.type === 'income').reduce((sum, entry) => sum + entry.amount, 0);
+  const outflow = entries.filter((entry) => entry.type !== 'income').reduce((sum, entry) => sum + entry.amount, 0);
+  const parts = [...(income > 0 ? [formatMinor(income, currency, { signed: true })] : []), ...(outflow > 0 || income === 0 ? [formatMinor(outflow, currency)] : [])];
+  return parts.join(' · ');
+}
+
+export function dayGroups(entries: readonly Entry[], today: string, labels: DayLabels, totals?: DayTotalsOptions): UiListGroup<Entry>[] {
+  const groups: { key: string; label: string; total?: string; items: Entry[] }[] = [];
   for (const entry of entries) {
     const last = groups[groups.length - 1];
     if (last?.key === entry.date) last.items.push(entry);
@@ -47,5 +59,8 @@ export function dayGroups(entries: readonly Entry[], today: string, labels: DayL
         items: [entry],
       });
   }
-  return groups;
+  if (totals === undefined) return groups;
+  return groups.map((group, index) =>
+    index === groups.length - 1 && !totals.lastDayComplete ? group : { ...group, total: dayTotal(group.items, totals.currency) },
+  );
 }

@@ -1,0 +1,49 @@
+<ui-dialog-header [title]="'households.invite.title' | translate" />
+<div uiDialogBody class="d-flex flex-column gap-3">
+  <div class="d-flex gap-2" role="tablist" [attr.aria-label]="'households.invite.tabs' | translate">
+    @for (item of tabs; track item) {
+      <button
+        uiButton
+        size="sm"
+        type="button"
+        role="tab"
+        [id]="'invite-tab-' + item"
+        [variant]="tab() === item ? 'primary' : 'secondary'"
+        [attr.aria-selected]="tab() === item"
+        [attr.aria-controls]="'invite-panel-' + item"
+        [attr.tabindex]="tab() === item ? 0 : -1"
+        (click)="select(item)"
+        (keydown)="onTabKey($event)"
+      >
+        {{ 'households.invite.' + item | translate }}
+      </button>
+    }
+  </div>
+
+  @if (tab() === 'email') {
+    <div role="tabpanel" id="invite-panel-email" aria-labelledby="invite-tab-email" class="d-flex flex-column gap-2">
+      <app-invite-form [busy]="busy()" [serverError]="inviteError()" (invite)="invite($event)" />
+      <p class="m-0 small">{{ 'households.invite.emailNote' | translate }}</p>
+    </div>
+  } @else {
+    <div role="tabpanel" id="invite-panel-qr" aria-labelledby="invite-tab-qr" class="d-flex flex-column gap-3 text-center">
+      @if (qrError(); as message) {
+        <ui-alert tone="danger">{{ message }}</ui-alert>
+      }
+      @if (code(); as shown) {
+        <app-qr-code [text]="shown.link" [label]="'households.qr.label' | translate" [expired]="expired()" />
+        <p class="m-0" aria-live="polite">
+          @if (expired()) {
+            {{ 'households.qr.expired' | translate }}
+          } @else {
+            {{ 'households.qr.expiresIn' | translate: { time: countdown() } }}
+          }
+        </p>
+        <p class="m-0 small">{{ 'households.qr.help' | translate }}</p>
+      }
+      <button uiButton variant="secondary" type="button" class="align-self-center" [loading]="creating()" (click)="newCode()">
+        {{ 'households.qr.newCode' | translate }}
+      </button>
+    </div>
+  }
+</div>

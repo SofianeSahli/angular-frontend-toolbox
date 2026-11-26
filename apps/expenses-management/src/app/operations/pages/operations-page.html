@@ -1,8 +1,4 @@
 <ui-page [title]="'operations.title' | translate">
-  <a uiPageActions uiButton variant="secondary" routerLink="/operations/recurrentes">
-    <ui-icon name="repeat" />
-    {{ 'operations.recurringLink' | translate }}
-  </a>
   <button uiPageActions uiButton variant="primary" type="button" [disabled]="!book()" (click)="add()">
     <ui-icon name="plus" />
     {{ 'operations.add' | translate }}
@@ -20,10 +16,18 @@
     <app-operations-filters
       [filters]="filters"
       [authors]="authors()"
+      [showAuthors]="isHouseholdBook()"
+      [caption]="caption()"
       [locale]="locale()"
       (changed)="operations.setFilters($event)"
       (clear)="operations.clearFilters()"
-    />
+    >
+      <ui-search-field
+        [(value)]="query"
+        [ariaLabel]="'operations.search.label' | translate"
+        [placeholder]="'operations.search.placeholder' | translate"
+      />
+    </app-operations-filters>
   }
 
   @if (failed()) {
@@ -33,6 +37,10 @@
         <button uiButton size="sm" type="button" (click)="retry()">{{ 'operations.list.retry' | translate }}</button>
       </div>
     </ui-alert>
+  }
+
+  @if (searchCapped()) {
+    <p class="m-0" role="status">{{ 'operations.search.partial' | translate }}</p>
   }
 
   @if (book(); as current) {
@@ -51,7 +59,9 @@
   }
 
   <ng-template #emptyState>
-    @if (narrowed()) {
+    @if (searching()) {
+      <ui-empty-state icon="search" [title]="'operations.empty.filteredTitle' | translate" />
+    } @else if (narrowed()) {
       <ui-empty-state icon="inbox" [title]="'operations.empty.filteredTitle' | translate">
         <button uiButton variant="secondary" type="button" (click)="operations.clearFilters()">{{ 'operations.filters.clear' | translate }}</button>
       </ui-empty-state>
@@ -62,7 +72,7 @@
     }
   </ng-template>
 
-  @if (endReached()) {
+  @if (endReached() && !searching()) {
     <p class="text-center mt-3 mb-0" role="status">{{ 'operations.list.end' | translate }}</p>
   }
 </ui-page>

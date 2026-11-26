@@ -35,4 +35,12 @@ describe('RecentCard (spec 008 REQ-3.6)', () => {
     await renderPart(RecentCard, { entries: [], currency: TND, month: '2026-11', today: '2026-11-25' });
     expect(visibleText()).toContain('Aucune opération ce mois-ci');
   });
+
+  it("lists today's entries without day headings and offers to add one when there are none (spec 009 REQ-2.2)", async () => {
+    const add = vi.fn();
+    await renderPart(RecentCard, { entries: [], currency: TND, month: '2026-11', today: '2026-11-25', todayOnly: true }, { add });
+    expect(screen.getByRole('heading', { level: 2 }).textContent).toContain("Aujourd'hui");
+    await userEvent.click(screen.getByRole('button', { name: /Ajouter/ }));
+    expect(add).toHaveBeenCalled();
+  });
 });

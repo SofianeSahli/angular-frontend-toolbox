@@ -18,6 +18,10 @@ describe('HouseholdPage', () => {
 
   const open = () => renderPage(HouseholdPage, stores, '/foyer');
   const button = (name: string) => screen.getByRole('button', { name: new RegExp(name) });
+  const removeSami = async () => {
+    await userEvent.click(screen.getByRole('button', { name: /Options pour/ }));
+    await userEvent.click(await screen.findByRole('menuitem', { name: new RegExp(t.remove) }));
+  };
 
   describe('without a household', () => {
     it('shows the empty state with "Créer un foyer" and the received invitations', async () => {
@@ -67,7 +71,7 @@ describe('HouseholdPage', () => {
       expect(button(t.rename)).toBeTruthy();
       expect(button(t.delete)).toBeTruthy();
       expect(screen.queryByRole('button', { name: t.leave })).toBeNull();
-      expect(screen.getAllByRole('button', { name: new RegExp(t.remove) })).toHaveLength(1);
+      expect(screen.getAllByRole('button', { name: /Options pour/ })).toHaveLength(1);
       expect(stores.household.loadDetail).toHaveBeenCalled();
     });
 
@@ -174,7 +178,7 @@ describe('HouseholdPage', () => {
     describe('remove member', () => {
       it('asks, removes and shows a toast', async () => {
         const view = await open();
-        await userEvent.click(button(t.remove));
+        await removeSami();
         await settle();
         expect(stores.confirm.ask).toHaveBeenCalledWith(expect.objectContaining({ title: t.removeConfirm.title, tone: 'danger' }));
         expect(stores.household.removeMember).toHaveBeenCalledWith('u2');
@@ -184,7 +188,7 @@ describe('HouseholdPage', () => {
       it('does nothing when declined', async () => {
         stores.confirm.ask.mockResolvedValue(false);
         await open();
-        await userEvent.click(button(t.remove));
+        await removeSami();
         await settle();
         expect(stores.household.removeMember).not.toHaveBeenCalled();
       });
@@ -192,7 +196,7 @@ describe('HouseholdPage', () => {
       it('leaves the household on 404 household.not_found', async () => {
         stores.household.removeMember.mockResolvedValue(failed('household.not_found', 404));
         const view = await open();
-        await userEvent.click(button(t.remove));
+        await removeSami();
         await settle();
         expect(view.router.url).toBe('/bienvenue');
       });
@@ -254,6 +258,10 @@ describe('HouseholdPage', () => {
     });
 
     const invite = async (email = 'sami@exemple.tn') => {
+      if (screen.queryByRole('textbox', { name: new RegExp(t.invite.email) }) === null) {
+        await userEvent.click(screen.getByRole('button', { name: fr.households.invite.open }));
+        await settle();
+      }
       await userEvent.type(screen.getByRole('textbox', { name: new RegExp(t.invite.email) }), email);
       await userEvent.click(screen.getByRole('button', { name: t.invite.submit }));
       await settle();
@@ -333,7 +341,7 @@ describe('HouseholdPage', () => {
     it('never shows invitation controls to a member', async () => {
       stores.household.household.set(memberOf);
       await open();
-      expect(screen.queryByRole('textbox', { name: new RegExp(t.invite.email) })).toBeNull();
+      expect(screen.queryByRole('button', { name: fr.households.invite.open })).toBeNull();
       expect(screen.queryByText(t.noInvitations)).toBeNull();
     });
   });

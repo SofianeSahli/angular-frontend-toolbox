@@ -1,0 +1,42 @@
+@layer ui {
+  :host {
+    --ui-amount-keypad-disabled-opacity: 0.4;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--ui-space-2);
+  }
+
+  .ui-amount-keypad__key {
+    min-block-size: var(--ui-control-height-lg);
+    border: 0;
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface-sunken);
+    color: var(--ui-color-ink);
+    font: inherit;
+    font-size: var(--ui-text-title-2-size);
+    font-weight: var(--ui-text-body-strong-weight);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background-color var(--ui-duration-fast) var(--ui-easing-standard);
+  }
+
+  .ui-amount-keypad__key--action {
+    background: transparent;
+  }
+
+  .ui-amount-keypad__key:active:not(:disabled) {
+    background: var(--ui-color-line);
+  }
+
+  .ui-amount-keypad__key:disabled {
+    opacity: var(--ui-amount-keypad-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  .ui-amount-keypad__key:focus-visible {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+    outline-offset: var(--ui-focus-ring-offset);
+  }
+}

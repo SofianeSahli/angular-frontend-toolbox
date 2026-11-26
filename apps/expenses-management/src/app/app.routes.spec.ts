@@ -40,7 +40,7 @@ function navigateAs(status: 'anonymous' | 'authenticated', unavailable = false, 
       { provide: HouseholdStore, useValue: stores.household },
       { provide: InvitationsStore, useValue: stores.invitations },
       { provide: CategoriesApi, useValue: { tree: () => of('notModified') } },
-      { provide: EntriesApi, useValue: { page: () => of({ items: [], nextCursor: null }) } },
+      { provide: EntriesApi, useValue: { page: () => of({ items: [], nextCursor: null }), collect: () => of({ items: [], complete: true }) } },
       { provide: BudgetApi, useValue: { get: () => of(NO_PLAN) } },
       { provide: SummaryApi, useValue: { get: () => of(summary()) } },
       { provide: RecurringApi, useValue: { list: () => of([]) } },
@@ -143,26 +143,38 @@ describe('app routes', () => {
       expect(await navigateAs('authenticated')('/budget?mois=2026-11')).toBe('/budget?mois=2026-11');
     });
 
-    it('opens the recurring operations, not the operations page (spec 008 REQ-6.1)', async () => {
+    it('opens the recurring tab at /recurrentes (spec 009 REQ-1.7)', async () => {
       const navigate = navigateAs('authenticated');
-      expect(await navigate('/operations/recurrentes')).toBe('/operations/recurrentes');
+      expect(await navigate('/recurrentes')).toBe('/recurrentes');
       const route = TestBed.inject(Router).routerState.snapshot.root.firstChild?.firstChild;
-      expect(route?.routeConfig?.path).toBe('operations/recurrentes');
       expect(route?.data['titleKey']).toBe('recurring.title');
     });
 
-    it('declares the recurring operations before the operations page', () => {
-      const children = appRoutes.find((route) => route.children?.some((child) => child.path === 'operations'))?.children ?? [];
-      const paths = children.map((child) => child.path);
-      expect(paths.indexOf('operations/recurrentes')).toBeLessThan(paths.indexOf('operations'));
-      expect(paths).toContain('budget');
+    it('redirects the old recurring path, keeping its query parameters (spec 009 REQ-1.7)', async () => {
+      expect(await navigateAs('authenticated')('/operations/recurrentes?mois=2026-10')).toBe('/recurrentes?mois=2026-10');
+    });
+
+    it('opens the month analysis in the shell (spec 009 REQ-1.7)', async () => {
+      expect(await navigateAs('authenticated')('/analyse?mois=2026-10')).toBe('/analyse?mois=2026-10');
+    });
+
+    it('sends a user without a book from the analysis to the welcome page', async () => {
+      expect(await navigateAs('authenticated', false, fakeStores())('/analyse')).toBe('/bienvenue');
+    });
+
+    it('sends a signed-out visitor from the join page to sign-in, keeping the token in the return URL (spec 009 REQ-11.4)', async () => {
+      expect(await navigateAs('anonymous')('/rejoindre#tok')).toBe(`/connexion?returnUrl=${encodeURIComponent('/rejoindre#tok')}`);
+    });
+
+    it('sends the old reset-password path to the forgot-password page (spec 009 REQ-13.4)', async () => {
+      expect(await navigateAs('anonymous')('/mot-de-passe/nouveau')).toBe('/mot-de-passe-oublie');
     });
 
     it('sends a user without a book from the budget to the welcome page', async () => {
       expect(await navigateAs('authenticated', false, fakeStores())('/budget')).toBe('/bienvenue');
     });
 
-    it.each(['/bienvenue', '/foyer', '/foyer/nouveau', '/carnets/nouveau', '/operations', '/budget', '/operations/recurrentes'])('sends a signed-out visitor from %s to sign-in', async (url) => {
+    it.each(['/bienvenue', '/foyer', '/foyer/nouveau', '/carnets/nouveau', '/operations', '/budget', '/recurrentes', '/analyse'])('sends a signed-out visitor from %s to sign-in', async (url) => {
       expect(await navigateAs('anonymous')(url)).toBe(`/connexion?returnUrl=${encodeURIComponent(url)}`);
     });
 
@@ -173,7 +185,9 @@ describe('app routes', () => {
         newHousehold: '/foyer/nouveau',
         newBook: '/carnets/nouveau',
         operations: '/operations',
-        recurring: '/operations/recurrentes',
+        recurring: '/recurrentes',
+        analysis: '/analyse',
+        join: '/rejoindre',
         budget: '/budget',
       });
     });

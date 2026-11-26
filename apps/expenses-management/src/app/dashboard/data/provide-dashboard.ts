@@ -2,13 +2,7 @@ import { EnvironmentProviders, computed, effect, inject, provideEnvironmentIniti
 import { SessionStore } from '@shared/identity-data-access';
 import { BooksStore } from '../../households/data/books.store';
 import { LedgerChanges, affects } from '../../ledger/ledger-changes';
-import { addMonths } from '../../ledger/month-context';
 import { DashboardStore } from './dashboard.store';
-
-function touchesHistory(months: readonly string[] | 'all', shown: string | null): boolean {
-  if (shown === null || months === 'all') return false;
-  return months.some((month) => month < shown && month >= addMonths(shown, -5));
-}
 
 export function provideDashboard(): EnvironmentProviders {
   return provideEnvironmentInitializer(() => {
@@ -43,10 +37,7 @@ export function provideDashboard(): EnvironmentProviders {
       untracked(() => {
         if (change === null) return;
         if (affects(change, dashboard.bookId(), dashboard.month())) dashboard.refresh(change.kind);
-        else if (change.kind === 'ledger' && change.bookId === dashboard.bookId()) {
-          dashboard.recheckFirstUse();
-          if (touchesHistory(change.months, dashboard.month())) dashboard.refresh('history');
-        }
+        else if (change.kind === 'ledger' && change.bookId === dashboard.bookId()) dashboard.recheckFirstUse();
       });
     });
   });

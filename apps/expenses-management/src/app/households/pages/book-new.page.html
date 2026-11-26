@@ -40,7 +40,7 @@
   </form>
   <div uiFlowFooter>
     <button uiButton variant="primary" type="submit" form="book-form" [loading]="submitting()">
-      {{ 'households.newBook.submit' | translate }}
+      {{ (firstRun ? 'households.newBook.submitFirst' : 'households.newBook.submit') | translate }}
     </button>
   </div>
 </ui-flow-layout>

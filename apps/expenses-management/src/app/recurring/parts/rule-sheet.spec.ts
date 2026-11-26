@@ -31,13 +31,15 @@ const failure = (code: string, fields: Record<string, string[]> = {}): RuleWrite
   error: new ApiError('validation', 422, code, fields, null, 'r1'),
 });
 
-async function renderSheet(editing?: RecurringRule) {
+async function renderSheet(editing: RecurringRule = rule('r1')) {
   writeStoredTree({ tops: TREE, etag: null });
   const close = vi.fn();
   const recurring = {
     create: vi.fn<(bookId: string, input: RuleInput) => Promise<RuleWriteResult>>().mockResolvedValue({ outcome: 'done', rule: rule('new') }),
     update: vi.fn<(bookId: string, id: string, patch: unknown) => Promise<RuleWriteResult>>().mockResolvedValue({ outcome: 'done', rule: rule('r1') }),
+    remove: vi.fn<(bookId: string, id: string) => Promise<RuleWriteResult>>().mockResolvedValue({ outcome: 'done', rule: null }),
   };
+  const confirm = { ask: vi.fn().mockResolvedValue(true) };
   const view = await render(RuleSheet, {
     providers: [
       provideTranslateService({ lang: 'fr', loader: provideTranslateLoader(FrLoader) }),
@@ -46,13 +48,13 @@ async function renderSheet(editing?: RecurringRule) {
       { provide: RecurringStore, useValue: recurring },
       { provide: BooksStore, useValue: { selectedBookId: signal('b1'), load: vi.fn().mockResolvedValue({ outcome: 'done' }) } },
       { provide: SessionStore, useValue: { account: signal({ id: 'u1', name: 'Moi' }) } },
-      { provide: UiConfirm, useValue: { ask: vi.fn().mockResolvedValue(true) } },
+      { provide: UiConfirm, useValue: confirm },
       { provide: OtherNamesApi, useValue: { list: vi.fn(() => of(['Garage'])) } },
       { provide: CategoriesApi, useValue: { tree: vi.fn(() => of<TreeAnswer>('notModified')) } },
     ],
   });
   await settle(view);
-  return { ...view, close, recurring, toasts: () => TestBed.inject(UiToast).toasts() };
+  return { ...view, close, recurring, confirm, toasts: () => TestBed.inject(UiToast).toasts() };
 }
 
 async function settle(view: { detectChanges(): void }) {
@@ -69,34 +71,13 @@ function fill(view: { detectChanges(): void }, label: RegExp, value: string) {
   view.detectChanges();
 }
 
-describe('RuleSheet (spec 008 REQ-6.3–6.5, 6.8)', () => {
+describe('RuleSheet, edit only (spec 008 REQ-6.4, 6.5, 6.8; spec 009 REQ-10.4)', () => {
   afterEach(() => localStorage.clear());
 
-  it('creates a monthly rule from today, warning that past entries are made at once', async () => {
-    const view = await renderSheet();
-    expect(screen.getByText(fr.recurring.sheet.pastStart)).toBeTruthy();
-    fill(view, /Montant/, '850');
-    view.fixture.componentInstance['setCategory']('food.groceries.supermarket');
-    view.detectChanges();
-    save();
-    await settle(view);
-    expect(view.recurring.create).toHaveBeenCalledWith('b1', {
-      amount: 850000,
-      category: 'food.groceries.supermarket',
-      otherName: null,
-      comment: null,
-      frequency: 'monthly',
-      interval: 1,
-      startsOn: today(),
-      endsOn: null,
-    });
-    expect(view.close).toHaveBeenCalled();
-  });
-
-  it('does not warn for a start in the future', async () => {
-    const view = await renderSheet();
-    fill(view, /Première date/, addDays(today(), 3));
-    expect(screen.queryByText(fr.recurring.sheet.pastStart)).toBeNull();
+  it('offers no creation: the title is the edit title and the next date is shown', async () => {
+    await renderSheet(rule('r1', { next_date: '2026-12-01' }));
+    expect(screen.getByRole('heading', { name: fr.recurring.sheet.editTitle })).toBeTruthy();
+    expect(screen.getByText(/Prochaine/)).toBeTruthy();
   });
 
   it('asks the Other name and shows suggestions on an Other leaf', async () => {
@@ -111,31 +92,26 @@ describe('RuleSheet (spec 008 REQ-6.3–6.5, 6.8)', () => {
   it('confirms a big amount before saving', async () => {
     const view = await renderSheet();
     fill(view, /Montant/, '5000');
-    view.fixture.componentInstance['setCategory']('food.groceries.supermarket');
-    view.detectChanges();
     save();
     await settle(view);
-    expect(view.recurring.create).not.toHaveBeenCalled();
+    expect(view.recurring.update).not.toHaveBeenCalled();
     save();
     await settle(view);
-    expect(view.recurring.create).toHaveBeenCalled();
+    expect(view.recurring.update).toHaveBeenCalledWith('b1', 'r1', { amount: 5000000 });
   });
 
   it('refuses an end before the start', async () => {
-    const view = await renderSheet();
-    fill(view, /Montant/, '10');
-    view.fixture.componentInstance['setCategory']('food.groceries.supermarket');
+    const view = await renderSheet(rule('r1', { starts_on: today() }));
     fill(view, /Dernière date/, addDays(today(), -1));
     save();
     await settle(view);
-    expect(view.recurring.create).not.toHaveBeenCalled();
+    expect(view.recurring.update).not.toHaveBeenCalled();
     expect(screen.getByText(fr.recurring.fields.ends_on.after_or_equal)).toBeTruthy();
   });
 
-  it('sends only the changed fields on edit, with an explanation of what changes', async () => {
+  it('sends only the changed fields, with an explanation of what changes', async () => {
     const view = await renderSheet(rule('r1', { ends_on: '2027-06-30' }));
-    expect(screen.getByText(fr.recurring.sheet.editNote)).toBeTruthy();
-    expect(screen.queryByText(fr.recurring.sheet.pastStart)).toBeNull();
+    expect(view.container.textContent).toContain(fr.recurring.sheet.editNote);
     fill(view, /Dernière date/, '');
     save();
     await settle(view);
@@ -153,34 +129,39 @@ describe('RuleSheet (spec 008 REQ-6.3–6.5, 6.8)', () => {
 
   it('shows field codes on their fields', async () => {
     const view = await renderSheet();
-    view.recurring.create.mockResolvedValueOnce(failure('validation.failed', { interval: ['interval.max'], starts_on: ['starts_on.before_or_equal'] }));
+    view.recurring.update.mockResolvedValueOnce(failure('validation.failed', { interval: ['interval.max'], starts_on: ['starts_on.before_or_equal'] }));
     fill(view, /Montant/, '10');
-    view.fixture.componentInstance['setCategory']('food.groceries.supermarket');
-    view.detectChanges();
     save();
     await settle(view);
     expect(screen.getByText(fr.recurring.fields.interval.max)).toBeTruthy();
     expect(screen.getByText(fr.recurring.fields.starts_on.before_or_equal)).toBeTruthy();
   });
 
-  it('shows the limit of 100 rules', async () => {
-    const view = await renderSheet();
-    view.recurring.create.mockResolvedValueOnce(failure('recurring_rule.limit_reached'));
-    fill(view, /Montant/, '10');
-    view.fixture.componentInstance['setCategory']('food.groceries.supermarket');
-    view.detectChanges();
-    save();
-    await settle(view);
-    expect(screen.getByText(fr.recurring.errors.limit)).toBeTruthy();
-  });
-
   it('closes with a toast when the rule is gone', async () => {
-    const view = await renderSheet(rule('r1'));
+    const view = await renderSheet();
     view.recurring.update.mockResolvedValueOnce(failure('recurring_rule.not_found'));
     fill(view, /Montant/, '900');
     save();
     await settle(view);
     expect(view.close).toHaveBeenCalled();
     expect(view.toasts().map((t) => t.message)).toContain(fr.recurring.toasts.gone);
+  });
+
+  it('stops the rule after a confirmation saying the entries stay (spec 009 REQ-10.4)', async () => {
+    const view = await renderSheet();
+    screen.getByRole('button', { name: fr.recurring.sheet.stop }).click();
+    await settle(view);
+    expect(view.confirm.ask).toHaveBeenCalledWith(expect.objectContaining({ message: fr.recurring.delete.message, tone: 'danger' }));
+    expect(view.recurring.remove).toHaveBeenCalledWith('b1', 'r1');
+    expect(view.close).toHaveBeenCalled();
+    expect(view.toasts().map((t) => t.message)).toContain(fr.recurring.toasts.deleted);
+  });
+
+  it('keeps the rule when stopping is cancelled', async () => {
+    const view = await renderSheet();
+    view.confirm.ask.mockResolvedValueOnce(false);
+    screen.getByRole('button', { name: fr.recurring.sheet.stop }).click();
+    await settle(view);
+    expect(view.recurring.remove).not.toHaveBeenCalled();
   });
 });

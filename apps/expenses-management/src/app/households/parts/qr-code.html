@@ -1,0 +1,4 @@
+<svg class="qr-code__svg" role="img" [attr.aria-label]="label()" [attr.viewBox]="'0 0 ' + symbol().size + ' ' + symbol().size" shape-rendering="crispEdges">
+  <rect class="qr-code__background" [attr.width]="symbol().size" [attr.height]="symbol().size" />
+  <path class="qr-code__modules" [attr.d]="symbol().path" />
+</svg>

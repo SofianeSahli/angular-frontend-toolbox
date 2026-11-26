@@ -1,0 +1,28 @@
+<ul class="ui-month-strip__list">
+  @for (item of months(); track item.month) {
+    <li class="ui-month-strip__item">
+      <button
+        #month
+        type="button"
+        class="ui-month-strip__month"
+        [class.ui-month-strip__month--todo]="item.status === 'todo'"
+        [attr.data-status]="item.status ?? null"
+        [attr.aria-current]="$index === selectedIndex() ? 'date' : null"
+        [attr.tabindex]="$index === focusIndex() ? 0 : -1"
+        (click)="choose(item.month)"
+        (focus)="focusIndex.set($index)"
+        (keydown)="onKeydown($event, $index)"
+      >
+        <span class="ui-month-strip__label">
+          {{ item.label }}
+          @if (item.caption) {
+            <span class="ui-month-strip__caption">{{ item.caption }}</span>
+          }
+        </span>
+        @if (item.statusLabel) {
+          &ngsp;<span class="ui-month-strip__status"><span class="ui-month-strip__dot" aria-hidden="true"></span>{{ item.statusLabel }}</span>
+        }
+      </button>
+    </li>
+  }
+</ul>

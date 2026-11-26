@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Inviter</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#1D4E89}a:hover{color:#163d6c}
+</style>
+</helmet>
+<div class="o-root" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: rgba(28,26,23,0.45); font-family: Inter, sans-serif; color: #1C1A17">
+<section aria-labelledby="inv-title" style="position: absolute; left: 0; right: 0; top: 96px; bottom: 0; background: #FFFFFF; border-radius: 20px 20px 0 0; padding: 8px 16px 24px; display: flex; flex-direction: column; gap: 16px">
+<div aria-hidden="true" style="width: 40px; height: 4px; border-radius: 2px; background: #D9D1C4; margin: 0 auto"></div>
+<header style="display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-top: -8px">
+<h1 id="inv-title" style="margin: 0; font-size: 17px; font-weight: 600">Inviter dans le foyer</h1>
+<a href="Household.dc.html" aria-label="Fermer" style="width: 44px; height: 44px; margin-right: -10px; display: flex; align-items: center; justify-content: center; color: #6B6358"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></a>
+</header>
+<div role="tablist" aria-label="Façon d'inviter" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 12px; background: #F3EEE6">
+<button type="button" role="tab" aria-selected="false" style="min-height: 40px; border: 0; border-radius: 9px; background: transparent; font: 500 14px Inter, sans-serif; color: #1C1A17">Par e-mail</button>
+<button type="button" role="tab" aria-selected="true" style="min-height: 40px; border: 0; border-radius: 9px; background: #FFFFFF; font: 600 14px Inter, sans-serif; color: #1C1A17; box-shadow: 0 1px 2px rgba(28,26,23,0.12)">QR code, sur place</button>
+</div>
+<div role="tabpanel" style="display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<div role="img" aria-label="QR code d'invitation" style="width: 220px; height: 220px; box-sizing: border-box; padding: 16px; border: 1px solid #E7E0D5; border-radius: 16px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{cells}}" as="c" hint-placeholder-count="49"><span style="{{c}}"></span></sc-for>
+</div>
+<p class="num" style="margin: 0; font-weight: 600">Expire dans 9:42</p>
+<p style="margin: 0; font-size: 14px; line-height: 20px; color: #6B6358; max-width: 300px">La personne scanne ce code avec l'appli, connectée à son compte. Il ne sert qu'une fois.</p>
+<button type="button" style="min-height: 44px; border: 0; background: transparent; font: 500 15px Inter, sans-serif; color: #1D4E89">Nouveau code</button>
+</div>
+<p style="margin: auto 0 0; padding: 12px; border-radius: 12px; background: #FBF8F3; font-size: 13px; line-height: 19px; color: #6B6358">Par e-mail : la personne voit l'invitation dans l'appli une fois connectée avec cette adresse ; valable 7 jours.</p>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+var on = '1110111100100110101101110110100101110011110111101';
+return { cells: on.split('').map(function (b) { return 'display: block; aspect-ratio: 1; border-radius: 3px; background: ' + (b === '1' ? '#1C1A17' : 'transparent'); }) };
+}
+}
+</script>
+</body>
+</html>

@@ -33,7 +33,14 @@
 
   @include bp.down(medium) {
     :host {
+      --ui-app-shell-tabs-block-size: calc(var(--ui-control-height-md) + 2 * var(--ui-space-2) + env(safe-area-inset-bottom));
+      --ui-app-shell-dock-offset: var(--ui-app-shell-tabs-block-size);
+
       grid-template-columns: minmax(0, 1fr);
+    }
+
+    :host(.ui-app-shell--tab-action) {
+      --ui-app-shell-dock-offset: calc(var(--ui-app-shell-tabs-block-size) + var(--ui-app-shell-tab-action-clearance));
     }
 
     .ui-app-shell__rail {

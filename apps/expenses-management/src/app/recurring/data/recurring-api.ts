@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { API_CONFIG, handling } from '@shared/http-data-access';
 import { Observable, map } from 'rxjs';
@@ -22,8 +22,7 @@ export class RecurringApi {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = inject(API_CONFIG).baseUrl;
 
-  list(bookId: string): Observable<RecurringRule[]> {
-    const context = handling(...RULE_LIST_CODES);
+  list(bookId: string, context: HttpContext = handling(...RULE_LIST_CODES)): Observable<RecurringRule[]> {
     return fetchAll((cursor) => {
       const params = cursor === null ? new HttpParams() : new HttpParams().set('cursor', cursor);
       return this.http.get<Page<RecurringRuleDto>>(this.url(bookId), { params, context });

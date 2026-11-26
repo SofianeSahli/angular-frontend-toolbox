@@ -35,7 +35,7 @@ export class CookieAuthStrategy implements AuthStrategy {
   }
 }
 
-const NOT_IMPLEMENTED = 'TokenAuthStrategy is not implemented (spec 009: token in secure storage, device_id)';
+const NOT_IMPLEMENTED = 'TokenAuthStrategy is not implemented (spec 011: token in secure storage, device_id)';
 
 @Injectable()
 export class TokenAuthStrategy implements AuthStrategy {

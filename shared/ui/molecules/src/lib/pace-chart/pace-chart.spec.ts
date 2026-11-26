@@ -16,7 +16,11 @@ describe('ui-pace-chart (spec 008 REQ-9.1, 9.2, 9.4)', () => {
     await render(UiPaceChart, { inputs: { days, daysInMonth: 30, label: 'Rythme du mois', summaryText: '700 DT dépensés sur 3 jours' } });
     expect(screen.getByRole('img', { name: '700 DT dépensés sur 3 jours' })).not.toBeNull();
     expect(document.querySelector('caption')?.textContent).toBe('Rythme du mois');
-    expect([...document.querySelectorAll('tbody tr')].map((row) => row.textContent?.replace(/\s+/g, ' ').trim())).toEqual(['1 100', '2 300', '3 700']);
+    expect([...document.querySelectorAll<HTMLTableRowElement>('tbody tr')].map((row) => [...row.cells].map((cell) => cell.textContent?.trim()))).toEqual([
+      ['1', '100'],
+      ['2', '300'],
+      ['3', '700'],
+    ]);
   });
 
   it('draws only the line, with no marker, target or reference by default', async () => {

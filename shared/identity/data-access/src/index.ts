@@ -6,3 +6,4 @@ export * from './lib/session.store';
 export * from './lib/guards';
 export * from './lib/return-url';
 export * from './lib/provide-identity';
+export * from './lib/preferences';

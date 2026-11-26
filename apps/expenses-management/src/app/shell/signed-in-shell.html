@@ -17,18 +17,30 @@
       <ui-icon name="list" />
       {{ 'shell.operations' | translate }}
     </a>
-    <a uiRailItem routerLink="/budget" routerLinkActive ariaCurrentWhenActive="page">
-      <ui-icon name="wallet" />
-      {{ 'shell.budget' | translate }}
-    </a>
-    <a uiRailItem routerLink="/foyer" routerLinkActive ariaCurrentWhenActive="page">
-      <ui-icon name="users" />
-      {{ 'shell.household' | translate }}
-    </a>
-    <a uiRailItem routerLink="/compte" routerLinkActive ariaCurrentWhenActive="page">
-      <ui-icon name="user" />
-      {{ 'shell.account' | translate }}
-    </a>
+    <ui-rail-section [label]="'shell.drawer.planning' | translate">
+      <a uiRailItem routerLink="/budget" routerLinkActive ariaCurrentWhenActive="page">
+        <ui-icon name="wallet" />
+        {{ 'shell.drawer.budgets' | translate }}
+      </a>
+      <a uiRailItem routerLink="/recurrentes" routerLinkActive ariaCurrentWhenActive="page">
+        <ui-icon name="repeat" />
+        {{ 'shell.recurring' | translate }}
+      </a>
+      <a uiRailItem routerLink="/analyse" routerLinkActive ariaCurrentWhenActive="page">
+        <ui-icon name="chart-column" />
+        {{ 'shell.analysis' | translate }}
+      </a>
+    </ui-rail-section>
+    <ui-rail-section [label]="'shell.drawer.householdAndAccount' | translate">
+      <a uiRailItem routerLink="/foyer" routerLinkActive ariaCurrentWhenActive="page">
+        <ui-icon name="users" />
+        {{ 'shell.household' | translate }}
+      </a>
+      <a uiRailItem routerLink="/compte" routerLinkActive ariaCurrentWhenActive="page">
+        <ui-icon name="user" />
+        {{ 'shell.account' | translate }}
+      </a>
+    </ui-rail-section>
 
     <div uiRailFooter class="signed-in-shell__footer">
       <span class="signed-in-shell__name">{{ account()?.name }}</span>
@@ -40,12 +52,21 @@
   </ui-side-rail>
 
   <ui-top-bar uiShellTop>
-    @if (showSwitcher()) {
-      <app-book-switcher uiTopBarTitle variant="bar" />
+    <button uiTopBarLeading uiButton variant="ghost" iconOnly type="button" aria-haspopup="dialog" [attr.aria-label]="'shell.menu' | translate" (click)="openMenu()">
+      <ui-icon name="menu" />
+    </button>
+    @if (showSwitcher() && book(); as current) {
+      <button uiTopBarTitle uiButton variant="ghost" type="button" class="signed-in-shell__book" aria-haspopup="dialog" (click)="openMenu('books')">
+        <span class="visually-hidden">{{ 'shell.books.switcher' | translate }} :</span>
+        <bdi class="text-truncate">{{ current.name }}</bdi>
+        <ui-icon name="chevron-down" />
+      </button>
+    } @else {
+      <span uiTopBarTitle class="signed-in-shell__title">{{ titleKey() ? (titleKey() | translate) : '' }}</span>
     }
-    @if (!showSwitcher()) {
-      <span uiTopBarTitle>{{ titleKey() ? (titleKey() | translate) : '' }}</span>
-    }
+    <a uiTopBarTrailing routerLink="/compte" class="signed-in-shell__avatar" [attr.aria-label]="'shell.account' | translate">
+      <ui-avatar [name]="account()?.name ?? ''" size="sm" decorative />
+    </a>
   </ui-top-bar>
 
   <router-outlet />
@@ -59,13 +80,13 @@
       <ui-icon name="list" />
       {{ 'shell.operations' | translate }}
     </a>
-    <a uiTab routerLink="/foyer" routerLinkActive ariaCurrentWhenActive="page">
-      <ui-icon name="users" />
-      {{ 'shell.household' | translate }}
+    <a uiTab routerLink="/budget" routerLinkActive ariaCurrentWhenActive="page">
+      <ui-icon name="wallet" />
+      {{ 'shell.budget' | translate }}
     </a>
-    <a uiTab routerLink="/compte" routerLinkActive ariaCurrentWhenActive="page">
-      <ui-icon name="user" />
-      {{ 'shell.account' | translate }}
+    <a uiTab routerLink="/recurrentes" routerLinkActive ariaCurrentWhenActive="page">
+      <ui-icon name="repeat" />
+      {{ 'shell.recurring' | translate }}
     </a>
     @if (canAdd()) {
       <button uiTabAction [attr.aria-label]="'shell.addExpense' | translate" (click)="add()">

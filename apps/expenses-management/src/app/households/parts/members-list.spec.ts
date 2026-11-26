@@ -38,12 +38,13 @@ describe('MembersList', () => {
     expect(screen.queryByRole('button', { name: new RegExp(t.remove) })).toBeNull();
   });
 
-  it('offers remove on every other member, never on the own row', async () => {
+  it('offers remove in an options menu on every other member, never on the own row (spec 009, écran 12)', async () => {
     const { remove } = await renderList(true);
     const rows = screen.getAllByRole('listitem');
     expect(within(rows[0]).queryByRole('button')).toBeNull();
-    expect(screen.getAllByRole('button', { name: new RegExp(t.remove) })).toHaveLength(2);
-    await userEvent.click(within(rows[2]).getByRole('button'));
+    expect(screen.getAllByRole('button', { name: /^Options pour/ })).toHaveLength(2);
+    await userEvent.click(within(rows[2]).getByRole('button', { name: /^Options pour/ }));
+    await userEvent.click(screen.getByRole('menuitem', { name: t.remove }));
     expect(remove).toHaveBeenCalledWith(member('u3'));
   });
 });

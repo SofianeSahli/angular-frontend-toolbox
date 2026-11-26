@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { ApiError } from '@shared/http-data-access';
 import { addYears, todayIn } from '@shared/util-format';
 import { Observable, firstValueFrom } from 'rxjs';
 import { BudgetApi } from '../../budget/data/budget-api';
@@ -14,20 +13,14 @@ import { Entry, EntryFilters } from '../../operations/data/models';
 import { RecurringRule } from '../../recurring/data/models';
 import { RecurringApi } from '../../recurring/data/recurring-api';
 import { comparisonRanges } from '../support/same-day';
-import { trendRange } from '../support/trend-series';
-import { MIN_MONTH, addMonths, currentMonth } from '../../ledger/month-context';
+import { MIN_MONTH, currentMonth } from '../../ledger/month-context';
+import { Card, idleCard } from './card';
 import { SummaryApi } from './summary-api';
-import { Summary } from './models';
 
-export type CardStatus = 'idle' | 'loading' | 'ready' | 'error';
-export type CardName = 'budget' | 'summary' | 'comparison' | 'previous' | 'trend' | 'upcoming' | 'recent';
+export type { Card, CardStatus } from './card';
+
+export type CardName = 'budget' | 'comparison' | 'upcoming' | 'recent';
 export type FirstUse = 'unknown' | 'yes' | 'no';
-
-export interface Card<T> {
-  readonly status: CardStatus;
-  readonly data: T | null;
-  readonly error: ApiError | null;
-}
 
 export interface Comparison {
   readonly current: number;
@@ -38,17 +31,12 @@ export const RECENT_SIZE = 5;
 
 const DEFAULT_TIMEZONE = 'Africa/Tunis';
 
-const idle = <T>(): Card<T> => ({ status: 'idle', data: null, error: null });
-
 interface DashboardState {
   bookId: string | null;
   month: string | null;
   today: string | null;
   budget: Card<Budget>;
-  summary: Card<Summary>;
   comparison: Card<Comparison>;
-  previous: Card<Summary>;
-  trend: Card<Summary>;
   upcoming: Card<readonly RecurringRule[]>;
   recent: Card<readonly Entry[]>;
   firstUse: FirstUse;
@@ -56,19 +44,20 @@ interface DashboardState {
 }
 
 const cards = {
-  budget: idle<Budget>(),
-  summary: idle<Summary>(),
-  comparison: idle<Comparison>(),
-  previous: idle<Summary>(),
-  trend: idle<Summary>(),
-  upcoming: idle<readonly RecurringRule[]>(),
-  recent: idle<readonly Entry[]>(),
+  budget: idleCard<Budget>(),
+  comparison: idleCard<Comparison>(),
+  upcoming: idleCard<readonly RecurringRule[]>(),
+  recent: idleCard<readonly Entry[]>(),
 };
 
 const initialState: DashboardState = { bookId: null, month: null, today: null, ...cards, firstUse: 'unknown', active: false };
 
 function filtersFor(from: string, to: string): EntryFilters {
   return { from, to, type: null, category: null, author: null };
+}
+
+export function showsToday(month: string, today: string): boolean {
+  return month === currentMonth(today);
 }
 
 export const DashboardStore = signalStore(
@@ -83,7 +72,7 @@ export const DashboardStore = signalStore(
       entriesApi = inject(EntriesApi),
       books = inject(BooksStore),
     ) => {
-      const generations: Record<CardName | 'firstUse', number> = { budget: 0, summary: 0, comparison: 0, previous: 0, trend: 0, upcoming: 0, recent: 0, firstUse: 0 };
+      const generations: Record<CardName | 'firstUse', number> = { budget: 0, comparison: 0, upcoming: 0, recent: 0, firstUse: 0 };
 
       const todayFor = (bookId: string): string => todayIn(books.books().find((book) => book.id === bookId)?.timezone ?? DEFAULT_TIMEZONE);
 
@@ -140,7 +129,7 @@ export const DashboardStore = signalStore(
         return run('budget', quiet, () => budgetApi.get(at.bookId, at.month), (budget) => {
           if (budget.hasPlan) {
             generations.comparison += 1;
-            patchState(store, { comparison: idle<Comparison>() });
+            patchState(store, { comparison: idleCard<Comparison>() });
           } else void loadComparison(quiet);
         });
       }
@@ -159,24 +148,6 @@ export const DashboardStore = signalStore(
         });
       }
 
-      function loadSummary(quiet: boolean): Promise<void> {
-        const at = context();
-        if (at === null) return Promise.resolve();
-        return run('summary', quiet, () => summaryApi.get(at.bookId, { month: at.month }));
-      }
-
-      function loadPrevious(quiet: boolean): Promise<void> {
-        const at = context();
-        if (at === null) return Promise.resolve();
-        return run('previous', quiet, () => summaryApi.get(at.bookId, { month: addMonths(at.month, -1) }));
-      }
-
-      function loadTrend(quiet: boolean): Promise<void> {
-        const at = context();
-        if (at === null) return Promise.resolve();
-        return run('trend', quiet, () => summaryApi.get(at.bookId, trendRange(at.month)));
-      }
-
       function loadUpcoming(quiet: boolean): Promise<void> {
         const at = context();
         if (at === null) return Promise.resolve();
@@ -186,11 +157,15 @@ export const DashboardStore = signalStore(
       function loadRecent(quiet: boolean): Promise<void> {
         const at = context();
         if (at === null) return Promise.resolve();
-        const range = monthRange(at.month);
+        const today = showsToday(at.month, at.today);
+        const range = today ? { from: at.today, to: at.today } : monthRange(at.month);
         return run(
           'recent',
           quiet,
-          async () => (await firstValueFrom(entriesApi.page(at.bookId, filtersFor(range.from, range.to)))).items.slice(0, RECENT_SIZE),
+          async () => {
+            const items = (await firstValueFrom(entriesApi.page(at.bookId, filtersFor(range.from, range.to)))).items;
+            return today ? items : items.slice(0, RECENT_SIZE);
+          },
           (entries) => {
             if (entries.length > 0) {
               generations.firstUse += 1;
@@ -214,18 +189,12 @@ export const DashboardStore = signalStore(
 
       function loadMonth(quiet: boolean): void {
         void loadBudget(quiet);
-        void loadSummary(quiet);
-        void loadPrevious(quiet);
-        void loadTrend(quiet);
         void loadRecent(quiet);
       }
 
       const loaders: Record<CardName, (quiet: boolean) => Promise<void>> = {
         budget: loadBudget,
-        summary: loadSummary,
         comparison: loadComparison,
-        previous: loadPrevious,
-        trend: loadTrend,
         upcoming: loadUpcoming,
         recent: loadRecent,
       };
@@ -253,13 +222,8 @@ export const DashboardStore = signalStore(
           return loaders[card](false);
         },
 
-        refresh(kind: 'ledger' | 'budget' | 'history'): void {
+        refresh(kind: 'ledger' | 'budget'): void {
           if (context() === null) return;
-          if (kind === 'history') {
-            void loadPrevious(true);
-            void loadTrend(true);
-            return;
-          }
           if (kind === 'budget') {
             void loadBudget(true);
             return;

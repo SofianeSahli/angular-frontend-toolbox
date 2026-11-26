@@ -26,6 +26,28 @@ describe('EntriesApi and OtherNamesApi (REQ-4.8, 6.2, 8.3)', () => {
 
   afterEach(() => http.verify());
 
+  const tick = () => new Promise((resolve) => setTimeout(resolve));
+
+  it('collects pages up to the page cap and says the list is partial (spec 009 REQ-6.2, 7.2)', async () => {
+    const result = firstValueFrom(api.collect('b1', NOVEMBER, { maxPages: 2 }));
+    http.expectOne((r) => r.url === LIST && !r.params.has('cursor')).flush({ data: [entryDto('e1')], meta: { next_cursor: 'c2' } });
+    await tick();
+    http.expectOne((r) => r.params.get('cursor') === 'c2').flush({ data: [entryDto('e2')], meta: { next_cursor: 'c3' } });
+    const answer = await result;
+    expect(answer.items.map((item) => item.id)).toEqual(['e1', 'e2']);
+    expect(answer.complete).toBe(false);
+  });
+
+  it('stops at the item cap, and is complete when the last page comes first (spec 009 REQ-3.3)', async () => {
+    const capped = firstValueFrom(api.collect('b1', NOVEMBER, { maxPages: 5, maxItems: 1 }));
+    http.expectOne((r) => r.url === LIST).flush({ data: [entryDto('e1'), entryDto('e2')], meta: { next_cursor: 'c2' } });
+    expect((await capped).items.map((item) => item.id)).toEqual(['e1']);
+
+    const all = firstValueFrom(api.collect('b1', NOVEMBER, { maxPages: 5 }));
+    http.expectOne((r) => r.url === LIST).flush({ data: [entryDto('e3')], meta: { next_cursor: null } });
+    expect(await all).toEqual({ items: [expect.objectContaining({ id: 'e3' })], complete: true });
+  });
+
   it('lists a page with the month only when no other filter is set', async () => {
     const result = firstValueFrom(api.page('b1', NOVEMBER));
     const request = http.expectOne((r) => r.url === LIST);

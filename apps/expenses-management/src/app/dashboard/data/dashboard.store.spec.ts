@@ -56,38 +56,46 @@ function setup() {
   return { apis, store, selectedBookId, account, load, ledger: TestBed.inject(LedgerChanges) };
 }
 
-describe('DashboardStore (spec 008 REQ-3.7, 3.8, 4.1–4.4, 8.2–8.5)', () => {
-  it('loads every card from its own request', async () => {
+describe('DashboardStore (spec 008 REQ-3.7, 3.8, 4.1–4.4, 8.2–8.5; spec 009 REQ-2.2, 2.3)', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-11-25T10:00:00Z'));
+  });
+
+  afterEach(() => vi.useRealTimers());
+
+  it('loads every card of a past month from its own request, with the five latest entries', async () => {
     const { apis, store } = setup();
-    store.open('b1', '2026-11');
+    store.open('b1', '2026-10');
     await flush();
-    expect(apis.budget.get).toHaveBeenCalledWith('b1', '2026-11');
-    expect(apis.summary.get).toHaveBeenCalledWith('b1', { month: '2026-11' });
+    expect(apis.budget.get).toHaveBeenCalledWith('b1', '2026-10');
+    expect(apis.summary.get).not.toHaveBeenCalled();
     expect(apis.recurring.list).toHaveBeenCalledWith('b1');
-    expect(apis.entries.page).toHaveBeenCalledWith('b1', { from: '2026-11-01', to: '2026-11-30', type: null, category: null, author: null });
-    expect([store.budget().status, store.summary().status, store.upcoming().status, store.recent().status]).toEqual(['ready', 'ready', 'ready', 'ready']);
+    expect(apis.entries.page).toHaveBeenCalledWith('b1', { from: '2026-10-01', to: '2026-10-31', type: null, category: null, author: null });
+    expect([store.budget().status, store.upcoming().status, store.recent().status]).toEqual(['ready', 'ready', 'ready']);
     expect(store.recent().data?.length).toBe(5);
     expect(store.firstUse()).toBe('no');
     expect(store.comparison().status).toBe('idle');
   });
 
-  it('keeps the other cards when one fails', async () => {
+  it("lists all of today's entries for the current month (spec 009 REQ-2.2)", async () => {
     const { apis, store } = setup();
-    apis.summary.get.mockReturnValue(throwError(() => error('http.offline')));
     store.open('b1', '2026-11');
     await flush();
-    expect(store.summary()).toMatchObject({ status: 'error', error: { code: 'http.offline' } });
-    expect(store.budget().status).toBe('ready');
-    expect(store.recent().status).toBe('ready');
+    expect(apis.entries.page).toHaveBeenCalledWith('b1', { from: '2026-11-25', to: '2026-11-25', type: null, category: null, author: null });
+    expect(store.recent().data?.length).toBe(6);
   });
 
-  it('retries one card', async () => {
+  it('keeps the other cards when one fails, and retries it', async () => {
     const { apis, store } = setup();
-    apis.summary.get.mockReturnValueOnce(throwError(() => error('http.offline')));
+    apis.recurring.list.mockReturnValueOnce(throwError(() => error('http.offline')));
     store.open('b1', '2026-11');
     await flush();
-    await store.reload('summary');
-    expect(store.summary().status).toBe('ready');
+    expect(store.upcoming()).toMatchObject({ status: 'error', error: { code: 'http.offline' } });
+    expect(store.budget().status).toBe('ready');
+    expect(store.recent().status).toBe('ready');
+    await store.reload('upcoming');
+    expect(store.upcoming().status).toBe('ready');
   });
 
   it('compares with the previous month only without a plan', async () => {
@@ -167,7 +175,7 @@ describe('DashboardStore (spec 008 REQ-3.7, 3.8, 4.1–4.4, 8.2–8.5)', () => {
     store.open('b1', '2026-11');
     await flush();
     apis.budget.get.mockClear();
-    apis.summary.get.mockClear();
+    apis.entries.page.mockClear();
     ledger.changed('b1', ['2026-10']);
     TestBed.tick();
     ledger.changed('b2', ['2026-11']);
@@ -176,64 +184,22 @@ describe('DashboardStore (spec 008 REQ-3.7, 3.8, 4.1–4.4, 8.2–8.5)', () => {
     ledger.changed('b1', ['2026-11']);
     TestBed.tick();
     expect(apis.budget.get).toHaveBeenCalled();
-    expect(apis.summary.get).toHaveBeenCalled();
-    expect(store.summary().status).toBe('ready');
+    expect(apis.entries.page).toHaveBeenCalled();
   });
 
-  it('loads the previous month and the six-month summary beside the others (REQ-9.11)', async () => {
-    const { apis, store } = setup();
-    store.open('b1', '2026-11');
-    await flush();
-    expect(apis.summary.get).toHaveBeenCalledWith('b1', { month: '2026-10' });
-    expect(apis.summary.get).toHaveBeenCalledWith('b1', { from: '2026-06-01', to: '2026-11-30' });
-    expect([store.previous().status, store.trend().status]).toEqual(['ready', 'ready']);
-  });
 
-  it('keeps the hero and the other cards when the previous month or the trend fails (REQ-9.11)', async () => {
-    const { apis, store } = setup();
-    apis.summary.get.mockImplementation((_book, period) =>
-      'month' in period && period.month === '2026-10'
-        ? throwError(() => error('http.offline'))
-        : 'from' in period && period.from === '2026-06-01'
-          ? throwError(() => error('http.unknown', 500))
-          : of(summary()),
-    );
-    store.open('b1', '2026-11');
-    await flush();
-    expect(store.previous().status).toBe('error');
-    expect(store.trend().status).toBe('error');
-    expect([store.budget().status, store.summary().status, store.recent().status]).toEqual(['ready', 'ready', 'ready']);
-    apis.summary.get.mockReturnValue(of(summary()));
-    await store.reload('trend');
-    expect(store.trend().status).toBe('ready');
-  });
 
-  it('refetches the previous month and the trend when an earlier month of the window changes', async () => {
-    const { apis, store, ledger } = setup();
-    store.open('b1', '2026-11');
-    await flush();
-    apis.budget.get.mockClear();
-    apis.summary.get.mockClear();
-    ledger.changed('b1', ['2026-08']);
-    TestBed.tick();
-    expect(apis.budget.get).not.toHaveBeenCalled();
-    expect(apis.summary.get).toHaveBeenCalledTimes(2);
-    apis.summary.get.mockClear();
-    ledger.changed('b1', ['2026-03']);
-    TestBed.tick();
-    expect(apis.summary.get).not.toHaveBeenCalled();
-  });
 
   it('refetches only the budget after a budget write', async () => {
     const { apis, store, ledger } = setup();
     store.open('b1', '2026-11');
     await flush();
     apis.budget.get.mockClear();
-    apis.summary.get.mockClear();
+    apis.entries.page.mockClear();
     ledger.budgetChanged('b1', '2026-11');
     TestBed.tick();
     expect(apis.budget.get).toHaveBeenCalledTimes(1);
-    expect(apis.summary.get).not.toHaveBeenCalled();
+    expect(apis.entries.page).not.toHaveBeenCalled();
   });
 
   it('reloads every card for a new book while shown, keeping the month', async () => {

@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ApiError } from '@shared/http-data-access';
-import { AuthResult, SessionStore } from '@shared/identity-data-access';
+import { AuthResult, IDENTITY_PREFERENCES, SessionStore } from '@shared/identity-data-access';
 import { UiBadge, UiButton, UiFieldMessage } from '@shared/ui-atoms';
-import { UiCodeInput, UiList, UiListItem, UiSectionHeader } from '@shared/ui-molecules';
+import { UiCodeInput, UiList, UiListItem, UiSectionHeader, UiSegmentedControl, UiSegmentedOption } from '@shared/ui-molecules';
 import { UiToast } from '@shared/ui-organisms';
 import { UiPage } from '@shared/ui-templates';
+import { THEME_CHOICES, ThemeChoice, UiThemeService } from '@shared/ui-tokens';
 import { AuthNavigation } from '../../shared/auth-navigation';
 import { serverMessage } from '../../shared/server-errors';
 
@@ -17,7 +18,20 @@ const CODE_PATTERN = /^\d{6}$/;
 
 @Component({
   selector: 'identity-account-page',
-  imports: [ReactiveFormsModule, TranslatePipe, UiBadge, UiButton, UiCodeInput, UiFieldMessage, UiList, UiListItem, UiPage, UiSectionHeader],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    TranslatePipe,
+    UiBadge,
+    UiButton,
+    UiCodeInput,
+    UiFieldMessage,
+    UiList,
+    UiListItem,
+    UiPage,
+    UiSectionHeader,
+    UiSegmentedControl,
+  ],
   templateUrl: './account.page.html',
   styleUrl: '../../shared/identity-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,6 +43,20 @@ export class AccountPage {
   private readonly navigation = inject(AuthNavigation);
   protected readonly account = this.store.account;
   protected readonly codeLength = CODE_LENGTH;
+  protected readonly theme = inject(UiThemeService);
+  protected readonly preferences = inject(IDENTITY_PREFERENCES, { optional: true });
+  protected readonly themeOptions = computed<readonly UiSegmentedOption<ThemeChoice>[]>(() => {
+    this.preferences?.language();
+    return THEME_CHOICES.map((value) => ({ value, label: this.translate.instant(`identity.account.themes.${value}`) }));
+  });
+
+  protected setTheme(choice: ThemeChoice | null): void {
+    if (choice !== null) this.theme.setChoice(choice);
+  }
+
+  protected setLanguage(language: string | null): void {
+    if (language !== null) this.preferences?.useLanguage(language);
+  }
 
   protected readonly disableForm = inject(NonNullableFormBuilder).group({
     code: ['', [Validators.required, Validators.pattern(CODE_PATTERN)]],

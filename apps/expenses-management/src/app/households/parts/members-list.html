@@ -16,12 +16,18 @@
             uiButton
             variant="ghost"
             size="sm"
+            iconOnly
             type="button"
-            [attr.aria-label]="('households.household.remove' | translate) + ' ' + person.name"
-            (click)="remove.emit(person)"
+            [attr.aria-label]="'households.household.memberOptions' | translate: { name: person.name }"
+            [uiMenuTriggerFor]="options"
           >
-            {{ 'households.household.remove' | translate }}
+            <ui-icon name="ellipsis" />
           </button>
+          <ng-template #options>
+            <ui-menu>
+              <button uiMenuItem icon="trash" (triggered)="remove.emit(person)">{{ 'households.household.remove' | translate }}</button>
+            </ui-menu>
+          </ng-template>
         }
       </span>
     </li>

@@ -100,7 +100,9 @@
     "forgotPassword": {
       "title": "Forgot password",
       "lead": "Enter your email: if an account exists, we'll send you a code to choose a new password.",
-      "submit": "Get a code"
+      "submit": "Get a code",
+      "step": "Step {{current}} of {{total}}",
+      "changeEmail": "Change e-mail address"
     },
     "resetPassword": {
       "title": "New password",
@@ -135,7 +137,15 @@
       "confirmDisable": "Turn off two-step sign-in",
       "cancel": "Cancel",
       "twoFactorEnabled": "Two-step sign-in turned on.",
-      "twoFactorDisabled": "Two-step sign-in turned off."
+      "twoFactorDisabled": "Two-step sign-in turned off.",
+      "preferences": "Preferences",
+      "languageChoice": "App language",
+      "theme": "Theme",
+      "themes": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
     }
   }
 }

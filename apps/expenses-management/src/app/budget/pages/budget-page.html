@@ -1,17 +1,7 @@
 <ui-page [title]="'budget.title' | translate">
-  @if (book()) {
-    <ui-month-switcher
-      uiPageActions
-      variant="plain"
-      [month]="shownMonth()"
-      [min]="minMonth"
-      [max]="maxMonth()"
-      [locale]="locale()"
-      (monthChange)="changeMonth($event)"
-    />
-  }
-
   @if (book(); as current) {
+    <ui-month-strip [months]="stripItems()" [selected]="shownMonth()" [ariaLabel]="'budget.strip.label' | translate" (selectedChange)="changeMonth($event)" />
+
     @switch (store.status()) {
       @case ('error') {
         <ui-alert tone="danger">
@@ -25,93 +15,93 @@
         @if (answer(); as plan) {
           @let draftValue = draft();
           <div class="budget-page">
-            <app-budget-overview [budget]="plan" [currency]="current.currency" />
-
-            @if (!plan.hasPlan) {
-              <p class="budget-page__invite m-0">{{ 'budget.noPlan' | translate }}</p>
-            }
-
-            <div class="row g-3">
-              <div class="col-12 col-md-6 d-flex flex-column gap-1">
-                <label uiLabel optional for="budget-income">{{ 'budget.expectedIncome' | translate }}</label>
-                <input
-                  uiInput
-                  id="budget-income"
-                  type="text"
-                  inputmode="decimal"
-                  autocomplete="off"
-                  dir="ltr"
-                  [value]="draftValue.income()"
-                  [attr.aria-invalid]="incomeError() ? 'true' : null"
-                  [attr.aria-describedby]="incomeError() ? 'budget-income-error' : null"
-                  (input)="setIncome($event)"
-                />
-                @if (incomeError(); as message) {
-                  <ui-field-message tone="error" id="budget-income-error">{{ message }}</ui-field-message>
-                }
-              </div>
-              <div class="col-12 col-md-6 d-flex flex-column gap-1">
-                <label uiLabel optional for="budget-saving">{{ 'budget.plannedSaving' | translate }}</label>
-                <input
-                  uiInput
-                  id="budget-saving"
-                  type="text"
-                  inputmode="decimal"
-                  autocomplete="off"
-                  dir="ltr"
-                  [value]="draftValue.saving()"
-                  [attr.aria-invalid]="savingError() ? 'true' : null"
-                  [attr.aria-describedby]="savingError() ? 'budget-saving-error' : null"
-                  (input)="setSaving($event)"
-                />
-                @if (savingError(); as message) {
-                  <ui-field-message tone="error" id="budget-saving-error">{{ message }}</ui-field-message>
-                }
-              </div>
-            </div>
-
-            <section class="d-flex flex-column gap-2" aria-labelledby="budget-lines-title">
-              <div class="d-flex align-items-center justify-content-between gap-2">
-                <h2 class="budget-page__title" id="budget-lines-title">{{ 'budget.lines.title' | translate }}</h2>
-                <button uiButton variant="secondary" size="sm" type="button" (click)="addLine()">
-                  <ui-icon name="plus" />
-                  {{ 'budget.lines.add' | translate }}
+            @if (showEmpty()) {
+              <ui-empty-state icon="inbox" [title]="monthName()" [text]="'budget.empty.text' | translate">
+                <button uiButton variant="primary" type="button" [loading]="store.busy() === 'copying'" [disabled]="busy()" (click)="copy()">
+                  {{ 'budget.empty.copy' | translate: { month: previousMonthName() } }}
                 </button>
-              </div>
-              @if (draftValue.lines().length === 0) {
-                <p class="budget-page__invite m-0">{{ 'budget.lines.empty' | translate }}</p>
-              }
-              @for (line of draftValue.lines(); track line.category) {
-                <app-plan-line-row
-                  [line]="line"
-                  [answer]="answerLines().get(line.category) ?? null"
-                  [currency]="current.currency"
-                  [error]="lineError(line.category)"
-                  [lastMonth]="lastMonths().get(line.category) ?? null"
-                  (textChange)="setLine(line.category, $event)"
-                  (remove)="removeLine(line.category)"
-                />
-              }
-              <app-off-plan-list [budget]="plan" [rows]="offPlanRows()" [currency]="current.currency" (add)="addFromOffPlan($event)" />
-            </section>
+                <button uiButton variant="secondary" type="button" [disabled]="busy()" (click)="startedFresh.set(true)">{{ 'budget.empty.fresh' | translate }}</button>
+              </ui-empty-state>
+            } @else {
+              <app-budget-summary
+                [budget]="plan"
+                [plannedTotal]="draftValue.plannedTotal()"
+                [currency]="current.currency"
+                [copyLabel]="'budget.copy.from' | translate: { month: previousMonthName() }"
+                [copying]="store.busy() === 'copying'"
+                [busy]="busy()"
+                (copyPrevious)="copy()"
+              />
 
-            <section class="d-flex flex-column gap-2" aria-labelledby="budget-totals-title">
-              <h2 class="budget-page__title" id="budget-totals-title">{{ 'budget.totals.title' | translate }}</h2>
-              <app-budget-totals [budget]="plan" [plannedTotal]="draftValue.plannedTotal()" [currency]="current.currency" />
-            </section>
+              <div class="budget-page__rows">
+                <button type="button" class="plan-line plan-line--button budget-page__row" (click)="editIncome()">
+                  <span class="plan-line__head">
+                    <span class="plan-line__name">{{ 'budget.expectedIncome' | translate }}</span>
+                    <bdi class="plan-line__amounts">{{ amountText(draftValue.income()) }}</bdi>
+                  </span>
+                  <span class="plan-line__numbers"><bdi>{{ 'budget.received' | translate: { amount: minorText(plan.income.actual) } }}</bdi></span>
+                </button>
+                @if (incomeError(); as message) {
+                  <ui-alert tone="danger">{{ message }}</ui-alert>
+                }
+                <button type="button" class="plan-line plan-line--button budget-page__row" (click)="editSaving()">
+                  <span class="plan-line__head">
+                    <span class="plan-line__name">{{ 'budget.plannedSaving' | translate }}</span>
+                    <bdi class="plan-line__amounts">{{ amountText(draftValue.saving()) }}</bdi>
+                  </span>
+                  <span class="plan-line__numbers"><bdi>{{ 'budget.savedAmount' | translate: { amount: minorText(plan.saving.actual) } }}</bdi></span>
+                </button>
+                @if (savingError(); as message) {
+                  <ui-alert tone="danger">{{ message }}</ui-alert>
+                }
+              </div>
+
+              <section class="d-flex flex-column gap-2" aria-labelledby="budget-lines-title">
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                  <h2 class="budget-page__title" id="budget-lines-title">{{ 'budget.lines.title' | translate }}</h2>
+                  <button uiButton variant="secondary" size="sm" type="button" (click)="addLine()">
+                    <ui-icon name="plus" />
+                    {{ 'budget.lines.add' | translate }}
+                  </button>
+                </div>
+                @if (draftValue.lines().length === 0) {
+                  <p class="budget-page__invite m-0">{{ 'budget.lines.empty' | translate }}</p>
+                }
+                @for (line of draftValue.lines(); track line.category) {
+                  <app-plan-line-row
+                    [line]="line"
+                    [answer]="answerLines().get(line.category) ?? null"
+                    [currency]="current.currency"
+                    [error]="lineError(line.category)"
+                    [lastMonth]="lastMonths().get(line.category) ?? null"
+                    (open)="editLine(line.category)"
+                  />
+                }
+                <app-off-plan-list [budget]="plan" [rows]="offPlanRows()" [currency]="current.currency" (add)="addFromOffPlan($event)" />
+              </section>
+            }
 
             @if (notice(); as text) {
               <ui-alert tone="danger">{{ text }}</ui-alert>
             }
 
-            <div class="budget-page__actions">
-              <button uiButton variant="secondary" type="button" [loading]="store.busy() === 'copying'" [disabled]="busy()" (click)="copy()">
-                {{ 'budget.copy.action' | translate }}
-              </button>
-              <button uiButton variant="primary" type="button" [loading]="store.busy() === 'saving'" [disabled]="busy() || !draftValue.dirty()" (click)="save()">
-                {{ 'budget.save' | translate }}
-              </button>
-            </div>
+            @if (showKnown()) {
+              <app-known-rules-card [rules]="knownRules()" [month]="month()" [monthName]="monthName()" [currency]="current.currency" />
+            }
+            @if (future()) {
+              <p class="budget-page__invite m-0">{{ 'budget.aheadLimit' | translate }}</p>
+            }
+
+            @if (draftValue.dirty()) {
+              <ui-save-bar
+                [text]="saveBarText()"
+                [primaryLabel]="'budget.save' | translate"
+                [secondaryLabel]="'budget.saveBar.discard' | translate"
+                [busy]="store.busy() === 'saving'"
+                (primary)="save()"
+                (secondary)="discard()"
+              />
+            }
           </div>
         }
       }

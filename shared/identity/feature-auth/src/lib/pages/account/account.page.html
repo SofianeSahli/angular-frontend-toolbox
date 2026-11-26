@@ -1,5 +1,4 @@
 <ui-page [title]="'identity.account.title' | translate">
-  <button uiPageActions uiButton type="button" [loading]="signingOut()" (click)="signOut()">{{ 'identity.account.signOut' | translate }}</button>
 
   @if (account(); as current) {
     <section class="d-flex flex-column gap-3 mb-4" aria-labelledby="identity-account-profile">
@@ -27,6 +26,26 @@
         </li>
       </ui-list>
       <p class="identity-lead">{{ 'identity.account.readOnly' | translate }}</p>
+    </section>
+
+    <section class="d-flex flex-column gap-3 mb-4" aria-labelledby="identity-account-preferences">
+      <ui-section-header id="identity-account-preferences" [title]="'identity.account.preferences' | translate" />
+      @if (preferences; as choices) {
+        <span class="fw-semibold">{{ 'identity.account.languageChoice' | translate }}</span>
+        <ui-segmented-control
+          [options]="choices.languages"
+          [ariaLabel]="'identity.account.languageChoice' | translate"
+          [ngModel]="choices.language()"
+          (ngModelChange)="setLanguage($event)"
+        />
+      }
+      <span class="fw-semibold">{{ 'identity.account.theme' | translate }}</span>
+      <ui-segmented-control
+        [options]="themeOptions()"
+        [ariaLabel]="'identity.account.theme' | translate"
+        [ngModel]="theme.choice()"
+        (ngModelChange)="setTheme($event)"
+      />
     </section>
 
     <section class="d-flex flex-column gap-3" aria-labelledby="identity-account-security">
@@ -67,4 +86,8 @@
       }
     </section>
   }
+
+  <div class="mt-4">
+    <button uiButton type="button" [loading]="signingOut()" (click)="signOut()">{{ 'identity.account.signOut' | translate }}</button>
+  </div>
 </ui-page>

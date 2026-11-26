@@ -3,14 +3,16 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRouteSnapshot, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { IDENTITY_CONFIG, SessionStore } from '@shared/identity-data-access';
-import { UiButton, UiIcon } from '@shared/ui-atoms';
-import { UiBottomTabs, UiRailItem, UiSideRail, UiTab, UiTabAction, UiTopBar, UiTopBarTitle } from '@shared/ui-organisms';
+import { UiAvatar, UiButton, UiIcon } from '@shared/ui-atoms';
+import { UiBottomTabs, UiRailItem, UiRailSection, UiSideRail, UiTab, UiTabAction, UiTopBar, UiTopBarTitle } from '@shared/ui-organisms';
 import { UiAppShell } from '@shared/ui-templates';
 import { filter, map } from 'rxjs';
 import { BooksStore } from '../households/data/books.store';
 import { EntrySheetService } from '../operations/entry-sheet.service';
 import { BookSwitcher } from './book-switcher';
 import { BrandMark } from './brand-mark';
+import { NavDrawerFocus } from './nav-drawer';
+import { NavDrawerService } from './nav-drawer.service';
 
 export const SHELL_TITLE_KEY = 'titleKey';
 export const SHELL_BOOK_BOUND = 'bookBound';
@@ -37,10 +39,12 @@ function deepestData(router: Router): ShellRouteData {
     RouterOutlet,
     TranslatePipe,
     UiAppShell,
+    UiAvatar,
     UiBottomTabs,
     UiButton,
     UiIcon,
     UiRailItem,
+    UiRailSection,
     UiSideRail,
     UiTab,
     UiTabAction,
@@ -57,6 +61,7 @@ export class SignedInShell {
   private readonly signInPath = inject(IDENTITY_CONFIG).paths.signIn;
   private readonly books = inject(BooksStore);
   private readonly sheets = inject(EntrySheetService);
+  private readonly menu = inject(NavDrawerService);
 
   protected readonly account = this.store.account;
   protected readonly signingOut = signal(false);
@@ -68,8 +73,13 @@ export class SignedInShell {
     { initialValue: deepestData(this.router) },
   );
   protected readonly titleKey = computed(() => this.routeData().titleKey);
-  protected readonly showSwitcher = computed(() => this.routeData().bookBound && this.books.selectedBook() !== null);
-  protected readonly canAdd = this.showSwitcher;
+  protected readonly book = this.books.selectedBook;
+  protected readonly showSwitcher = computed(() => this.routeData().bookBound && this.book() !== null);
+  protected readonly canAdd = computed(() => this.book() !== null);
+
+  protected openMenu(focus: NavDrawerFocus = null): void {
+    this.menu.open(focus);
+  }
 
   protected add(): void {
     this.sheets.openNew();

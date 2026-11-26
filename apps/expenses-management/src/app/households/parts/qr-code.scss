@@ -1,0 +1,30 @@
+@layer app {
+  :host {
+    --ui-qr-code-inline-size: 220px;
+    --ui-qr-code-expired-opacity: 0.25;
+
+    display: block;
+    inline-size: var(--ui-qr-code-inline-size);
+    max-inline-size: 100%;
+    margin-inline: auto;
+    transition: opacity var(--ui-duration-base) var(--ui-easing-standard);
+  }
+
+  :host(.qr-code--expired) {
+    opacity: var(--ui-qr-code-expired-opacity);
+  }
+
+  .qr-code__svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .qr-code__background {
+    fill: var(--ui-color-surface);
+  }
+
+  .qr-code__modules {
+    fill: var(--ui-color-ink);
+  }
+}

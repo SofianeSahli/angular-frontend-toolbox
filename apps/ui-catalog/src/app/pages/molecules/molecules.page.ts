@@ -5,6 +5,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { UiAmount, UiAvatar, UiButton, UiIcon, UiInput, UiSelect } from '@shared/ui-atoms';
 import {
   UiAlert,
+  UiAmountKeypad,
   UiAvatarGroup,
   UiBarItem,
   UiBarList,
@@ -21,9 +22,12 @@ import {
   UiMenuItemRadio,
   UiMenuTrigger,
   UiMeter,
+  UiMonthStrip,
+  UiMonthStripItem,
   UiMonthSwitcher,
   UiOptionCards,
   UiPaceChart,
+  UiSaveBar,
   UiSearchField,
   UiSectionHeader,
   UiSegmentedControl,
@@ -79,6 +83,15 @@ const TREND_ITEMS: UiTrendItem[] = [
   { id: '2026-11', label: 'nov.', value: 760, valueText: '760 DT', current: true },
 ];
 
+const STRIP_MONTHS: readonly UiMonthStripItem[] = [
+  { month: '2026-09', label: 'sept.', caption: '26', status: 'closed', statusLabel: 'Clos' },
+  { month: '2026-10', label: 'oct.', caption: '26', status: 'closed', statusLabel: 'Clos' },
+  { month: '2026-11', label: 'nov.', caption: '26', status: 'current', statusLabel: 'En cours' },
+  { month: '2026-12', label: 'déc.', caption: '26', status: 'planned', statusLabel: 'Prévu' },
+  { month: '2027-01', label: 'janv.', caption: '27', status: 'todo', statusLabel: 'À faire' },
+  { month: '2027-02', label: 'févr.', caption: '27' },
+];
+
 @Component({
   selector: 'app-molecules-page',
   imports: [
@@ -91,6 +104,7 @@ const TREND_ITEMS: UiTrendItem[] = [
     UiInput,
     UiSelect,
     UiAlert,
+    UiAmountKeypad,
     UiAvatarGroup,
     UiBarList,
     UiChipGroup,
@@ -106,9 +120,11 @@ const TREND_ITEMS: UiTrendItem[] = [
     UiMenuItemRadio,
     UiMenuTrigger,
     UiMeter,
+    UiMonthStrip,
     UiMonthSwitcher,
     UiOptionCards,
     UiPaceChart,
+    UiSaveBar,
     UiSearchField,
     UiSectionHeader,
     UiSegmentedControl,
@@ -138,6 +154,11 @@ export class MoleculesPage {
   protected readonly query = signal('');
   protected readonly showPassword = signal(false);
   protected readonly book = signal('foyer');
+  protected readonly keypadAmount = signal('12,5');
+  protected readonly keypadWhole = signal('');
+  protected readonly stripMonths = STRIP_MONTHS;
+  protected readonly stripMonth = signal('2026-11');
+  protected readonly saveBarBusy = signal(false);
 
   protected readonly form = new FormGroup({
     name: new FormControl('Foyer Sahli', [Validators.required, Validators.maxLength(60)]),

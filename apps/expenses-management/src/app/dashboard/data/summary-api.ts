@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { API_CONFIG, handling } from '@shared/http-data-access';
 import { Observable, map } from 'rxjs';
@@ -12,11 +12,11 @@ export class SummaryApi {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = inject(API_CONFIG).baseUrl;
 
-  get(bookId: string, period: SummaryPeriod): Observable<Summary> {
+  get(bookId: string, period: SummaryPeriod, context: HttpContext = handling(...SUMMARY_CODES)): Observable<Summary> {
     return this.http
       .get<{ readonly data: SummaryDto }>(`${this.baseUrl}/books/${encodeURIComponent(bookId)}/summary`, {
         params: toPeriodParams(period),
-        context: handling(...SUMMARY_CODES),
+        context,
       })
       .pipe(map((response) => toSummary(response.data)));
   }

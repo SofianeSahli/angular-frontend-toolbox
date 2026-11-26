@@ -1,0 +1,15 @@
+<section class="plan-line" aria-labelledby="known-rules-title">
+  <div class="d-flex align-items-baseline justify-content-between gap-2">
+    <h2 class="budget-parts__title" id="known-rules-title">{{ 'budget.known.title' | translate: { month: monthName() } }}</h2>
+    <a routerLink="/recurrentes">{{ 'budget.known.link' | translate }}</a>
+  </div>
+  <ul class="known-rules">
+    @for (row of rows(); track row.id) {
+      <li class="known-rules__row">
+        <bdi>{{ row.label }}</bdi>
+        <bdi>{{ row.amount }}</bdi>
+      </li>
+    }
+  </ul>
+  <p class="plan-line__numbers m-0"><bdi>{{ 'budget.known.total' | translate: { amount: expenseTotal() } }}</bdi></p>
+</section>

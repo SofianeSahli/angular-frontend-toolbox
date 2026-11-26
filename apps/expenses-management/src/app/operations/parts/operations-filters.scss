@@ -1,0 +1,14 @@
+@layer app {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-3);
+  }
+
+  .operations-filters__chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ui-space-2);
+  }
+}

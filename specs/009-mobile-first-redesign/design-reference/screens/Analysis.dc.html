@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Analyse du mois</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#1D4E89}a:hover{color:#163d6c}
+</style>
+</helmet>
+<div class="o-root" style="width: 390px; height: 1300px; position: relative; overflow: hidden; background: #FBF8F3; font-family: Inter, sans-serif; color: #1C1A17">
+<dc-import name="TopBar" title="Analyse du mois" hint-size="390px,56px"></dc-import>
+<div style="padding: 0 16px 112px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; justify-content: space-between; align-items: center">
+<button aria-label="Mois précédent" style="width: 44px; height: 44px; border: 0; background: transparent; color: #6B6358; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<span style="font-weight: 600">Novembre 2026</span>
+<button aria-label="Mois suivant" disabled style="width: 44px; height: 44px; border: 0; background: transparent; color: #C9C1B4; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+
+<section class="ui-card" style="padding: 16px" aria-labelledby="a-pace">
+<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px"><h2 id="a-pace" class="ui-h3" style="margin: 0">Rythme du mois</h2><span style="font-size: 13px; color: #6B6358">hors loyer et factures</span></div>
+<svg role="img" aria-label="Dépenses courantes cumulées : 1 119 DT au 25 novembre, pour un rythme prévu de 1 330 DT" viewBox="0 0 326 140" width="326" height="140" style="display: block">
+<line x1="8" y1="128" x2="318" y2="128" stroke="#E7E0D5"></line>
+<path d="M8.0 128.0 L318.0 16.0" stroke="#8F877A" stroke-width="1.5" stroke-dasharray="4 4" fill="none"></path>
+<path d="M8.0 128.0 L8.0 125.2 L29.4 119.6 L50.8 111.9 L72.1 104.9 L93.5 100.7 L114.9 91.6 L136.3 83.2 L157.7 74.8 L179.0 66.4 L200.4 58.0 L221.8 53.0 L261 49.7" stroke="#4E6B1F" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"></path>
+<circle cx="261" cy="49.7" r="5" fill="#4E6B1F" stroke="#FFFFFF" stroke-width="2"></circle>
+<text x="8" y="140" font-size="11" fill="#6B6358" font-family="Inter, sans-serif">1 nov.</text>
+<text x="318" y="140" font-size="11" fill="#6B6358" text-anchor="end" font-family="Inter, sans-serif">30 nov.</text>
+<text x="196" y="40" font-size="12" font-weight="600" fill="#1C1A17" font-family="Inter, sans-serif">1 119 DT</text>
+</svg>
+<p style="margin: 8px 0 0; font-size: 14px; color: #1C1A17">Sous le rythme prévu de <strong>211 DT</strong>.</p>
+</section>
+
+<section class="ui-card" style="padding: 16px; display: flex; flex-direction: column; gap: 12px" aria-labelledby="a-cat">
+<h2 id="a-cat" class="ui-h3" style="margin: 0">Par catégorie</h2>
+<sc-for list="{{cats}}" as="c" hint-placeholder-count="5">
+<a href="OpsList.dc.html" style="display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: #1C1A17; min-height: 44px; justify-content: center">
+<span class="num" style="display: flex; justify-content: space-between; font-size: 14px"><span>{{c.name}}</span><span><strong style="font-weight: 600">{{c.amount}}</strong> <span style="color: #6B6358">· {{c.share}}</span></span></span>
+<span aria-hidden="true" style="height: 8px; border-radius: 4px; background: #F3EEE6; display: block"><span style="{{c.bar}}"></span></span>
+</a>
+</sc-for>
+</section>
+
+<section class="ui-card" style="padding: 16px" aria-labelledby="a-trend">
+<h2 id="a-trend" class="ui-h3" style="margin: 0 0 12px">6 derniers mois</h2>
+<div role="img" aria-label="Dépenses : juin 2 210, juillet 2 640, août 3 120, septembre 2 480, octobre 2 390, novembre 1 843 DT à ce jour" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; align-items: end; height: 150px">
+<sc-for list="{{months}}" as="m" hint-placeholder-count="6">
+<span style="display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end">
+<span class="num" style="font-size: 11px; color: #6B6358">{{m.value}}</span>
+<span style="{{m.bar}}"></span>
+<span style="font-size: 12px; color: #6B6358">{{m.label}}</span>
+</span>
+</sc-for>
+</div>
+</section>
+
+<section class="ui-card" style="padding: 16px; display: flex; flex-direction: column; gap: 10px" aria-labelledby="a-mem">
+<h2 id="a-mem" class="ui-h3" style="margin: 0">Qui a ajouté quoi</h2>
+<div class="num" style="display: flex; justify-content: space-between; font-size: 14px"><span>Sofiane</span><span><strong>1 128 DT</strong> · 41 opérations</span></div>
+<div class="num" style="display: flex; justify-content: space-between; font-size: 14px"><span>Amira</span><span><strong>715 DT</strong> · 37 opérations</span></div>
+<p style="margin: 0; font-size: 13px; color: #6B6358">Ce qui a été saisi par chacun, pas qui a payé.</p>
+</section>
+</div>
+<div style="position: absolute; left: 0; bottom: 0"><dc-import name="TabBar" active="none" hint-size="390px,84px"></dc-import></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1300}}'>
+class Component extends DCLogic {
+renderVals() {
+var cats = [['Logement', 650], ['Alimentation', 712], ['Factures', 190], ['Cafés & resto', 134], ['Transport', 96], ['Santé', 40]];
+cats.sort(function (a, b) { return b[1] - a[1]; });
+var max = cats[0][1];
+var total = 1843;
+var months = [['juin', 2210], ['juil.', 2640], ['août', 3120], ['sept.', 2480], ['oct.', 2390], ['nov.', 1843]];
+return {
+cats: cats.map(function (c) {
+return { name: c[0], amount: c[1] + ' DT', share: Math.round(c[1] / total * 100) + ' %', bar: 'display: block; height: 8px; border-radius: 4px; background: #1D4E89; width: ' + Math.round(c[1] / max * 100) + '%' };
+}),
+months: months.map(function (m, i) {
+var last = i === months.length - 1;
+return { label: m[0], value: (m[1] / 1000).toFixed(1).replace('.', ',') + ' k', bar: 'display: block; width: 100%; border-radius: 6px 6px 2px 2px; height: ' + Math.round(m[1] / 3120 * 96) + 'px; background: ' + (last ? '#4E6B1F' : '#C9C1B4') };
+})
+};
+}
+}
+</script>
+</body>
+</html>

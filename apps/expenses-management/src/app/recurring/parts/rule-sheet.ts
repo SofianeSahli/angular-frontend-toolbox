@@ -1,7 +1,7 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ApiError } from '@shared/http-data-access';
 import { SessionStore } from '@shared/identity-data-access';
@@ -22,34 +22,20 @@ import { OtherNamesApi } from '../../operations/data/other-names-api';
 import { BIG_AMOUNT_MAJOR, COMMENT_MAX, OTHER_NAME_MAX, amountValidator } from '../../operations/parts/entry-sheet';
 import { FREQUENCIES, Frequency, RecurringRule } from '../data/models';
 import { RecurringStore, RuleWriteResult } from '../data/recurring.store';
-import { RuleForm, diffRule, emptyRuleForm, formFromRule, isEmptyRulePatch, toRuleInput } from '../data/rule-draft';
+import { RuleForm, diffRule, formFromRule, isEmptyRulePatch } from '../data/rule-draft';
+import { longDate, uiLocale } from '../../operations/support/day-groups';
 import { RuleField, refusesRuleCategory, ruleCodeMessage, ruleFieldMessages, ruleReaction } from '../support/rule-errors';
+import { INTERVALS, rangeValidator } from '../support/rule-validators';
+
+export { INTERVALS };
 
 export interface RuleSheetData {
   readonly book: Book;
-  readonly rule?: RecurringRule;
+  readonly rule: RecurringRule;
 }
 
-export const INTERVALS: readonly number[] = Array.from({ length: 12 }, (_, index) => index + 1);
 const MAX_SUGGESTIONS = 10;
 const ERROR_TEMPLATES: Readonly<Record<string, string>> = { amount: '{{message}}', server: '{{message}}', range: '{{message}}' };
-
-function rangeValidator(
-  code: string,
-  bounds: (control: AbstractControl<string>) => { min: string | null; max: string | null },
-  required: boolean,
-  translate: TranslateService,
-): ValidatorFn {
-  return (control: AbstractControl<string>): ValidationErrors | null => {
-    const value = control.value ?? '';
-    const { min, max } = bounds(control);
-    const failure = (suffix: string) => ({ range: { message: translate.instant(`recurring.fields.${code}.${suffix}`) } });
-    if (value === '') return required ? failure('required') : null;
-    if (min !== null && value < min) return failure('after_or_equal');
-    if (max !== null && value > max) return failure('before_or_equal');
-    return null;
-  };
-}
 
 @Component({
   selector: 'app-rule-sheet',
@@ -98,7 +84,7 @@ export class RuleSheet {
   private readonly toast = inject(UiToast);
 
   protected readonly book = this.data.book;
-  protected readonly editing = this.data.rule ?? null;
+  protected readonly editing = this.data.rule;
   private readonly exponent = this.book.currency.exponent;
   protected readonly today = todayIn(this.book.timezone);
   protected readonly minStart = addYears(this.today, -1);
@@ -153,7 +139,10 @@ export class RuleSheet {
   });
   protected readonly isOther = computed(() => this.node()?.isOther ?? false);
   protected readonly retired = computed(() => this.node()?.retired ?? false);
-  protected readonly pastStart = computed(() => this.editing === null && this.value().startsOn !== '' && this.value().startsOn <= this.today);
+  protected readonly nextDate = computed(() => {
+    const next = this.editing.nextDate;
+    return next === null ? null : longDate(next, uiLocale(this.translate.getCurrentLang()));
+  });
   protected readonly endMin = computed(() => this.value().startsOn || this.minStart);
   protected readonly recentChips = computed(() =>
     this.recents()
@@ -170,7 +159,7 @@ export class RuleSheet {
     void this.categories.load();
     const accountId = this.session.account()?.id ?? null;
     if (accountId !== null) this.recents.set(readRecentCategories(accountId, this.book.id));
-    this.form.setValue(this.editing === null ? emptyRuleForm(this.today) : formFromRule(this.editing, this.exponent));
+    this.form.setValue(formFromRule(this.editing, this.exponent));
     this.form.markAsPristine();
 
     const destroyRef = inject(DestroyRef);
@@ -233,21 +222,38 @@ export class RuleSheet {
     if (this.form.invalid || this.unavailable()) return;
     const form = this.form.getRawValue() as RuleForm;
     const context = { exponent: this.exponent, isOther: this.isOther() };
-    if (this.editing !== null) {
-      const patch = diffRule(this.editing, form, context);
-      if (patch === null) return;
-      if (isEmptyRulePatch(patch)) {
-        this.context.close();
-        return;
-      }
-      if (patch.amount !== undefined && this.needsConfirmation(patch.amount)) return;
-      const rule = this.editing;
-      await this.write(() => this.recurring.update(this.book.id, rule.id, patch), 'recurring.toasts.updated');
+    const patch = diffRule(this.editing, form, context);
+    if (patch === null) return;
+    if (isEmptyRulePatch(patch)) {
+      this.context.close();
       return;
     }
-    const input = toRuleInput(form, context);
-    if (input === null || this.needsConfirmation(input.amount)) return;
-    await this.write(() => this.recurring.create(this.book.id, input), 'recurring.toasts.created', input.category);
+    if (patch.amount !== undefined && this.needsConfirmation(patch.amount)) return;
+    const rule = this.editing;
+    await this.write(() => this.recurring.update(this.book.id, rule.id, patch), 'recurring.toasts.updated', patch.category);
+  }
+
+  protected async stop(): Promise<void> {
+    if (this.saving() || this.deleting()) return;
+    const confirmed = await this.confirm.ask({
+      title: this.translate.instant('recurring.delete.title'),
+      message: this.translate.instant('recurring.delete.message'),
+      confirmLabel: this.translate.instant('recurring.delete.confirm'),
+      cancelLabel: this.translate.instant('recurring.delete.cancel'),
+      tone: 'danger',
+    });
+    if (!confirmed) return;
+    this.notice.set(null);
+    this.deleting.set(true);
+    const result = await this.recurring.remove(this.book.id, this.editing.id);
+    this.deleting.set(false);
+    if (result.outcome === 'done') {
+      this.form.markAsPristine();
+      this.context.close();
+      this.toast.show({ message: this.translate.instant('recurring.toasts.deleted'), tone: 'success' });
+      return;
+    }
+    this.handleError(result.error);
   }
 
   private async write(call: () => Promise<RuleWriteResult>, toastKey: string, category?: string): Promise<void> {
@@ -305,7 +311,7 @@ export class RuleSheet {
   private showFieldErrors(error: ApiError): void {
     if (refusesRuleCategory(error)) {
       void this.categories.load({ force: true });
-      if (this.editing === null || this.form.controls.category.value !== this.editing.category) this.form.controls.category.setValue(null);
+      if (this.form.controls.category.value !== this.editing.category) this.form.controls.category.setValue(null);
     }
     const messages = ruleFieldMessages(error, this.translate);
     for (const [field, message] of Object.entries(messages) as [RuleField, string][]) {

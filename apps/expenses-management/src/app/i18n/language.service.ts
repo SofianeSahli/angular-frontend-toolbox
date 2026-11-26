@@ -10,7 +10,9 @@ export const LANGUAGE_STORAGE_KEY = 'ui.lang';
 const DEFAULT_LANGUAGE: AppLanguage = 'fr';
 const RIGHT_TO_LEFT: ReadonlySet<AppLanguage> = new Set(['ar']);
 
-function isAppLanguage(value: unknown): value is AppLanguage {
+export const LANGUAGE_NAMES: Readonly<Record<AppLanguage, string>> = { fr: 'Français', en: 'English', ar: 'العربية' };
+
+export function isAppLanguage(value: unknown): value is AppLanguage {
   return typeof value === 'string' && (APP_LANGUAGES as readonly string[]).includes(value);
 }
 

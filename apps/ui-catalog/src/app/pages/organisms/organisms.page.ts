@@ -3,6 +3,7 @@ import { UiAmount, UiButton, UiIcon, UiInput, UiLabel, UiSelect } from '@shared/
 import { UiListItem, UiSearchField } from '@shared/ui-molecules';
 import {
   UI_DIALOG_CONTEXT,
+  UI_DRAWER_CONTEXT,
   UiBottomTabs,
   UiConfirm,
   UiDialog,
@@ -10,6 +11,7 @@ import {
   UiDialogFooter,
   UiDialogHeader,
   UiDialogPresentation,
+  UiDrawer,
   UiFilterBar,
   UiGroupedList,
   UiListGroup,
@@ -55,6 +57,15 @@ export class ExpenseDialogDemo {
 }
 
 @Component({
+  imports: [UiButton, UiIcon],
+  templateUrl: './drawer-demo.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class DrawerDemo {
+  protected readonly context = inject(UI_DRAWER_CONTEXT);
+}
+
+@Component({
   selector: 'app-organisms-page',
   imports: [
     UiAmount,
@@ -83,6 +94,7 @@ export class ExpenseDialogDemo {
 })
 export class OrganismsPage {
   private readonly dialog = inject(UiDialog);
+  private readonly drawer = inject(UiDrawer);
   private readonly confirm = inject(UiConfirm);
   private readonly toast = inject(UiToast);
 
@@ -90,6 +102,10 @@ export class OrganismsPage {
   protected readonly query = signal('');
   protected readonly loading = signal(false);
   protected readonly lastAnswer = signal('');
+
+  protected openDrawer(): void {
+    this.drawer.open<string>(DrawerDemo, { title: 'Menu' }).closed.subscribe((choice) => this.lastAnswer.set(choice ? `Tiroir : ${choice}` : 'Tiroir fermé'));
+  }
 
   protected openDialog(presentation: UiDialogPresentation): void {
     this.dialog.open(ExpenseDialogDemo, { presentation });

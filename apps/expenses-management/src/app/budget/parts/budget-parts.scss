@@ -126,3 +126,59 @@
   grid-column: 1 / -1;
   text-align: start;
 }
+
+.plan-line--button {
+  inline-size: 100%;
+  color: var(--ui-color-ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.plan-line--button:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: var(--ui-focus-ring-offset);
+}
+
+.plan-line__amounts {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.plan-line__amounts--over {
+  color: var(--ui-color-danger);
+}
+
+.budget-summary__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ui-space-2);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+
+  dd {
+    margin: 0;
+    font-weight: var(--ui-text-body-strong-weight);
+  }
+}
+
+.budget-summary__label {
+  color: var(--ui-color-ink-muted);
+  font-size: var(--ui-text-small-size);
+}
+
+.known-rules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.known-rules__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ui-space-3);
+  font-variant-numeric: tabular-nums;
+}

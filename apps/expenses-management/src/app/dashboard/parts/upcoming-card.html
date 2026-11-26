@@ -1,5 +1,5 @@
 <app-card-frame [heading]="'dashboard.upcoming.title' | translate" [status]="status()" [error]="error()" (retry)="retry.emit()">
-    <a cardAside routerLink="/operations/recurrentes">{{ 'dashboard.upcoming.seeAll' | translate }}</a>
+    <a cardAside routerLink="/recurrentes">{{ 'dashboard.upcoming.seeAll' | translate }}</a>
     @if (rows().length === 0) {
       <p class="dashboard-card__muted">{{ 'dashboard.upcoming.empty' | translate }}</p>
     } @else {

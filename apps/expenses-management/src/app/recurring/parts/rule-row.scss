@@ -4,6 +4,13 @@
 
 .rule-row {
   display: flex;
+  inline-size: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ui-color-ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
   align-items: center;
   gap: var(--ui-space-3);
   padding-block: var(--ui-space-3);
@@ -36,8 +43,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-.rule-row__actions {
-  display: flex;
-  flex: none;
-  gap: var(--ui-space-1);
+.rule-row:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: calc(-1 * var(--ui-focus-ring-width));
 }

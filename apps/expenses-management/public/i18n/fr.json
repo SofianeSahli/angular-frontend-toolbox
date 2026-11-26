@@ -21,7 +21,33 @@
       "limit": "Vous avez déjà 5 carnets personnels."
     },
     "operations": "Opérations",
-    "budget": "Budget"
+    "budget": "Budget",
+    "menu": "Menu",
+    "recurring": "Récurrentes",
+    "analysis": "Analyse du mois",
+    "drawer": {
+      "close": "Fermer le menu",
+      "books": "Carnets",
+      "householdBook": "Foyer",
+      "personalBook": "Personnel",
+      "planning": "Prévoir",
+      "budgets": "Budgets",
+      "householdAndAccount": "Foyer et compte",
+      "appearance": "Apparence",
+      "language": "Langue",
+      "themes": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Système"
+      },
+      "hints": {
+        "budget": "{{month}} · {{amount}} restants",
+        "rule": "{{count}} règle",
+        "rules": "{{count}} règles",
+        "member": "{{count}} membre",
+        "members": "{{count}} membres"
+      }
+    }
   },
   "brand": {
     "promise": "Vos dépenses du foyer, à deux, sans prise de tête.",
@@ -61,7 +87,10 @@
       "minlength": "{{requiredLength}} caractères minimum.",
       "maxlength": "{{requiredLength}} caractères maximum.",
       "pattern": "Le format n'est pas valide."
-    }
+    },
+    "keypad": "Pavé numérique",
+    "keypadDelete": "Effacer le dernier chiffre",
+    "keypadSeparator": "Virgule"
   },
   "households": {
     "welcome": {
@@ -108,7 +137,8 @@
       "otherCurrency": "Autre…",
       "otherCurrencyField": "Code de la devise (3 lettres)",
       "timezone": "Fuseau horaire",
-      "submit": "Créer le carnet"
+      "submit": "Créer le carnet",
+      "submitFirst": "Créer et noter une première dépense"
     },
     "errors": {
       "generic": "Une erreur est survenue. Réessayez.",
@@ -211,6 +241,41 @@
         "submit": "Inviter",
         "sent": "Invitation envoyée. Un e-mail de notification a été envoyé.",
         "throttled": "Limite d'invitations atteinte, réessayez dans {{retry}}."
+      },
+      "bookName": "· carnet « {{name}} »",
+      "membersCount": "Membres ({{count}})",
+      "memberOptions": "Options pour {{name}}",
+      "sensitive": "Actions sensibles"
+    },
+    "invite": {
+      "open": "Inviter quelqu'un",
+      "title": "Inviter dans le foyer",
+      "tabs": "Façon d'inviter",
+      "email": "Par e-mail",
+      "qr": "QR code, sur place",
+      "emailNote": "La personne voit l'invitation dans l'appli une fois connectée avec cette adresse ; valable 7 jours."
+    },
+    "qr": {
+      "label": "QR code d'invitation",
+      "expiresIn": "Expire dans {{time}}",
+      "expired": "Ce code a expiré. Créez-en un nouveau.",
+      "help": "La personne scanne ce code avec l'appareil photo de son téléphone, connectée à son compte. Il ne sert qu'une fois.",
+      "newCode": "Nouveau code",
+      "offline": "Hors ligne : impossible de créer un code."
+    },
+    "join": {
+      "title": "Rejoindre un foyer",
+      "invitedBy": "{{name}} vous invite dans le foyer",
+      "accept": "Rejoindre",
+      "decline": "Refuser",
+      "home": "Retour à l'accueil",
+      "joined": "Vous avez rejoint « {{name}} »",
+      "errors": {
+        "notFound": "Ce code n'est plus valable. Demandez-en un nouveau.",
+        "alreadyJoined": "Vous appartenez déjà à un foyer : quittez-le d'abord.",
+        "memberLimit": "Ce foyer est complet.",
+        "offline": "Hors ligne : réessayez une fois connecté.",
+        "throttled": "Trop de tentatives. Réessayez dans {{retry}}."
       }
     }
   },
@@ -233,7 +298,7 @@
       },
       "category": "Catégorie",
       "removeCategory": "Retirer le filtre {{name}}",
-      "author": "Auteur",
+      "author": "Membre",
       "allAuthors": "Tous",
       "me": "Moi",
       "clear": "Effacer les filtres"
@@ -278,12 +343,25 @@
         "cancel": "Continuer la saisie"
       },
       "delete": {
-        "action": "Supprimer",
+        "action": "Supprimer l'opération…",
         "title": "Supprimer cette opération ?",
         "message": "Cette action est définitive.",
         "confirm": "Supprimer",
         "cancel": "Annuler"
-      }
+      },
+      "mode": "Type de saisie",
+      "once": "Une seule fois",
+      "recurring": "Récurrente",
+      "bookCaption": "Carnet {{book}}",
+      "suggested": "suggérée",
+      "otherCategory": "Autre catégorie…",
+      "templates": "Reprendre une opération récente",
+      "otherDate": "Autre date",
+      "note": "Note",
+      "enterAmount": "Saisissez un montant",
+      "saveAmount": "Ajouter {{amount}}",
+      "addedBy": "Ajoutée par {{name}}",
+      "updatedBy": "modifiée par {{name}}"
     },
     "toasts": {
       "created": {
@@ -346,7 +424,12 @@
       }
     },
     "recurringBadge": "récurrent",
-    "recurringLink": "Récurrentes"
+    "recurringLink": "Récurrentes",
+    "search": {
+      "label": "Rechercher une opération",
+      "placeholder": "Rechercher (nom, note, montant)",
+      "partial": "La recherche porte seulement sur les opérations chargées."
+    }
   },
   "categories": {
     "food": {
@@ -918,7 +1001,7 @@
       "seeAll": "Voir les récurrentes"
     },
     "recent": {
-      "title": "Récent",
+      "title": "Dernières opérations",
       "empty": "Aucune opération ce mois-ci",
       "seeAll": "Tout voir"
     },
@@ -944,6 +1027,16 @@
       "title": "6 derniers mois",
       "label": "Dépenses des 6 derniers mois",
       "average": "Moyenne : {{amount}}"
+    },
+    "today": {
+      "title": "Aujourd'hui",
+      "all": "Toutes les opérations",
+      "empty": "Rien de noté aujourd'hui",
+      "add": "Ajouter une opération"
+    },
+    "analysisLink": {
+      "title": "Analyse du mois",
+      "text": "Rythme, catégories, 6 derniers mois, membres"
     }
   },
   "budget": {
@@ -968,13 +1061,14 @@
     "cleared": "Budget effacé",
     "cancel": "Annuler",
     "lines": {
-      "title": "Lignes du budget",
+      "title": "Dépenses prévues",
       "add": "Ajouter une ligne",
       "empty": "Aucune ligne pour l'instant.",
       "planned": "Prévu",
       "actual": "Dépensé : {{amount}}",
       "percent": "{{percent}} %",
-      "remove": "Retirer {{name}}"
+      "remove": "Retirer {{name}}",
+      "rowLabel": "{{name}}, prévu {{planned}}, dépensé {{spent}}"
     },
     "status": {
       "ok": "Dans le budget",
@@ -996,7 +1090,8 @@
       "replaceTitle": "Remplacer le budget de ce mois ?",
       "replaceMessage": "Le budget de ce mois sera remplacé par celui du mois précédent.",
       "replaceConfirm": "Remplacer",
-      "nothing": "Le mois précédent n'a pas de budget"
+      "nothing": "Le mois précédent n'a pas de budget",
+      "from": "Copier le budget de {{month}}"
     },
     "leave": {
       "title": "Quitter sans enregistrer ?",
@@ -1069,11 +1164,45 @@
       "total": "Dépensé / prévu",
       "amounts": "{{spent}} / {{planned}}"
     },
-    "lastMonth": "Le mois dernier : {{amount}}"
+    "lastMonth": "Le mois dernier : {{amount}}",
+    "strip": {
+      "label": "Mois du budget",
+      "closed": "Clos",
+      "current": "En cours",
+      "planned": "Prévu",
+      "todo": "À faire"
+    },
+    "summary": {
+      "planned": "Prévu",
+      "spent": "Dépensé",
+      "left": "Reste"
+    },
+    "empty": {
+      "text": "Pas encore de budget. Préparez-le maintenant : vous pourrez l'ajuster jusqu'à la fin du mois.",
+      "copy": "Copier {{month}}",
+      "fresh": "Partir de zéro"
+    },
+    "received": "Reçu {{amount}}",
+    "savedAmount": "Épargné {{amount}}",
+    "saveBar": {
+      "one": "{{count}} modification",
+      "many": "{{count}} modifications",
+      "discard": "Annuler"
+    },
+    "amountSheet": {
+      "apply": "Valider",
+      "remove": "Retirer la ligne"
+    },
+    "known": {
+      "title": "Déjà connu pour {{month}}",
+      "link": "Récurrentes",
+      "total": "{{amount}} de dépenses fixes déjà engagées"
+    },
+    "aheadLimit": "On peut préparer un budget jusqu'à 12 mois à l'avance."
   },
   "recurring": {
     "title": "Opérations récurrentes",
-    "add": "Ajouter une récurrente",
+    "add": "Nouvelle opération récurrente",
     "loading": "Chargement des récurrentes…",
     "loadError": "Impossible de charger les récurrentes.",
     "loadOffline": "Hors connexion. Les récurrentes n'ont pas pu être chargées.",
@@ -1097,7 +1226,7 @@
       }
     },
     "sheet": {
-      "addTitle": "Nouvelle récurrente",
+      "addTitle": "Nouvelle opération récurrente",
       "editTitle": "Modifier la récurrente",
       "editNote": "Les opérations déjà créées ne changent pas. Un nouveau calendrier s'applique à partir d'aujourd'hui.",
       "pastStart": "Les opérations échues jusqu'à aujourd'hui seront créées tout de suite",
@@ -1109,7 +1238,10 @@
       },
       "interval": "Tous les (nombre de semaines, mois ou années)",
       "startsOn": "Première date",
-      "endsOn": "Dernière date"
+      "endsOn": "Dernière date",
+      "next": "Prochaine : {{date}}.",
+      "stop": "Arrêter cette récurrence…",
+      "saveAmount": "Enregistrer · {{amount}} {{frequency}}"
     },
     "delete": {
       "title": "Supprimer cette récurrente ?",
@@ -1149,6 +1281,29 @@
         "date_format": "Date invalide",
         "after_or_equal": "La dernière date doit suivre la première"
       }
+    },
+    "rowLabel": "{{name}}, {{frequency}}, {{next}}",
+    "average": {
+      "title": "En moyenne chaque mois, déjà prévu",
+      "expense": "Dépenses fixes",
+      "income": "Revenus"
+    },
+    "sections": {
+      "expense": "Dépenses",
+      "income": "Revenus",
+      "saving": "Épargne",
+      "none": "Aucune règle",
+      "ended": "Terminées ({{count}})"
+    }
+  },
+  "analysis": {
+    "title": "Analyse du mois",
+    "pace": {
+      "fixedExcluded": "Hors loyer et factures récurrentes"
+    },
+    "members": {
+      "title": "Qui a ajouté quoi",
+      "note": "Ce qui a été saisi par chacun, pas qui a payé."
     }
   }
 }

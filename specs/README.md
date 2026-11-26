@@ -85,6 +85,17 @@ First spec whose domain code lives in the app only; the toolbox gets nothing new
 - Shell: "Budget" rail destination (`wallet` icon); `dashboard.*`, `budget.*`, `recurring.*` keys in fr/en/ar (Arabic draft). Files: `008-dashboard-budget-recurring/`.
 - Charts (amendment, 2026-11-25, US-9): `ui-pace-chart` and `ui-trend-bars` in `@shared/ui-molecules` (inline SVG, RTL-mirrored time axis, hidden data table, catalog states); `Summary` keeps `days` and `months`; dashboard "Rythme du mois" and "6 derniers mois" cards, clickable category bars, skeleton cards; budget "Vue d'ensemble", expandable "Hors budget" with "Ajouter au budget", "Le mois dernier" per line, income and saving meters. Tasks T25–T44.
 
+## 009 — Mobile-first redesign (implemented, in review)
+
+- Toolbox: `ui-amount-keypad` (+ `pressKeypadKey`), `ui-month-strip`, `ui-save-bar` in `@shared/ui-molecules`; `UiDrawer` (CDK dialog at the inline-start edge, closes on back, follows a direction change) in `@shared/ui-organisms`; `--ui-app-shell-dock-offset`; `UI_TEXT` keypad strings; catalog states. `IDENTITY_PREFERENCES` token (data-access); account page with theme and language; forgot password in two steps on one page (`/mot-de-passe/nouveau` redirects).
+- App shell: top bar (menu, book name, avatar), `NavDrawer` with books, destinations, hints (`DrawerHints`, quiet reads), theme, language, sign out; tabs Accueil, Opérations, raised « + », Budget, Récurrentes; rail with the same destinations.
+- Routes: `/analyse`, `/recurrentes` (old `/operations/recurrentes` redirects), `/rejoindre#<token>`.
+- Accueil: hero, today's entries (or the latest five), watch list, upcoming, link to the analysis. Charts moved to `analysis/` with `AnalysisStore`; the pace line leaves out rule-made expenses when all are known.
+- Add sheet: one-off / recurring switch, keypad below 820 px (`AmountPad`), suggested category and three templates from `EntryHistory` (last 30 entries of the account), date and note chips, recurring rule creation. Edit sheet: added/changed by, delete in the body.
+- Opérations: month totals, in-app search over up to 20 pages, chips, day totals. Budget: month strip with statuses (`BudgetPlans`), summary card, rows edited in `AmountSheet`, save bar, empty state, « Déjà connu » from rule due dates. Récurrentes: monthly averages, sections by type, ended rules collapsed; rule sheet is edit-only with « Arrêter ».
+- Foyer: options menu per member, `InviteSheet` with e-mail and QR tabs (`qrcode` dependency, 10-minute countdown); `JoinPage` previews and accepts a QR token. First run ends on « Créer et noter une première dépense ».
+- fr/en/ar keys (Arabic a draft). Deviations in `009-mobile-first-redesign/tasks.md`.
+
 ## Next
 
-009 Production readiness. See [docs/ROADMAP.md](../docs/ROADMAP.md).
+010 Production readiness. See [docs/ROADMAP.md](../docs/ROADMAP.md).

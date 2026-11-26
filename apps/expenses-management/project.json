@@ -51,7 +51,10 @@
           "includePaths": [
             "shared/ui/tokens/src/styles"
           ]
-        }
+        },
+        "allowedCommonJsDependencies": [
+          "qrcode"
+        ]
       },
       "configurations": {
         "production": {
