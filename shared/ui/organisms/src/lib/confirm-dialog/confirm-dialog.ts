@@ -4,7 +4,7 @@ import { UiButton } from '@shared/ui-atoms';
 import { UI_TEXT } from '@shared/ui-tokens';
 import { firstValueFrom } from 'rxjs';
 import { UI_DIALOG_CONTEXT, UiDialog } from '../dialog/dialog';
-import { UiDialogBody, UiDialogFooter, UiDialogHeader } from '../dialog/dialog-parts';
+import { UiDialogBody, UiDialogFooter, UiDialogHeader } from '../dialog/dialog-parts/dialog-parts';
 
 export type UiConfirmTone = 'primary' | 'danger';
 

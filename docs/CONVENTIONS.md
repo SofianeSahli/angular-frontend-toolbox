@@ -10,6 +10,7 @@ Moved from `CLAUDE.md`. Read it before writing or reviewing code; the checklist 
 
 ## Angular
 
+- One folder per component, named after the file base name with dots turned into dashes; it holds only that component's `.ts`, `.html`, `.scss`, `.spec.ts` and the helpers nothing else imports. Example: `households/pages/household-page/household.page.ts`. A toolbox folder that already holds exactly one component keeps its name; a file declaring several components counts as one; shared stylesheets, services and specs covering several components stay in the parent folder.
 - Standalone components only; no NgModules. Use `inject()`, not constructor injection.
 - Signals first: `input()`, `output()`, `model()`, `computed()`, `linkedSignal()`. Do not use `@Input`/`@Output` decorators in new code.
 - `computed()` must only read signals. Form values are not signals — use `toSignal(control.valueChanges, …)`.

@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { UiList } from './list';
-import { UiListItem } from './list-item';
+import { UiListItem } from './list-item/list-item';
 
 describe('ui-list and uiListItem', () => {
   it('renders a list of rows with title, subtitle and trailing content', async () => {

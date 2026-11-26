@@ -4,7 +4,7 @@ import { UiDialog } from '@shared/ui-organisms';
 import { filter, merge, takeUntil } from 'rxjs';
 import { BooksStore } from '../households/data/books.store';
 import { RecurringRule } from './data/models';
-import { RuleSheet, RuleSheetData } from './parts/rule-sheet';
+import { RuleSheet, RuleSheetData } from './parts/rule-sheet/rule-sheet';
 
 @Injectable({ providedIn: 'root' })
 export class RuleSheetService {

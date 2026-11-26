@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { fireEvent, render, screen } from '@testing-library/angular';
-import { UiToastRegion } from './toast-region';
+import { UiToastRegion } from './toast-region/toast-region';
 import { UiToast } from './toast.service';
 
 function stubDevice(phone: boolean): void {

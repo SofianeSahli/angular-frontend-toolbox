@@ -15,8 +15,8 @@ import {
 import { NgControl, ValidationErrors } from '@angular/forms';
 import { UiFieldMessage, UiInput, UiLabel, UiSelect } from '@shared/ui-atoms';
 import { UI_TEXT, fillUiText } from '@shared/ui-tokens';
-import { UiFieldAction } from './field-action';
-import { UiFieldAffix } from './field-affix';
+import { UiFieldAction } from './field-action/field-action';
+import { UiFieldAffix } from './field-affix/field-affix';
 
 interface ControlState {
   readonly value: unknown;

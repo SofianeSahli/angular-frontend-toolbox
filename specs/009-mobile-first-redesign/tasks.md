@@ -86,7 +86,7 @@ Tests were written for each task. They were not run here (project rule); CI and 
 | 6.1–6.3 | `analysis.store.spec`, `analysis-page.spec`, `pace-card.spec`, `fixed-bills.spec` | left to CI |
 | 7.1–7.4 | `operations-page.spec`, `operations-filters.spec`, `search.spec`, `day-groups.spec`, `operations.store.spec`, `entries-api.spec` | left to CI |
 | 8.1 | category picker unchanged (spec 007 tests) | left to CI |
-| 9.1–9.7 | `budget-page.spec`, `budget-parts.spec`, `budget-plans.spec`, `strip-months.spec`, `budget-draft.spec`, `schedule.spec` | left to CI |
+| 9.1–9.7 | `budget-page.spec`, `plan-line-row.spec`, `budget-summary.spec`, `known-rules-card.spec`, `off-plan-list.spec`, `budget-plans.spec`, `strip-months.spec`, `budget-draft.spec`, `schedule.spec` | left to CI |
 | 10.1–10.4 | `recurring-page.spec`, `rule-row.spec`, `rule-sheet.spec`, `schedule.spec` | left to CI |
 | 11.1–11.4 | `household.page.spec`, `invite-sheet.spec`, `qr-code.spec`, `join.page.spec`, `qr-invitations-api.spec` | left to CI |
 | 12.1 | `account.page.spec` | left to CI |

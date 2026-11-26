@@ -8,7 +8,7 @@ import { UiButton, UiCheckRow, UiCheckbox, UiFieldMessage, UiIcon, UiInput } fro
 import { UiAlert, UiFieldAction, UiFieldAffix, UiFormField } from '@shared/ui-molecules';
 import { accountLocaleOf } from '../../shared/account-locale';
 import { AuthNavigation } from '../../shared/auth-navigation';
-import { GoogleButton } from '../../shared/google-button';
+import { GoogleButton } from '../../shared/google-button/google-button';
 import { SERVER_ERROR_TEMPLATE, applyServerErrors, serverMessage, showOnField } from '../../shared/server-errors';
 import { SignUpDraft, SignUpDraftValues } from '../../shared/sign-up-draft';
 

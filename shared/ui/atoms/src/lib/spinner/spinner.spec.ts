@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/angular';
 import { provideUiText } from '@shared/ui-tokens';
-import { UiSkeleton } from './skeleton';
 import { UiSpinner } from './spinner';
 
 describe('ui-spinner', () => {
@@ -16,14 +15,5 @@ describe('ui-spinner', () => {
     });
     expect(screen.getByRole('status', { name: 'Loading' })).toBeTruthy();
     expect(screen.getByRole('status', { name: 'Enregistrement' }).classList).toContain('ui-spinner--24');
-  });
-});
-
-describe('ui-skeleton', () => {
-  it.each(['line', 'block', 'circle'])('draws the %s shape, hidden from assistive technology', async (shape) => {
-    const { container } = await render(`<ui-skeleton shape="${shape}" />`, { imports: [UiSkeleton] });
-    const skeleton = container.querySelector('ui-skeleton');
-    expect(skeleton?.getAttribute('aria-hidden')).toBe('true');
-    expect(skeleton?.classList).toContain(`ui-skeleton--${shape}`);
   });
 });
