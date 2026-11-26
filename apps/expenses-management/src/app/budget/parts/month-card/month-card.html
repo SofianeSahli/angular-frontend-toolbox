@@ -1,0 +1,141 @@
+<section class="plan-line month" [attr.aria-label]="'budget.month.label' | translate">
+  <ui-segmented-control [options]="views()" [ariaLabel]="'budget.month.view' | translate" [formControl]="view" />
+
+  @if (shown() === 'plan') {
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <h2 class="month__title">{{ 'budget.forecast.title' | translate }}</h2>
+      @if (forecast().remainder !== null) {
+        <ui-badge [tone]="over() ? 'danger' : 'success'">
+          @if (over()) {
+            <ui-icon name="circle-exclamation-point" [size]="16" />
+          }
+          {{ (over() ? 'budget.forecast.over' : 'budget.forecast.balanced') | translate }}
+        </ui-badge>
+      }
+    </div>
+
+    @if (forecast().remainder !== null) {
+      <p class="month__figure" [class.month__figure--over]="over()">
+        <bdi>{{ bare(forecast().remainder ?? 0, true) }}<span class="month__unit">&nbsp;{{ unit() }}</span></bdi>
+      </p>
+    } @else {
+      <p class="m-0">{{ 'budget.forecast.noIncome' | translate }}</p>
+      <button uiButton variant="primary" type="button" class="month__action align-self-start" (click)="editIncome.emit()">
+        {{ 'budget.forecast.addIncome' | translate }}
+      </button>
+    }
+
+    @if (forecast().income !== null) {
+      <div class="month__bar" role="img" [attr.aria-label]="barLabel()">
+        <span class="month__segment month__segment--lines" [style.inline-size.%]="bar().lines"></span>
+        <span class="month__segment month__segment--saving" [style.inline-size.%]="bar().saving"></span>
+        @if (bar().rest > 0) {
+          <span class="month__segment month__segment--rest" [style.inline-size.%]="bar().rest"></span>
+        }
+        @if (over()) {
+          <span class="month__overflow" [style.inset-inline-start.%]="bar().limit"></span>
+        }
+      </div>
+      <ul class="month__legend">
+        <li>
+          <span class="month__swatch month__segment--lines" aria-hidden="true"></span>
+          {{ 'budget.month.legend.lines' | translate }} <bdi>{{ bare(forecast().lines) }}</bdi>
+        </li>
+        <li>
+          <span class="month__swatch month__segment--saving" aria-hidden="true"></span>
+          {{ 'budget.month.legend.saving' | translate }} <bdi>{{ bare(forecast().saving) }}</bdi>
+        </li>
+        <li>
+          <span class="month__swatch" [class.month__segment--rest]="!over()" [class.month__segment--over]="over()" aria-hidden="true"></span>
+          {{ 'budget.month.legend.rest' | translate }} <bdi>{{ bare(forecast().remainder ?? 0, over()) }}</bdi>
+        </li>
+      </ul>
+    }
+
+    <button type="button" class="month__toggle" [attr.aria-expanded]="detailOpen()" [attr.aria-controls]="detailId" (click)="detailOpen.set(!detailOpen())">
+      {{ (detailOpen() ? 'budget.month.hideDetail' : 'budget.month.showDetail') | translate }}
+      <ui-icon class="month__chevron" name="chevron-right" [size]="16" />
+    </button>
+    <ul class="month__sum" [id]="detailId" [hidden]="!detailOpen()">
+      <li>
+        <button type="button" class="month__row month__row--button" (click)="editIncome.emit()">
+          <span class="month__sign" aria-hidden="true"></span>
+          <span class="month__label">{{ 'budget.expectedIncome' | translate }}</span>
+          <bdi>{{ forecast().income === null ? '—' : format(forecast().income ?? 0) }}</bdi>
+          <ui-icon class="month__end" name="pencil" [size]="16" />
+        </button>
+        @if (incomeError(); as message) {
+          <ui-field-message tone="error">{{ message }}</ui-field-message>
+        }
+      </li>
+      <li class="month__row">
+        <span class="month__sign" aria-hidden="true">−</span>
+        <span class="month__label">{{ 'budget.forecast.lines' | translate }}</span>
+        <bdi>{{ format(forecast().lines) }}</bdi>
+        <span class="month__end" aria-hidden="true"></span>
+      </li>
+      <li>
+        <button type="button" class="month__row month__row--button" (click)="editSaving.emit()">
+          <span class="month__sign" aria-hidden="true">−</span>
+          <span class="month__label">{{ 'budget.plannedSaving' | translate }}</span>
+          <bdi>{{ format(forecast().saving) }}</bdi>
+          <ui-icon class="month__end" name="pencil" [size]="16" />
+        </button>
+        @if (savingError(); as message) {
+          <ui-field-message tone="error">{{ message }}</ui-field-message>
+        }
+      </li>
+      @if (forecast().remainder !== null) {
+        <li class="month__row month__row--result">
+          <span class="month__sign" aria-hidden="true">=</span>
+          <span class="month__label">{{ 'budget.forecast.rest' | translate }}</span>
+          <bdi>{{ signed(forecast().remainder ?? 0) }}</bdi>
+          <span class="month__end" aria-hidden="true"></span>
+        </li>
+      }
+    </ul>
+  } @else {
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <h2 class="month__title">{{ 'budget.table.left' | translate }}</h2>
+      @if (exhausted()) {
+        <ui-badge tone="danger">
+          <ui-icon name="circle-exclamation-point" [size]="16" />
+          {{ 'dashboard.hero.exhausted' | translate }}
+        </ui-badge>
+      }
+    </div>
+    <p class="month__figure">
+      <bdi>{{ bare(left()) }}<span class="month__unit">&nbsp;{{ unit() }}</span></bdi>
+    </p>
+    <ui-meter [value]="actual()" [max]="forecast().spending" [state]="state()" [label]="'budget.month.meter' | translate" />
+    <div class="month__spent">
+      <bdi>{{
+        (percent() === null ? 'budget.month.spentUnplanned' : 'budget.month.spent')
+          | translate: { actual: bare(actual()), planned: bare(forecast().spending), currency: unit(), percent: percent() }
+      }}</bdi>
+      @if (position() === 'current' && daysLeft() !== null) {
+        <span class="month__muted">{{ 'budget.month.daysLeft' | translate: { days: daysLeft() } }}</span>
+      } @else if (position() === 'past') {
+        <span class="month__muted">{{ 'budget.month.closed' | translate }}</span>
+      }
+    </div>
+  }
+
+  <p class="month__income">
+    <span>{{ 'budget.month.received' | translate }}</span>
+    <span class="d-flex align-items-center gap-2">
+      <bdi>
+        <strong>{{ bare(receivedIncome()) }}</strong>
+        @if (forecast().income !== null) {
+          / {{ bare(forecast().income ?? 0) }}
+        }
+        {{ unit() }}
+      </bdi>
+      @if (received()) {
+        <span class="month__received" role="img" [attr.aria-label]="'budget.month.receivedFull' | translate">
+          <ui-icon name="check" [size]="16" />
+        </span>
+      }
+    </span>
+  </p>
+</section>

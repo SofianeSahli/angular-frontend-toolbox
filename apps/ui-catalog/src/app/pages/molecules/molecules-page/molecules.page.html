@@ -176,6 +176,7 @@
       </div>
       <div class="col-md-4 d-flex flex-column gap-3">
         <ui-month-strip [months]="stripMonths" [(selected)]="stripMonth" ariaLabel="Mois du budget" />
+        <ui-month-strip compact [months]="stripMonths" [(selected)]="stripMonth" ariaLabel="Mois du budget (compact)" />
         <p class="m-0">Mois choisi : {{ stripMonth() }}</p>
         <ui-save-bar
           text="2 modifications · Alimentation 850 DT"

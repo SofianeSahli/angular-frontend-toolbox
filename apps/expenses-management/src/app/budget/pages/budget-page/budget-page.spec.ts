@@ -4,7 +4,9 @@ import { Router, RouterOutlet, provideRouter } from '@angular/router';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { ApiError } from '@shared/http-data-access';
 import { UiConfirm, UiDialog, UiToast } from '@shared/ui-organisms';
+import { formatMinor } from '@shared/util-format';
 import { render, screen, within } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 import { Observable, of } from 'rxjs';
 import fr from '../../../../../public/i18n/fr.json';
 import { CategoriesStore } from '../../../categories/data/categories.store';
@@ -16,7 +18,7 @@ import { BooksStore } from '../../../households/data/books.store';
 import { book } from '../../../households/testing';
 import { RecurringApi } from '../../../recurring/data/recurring-api';
 import { rule } from '../../../recurring/testing';
-import { FAKE_LABELS } from '../../../testing/render-part';
+import { FAKE_LABELS, TND } from '../../../testing/render-part';
 import { BudgetPlans } from '../../data/budget-plans';
 import { BudgetBusy, BudgetStatus, BudgetStore, BudgetWriteResult } from '../../data/budget.store';
 import { Budget, BudgetInput } from '../../data/models';
@@ -90,7 +92,19 @@ async function renderBudget(initial: Budget = budget(), url = '/budget?mois=2026
 }
 
 const strip = () => screen.getByRole('navigation', { name: fr.budget.strip.label });
+const monthCard = () => screen.getByRole('region', { name: fr.budget.month.label });
 const lineButton = (name: string) => screen.getByRole('button', { name: new RegExp(`^Nom ${name},`) });
+
+async function openDetail(view: Awaited<ReturnType<typeof renderBudget>>) {
+  within(monthCard()).getByRole('button', { name: fr.budget.month.showDetail }).click();
+  await view.settle();
+}
+
+async function copyFromMenu(view: Awaited<ReturnType<typeof renderBudget>>) {
+  await userEvent.click(screen.getByRole('button', { name: fr.ui.moreActions }));
+  await userEvent.click(screen.getByRole('menuitem', { name: /^Copier le budget/ }));
+  await view.settle();
+}
 
 async function editFirstLine(view: Awaited<ReturnType<typeof renderBudget>>) {
   lineButton('food').click();
@@ -98,22 +112,24 @@ async function editFirstLine(view: Awaited<ReturnType<typeof renderBudget>>) {
 }
 
 describe('BudgetPage (spec 008 REQ-5.1, 5.6–5.9; spec 009 REQ-9.1–9.7)', () => {
-  it('opens the month of the query and shows the overview, income, saving and lines', async () => {
+  it('opens the month of the query and shows the month card and the lines', async () => {
     const { store } = await renderBudget();
     expect(store.open).toHaveBeenCalledWith('b1', '2026-11');
-    expect(screen.getByRole('heading', { name: "Vue d'ensemble" })).toBeTruthy();
-    expect(screen.getByRole('button', { name: /Revenu prévu/ })).toBeTruthy();
+    expect(screen.getByRole('radio', { name: fr.budget.month.plan }).getAttribute('aria-checked')).toBe('true');
+    expect(screen.getByRole('table', { name: fr.budget.table.title })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: /^Copier le budget/ })).toBeNull();
     expect(screen.getAllByRole('button', { name: /^Nom .*, prévu/ })).toHaveLength(4);
-    expect(screen.getByText('Hors budget')).toBeTruthy();
+    expect(screen.getAllByText('Hors budget')).toHaveLength(2);
   });
 
-  it('shows a month strip with the selected month and the known statuses', async () => {
+  it('shows a month strip with the selected month and the statuses in the names', async () => {
     const view = await renderBudget();
     const months = within(strip()).getAllByRole('button');
     const selected = months.find((month) => month.getAttribute('aria-current') === 'date');
     expect(selected).toBeTruthy();
     expect(view.plans.load).toHaveBeenCalledWith('b1', expect.arrayContaining([expect.stringMatching(/^\d{4}-\d{2}$/)]));
-    expect(strip().textContent).toContain(fr.budget.strip.closed);
+    expect(selected?.getAttribute('aria-label')).toMatch(new RegExp(`^nov\\.? : ${fr.budget.strip.current}$`));
+    expect(strip().textContent).not.toContain(fr.budget.strip.closed);
   });
 
   it('edits a line in a sheet and shows the save bar with the number of changes', async () => {
@@ -172,7 +188,7 @@ describe('BudgetPage (spec 008 REQ-5.1, 5.6–5.9; spec 009 REQ-9.1–9.7)', () 
 
   it('offers to copy the previous month or start from zero for a month without a plan (REQ-9.6)', async () => {
     const view = await renderBudget(NO_PLAN);
-    expect(screen.queryByRole('heading', { name: "Vue d'ensemble" })).toBeNull();
+    expect(screen.queryByRole('region', { name: fr.budget.month.label })).toBeNull();
     screen.getByRole('button', { name: /^Copier/ }).click();
     await view.settle();
     expect(view.confirm.ask).not.toHaveBeenCalled();
@@ -183,13 +199,12 @@ describe('BudgetPage (spec 008 REQ-5.1, 5.6–5.9; spec 009 REQ-9.1–9.7)', () 
     const view = await renderBudget(NO_PLAN);
     screen.getByRole('button', { name: fr.budget.empty.fresh }).click();
     view.detectChanges();
-    expect(screen.getByRole('heading', { name: fr.budget.lines.title })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: fr.budget.table.title })).toBeTruthy();
   });
 
   it('confirms the replacement of an existing plan', async () => {
     const view = await renderBudget();
-    screen.getByRole('button', { name: /^Copier le budget/ }).click();
-    await view.settle();
+    await copyFromMenu(view);
     expect(view.confirm.ask).toHaveBeenCalledWith(expect.objectContaining({ title: fr.budget.copy.replaceTitle }));
     expect(view.store.copy).toHaveBeenCalledWith(true);
   });
@@ -210,13 +225,25 @@ describe('BudgetPage (spec 008 REQ-5.1, 5.6–5.9; spec 009 REQ-9.1–9.7)', () 
     expect(config.data.mode).toBe('plan');
     expect(config.data.excluded).toEqual(['food', 'home.housing', 'transport', 'entertainment.outings']);
     expect(screen.getAllByRole('button', { name: /^Nom .*, prévu/ })).toHaveLength(5);
+    expect(view.dialog.open).toHaveBeenCalledWith(AmountSheet, expect.objectContaining({ data: expect.objectContaining({ text: '', removable: false }) }));
+  });
+
+  it('adds no line when the amount of the new line is cancelled', async () => {
+    const view = await renderBudget();
+    view.dialog.open.mockImplementation((component: unknown) => ({ closed: of(component === AmountSheet ? undefined : 'health') }));
+    screen.getByRole('button', { name: 'Ajouter une ligne au budget' }).click();
+    await view.settle();
+    expect(screen.getAllByRole('button', { name: /^Nom .*, prévu/ })).toHaveLength(4);
   });
 
   it('lists the unplanned categories and adds one to the draft (spec 008 REQ-9.13)', async () => {
     const view = await renderBudget();
     view.store.summary.set(summary({ categories: [nodeDto('food', 600000), nodeDto('health', 9000)] }));
     view.detectChanges();
-    screen.getByRole('button', { name: 'Voir le détail' }).click();
+    screen
+      .getAllByRole('button', { name: 'Voir le détail' })
+      .filter((button) => !monthCard().contains(button))[0]
+      .click();
     view.detectChanges();
     screen.getByRole('button', { name: 'Ajouter Nom health au budget' }).click();
     view.detectChanges();
@@ -242,6 +269,28 @@ describe('BudgetPage (spec 008 REQ-5.1, 5.6–5.9; spec 009 REQ-9.1–9.7)', () 
     expect(view.recurringApi.list).toHaveBeenCalledWith('b1', expect.anything());
     expect(screen.getByRole('heading', { name: /Déjà connu pour/ })).toBeTruthy();
     expect(view.container.textContent).toContain('Loyer');
+  });
+
+  it('updates the forecast while the income and saving are edited', async () => {
+    const view = await renderBudget();
+    expect(view.container.textContent).toContain(formatMinor(1100000, TND, { signed: true }));
+    view.answers.next = { kind: 'set', text: '1000' };
+    await openDetail(view);
+    within(monthCard()).getByRole('button', { name: /^Revenu prévu/ }).click();
+    await view.settle();
+    expect(view.container.textContent).toContain(formatMinor(-400000, TND, { signed: true }));
+    expect(screen.getByText(fr.budget.forecast.over)).toBeTruthy();
+    screen.getByRole('button', { name: /Épargne prévue\s+300/ }).click();
+    await view.settle();
+    expect(view.container.textContent).toContain(formatMinor(-1100000, TND, { signed: true }));
+    expect(screen.getByRole('status').textContent).toContain('2 modifications');
+  });
+
+  it('counts the off-plan operations in the table', async () => {
+    const view = await renderBudget();
+    view.store.summary.set(summary({ categories: [{ ...nodeDto('food', 600000) }, { ...nodeDto('health', 9000), entries: 3 }] }));
+    view.detectChanges();
+    expect(screen.getByRole('rowheader', { name: 'Hors budget · 3 opérations' })).toBeTruthy();
   });
 
   it('shows the load error with a retry', async () => {

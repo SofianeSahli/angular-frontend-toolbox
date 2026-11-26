@@ -1045,7 +1045,6 @@
     "loadError": "The budget could not be loaded.",
     "loadOffline": "You are offline. The budget could not be loaded.",
     "retry": "Retry",
-    "noPlan": "This month has no budget yet. Add lines or copy last month.",
     "expectedIncome": "Expected income",
     "plannedSaving": "Planned saving",
     "retired": "Retired",
@@ -1061,31 +1060,15 @@
     "cleared": "Budget cleared",
     "cancel": "Cancel",
     "lines": {
-      "title": "Planned expenses",
-      "add": "Add a line",
+      "add": "Add a line to the budget",
+      "short": "Line",
       "empty": "No line yet.",
-      "planned": "Planned",
-      "actual": "Spent: {{amount}}",
-      "percent": "{{percent}}%",
-      "remove": "Remove {{name}}",
       "rowLabel": "{{name}}, planned {{planned}}, spent {{spent}}"
     },
     "status": {
-      "ok": "Within budget",
-      "warning": "Almost reached",
       "over": "Over budget"
     },
-    "totals": {
-      "title": "Totals",
-      "planned": "Planned",
-      "actual": "Spent",
-      "remaining": "Left to spend",
-      "income": "Income (received / expected)",
-      "expected_remaining_income": "Expected net income",
-      "saving": "Saving (put aside / planned)"
-    },
     "copy": {
-      "action": "Copy last month",
       "done": "Last month's budget copied",
       "replaceTitle": "Replace this month's budget?",
       "replaceMessage": "This month's budget will be replaced by the previous month's.",
@@ -1159,11 +1142,6 @@
         "boolean": "Value refused"
       }
     },
-    "overview": {
-      "title": "Overview",
-      "total": "Spent / planned",
-      "amounts": "{{spent}} / {{planned}}"
-    },
     "lastMonth": "Last month: {{amount}}",
     "strip": {
       "label": "Budget months",
@@ -1172,18 +1150,11 @@
       "planned": "Planned",
       "todo": "To do"
     },
-    "summary": {
-      "planned": "Planned",
-      "spent": "Spent",
-      "left": "Left"
-    },
     "empty": {
       "text": "No budget yet. Prepare it now: you can adjust it until the end of the month.",
       "copy": "Copy {{month}}",
       "fresh": "Start from zero"
     },
-    "received": "Received {{amount}}",
-    "savedAmount": "Saved {{amount}}",
     "saveBar": {
       "one": "{{count}} change",
       "many": "{{count}} changes",
@@ -1198,7 +1169,51 @@
       "link": "Recurring",
       "total": "{{amount}} of fixed expenses already committed"
     },
-    "aheadLimit": "A budget can be prepared up to 12 months ahead."
+    "aheadLimit": "A budget can be prepared up to 12 months ahead.",
+    "forecast": {
+      "title": "Expected income after spending",
+      "balanced": "Balanced",
+      "over": "Above income",
+      "noIncome": "Add your expected income to see what is left",
+      "addIncome": "Add expected income",
+      "barLabel": "Planned expenses {{lines}}, planned saving {{saving}}, left {{rest}}",
+      "lines": "Planned expenses",
+      "rest": "Left after spending"
+    },
+    "month": {
+      "label": "Month view",
+      "view": "View",
+      "plan": "Planned",
+      "real": "Actual",
+      "showDetail": "Show details",
+      "hideDetail": "Hide details",
+      "legend": {
+        "lines": "Expenses",
+        "saving": "Saving",
+        "rest": "Left"
+      },
+      "meter": "Actual against planned",
+      "spent": "{{actual}} / {{planned}} {{currency}} spent · {{percent}}%",
+      "spentUnplanned": "{{actual}} / {{planned}} {{currency}} spent",
+      "daysLeft": "{{days}} d left",
+      "closed": "Month closed",
+      "received": "Income received",
+      "receivedFull": "Received in full"
+    },
+    "table": {
+      "title": "Line by line",
+      "edit": "Edit",
+      "category": "Category",
+      "planned": "Planned",
+      "actual": "Actual",
+      "gap": "Gap",
+      "savingTag": "Saving",
+      "offPlanOne": "Off budget · {{count}} operation",
+      "offPlanMany": "Off budget · {{count}} operations",
+      "total": "Total",
+      "left": "Left to spend",
+      "note": "Amounts in {{currency}}. Overspending never offsets another line."
+    }
   },
   "recurring": {
     "title": "Recurring operations",

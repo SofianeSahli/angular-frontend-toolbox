@@ -12,28 +12,10 @@
   background: var(--ui-color-surface);
 }
 
-.plan-line--off {
-  flex-direction: row;
-  justify-content: space-between;
-  background: var(--ui-color-surface-sunken);
-}
-
-.plan-line__head {
-  display: flex;
-  align-items: center;
-  gap: var(--ui-space-2);
-}
-
 .plan-line__name {
   flex: 1 1 auto;
   min-inline-size: 0;
   font-weight: var(--ui-text-body-strong-weight);
-}
-
-.plan-line__field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ui-space-1);
 }
 
 .plan-line__numbers {
@@ -44,54 +26,11 @@
   font-variant-numeric: tabular-nums;
 }
 
-.budget-totals {
-  display: grid;
-  grid-template-columns: 1fr max-content;
-  gap: var(--ui-space-2) var(--ui-space-4);
-  margin: 0;
-  font-variant-numeric: tabular-nums;
-
-  dd {
-    margin: 0;
-    text-align: end;
-  }
-}
-
 .budget-parts__title {
   margin: 0;
   font-size: var(--ui-text-title-2-size);
   font-weight: var(--ui-text-title-2-weight);
   line-height: var(--ui-text-title-2-line-height);
-}
-
-.budget-overview {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ui-space-3);
-}
-
-.budget-overview__lines {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ui-space-3);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.budget-overview__line {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ui-space-1);
-}
-
-.budget-overview__total {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ui-space-1);
-  padding: var(--ui-space-3);
-  border-radius: var(--ui-radius-md);
-  background: var(--ui-color-surface-sunken);
 }
 
 .plan-line--off-list {
@@ -120,51 +59,6 @@
   gap: var(--ui-space-2) var(--ui-space-3);
   padding-block: var(--ui-space-2);
   border-block-start: var(--ui-border-width-thin) solid var(--ui-color-line);
-}
-
-.budget-totals__meter {
-  grid-column: 1 / -1;
-  text-align: start;
-}
-
-.plan-line--button {
-  inline-size: 100%;
-  color: var(--ui-color-ink);
-  font: inherit;
-  text-align: start;
-  cursor: pointer;
-}
-
-.plan-line--button:focus-visible {
-  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
-  outline-offset: var(--ui-focus-ring-offset);
-}
-
-.plan-line__amounts {
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.plan-line__amounts--over {
-  color: var(--ui-color-danger);
-}
-
-.budget-summary__stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--ui-space-2);
-  margin: 0;
-  font-variant-numeric: tabular-nums;
-
-  dd {
-    margin: 0;
-    font-weight: var(--ui-text-body-strong-weight);
-  }
-}
-
-.budget-summary__label {
-  color: var(--ui-color-ink-muted);
-  font-size: var(--ui-text-small-size);
 }
 
 .known-rules {

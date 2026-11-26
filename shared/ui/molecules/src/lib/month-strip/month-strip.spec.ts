@@ -63,6 +63,18 @@ describe('ui-month-strip', () => {
     expect(document.activeElement).toBe(buttons()[2]);
   });
 
+  it('shows only the month and a dot when compact, keeping the status in the name', async () => {
+    await render('<ui-month-strip compact [months]="months" selected="2026-11" ariaLabel="Mois du budget" />', {
+      imports: [UiMonthStrip],
+      componentProperties: { months },
+    });
+    const current = screen.getByRole('button', { name: 'nov. 26 : En cours' });
+    expect(current.textContent?.trim()).toBe('nov.');
+    expect(current.querySelector('.ui-month-strip__dot')).toBeTruthy();
+    const unknown = screen.getByRole('button', { name: 'févr. 27' });
+    expect(unknown.querySelector('.ui-month-strip__dot')).toBeNull();
+  });
+
   it('selects a month on click', async () => {
     const { buttons, month } = await setup();
     await userEvent.click(buttons()[0]);

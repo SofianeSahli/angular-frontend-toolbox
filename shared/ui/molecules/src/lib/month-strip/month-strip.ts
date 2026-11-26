@@ -4,6 +4,7 @@ import {
   ElementRef,
   Injector,
   afterNextRender,
+  booleanAttribute,
   computed,
   effect,
   inject,
@@ -32,12 +33,14 @@ export interface UiMonthStripItem {
   host: {
     role: 'navigation',
     '[attr.aria-label]': 'ariaLabel()',
+    '[class.ui-month-strip--compact]': 'compact()',
   },
 })
 export class UiMonthStrip {
   readonly months = input.required<readonly UiMonthStripItem[]>();
   readonly selected = model.required<string>();
   readonly ariaLabel = input.required<string>();
+  readonly compact = input(false, { transform: booleanAttribute });
 
   private readonly host: HTMLElement = inject(ElementRef).nativeElement;
   private readonly injector = inject(Injector);
@@ -51,6 +54,11 @@ export class UiMonthStrip {
       const index = this.selectedIndex();
       afterNextRender(() => this.buttons()[index]?.nativeElement.scrollIntoView?.({ block: 'nearest', inline: 'center' }), { injector: this.injector });
     });
+  }
+
+  protected accessibleName(item: UiMonthStripItem): string {
+    const name = item.caption ? `${item.label} ${item.caption}` : item.label;
+    return item.statusLabel ? `${name} : ${item.statusLabel}` : name;
   }
 
   protected choose(month: string): void {

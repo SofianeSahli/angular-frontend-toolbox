@@ -95,6 +95,7 @@ First spec whose domain code lives in the app only; the toolbox gets nothing new
 - Opérations: month totals, in-app search over up to 20 pages, chips, day totals. Budget: month strip with statuses (`BudgetPlans`), summary card, rows edited in `AmountSheet`, save bar, empty state, « Déjà connu » from rule due dates. Récurrentes: monthly averages, sections by type, ended rules collapsed; rule sheet is edit-only with « Arrêter ».
 - Foyer: options menu per member, `InviteSheet` with e-mail and QR tabs (`qrcode` dependency, 10-minute countdown); `JoinPage` previews and accepts a QR token. First run ends on « Créer et noter une première dépense ».
 - fr/en/ar keys (Arabic a draft). Deviations in `009-mobile-first-redesign/tasks.md`.
+- Follow-up: budget polishing (month card with planned and actual views, line table, compact month strip), branch `spec/009-budget-polishing`, no spec (owner).
 
 ## Next
 

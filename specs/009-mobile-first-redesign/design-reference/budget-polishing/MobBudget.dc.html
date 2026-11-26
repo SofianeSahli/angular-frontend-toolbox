@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Budget — prévision du mois</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#1D4E89}a:hover{color:#163d6c}
+</style>
+</helmet>
+<div class="o-root" style="width: 390px; height: 1260px; position: relative; overflow: hidden; background: #FBF8F3; font-family: Inter, sans-serif; color: #1C1A17">
+<dc-import name="TopBar" title="Budget" hint-size="390px,56px"></dc-import>
+<div style="padding: 0 16px 112px; display: flex; flex-direction: column; gap: 16px">
+
+<nav aria-label="Mois du budget" style="display: flex; gap: 6px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 2px">
+<sc-for list="{{months}}" as="m" hint-placeholder-count="6">
+<a href="{{m.href}}" aria-current="{{m.current}}" aria-label="{{m.aria}}" style="{{m.style}}"><span aria-hidden="true" style="{{m.dot}}"></span>{{m.label}}</a>
+</sc-for>
+</nav>
+
+<section class="ui-card" style="padding: 16px; display: flex; flex-direction: column; gap: 14px" aria-label="Vue du mois">
+<div role="radiogroup" aria-label="Vue" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 12px; background: #F3EEE6">
+<button type="button" role="radio" aria-checked="{{planChecked}}" onClick="{{ showPlan }}" style="{{planTab}}">Prévu</button>
+<button type="button" role="radio" aria-checked="{{realChecked}}" onClick="{{ showReal }}" style="{{realTab}}">Réel</button>
+</div>
+
+<sc-if value="{{ isPlan }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 14px; color: #6B6358">Revenu prévu après dépenses</span><span class="ui-badge ui-badge--success">Équilibré</span></div>
+<span class="num" style="font-size: 40px; line-height: 44px; font-weight: 600; letter-spacing: -0.02em; color: #2D5016">+100<span style="font-size: 20px; font-weight: 500; margin-left: 6px; color: #6B6358">DT</span></span>
+<div role="img" aria-label="Revenu prévu 2 800 DT : dépenses 2 500, épargne 200, reste 100" style="display: flex; height: 12px; border-radius: 6px; overflow: hidden; gap: 2px"><span style="flex: 2500; background: #57534E"></span><span style="flex: 200; background: #1D4E89"></span><span style="flex: 100; background: #8FA35C"></span></div>
+<div class="num" style="display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: #6B6358">
+<span style="display: flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 2px; background: #57534E"></span>Dépenses 2 500</span>
+<span style="display: flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 2px; background: #1D4E89"></span>Épargne 200</span>
+<span style="display: flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 2px; background: #8FA35C"></span>Reste 100</span>
+</div>
+<button type="button" aria-expanded="{{detailExpanded}}" onClick="{{ toggleDetail }}" style="align-self: flex-start; min-height: 44px; margin: -8px 0; padding: 0; border: 0; background: transparent; font: 500 14px Inter, sans-serif; color: #1D4E89; display: flex; align-items: center; gap: 4px">{{detailLabel}}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="{{detailChevron}}"></path></svg></button>
+<sc-if value="{{ detail }}" hint-placeholder-val="{{ false }}">
+<dl class="num" style="margin: 0; padding: 12px; border-radius: 12px; background: #FBF8F3; display: flex; flex-direction: column; gap: 6px; font-size: 14px">
+<div style="display: flex; justify-content: space-between"><dt>Revenu prévu</dt><dd style="margin: 0; font-weight: 600">2 800 DT</dd></div>
+<div style="display: flex; justify-content: space-between"><dt>− Dépenses prévues</dt><dd style="margin: 0">2 500 DT</dd></div>
+<div style="display: flex; justify-content: space-between"><dt>− Épargne prévue</dt><dd style="margin: 0">200 DT</dd></div>
+<div style="display: flex; justify-content: space-between; padding-top: 6px; border-top: 1px solid #E7E0D5; font-weight: 600"><dt>= Reste après dépenses</dt><dd style="margin: 0; color: #2D5016">+100 DT</dd></div>
+</dl>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isReal }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 14px; color: #6B6358">Reste à dépenser</span><span class="ui-badge ui-badge--success">Dans le rythme</span></div>
+<span class="num" style="font-size: 40px; line-height: 44px; font-weight: 600; letter-spacing: -0.02em">657<span style="font-size: 20px; font-weight: 500; margin-left: 6px; color: #6B6358">DT</span></span>
+<div class="ui-progress" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" aria-label="Dépensé : 76 % du prévu"><div class="ui-progress__bar" style="width: 76%"></div></div>
+<div class="num" style="display: flex; justify-content: space-between; font-size: 13px"><span>2 043 / 2 700 DT dépensés · 76 %</span><span style="color: #6B6358">4 j restants</span></div>
+</div>
+</sc-if>
+
+<div class="num" style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #E7E0D5; font-size: 13px; color: #6B6358">
+<span>Revenu reçu</span>
+<span style="display: flex; align-items: center; gap: 6px"><span><strong style="color: #1C1A17; font-weight: 600">2 800</strong> / 2 800 DT</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2D7A4C" stroke-width="2.4" stroke-linecap="round" role="img" aria-label="Reçu en entier"><path d="M5 12l5 5 9-10"></path></svg></span>
+</div>
+</section>
+
+<section aria-labelledby="h-lines">
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 0 4px 6px"><h2 id="h-lines" class="ui-h3" style="margin: 0">Ligne par ligne</h2><span style="display: flex; align-items: center; gap: 4px"><a href="CategoryPicker.dc.html" style="min-height: 44px; box-sizing: border-box; padding: 0 12px 0 8px; border-radius: 999px; border: 1px solid #1D4E89; color: #1D4E89; font: 500 14px Inter, sans-serif; display: flex; align-items: center; gap: 4px; text-decoration: none" aria-label="Ajouter une ligne au budget"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Ligne</a><button type="button" style="min-height: 44px; border: 0; background: transparent; padding: 0 6px; font: 500 14px Inter, sans-serif; color: #1D4E89">Modifier</button><button type="button" aria-label="Plus d'actions : copier le budget d'octobre" aria-haspopup="menu" style="width: 44px; height: 44px; margin-right: -12px; border: 0; background: transparent; color: #6B6358; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button></span></div>
+<div class="ui-card" style="padding: 0; overflow: hidden">
+<div class="num" role="row" style="display: grid; grid-template-columns: minmax(0, 1fr) 64px 64px 64px; gap: 8px; padding: 10px 16px; font-size: 12px; font-weight: 600; color: #6B6358; background: #FBF8F3; border-bottom: 1px solid #E7E0D5"><span>Catégorie</span><span style="text-align: right">Prévu</span><span style="text-align: right">Réel</span><span style="text-align: right">Écart</span></div>
+<sc-for list="{{lines}}" as="l" hint-placeholder-count="8">
+<div class="num" style="{{l.rowStyle}}">
+<span style="min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; align-items: center; gap: 6px; min-width: 0"><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500">{{l.name}}</span><sc-if value="{{ l.saving }}" hint-placeholder-val="{{ false }}"><span style="flex: none; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 6px; background: #EAF0F7; color: #163D6C">Épargne</span></sc-if></span>
+<span aria-hidden="true" style="display: block; height: 4px; border-radius: 2px; background: #EFE9DF"><span style="{{l.bar}}"></span></span>
+</span>
+<span style="text-align: right">{{l.plan}}</span>
+<span style="text-align: right; font-weight: 600; color: {{l.realColor}}">{{l.real}}</span>
+<span style="text-align: right; color: {{l.gapColor}}">{{l.gap}}</span>
+</div>
+</sc-for>
+<div class="num" style="display: grid; grid-template-columns: minmax(0, 1fr) 64px 64px 64px; gap: 8px; padding: 12px 16px; font-size: 14px; border-top: 1px solid #E7E0D5"><span style="color: #6B6358">Hors budget · 2 opérations</span><span style="text-align: right; color: #6B6358">—</span><span style="text-align: right; font-weight: 600">21</span><span style="text-align: right; color: #6B6358">—</span></div>
+<div class="num" style="display: grid; grid-template-columns: minmax(0, 1fr) 64px 64px 64px; gap: 8px; padding: 12px 16px; font-size: 14px; font-weight: 600; background: #F3EEE6"><span>Total</span><span style="text-align: right">2 700</span><span style="text-align: right">2 043</span><span style="text-align: right">657</span></div>
+</div>
+<p style="margin: 8px 4px 0; font-size: 13px; line-height: 19px; color: #6B6358">Montants en DT. Un dépassement ne compense jamais une autre ligne.</p>
+</section>
+</div>
+<div style="position: absolute; left: 0; bottom: 0"><dc-import name="TabBar" active="budget" hint-size="390px,84px"></dc-import></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1260}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { view: 'plan', detail: false };
+}
+renderVals() {
+var self = this;
+var st = this.state;
+var ms = [['sept.', 'Clos', 'done'], ['oct.', 'Clos', 'done'], ['nov.', 'En cours', 'now'], ['déc.', 'Prévu', 'planned'], ['janv.', 'À faire', 'empty'], ['févr.', 'À faire', 'empty']];
+var dotColor = { done: '#8F877A', now: '#8FA35C', planned: '#1D4E89', empty: 'transparent' };
+var months = ms.map(function (m) {
+var on = m[2] === 'now';
+return {
+label: m[0], current: on ? 'page' : 'false', aria: m[0] + ' : ' + m[1],
+href: m[0] === 'janv.' ? 'MobBudgetFuture.dc.html' : 'MobBudget.dc.html',
+style: 'flex: none; min-height: 40px; padding: 0 12px; border-radius: 999px; display: flex; align-items: center; gap: 6px; text-decoration: none; font-size: 14px; font-weight: ' + (on ? '600' : '500') + '; ' + (on ? 'background: #1C1A17; color: #FFFFFF; border: 1px solid #1C1A17' : 'background: #FFFFFF; color: #1C1A17; border: 1px ' + (m[2] === 'empty' ? 'dashed #C9C1B4' : 'solid #E7E0D5')),
+dot: 'width: 7px; height: 7px; border-radius: 50%; background: ' + dotColor[m[2]] + '; border: 1px solid ' + (m[2] === 'empty' ? '#8F877A' : dotColor[m[2]])
+};
+});
+var raw = [
+['Alimentation', 850, 712, false], ['Cafés & resto', 120, 134, false], ['Transport', 150, 96, false],
+['Factures (STEG, SONEDE, Internet)', 250, 190, false], ['Loyer', 650, 650, false], ['Santé', 200, 40, false],
+['Divers', 280, 0, false], ['Compte épargne', 200, 200, true]
+];
+var lines = raw.map(function (r, i) {
+var gap = r[1] - r[2];
+var over = gap < 0;
+var pct = Math.min(100, Math.round(r[2] / r[1] * 100));
+return {
+name: r[0], saving: r[3], plan: String(r[1]), real: String(r[2]),
+gap: over ? '−' + (-gap) : (gap === 0 ? '0' : '+' + gap),
+realColor: over ? '#B8443A' : '#1C1A17',
+gapColor: over ? '#B8443A' : '#6B6358',
+bar: 'display: block; height: 4px; border-radius: 2px; width: ' + pct + '%; background: ' + (over ? 'repeating-linear-gradient(135deg, #B8443A 0 4px, #D9867D 4px 8px)' : (r[3] ? '#1D4E89' : (pct >= 85 ? '#B7791F' : '#4E6B1F'))),
+rowStyle: 'display: grid; grid-template-columns: minmax(0, 1fr) 64px 64px 64px; gap: 8px; align-items: center; padding: 12px 16px; font-size: 14px; min-height: 56px; box-sizing: border-box; ' + (i < raw.length - 1 ? 'border-bottom: 1px solid #F3EEE6' : '')
+};
+});
+var segOff = 'min-height: 40px; border: 0; border-radius: 9px; background: transparent; color: #1C1A17; font: 500 14px Inter, sans-serif; cursor: pointer; ';
+var segOn = 'background: #FFFFFF; font-weight: 600; box-shadow: 0 1px 2px rgba(28,26,23,0.12)';
+var plan = st.view === 'plan';
+return {
+months: months, lines: lines,
+isPlan: plan, isReal: !plan,
+planChecked: plan ? 'true' : 'false', realChecked: plan ? 'false' : 'true',
+planTab: segOff + (plan ? segOn : ''), realTab: segOff + (plan ? '' : segOn),
+showPlan: function () { self.setState({ view: 'plan' }); },
+showReal: function () { self.setState({ view: 'real' }); },
+detail: st.detail, detailExpanded: st.detail ? 'true' : 'false',
+detailLabel: st.detail ? 'Masquer le détail' : 'Voir le détail',
+detailChevron: st.detail ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6',
+toggleDetail: function () { self.setState({ detail: !st.detail }); }
+};
+}
+}
+</script>
+</body>
+</html>

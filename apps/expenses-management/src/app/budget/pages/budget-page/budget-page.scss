@@ -11,23 +11,3 @@
 .budget-page__invite {
   color: var(--ui-color-ink-muted);
 }
-
-.budget-page__title {
-  margin: 0;
-  font-size: var(--ui-text-title-2-size);
-  font-weight: var(--ui-text-title-2-weight);
-  line-height: var(--ui-text-title-2-line-height);
-}
-
-.budget-page__actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--ui-space-2);
-}
-
-.budget-page__rows {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ui-space-2);
-}

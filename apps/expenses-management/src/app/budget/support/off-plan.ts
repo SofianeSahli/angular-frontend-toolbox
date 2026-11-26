@@ -18,3 +18,14 @@ export function offPlanCategories(summary: Summary, plannedCodes: Iterable<strin
     .sort((a, b) => b.total - a.total || a.index - b.index)
     .map(({ code, total }) => ({ code, total }));
 }
+
+function entriesBelow(node: SummaryNode, planned: ReadonlySet<string>): number {
+  return node.children.reduce((sum, child) => sum + (planned.has(child.category) ? child.entries : entriesBelow(child, planned)), 0);
+}
+
+export function offPlanEntries(summary: Summary, plannedCodes: Iterable<string>): number {
+  const planned = new Set(plannedCodes);
+  return summary.categories
+    .filter((node) => node.type === 'expense' && !planned.has(node.category))
+    .reduce((sum, node) => sum + node.entries - entriesBelow(node, planned), 0);
+}
