@@ -3,11 +3,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ApiError } from '@shared/http-data-access';
-import { UiButton, UiIcon, UiSkeleton } from '@shared/ui-atoms';
+import { UiButton, UiSkeleton } from '@shared/ui-atoms';
 import { UiAlert, UiEmptyState, UiMonthStrip, UiMonthStripItem, UiSaveBar } from '@shared/ui-molecules';
 import { UiConfirm, UiDialog, UiToast } from '@shared/ui-organisms';
 import { UiPage } from '@shared/ui-templates';
-import { formatMinor, parseMajor, todayIn } from '@shared/util-format';
+import { todayIn } from '@shared/util-format';
 import { firstValueFrom, map } from 'rxjs';
 import { CategoriesStore } from '../../../categories/data/categories.store';
 import { CategoryLabels } from '../../../categories/data/category-labels';
@@ -18,8 +18,8 @@ import { RecurringRule } from '../../../recurring/data/models';
 import { RecurringApi } from '../../../recurring/data/recurring-api';
 import { BudgetPlans } from '../../data/budget-plans';
 import { AmountSheetResult, openAmountSheet } from '../../parts/amount-sheet/amount-sheet';
-import { BudgetSummary } from '../../parts/budget-summary/budget-summary';
 import { KnownRulesCard, dueInMonth } from '../../parts/known-rules-card/known-rules-card';
+import { MonthCard } from '../../parts/month-card/month-card';
 import { futureMonths, stripMonths, stripStatus } from '../../support/strip-months';
 import { injectTranslationRevision } from '../../../i18n/translation-revision';
 import { BooksStore } from '../../../households/data/books.store';
@@ -29,9 +29,10 @@ import { LeaveCheck } from '../budget-leave.guard';
 import { BudgetStore, BudgetWriteResult } from '../../data/budget.store';
 import { Budget, BudgetInput, BudgetLine } from '../../data/models';
 import { OffPlanItem, OffPlanList } from '../../parts/off-plan-list/off-plan-list';
-import { PlanLineRow } from '../../parts/plan-line-row/plan-line-row';
+import { LinesTable } from '../../parts/lines-table/lines-table';
+import { forecast, realised } from '../../support/forecast';
 import { lastMonthActual } from '../../support/last-month';
-import { OffPlanCategory, offPlanCategories } from '../../support/off-plan';
+import { OffPlanCategory, offPlanCategories, offPlanEntries } from '../../support/off-plan';
 import { BudgetFieldErrors, budgetFieldErrors, budgetReaction, parseMessage, throttledMessage } from '../../support/budget-errors';
 
 const DEFAULT_TIMEZONE = 'Africa/Tunis';
@@ -40,22 +41,21 @@ const NO_EXPONENT = 3;
 @Component({
   selector: 'app-budget-page',
   imports: [
-    BudgetSummary,
     KnownRulesCard,
+    LinesTable,
+    MonthCard,
     OffPlanList,
-    PlanLineRow,
     TranslatePipe,
     UiAlert,
     UiButton,
     UiEmptyState,
-    UiIcon,
     UiMonthStrip,
     UiPage,
     UiSaveBar,
     UiSkeleton,
   ],
   templateUrl: './budget-page.html',
-  styleUrls: ['./budget-page.scss', '../../parts/budget-parts.scss'],
+  styleUrl: './budget-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BudgetPage implements OnInit, OnDestroy, LeaveCheck {
@@ -81,7 +81,8 @@ export class BudgetPage implements OnInit, OnDestroy, LeaveCheck {
   protected readonly startedFresh = signal(false);
   private readonly rules = signal<readonly RecurringRule[]>([]);
   private rulesRequest = 0;
-  protected readonly future = computed(() => positionOf(this.month(), this.today()) === 'future');
+  protected readonly position = computed(() => positionOf(this.month(), this.today()));
+  protected readonly future = computed(() => this.position() === 'future');
   protected readonly locale = computed(() => {
     this.revision();
     return uiLocale(this.translate.getCurrentLang());
@@ -115,9 +116,37 @@ export class BudgetPage implements OnInit, OnDestroy, LeaveCheck {
   protected readonly lastMonths = computed(
     () => new Map(this.draft().lines().map((line) => [line.category, lastMonthActual(this.store.previous(), line.category)] as const)),
   );
+  protected readonly forecastValue = computed(() => {
+    const draft = this.draft();
+    return forecast(draft.incomeMinor(), draft.plannedTotal(), draft.savingMinor());
+  });
+  protected readonly realisedValue = computed(() => {
+    const answer = this.answer();
+    const draft = this.draft();
+    return answer === null ? { actual: 0, offPlan: 0, left: 0 } : realised(answer, draft.plannedLines(), draft.savingMinor());
+  });
+  protected readonly offPlanCount = computed(() => {
+    const summary = this.store.summary();
+    if (summary === null) return null;
+    const saved = this.answerLines();
+    const planned = this.draft()
+      .lines()
+      .map((line) => line.category)
+      .filter((category) => saved.has(category));
+    return offPlanEntries(summary, planned);
+  });
+  protected readonly shownLineErrors = computed(() => {
+    const errors = new Map<string, string>();
+    for (const line of this.draft().lines()) {
+      const message = this.lineError(line.category);
+      if (message !== null) errors.set(line.category, message);
+    }
+    return errors;
+  });
   protected readonly submitted = signal(false);
   protected readonly serverErrors = signal<BudgetFieldErrors | null>(null);
   protected readonly notice = signal<string | null>(null);
+  protected readonly addedLine = signal<string | null>(null);
   protected readonly busy = computed(() => this.store.busy() !== 'idle');
 
   protected readonly stripItems = computed<readonly UiMonthStripItem[]>(() => {
@@ -130,7 +159,6 @@ export class BudgetPage implements OnInit, OnDestroy, LeaveCheck {
       return {
         month,
         label: short.format(this.firstDay(month)),
-        caption: month.slice(2, 4),
         status,
         statusLabel: status === undefined ? undefined : this.translate.instant(`budget.strip.${status}`),
       };
@@ -223,7 +251,7 @@ export class BudgetPage implements OnInit, OnDestroy, LeaveCheck {
     this.navigateTo(month);
   }
 
-  protected lineError(category: string): string | null {
+  private lineError(category: string): string | null {
     const parse = this.draft().lineErrors().get(category);
     const server = this.serverErrors()?.lines[category];
     return this.fieldError(parse ?? null, server?.planned ?? server?.category ?? null);
@@ -260,20 +288,15 @@ export class BudgetPage implements OnInit, OnDestroy, LeaveCheck {
     this.notice.set(null);
   }
 
-  protected amountText(text: string): string {
-    if (text.trim() === '') return '—';
-    const parsed = parseMajor(text, this.book()?.currency.exponent ?? NO_EXPONENT, { allowZero: true });
-    return parsed.ok ? this.minorText(parsed.minor) : text;
-  }
-
-  protected minorText(minor: number): string {
-    const book = this.book();
-    return book === null ? '' : formatMinor(minor, book.currency);
-  }
-
   protected async addLine(): Promise<void> {
     const code = await openCategoryPicker(this.dialog, { mode: 'plan', excluded: [...this.draft().categories()] });
-    if (code !== null) this.draft().addLine(code);
+    if (code === null) return;
+    const result = await this.askAmount(this.labels.name(code), '', false, false);
+    if (result?.kind !== 'set') return;
+    if (!this.draft().addLine(code)) return;
+    this.draft().setLine(code, result.text);
+    this.addedLine.set(code);
+    setTimeout(() => this.addedLine.set(null), 1600);
   }
 
   protected addFromOffPlan(row: OffPlanCategory): void {

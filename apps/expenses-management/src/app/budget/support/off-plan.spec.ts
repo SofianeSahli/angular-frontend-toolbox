@@ -1,5 +1,5 @@
 import { nodeDto, summary } from '../../dashboard/testing';
-import { offPlanCategories } from './off-plan';
+import { offPlanCategories, offPlanEntries } from './off-plan';
 
 const tree = summary({
   categories: [
@@ -44,5 +44,13 @@ describe('offPlanCategories (spec 008 REQ-9.13)', () => {
   it('keeps the tree order for equal totals', () => {
     const equal = summary({ categories: [nodeDto('b', 100), nodeDto('a', 100)] });
     expect(offPlanCategories(equal, []).map((row) => row.code)).toEqual(['b', 'a']);
+  });
+});
+
+describe('offPlanEntries', () => {
+  it('counts the operations outside the planned categories', () => {
+    const data = summary({ categories: [{ ...nodeDto('food', 10), entries: 4 }, { ...nodeDto('health', 5), entries: 2 }] });
+    expect(offPlanEntries(data, ['food'])).toBe(2);
+    expect(offPlanEntries(data, [])).toBe(6);
   });
 });

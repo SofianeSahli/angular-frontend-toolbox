@@ -1,0 +1,62 @@
+.month__bar {
+  position: relative;
+  display: flex;
+  block-size: var(--ui-space-3);
+  overflow: hidden;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-color-surface-sunken);
+}
+
+.month__segment {
+  display: block;
+}
+
+.month__segment--lines {
+  background: var(--ui-color-accent);
+}
+
+.month__segment--saving {
+  background: var(--ui-color-warning);
+}
+
+.month__segment--rest {
+  background: var(--ui-color-success);
+}
+
+.month__segment--over,
+.month__overflow {
+  background: repeating-linear-gradient(135deg, var(--ui-color-danger) 0 var(--ui-space-1), var(--ui-color-surface) var(--ui-space-1) var(--ui-space-2));
+}
+
+.month__overflow {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  border-inline-start: var(--ui-border-width-thin) solid var(--ui-color-ink);
+}
+
+.month__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-space-1) var(--ui-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ui-color-ink-muted);
+  font-size: var(--ui-text-small-size);
+  line-height: var(--ui-text-small-line-height);
+  font-variant-numeric: tabular-nums;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-1);
+  }
+}
+
+.month__swatch {
+  flex: none;
+  inline-size: var(--ui-space-2);
+  block-size: var(--ui-space-2);
+  border-radius: var(--ui-radius-sm);
+}

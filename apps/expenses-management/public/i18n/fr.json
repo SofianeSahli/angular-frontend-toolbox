@@ -1045,7 +1045,6 @@
     "loadError": "Impossible de charger le budget.",
     "loadOffline": "Hors connexion. Le budget n'a pas pu être chargé.",
     "retry": "Réessayer",
-    "noPlan": "Ce mois n'a pas encore de budget. Ajoutez des lignes ou copiez le mois dernier.",
     "expectedIncome": "Revenu prévu",
     "plannedSaving": "Épargne prévue",
     "retired": "Retirée",
@@ -1061,31 +1060,15 @@
     "cleared": "Budget effacé",
     "cancel": "Annuler",
     "lines": {
-      "title": "Dépenses prévues",
-      "add": "Ajouter une ligne",
+      "add": "Ajouter une ligne au budget",
+      "short": "Ligne",
       "empty": "Aucune ligne pour l'instant.",
-      "planned": "Prévu",
-      "actual": "Dépensé : {{amount}}",
-      "percent": "{{percent}} %",
-      "remove": "Retirer {{name}}",
       "rowLabel": "{{name}}, prévu {{planned}}, dépensé {{spent}}"
     },
     "status": {
-      "ok": "Dans le budget",
-      "warning": "Presque atteint",
       "over": "Dépassé"
     },
-    "totals": {
-      "title": "Totaux",
-      "planned": "Prévu",
-      "actual": "Dépensé",
-      "remaining": "Reste à dépenser",
-      "income": "Revenus (reçus / prévus)",
-      "expected_remaining_income": "Revenus nette prévue",
-      "saving": "Épargne (mise de côté / prévue)"
-    },
     "copy": {
-      "action": "Copier le mois dernier",
       "done": "Budget du mois dernier copié",
       "replaceTitle": "Remplacer le budget de ce mois ?",
       "replaceMessage": "Le budget de ce mois sera remplacé par celui du mois précédent.",
@@ -1159,11 +1142,6 @@
         "boolean": "Valeur refusée"
       }
     },
-    "overview": {
-      "title": "Vue d'ensemble",
-      "total": "Dépensé / prévu",
-      "amounts": "{{spent}} / {{planned}}"
-    },
     "lastMonth": "Le mois dernier : {{amount}}",
     "strip": {
       "label": "Mois du budget",
@@ -1172,18 +1150,11 @@
       "planned": "Prévu",
       "todo": "À faire"
     },
-    "summary": {
-      "planned": "Prévu",
-      "spent": "Dépensé",
-      "left": "Reste"
-    },
     "empty": {
       "text": "Pas encore de budget. Préparez-le maintenant : vous pourrez l'ajuster jusqu'à la fin du mois.",
       "copy": "Copier {{month}}",
       "fresh": "Partir de zéro"
     },
-    "received": "Reçu {{amount}}",
-    "savedAmount": "Épargné {{amount}}",
     "saveBar": {
       "one": "{{count}} modification",
       "many": "{{count}} modifications",
@@ -1198,7 +1169,51 @@
       "link": "Récurrentes",
       "total": "{{amount}} de dépenses fixes déjà engagées"
     },
-    "aheadLimit": "On peut préparer un budget jusqu'à 12 mois à l'avance."
+    "aheadLimit": "On peut préparer un budget jusqu'à 12 mois à l'avance.",
+    "forecast": {
+      "title": "Revenu prévu après dépenses",
+      "balanced": "Équilibré",
+      "over": "Au-dessus du revenu",
+      "noIncome": "Ajoutez votre revenu prévu pour voir ce qu'il reste",
+      "addIncome": "Ajouter le revenu prévu",
+      "barLabel": "Dépenses prévues {{lines}}, épargne prévue {{saving}}, reste {{rest}}",
+      "lines": "Dépenses prévues",
+      "rest": "Reste après dépenses"
+    },
+    "month": {
+      "label": "Vue du mois",
+      "view": "Vue",
+      "plan": "Prévu",
+      "real": "Réel",
+      "showDetail": "Voir le détail",
+      "hideDetail": "Masquer le détail",
+      "legend": {
+        "lines": "Dépenses",
+        "saving": "Épargne",
+        "rest": "Reste"
+      },
+      "meter": "Réel sur prévu",
+      "spent": "{{actual}} / {{planned}} {{currency}} dépensés · {{percent}} %",
+      "spentUnplanned": "{{actual}} / {{planned}} {{currency}} dépensés",
+      "daysLeft": "{{days}} j restants",
+      "closed": "Mois clos",
+      "received": "Revenu reçu",
+      "receivedFull": "Reçu en entier"
+    },
+    "table": {
+      "title": "Ligne par ligne",
+      "edit": "Modifier",
+      "category": "Catégorie",
+      "planned": "Prévu",
+      "actual": "Réel",
+      "gap": "Écart",
+      "savingTag": "Épargne",
+      "offPlanOne": "Hors budget · {{count}} opération",
+      "offPlanMany": "Hors budget · {{count}} opérations",
+      "total": "Total",
+      "left": "Reste à dépenser",
+      "note": "Montants en {{currency}}. Un dépassement ne compense jamais une autre ligne."
+    }
   },
   "recurring": {
     "title": "Opérations récurrentes",

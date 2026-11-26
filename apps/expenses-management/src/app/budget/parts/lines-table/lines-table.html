@@ -1,0 +1,106 @@
+<section class="d-flex flex-column gap-2" aria-labelledby="budget-lines-title">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+    <h2 class="budget-parts__title" id="budget-lines-title">{{ 'budget.table.title' | translate }}</h2>
+    <div class="d-flex align-items-center gap-1">
+      <button
+        uiButton
+        type="button"
+        class="lines__action lines__add"
+        [disabled]="busy()"
+        [attr.aria-label]="'budget.lines.add' | translate"
+        (click)="addLine.emit()"
+      >
+        <ui-icon name="plus" />
+        {{ 'budget.lines.short' | translate }}
+      </button>
+      <button uiButton variant="ghost" type="button" class="lines__action" (click)="focusFirstRow()">{{ 'budget.table.edit' | translate }}</button>
+      <button
+        uiButton
+        variant="ghost"
+        iconOnly
+        type="button"
+        class="lines__action lines__more"
+        [loading]="copying()"
+        [disabled]="busy()"
+        [attr.aria-label]="'ui.moreActions' | translate"
+        [uiMenuTriggerFor]="actions"
+      >
+        <ui-icon name="ellipsis" />
+      </button>
+      <ng-template #actions>
+        <ui-menu>
+          <button uiMenuItem (triggered)="copyPrevious.emit()">{{ copyLabel() }}</button>
+        </ui-menu>
+      </ng-template>
+    </div>
+  </div>
+  @if (lines().length === 0) {
+    <p class="plan-line__numbers">{{ 'budget.lines.empty' | translate }}</p>
+  }
+  <div class="plan-line lines">
+    <table class="lines__table" aria-labelledby="budget-lines-title">
+      <thead>
+        <tr>
+          <th scope="col" class="lines__category">{{ 'budget.table.category' | translate }}</th>
+          <th scope="col" class="lines__number">{{ 'budget.table.planned' | translate }}</th>
+          <th scope="col" class="lines__number">{{ 'budget.table.actual' | translate }}</th>
+          <th scope="col" class="lines__number">{{ 'budget.table.gap' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (line of lines(); track line.category) {
+          <tr
+            appPlanLineRow
+            [class.lines__row--new]="line.category === added()"
+            [name]="labels.name(line.category)"
+            [emoji]="labels.emoji(line.category)"
+            [text]="line.text"
+            [actual]="answers().get(line.category)?.actual ?? 0"
+            [currency]="currency()"
+            [tag]="line.retired ? ('budget.retired' | translate) : null"
+            tagTone="warning"
+            [error]="lineErrors().get(line.category) ?? null"
+            [lastMonth]="lastMonths().get(line.category) ?? null"
+            (open)="editLine.emit(line.category)"
+          ></tr>
+        }
+        <tr
+          appPlanLineRow
+          [name]="'budget.plannedSaving' | translate"
+          [text]="savingText()"
+          [actual]="savingActual()"
+          [currency]="currency()"
+          [tag]="'budget.table.savingTag' | translate"
+          tagTone="accent"
+          [limit]="false"
+          (open)="editSaving.emit()"
+        ></tr>
+        @if (offPlan() > 0) {
+          <tr class="lines__row">
+            <th scope="row" class="lines__category">
+              @if (offPlanCount(); as count) {
+                {{ (count === 1 ? 'budget.table.offPlanOne' : 'budget.table.offPlanMany') | translate: { count } }}
+              } @else {
+                {{ 'budget.offPlan.title' | translate }}
+              }
+            </th>
+            <td class="lines__number">—</td>
+            <td class="lines__number"><bdi>{{ amount(offPlan()) }}</bdi></td>
+            <td class="lines__number">—</td>
+          </tr>
+        }
+      </tbody>
+      <tfoot>
+        <tr class="lines__row lines__row--total">
+          <th scope="row" class="lines__category">{{ 'budget.table.total' | translate }}</th>
+          <td class="lines__number"><bdi>{{ amount(totals().planned) }}</bdi></td>
+          <td class="lines__number"><bdi>{{ amount(totals().actual) }}</bdi></td>
+          <td class="lines__number">
+            <span class="visually-hidden">{{ 'budget.table.left' | translate }}&ngsp;</span><bdi>{{ amount(totals().left) }}</bdi>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <p class="plan-line__numbers">{{ 'budget.table.note' | translate: { currency: unit() } }}</p>
+</section>

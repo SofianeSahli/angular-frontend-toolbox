@@ -1,16 +1,26 @@
-<button type="button" class="plan-line plan-line--button" [attr.aria-label]="accessibleName()" (click)="open.emit()">
-  <span class="plan-line__head">
-    <span class="plan-line__name"><span aria-hidden="true">{{ emoji() }}</span>&ngsp;<bdi>{{ name() }}</bdi></span>
-    @if (line().retired) {
-      <ui-badge tone="warning">{{ 'budget.retired' | translate }}</ui-badge>
+<th scope="row" class="line__name">
+  <button type="button" class="line__button" [attr.aria-label]="accessibleName()">
+    @if (emoji(); as icon) {
+      <span aria-hidden="true">{{ icon }}</span>&ngsp;
     }
-    <bdi class="plan-line__amounts" [class.plan-line__amounts--over]="state() === 'over'">{{ spentText() }} / {{ plannedText() }}</bdi>
-  </span>
-  <ui-meter [value]="actual()" [max]="answer()?.planned ?? 0" [state]="state()" [label]="name()" />
-  @if (lastMonth() !== null) {
-    <span class="plan-line__numbers"><bdi>{{ 'budget.lastMonth' | translate: { amount: lastMonthText() } }}</bdi></span>
+    <bdi>{{ name() }}</bdi>
+  </button>
+  @if (tag(); as label) {
+    <ui-badge [tone]="tagTone()">{{ label }}</ui-badge>
   }
-</button>
-@if (error(); as message) {
-  <ui-field-message tone="error">{{ message }}</ui-field-message>
-}
+  <ui-meter [value]="actual()" [max]="max()" [state]="state()" [label]="name()" />
+  @if (lastMonth() !== null) {
+    <span class="line__note"><bdi>{{ 'budget.lastMonth' | translate: { amount: lastMonthText() } }}</bdi></span>
+  }
+  @if (error(); as message) {
+    <ui-field-message tone="error">{{ message }}</ui-field-message>
+  }
+</th>
+<td class="line__amount"><bdi>{{ plannedText() }}</bdi></td>
+<td class="line__amount"><bdi>{{ actualText() }}</bdi></td>
+<td class="line__amount" [class.line__amount--over]="state() === 'over'">
+  @if (state() === 'over') {
+    <ui-icon name="circle-exclamation-point" [size]="16" />
+  }
+  <bdi>{{ gapText() }}</bdi>
+</td>

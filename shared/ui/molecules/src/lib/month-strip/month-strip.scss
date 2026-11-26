@@ -95,4 +95,29 @@
   [data-status='todo'] .ui-month-strip__dot {
     background: transparent;
   }
+
+  :host(.ui-month-strip--compact) .ui-month-strip__month {
+    flex-direction: row;
+    justify-content: center;
+    min-inline-size: var(--ui-control-height-lg);
+    border-radius: var(--ui-radius-pill);
+  }
+
+  :host(.ui-month-strip--compact) .ui-month-strip__month[aria-current] {
+    border-color: var(--ui-color-ink);
+    background: var(--ui-color-ink);
+    color: var(--ui-color-surface);
+  }
+
+  :host(.ui-month-strip--compact) [data-status='closed'] .ui-month-strip__dot {
+    color: var(--ui-color-line-strong);
+  }
+
+  :host(.ui-month-strip--compact) [data-status='planned'] .ui-month-strip__dot {
+    color: var(--ui-color-brand);
+  }
+
+  :host(.ui-month-strip--compact) [data-status='todo'] .ui-month-strip__dot {
+    color: var(--ui-color-line-strong);
+  }
 }

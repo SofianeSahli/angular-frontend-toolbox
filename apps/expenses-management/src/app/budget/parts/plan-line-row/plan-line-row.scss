@@ -1,0 +1,51 @@
+:host {
+  border-block-start: var(--ui-border-width-thin) solid var(--ui-color-line);
+  cursor: pointer;
+}
+
+.line__name {
+  padding-block: var(--ui-space-1) var(--ui-space-2);
+  font-weight: var(--ui-text-body-strong-weight);
+  text-align: start;
+}
+
+.line__button {
+  display: block;
+  inline-size: 100%;
+  min-block-size: var(--ui-control-height-lg);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ui-color-ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.line__button:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: var(--ui-focus-ring-offset);
+}
+
+ui-meter {
+  --ui-meter-block-size: var(--ui-space-1);
+}
+
+.line__note {
+  display: block;
+  color: var(--ui-color-ink-muted);
+  font-size: var(--ui-text-caption-size);
+  font-weight: var(--ui-text-body-weight);
+}
+
+.line__amount {
+  padding-inline-start: var(--ui-space-2);
+  font-size: var(--ui-text-small-size);
+  text-align: end;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.line__amount--over {
+  color: var(--ui-color-danger);
+}

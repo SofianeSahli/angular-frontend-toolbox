@@ -67,12 +67,10 @@ export class BudgetDraft {
   readonly incomeError = computed(() => this.failureOf(this.income()));
   readonly savingError = computed(() => this.failureOf(this.saving()));
 
-  readonly plannedTotal = computed(() =>
-    this.lines().reduce((sum, line) => {
-      const parsed = parseMajor(line.text, this.exponent, { allowZero: true });
-      return parsed.ok ? sum + parsed.minor : sum;
-    }, 0),
-  );
+  readonly plannedLines = computed(() => this.lines().map((line) => ({ category: line.category, planned: this.minorOf(line.text) ?? 0 })));
+  readonly plannedTotal = computed(() => this.plannedLines().reduce((sum, line) => sum + line.planned, 0));
+  readonly incomeMinor = computed(() => this.minorOf(this.income()));
+  readonly savingMinor = computed(() => this.minorOf(this.saving()));
 
   constructor(
     private readonly exponent: number,
@@ -143,6 +141,11 @@ export class BudgetDraft {
         return { category: line.category, planned: parsed.ok ? parsed.minor : 0 };
       }),
     };
+  }
+
+  private minorOf(text: string): number | null {
+    const parsed = parseMajor(text, this.exponent, { allowZero: true });
+    return parsed.ok ? parsed.minor : null;
   }
 
   private failureOf(text: string): ParseFailure | null {
