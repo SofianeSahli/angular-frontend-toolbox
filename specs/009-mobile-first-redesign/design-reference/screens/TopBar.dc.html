@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Barre du haut</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<header style="width: 390px; height: 56px; box-sizing: border-box; padding: 6px 4px; background: #FBF8F3; display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; align-items: center; font-family: Inter, sans-serif; color: #1C1A17">
+<a href="Drawer.dc.html" aria-label="Menu" aria-haspopup="dialog" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #1C1A17; border-radius: 12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"></path></svg></a>
+<sc-if value="{{ bookMode }}" hint-placeholder-val="{{ true }}">
+<a href="Drawer.dc.html" aria-haspopup="dialog" aria-label="Carnet : Dépenses du foyer. Changer de carnet" style="justify-self: center; min-height: 44px; max-width: 100%; padding: 0 10px; border-radius: 12px; display: flex; align-items: center; gap: 6px; text-decoration: none; color: #1C1A17; font-size: 16px; font-weight: 600"><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">Dépenses du foyer</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="flex: none"><path d="M6 9l6 6 6-6"></path></svg></a>
+</sc-if>
+<sc-if value="{{ titleMode }}" hint-placeholder-val="{{ false }}">
+<h1 style="margin: 0; justify-self: center; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{title}}</h1>
+</sc-if>
+<a href="Account.dc.html" aria-label="Mon compte" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none"><span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 50%; background: #1D4E89; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600">S</span></a>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"title":{"editor":"text","default":""},"$preview":{"width":390,"height":56}}'>
+class Component extends DCLogic {
+renderVals() {
+var title = this.props.title ?? '';
+return { title: title, bookMode: title === '', titleMode: title !== '' };
+}
+}
+</script>
+</body>
+</html>

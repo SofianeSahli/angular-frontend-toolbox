@@ -15,6 +15,7 @@ import { FAKE_LABELS } from '../../testing/render-part';
 import { RecurringRule } from '../data/models';
 import { RecurringStatus, RecurringStore, RuleWriteResult } from '../data/recurring.store';
 import { RuleSheetService } from '../rule-sheet.service';
+import { EntrySheetService } from '../../operations/entry-sheet.service';
 import { rule } from '../testing';
 import { RecurringPage } from './recurring-page';
 
@@ -28,7 +29,8 @@ async function renderRecurring(rules: RecurringRule[] = [rule('r1'), rule('r2', 
     remove: vi.fn<(bookId: string, id: string) => Promise<RuleWriteResult>>().mockResolvedValue({ outcome: 'done', rule: null }),
     setActive: vi.fn(),
   };
-  const sheets = { openNew: vi.fn(), openEdit: vi.fn() };
+  const sheets = { openEdit: vi.fn() };
+  const entrySheets = { openNew: vi.fn() };
   const confirm = { ask: vi.fn<(options: unknown) => Promise<boolean>>().mockResolvedValue(true) };
   const view = await render(RecurringPage, {
     providers: [
@@ -39,12 +41,13 @@ async function renderRecurring(rules: RecurringRule[] = [rule('r1'), rule('r2', 
       { provide: CategoriesStore, useValue: { load: vi.fn().mockResolvedValue({ outcome: 'done' }) } },
       { provide: CategoryLabels, useValue: FAKE_LABELS },
       { provide: RuleSheetService, useValue: sheets },
+      { provide: EntrySheetService, useValue: entrySheets },
       { provide: UiConfirm, useValue: confirm },
     ],
   });
   TestBed.inject(TranslateService).setTranslation('fr', fr);
   view.detectChanges();
-  return { ...view, store, sheets, confirm, toasts: () => TestBed.inject(UiToast).toasts() };
+  return { ...view, store, sheets, entrySheets, confirm, toasts: () => TestBed.inject(UiToast).toasts() };
 }
 
 describe('RecurringPage (spec 008 REQ-6.1, 6.2, 6.6, 8.5)', () => {
@@ -55,34 +58,31 @@ describe('RecurringPage (spec 008 REQ-6.1, 6.2, 6.6, 8.5)', () => {
     expect(screen.getAllByRole('listitem')).toHaveLength(2);
   });
 
-  it('adds and edits through the rule sheet', async () => {
+  it('adds through the add sheet in recurring mode and edits through the rule sheet (spec 009 REQ-10.1, 10.4)', async () => {
     const view = await renderRecurring();
-    await userEvent.click(screen.getAllByRole('button', { name: /Ajouter une récurrente/ })[0]);
-    expect(view.sheets.openNew).toHaveBeenCalled();
-    await userEvent.click(screen.getByRole('button', { name: 'Modifier Garage' }));
-    expect(view.sheets.openEdit).toHaveBeenCalledWith(expect.objectContaining({ id: 'r2' }));
+    await userEvent.click(screen.getAllByRole('button', { name: new RegExp(fr.recurring.add) })[0]);
+    expect(view.entrySheets.openNew).toHaveBeenCalledWith({ mode: 'recurring' });
+    await userEvent.click(screen.getAllByRole('button', { name: /Loyer/ })[0]);
+    expect(view.sheets.openEdit).toHaveBeenCalled();
   });
 
-  it('deletes after a confirmation saying entries stay', async () => {
-    const view = await renderRecurring();
-    await userEvent.click(screen.getByRole('button', { name: 'Supprimer Garage' }));
-    expect(view.confirm.ask).toHaveBeenCalledWith(expect.objectContaining({ message: fr.recurring.delete.message }));
-    expect(view.store.remove).toHaveBeenCalledWith('b1', 'r2');
-    expect(view.toasts().map((t) => t.message)).toContain(fr.recurring.toasts.deleted);
+  it('shows the monthly average of live rules, expenses and income apart (spec 009 REQ-10.1)', async () => {
+    const view = await renderRecurring([rule('r1', { amount: 650000 }), rule('r2', { amount: 2800000, type: 'income' })]);
+    const text = (view.container.textContent ?? '').replace(/[\u202f\u00a0]/g, ' ');
+    expect(text).toContain('650,000');
+    expect(text).toContain('2 800,000');
   });
 
-  it('keeps the rule when the deletion is cancelled', async () => {
-    const view = await renderRecurring();
-    view.confirm.ask.mockResolvedValueOnce(false);
-    await userEvent.click(screen.getByRole('button', { name: 'Supprimer Garage' }));
-    expect(view.store.remove).not.toHaveBeenCalled();
-  });
-
-  it('tells when the rule was already gone', async () => {
-    const view = await renderRecurring();
-    view.store.remove.mockResolvedValueOnce({ outcome: 'error', error: new ApiError('not-found', 404, 'recurring_rule.not_found', {}, null, '') });
-    await userEvent.click(screen.getByRole('button', { name: 'Supprimer Garage' }));
-    expect(view.toasts().map((t) => t.message)).toContain(fr.recurring.toasts.gone);
+  it('lists live rules by type and keeps ended ones collapsed (spec 009 REQ-10.2)', async () => {
+    await renderRecurring([rule('r1'), rule('r2', { type: 'income', comment: 'Salaire' }), rule('r3', { comment: 'Ancien', next_date: null })]);
+    expect(screen.getByRole('heading', { name: fr.recurring.sections.expense })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: fr.recurring.sections.income })).toBeTruthy();
+    expect(screen.queryByRole('heading', { name: fr.recurring.sections.saving })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Ancien/ })).toBeNull();
+    const toggle = screen.getByRole('button', { name: /Terminées \(1\)/ });
+    await userEvent.click(toggle);
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(screen.getByRole('button', { name: /Ancien/ })).toBeTruthy();
   });
 
   it('shows an empty state', async () => {

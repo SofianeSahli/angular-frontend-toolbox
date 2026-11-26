@@ -7,6 +7,7 @@
       <button uiButton variant="primary" (click)="openDialog('auto')">Dialogue (auto)</button>
       <button uiButton (click)="openDialog('dialog')">Dialogue</button>
       <button uiButton (click)="openDialog('sheet')">Feuille</button>
+      <button uiButton (click)="openDrawer()"><ui-icon name="menu" />Tiroir</button>
       <button uiButton variant="danger" (click)="askDelete()">Confirmation (danger)</button>
       <button uiButton (click)="askArchive()">Confirmation</button>
       <span aria-live="polite">{{ lastAnswer() }}</span>
@@ -48,6 +49,15 @@
           <a uiTab href="#navigation"><ui-icon name="pill" />Budgets</a>
           <a uiTab href="#navigation"><ui-icon name="menu" />Plus</a>
           <button uiTabAction aria-label="Ajouter une dépense"><ui-icon name="plus" /></button>
+        </ui-bottom-tabs>
+      </div>
+      <div class="catalog-frame flex-grow-1">
+        <ui-bottom-tabs ariaLabel="Onglets avec action surélevée, aucun onglet actif">
+          <a uiTab href="#navigation"><ui-icon name="house" />Accueil</a>
+          <a uiTab href="#navigation"><ui-icon name="repeat" />Opérations</a>
+          <a uiTab href="#navigation"><ui-icon name="pill" />Budget</a>
+          <a uiTab href="#navigation"><ui-icon name="repeat" />Récurrentes</a>
+          <button uiTabAction aria-label="Ajouter une dépense (onglets sans page active)"><ui-icon name="plus" /></button>
         </ui-bottom-tabs>
       </div>
     </div>

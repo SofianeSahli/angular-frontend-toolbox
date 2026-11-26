@@ -23,7 +23,9 @@ export const PATHS = {
   newHousehold: '/foyer/nouveau',
   newBook: '/carnets/nouveau',
   operations: '/operations',
-  recurring: '/operations/recurrentes',
+  recurring: '/recurrentes',
+  analysis: '/analyse',
+  join: '/rejoindre',
   budget: '/budget',
 } as const;
 
@@ -72,6 +74,18 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./budget/pages/budget-page').then((m) => m.BudgetPage),
         data: { [SHELL_TITLE_KEY]: 'budget.title', [SHELL_BOOK_BOUND]: true },
       },
+      { path: 'operations/recurrentes', redirectTo: ({ queryParams }) => inject(Router).createUrlTree([PATHS.recurring], { queryParams }) },
+      {
+        path: routePath(PATHS.analysis),
+        canActivate: [workspaceGuard],
+        loadComponent: () => import('./analysis/pages/analysis-page').then((m) => m.AnalysisPage),
+        data: { [SHELL_TITLE_KEY]: 'analysis.title', [SHELL_BOOK_BOUND]: true },
+      },
+      {
+        path: routePath(PATHS.join),
+        loadComponent: () => import('./households/pages/join.page').then((m) => m.JoinPage),
+        data: { [SHELL_TITLE_KEY]: 'households.join.title' },
+      },
       {
         path: routePath(PATHS.recurring),
         canActivate: [workspaceGuard],
@@ -103,7 +117,7 @@ export const appRoutes: Route[] = [
       { path: routePath(PATHS.signUp), loadComponent: () => identityPages().then((m) => m.SignUpPage) },
       { path: routePath(PATHS.emailCode), loadComponent: () => identityPages().then((m) => m.EmailCodePage) },
       { path: routePath(PATHS.forgotPassword), loadComponent: () => identityPages().then((m) => m.ForgotPasswordPage) },
-      { path: routePath(PATHS.resetPassword), loadComponent: () => identityPages().then((m) => m.ResetPasswordPage) },
+      { path: routePath(PATHS.resetPassword), redirectTo: PATHS.forgotPassword },
     ],
   },
   {

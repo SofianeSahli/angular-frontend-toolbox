@@ -21,6 +21,7 @@
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
     "bootstrap": "^5.3.8",
+    "qrcode": "^1.5.4",
     "rxjs": "~7.8.0",
     "zone.js": "0.16.3"
   },
@@ -44,6 +45,7 @@
     "@nx/eslint-plugin": "24.0.6",
     "@nx/js": "24.0.6",
     "@nx/vitest": "^24.0.6",
+    "@oxc-project/runtime": "^0.156.0",
     "@schematics/angular": "~22.2.6",
     "@swc-node/register": "1.12.1",
     "@swc/core": "1.16.22",
@@ -52,6 +54,7 @@
     "@testing-library/dom": "^10.4.2",
     "@testing-library/user-event": "^14.6.13",
     "@types/node": "^22.0.0",
+    "@types/qrcode": "^1.5.6",
     "@typescript-eslint/utils": "^8.40.0",
     "@vitest/ui": "^4.0.0",
     "angular-eslint": "22.6.0",

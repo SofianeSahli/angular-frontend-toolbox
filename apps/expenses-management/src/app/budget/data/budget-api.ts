@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { API_CONFIG, handling } from '@shared/http-data-access';
 import { Observable, map } from 'rxjs';
@@ -18,9 +18,9 @@ export class BudgetApi {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = inject(API_CONFIG).baseUrl;
 
-  get(bookId: string, month: string): Observable<Budget> {
+  get(bookId: string, month: string, context: HttpContext = handling(...BUDGET_READ_CODES)): Observable<Budget> {
     return this.http
-      .get<BudgetResponse>(this.url(bookId, month), { context: handling(...BUDGET_READ_CODES) })
+      .get<BudgetResponse>(this.url(bookId, month), { context })
       .pipe(map((response) => toBudget(response.data)));
   }
 

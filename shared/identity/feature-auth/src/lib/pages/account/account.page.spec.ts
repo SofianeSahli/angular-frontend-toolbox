@@ -1,6 +1,9 @@
-import { fireEvent, screen } from '@testing-library/angular';
+import { signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { UiThemeService } from '@shared/ui-tokens';
+import { fireEvent, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { Account } from '@shared/identity-data-access';
+import { Account, IDENTITY_PREFERENCES } from '@shared/identity-data-access';
 import fr from '../../../i18n/fr.json';
 import { failed, fakeSessionStore, renderPage, settle } from '../../testing/page-harness';
 import { AccountPage } from './account.page';
@@ -79,5 +82,17 @@ describe('AccountPage', () => {
     await settle();
     expect(store.signOut).toHaveBeenCalled();
     expect(router.url).toBe('/connexion');
+  });
+
+  it('applies the theme and, when the app gives them, the languages (spec 009 REQ-12.1)', async () => {
+    const language = signal('fr');
+    const useLanguage = vi.fn((value: string) => language.set(value));
+    const preferences = { languages: [{ value: 'fr', label: 'Français' }, { value: 'ar', label: 'العربية' }], language, useLanguage };
+    await renderPage(AccountPage, { url: '/compte', store: signedInStore(), providers: [{ provide: IDENTITY_PREFERENCES, useValue: preferences }] });
+    await userEvent.click(within(screen.getByRole('radiogroup', { name: fr.identity.account.theme })).getByRole('radio', { name: fr.identity.account.themes.dark }));
+    expect(TestBed.inject(UiThemeService).choice()).toBe('dark');
+    TestBed.inject(UiThemeService).setChoice('system');
+    await userEvent.click(within(screen.getByRole('radiogroup', { name: fr.identity.account.languageChoice })).getByRole('radio', { name: 'العربية' }));
+    expect(useLanguage).toHaveBeenCalledWith('ar');
   });
 });

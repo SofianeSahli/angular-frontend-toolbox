@@ -1,9 +1,4 @@
 <ui-page [title]="'recurring.title' | translate">
-  <button uiPageActions uiButton variant="primary" type="button" [disabled]="!book()" (click)="add()">
-    <ui-icon name="plus" />
-    {{ 'recurring.add' | translate }}
-  </button>
-
   @if (book(); as current) {
     @switch (store.status()) {
       @case ('error') {
@@ -20,11 +15,55 @@
             <button uiButton variant="primary" type="button" (click)="add()">{{ 'recurring.add' | translate }}</button>
           </ui-empty-state>
         } @else {
-          <ui-list>
-            @for (rule of store.rules(); track rule.id) {
-              <li><app-rule-row [rule]="rule" [currency]="current.currency" (edit)="edit($event)" (remove)="remove($event)" /></li>
+          <div class="recurring-page">
+            <section class="recurring-page__average" [attr.aria-label]="'recurring.average.title' | translate">
+              <p class="recurring-page__muted m-0">{{ 'recurring.average.title' | translate }}</p>
+              <dl class="recurring-page__stats">
+                <div>
+                  <dt class="recurring-page__muted">{{ 'recurring.average.expense' | translate }}</dt>
+                  <dd><bdi><ui-amount [millimes]="average().expense" [currency]="current.currency" /></bdi></dd>
+                </div>
+                <div>
+                  <dt class="recurring-page__muted">{{ 'recurring.average.income' | translate }}</dt>
+                  <dd><bdi><ui-amount [millimes]="average().income" [currency]="current.currency" tone="income" /></bdi></dd>
+                </div>
+              </dl>
+              <button uiButton variant="primary" type="button" (click)="add()">
+                <ui-icon name="plus" />
+                {{ 'recurring.add' | translate }}
+              </button>
+            </section>
+
+            @for (section of sections(); track section.type) {
+              <section class="d-flex flex-column gap-2" [attr.aria-labelledby]="'recurring-section-' + section.type">
+                <h2 class="recurring-page__title" [id]="'recurring-section-' + section.type">{{ 'recurring.sections.' + section.type | translate }}</h2>
+                @if (section.rules.length === 0) {
+                  <p class="recurring-page__muted m-0">{{ 'recurring.sections.none' | translate }}</p>
+                } @else {
+                  <ui-list>
+                    @for (rule of section.rules; track rule.id) {
+                      <li><app-rule-row [rule]="rule" [currency]="current.currency" (edit)="edit($event)" /></li>
+                    }
+                  </ui-list>
+                }
+              </section>
             }
-          </ui-list>
+
+            @if (ended().length > 0) {
+              <section class="d-flex flex-column gap-2">
+                <button uiButton variant="ghost" type="button" class="align-self-start" aria-controls="recurring-ended" [attr.aria-expanded]="showEnded()" (click)="showEnded.set(!showEnded())">
+                  {{ 'recurring.sections.ended' | translate: { count: ended().length } }}
+                </button>
+                @if (showEnded()) {
+                  <ui-list id="recurring-ended">
+                    @for (rule of ended(); track rule.id) {
+                      <li><app-rule-row [rule]="rule" [currency]="current.currency" (edit)="edit($event)" /></li>
+                    }
+                  </ui-list>
+                }
+              </section>
+            }
+          </div>
         }
       }
       @default {

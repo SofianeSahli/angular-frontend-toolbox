@@ -1,0 +1,5 @@
+<p class="ui-save-bar__text" role="status">{{ text() }}</p>
+<div class="ui-save-bar__actions">
+  <button uiButton variant="ghost" size="sm" type="button" [disabled]="busy()" (click)="secondary.emit()">{{ secondaryLabel() }}</button>
+  <button uiButton variant="primary" size="sm" type="button" [loading]="busy()" (click)="primary.emit()">{{ primaryLabel() }}</button>
+</div>

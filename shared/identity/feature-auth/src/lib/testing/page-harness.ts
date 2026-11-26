@@ -1,4 +1,4 @@
-import { Component, Type, signal } from '@angular/core';
+import { Component, Provider, Type, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router, RouterOutlet, provideRouter } from '@angular/router';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
@@ -71,6 +71,7 @@ export function fakeSessionStore() {
 export type FakeSessionStore = ReturnType<typeof fakeSessionStore>;
 
 export interface PageOptions {
+  readonly providers?: readonly Provider[];
   readonly store?: FakeSessionStore;
   readonly url?: string;
   readonly beforeNavigate?: () => void;
@@ -95,6 +96,7 @@ export async function renderPage<T>(page: Type<T>, options: PageOptions = {}) {
       provideTranslateService({ lang: 'fr' }),
       { provide: IDENTITY_CONFIG, useValue: TEST_CONFIG },
       { provide: SessionStore, useValue: store },
+      ...(options.providers ?? []),
     ],
   });
   renderedView = view;

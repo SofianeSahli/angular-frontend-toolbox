@@ -1,0 +1,8 @@
+<output class="amount-pad__display" tabindex="-1" aria-live="polite" [attr.id]="inputId() ?? null" [attr.aria-label]="label()" [class.amount-pad__display--empty]="empty()">
+  <bdi dir="ltr" class="amount-pad__value">{{ display() }}</bdi>
+  <span class="amount-pad__currency">{{ currency().code }}</span>
+</output>
+@if (caption(); as text) {
+  <p class="amount-pad__caption">{{ text }}</p>
+}
+<ui-amount-keypad [(value)]="value" [decimals]="currency().exponent" />

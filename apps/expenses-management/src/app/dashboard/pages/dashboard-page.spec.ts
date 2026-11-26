@@ -13,8 +13,7 @@ import { BooksStore } from '../../households/data/books.store';
 import { book } from '../../households/testing';
 import { EntrySheetService } from '../../operations/entry-sheet.service';
 import { Card, CardName, Comparison, DashboardStore, FirstUse } from '../data/dashboard.store';
-import { Summary } from '../data/models';
-import { FAKE_LABELS, summary } from '../testing';
+import { FAKE_LABELS } from '../testing';
 import { DashboardPage } from './dashboard-page';
 
 const ready = <T>(data: T): Card<T> => ({ status: 'ready', data, error: null });
@@ -26,10 +25,7 @@ function fakeStore() {
     bookId,
     month,
     budget: signal<Card<Budget>>(ready(budget())),
-    summary: signal<Card<Summary>>(ready(summary())),
     comparison: signal<Card<Comparison>>({ status: 'idle', data: null, error: null }),
-    previous: signal<Card<Summary>>(ready(summary())),
-    trend: signal<Card<Summary>>(ready(summary())),
     upcoming: signal<Card<readonly never[]>>(ready([])),
     recent: signal<Card<readonly never[]>>(ready([])),
     firstUse: signal<FirstUse>('no'),
@@ -97,32 +93,31 @@ describe('DashboardPage (spec 008 REQ-1.1–1.4, 3.8, 4.4, 8.9)', () => {
     expect(screen.getByRole('heading', { name: 'Dépensé ce mois' })).toBeTruthy();
   });
 
-  it('gives each card a heading and shows members only for a household', async () => {
-    await renderDashboard('/', 'account');
-    expect(screen.queryByRole('heading', { name: 'Par membre' })).toBeNull();
-    for (const name of ["Où va l'argent", 'À venir', 'Récent']) expect(screen.getByRole('heading', { name })).toBeTruthy();
-  });
-
-  it('shows members for a household', async () => {
-    await renderDashboard('/', 'household');
-    expect(screen.getByRole('heading', { name: 'Par membre' })).toBeTruthy();
-  });
-
-  it('places the pace card after the hero and the trend card after the members (REQ-9.7, 9.8)', async () => {
-    await renderDashboard('/?mois=2026-11', 'household');
+  it('orders the cards: hero, today, watch list, upcoming, analysis link (spec 009 REQ-2.1)', async () => {
+    await renderDashboard(`/?mois=${thisMonth()}`, 'household');
     const order = screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent?.trim());
-    expect(order.indexOf('Rythme du mois')).toBe(order.indexOf('Reste à dépenser') + 2);
-    expect(order.indexOf('Rythme du mois')).toBeLessThan(order.indexOf("Où va l'argent"));
-    expect(order.indexOf('6 derniers mois')).toBeGreaterThan(order.indexOf('Par membre'));
-    expect(order.indexOf('6 derniers mois')).toBeLessThan(order.indexOf('À venir'));
+    expect(order).toEqual(['Reste à dépenser', "Aujourd'hui", 'À surveiller', 'À venir']);
+    expect(screen.getByRole('link', { name: /Analyse du mois/ }).getAttribute('href')).toBe(`/analyse?mois=${thisMonth()}`);
+    for (const name of ['Rythme du mois', "Où va l'argent", '6 derniers mois', 'Qui a ajouté quoi']) expect(screen.queryByRole('heading', { name })).toBeNull();
   });
 
-  it('reloads only the failing chart card on retry', async () => {
+  it('lists the latest entries of another month (spec 009 REQ-2.3)', async () => {
+    await renderDashboard('/?mois=2026-10');
+    expect(screen.getByRole('heading', { name: 'Dernières opérations' })).toBeTruthy();
+  });
+
+  it('offers to add an entry when nothing was noted today (spec 009 REQ-2.2)', async () => {
+    const view = await renderDashboard(`/?mois=${thisMonth()}`);
+    screen.getByRole('button', { name: /Ajouter/ }).click();
+    expect(view.sheets.openNew).toHaveBeenCalled();
+  });
+
+  it('reloads only the failing card on retry', async () => {
     const view = await renderDashboard('/?mois=2026-11');
-    view.store.trend.set({ status: 'error', data: null, error: null });
+    view.store.upcoming.set({ status: 'error', data: null, error: null });
     view.detectChanges();
     screen.getByRole('button', { name: 'Réessayer' }).click();
-    expect(view.store.reload).toHaveBeenCalledWith('trend');
+    expect(view.store.reload).toHaveBeenCalledWith('upcoming');
     expect(screen.getByRole('heading', { name: 'Reste à dépenser' })).toBeTruthy();
   });
 
@@ -137,7 +132,7 @@ describe('DashboardPage (spec 008 REQ-1.1–1.4, 3.8, 4.4, 8.9)', () => {
     view.store.firstUse.set('yes');
     view.detectChanges();
     expect(screen.getByRole('heading', { name: 'Bienvenue dans votre carnet' })).toBeTruthy();
-    expect(screen.queryByRole('heading', { name: 'Récent' })).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Dernières opérations' })).toBeNull();
     screen.getByRole('button', { name: /Ajouter une opération/ }).click();
     expect(view.sheets.openNew).toHaveBeenCalled();
   });

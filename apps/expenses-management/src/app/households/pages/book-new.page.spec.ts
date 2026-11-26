@@ -23,9 +23,20 @@ describe('BookNewPage', () => {
 
   async function submit(name = 'Courses') {
     await userEvent.type(screen.getByRole('textbox', { name: new RegExp(t.newBook.name) }), name);
-    await userEvent.click(screen.getByRole('button', { name: t.newBook.submit }));
+    await userEvent.click(screen.getByRole('button', { name: new RegExp(`^(${t.newBook.submit}|${t.newBook.submitFirst})$`) }));
     await settle();
   }
+
+  it('ends the first run on "Créer et noter une première dépense" (spec 009 REQ-13.5)', async () => {
+    await open('/carnets/nouveau?foyer=1');
+    expect(screen.getByRole('button', { name: t.newBook.submitFirst })).toBeTruthy();
+  });
+
+  it('keeps the plain label when the user already has a book', async () => {
+    stores.books.books.set([book('a')]);
+    await open('/carnets/nouveau');
+    expect(screen.getByRole('button', { name: t.newBook.submit })).toBeTruthy();
+  });
 
   it('shows the household book as step 2 of 2 and the personal book as 1 of 1', async () => {
     await open('/carnets/nouveau?foyer=1');
@@ -44,7 +55,7 @@ describe('BookNewPage', () => {
 
   it('refuses an empty name', async () => {
     await open('/carnets/nouveau');
-    await userEvent.click(screen.getByRole('button', { name: t.newBook.submit }));
+    await userEvent.click(screen.getByRole('button', { name: t.newBook.submitFirst }));
     await settle();
     expect(stores.books.create).not.toHaveBeenCalled();
   });

@@ -8,6 +8,7 @@ import { UiButton, UiInput, UiSelect } from '@shared/ui-atoms';
 import { UiAlert, UiFormField } from '@shared/ui-molecules';
 import { UiToast } from '@shared/ui-organisms';
 import { UiFlowLayout } from '@shared/ui-templates';
+import { EntrySheetService } from '../../operations/entry-sheet.service';
 import { BooksStore } from '../data/books.store';
 import { HouseholdStore } from '../data/household.store';
 import { NewBook } from '../data/models';
@@ -30,8 +31,10 @@ export class BookNewPage {
   private readonly router = inject(Router);
   private readonly toast = inject(UiToast);
   private readonly translate = inject(TranslateService);
+  private readonly sheets = inject(EntrySheetService);
 
   protected readonly forHousehold = inject(ActivatedRoute).snapshot.queryParamMap.get('foyer') === '1';
+  protected readonly firstRun = this.books.books().length === 0;
   protected readonly maxLength = NAME_MAX_LENGTH;
   protected readonly currencies = CURRENCY_CHOICES;
   protected readonly otherCurrency = OTHER_CURRENCY;
@@ -106,7 +109,8 @@ export class BookNewPage {
     this.message.set(null);
     const result = await this.books.create(request);
     if (result.outcome === 'done') {
-      await this.router.navigateByUrl('/');
+      const arrived = await this.router.navigateByUrl('/');
+      if (arrived && this.firstRun) this.sheets.openNew();
     } else {
       await this.fail(result.error);
     }

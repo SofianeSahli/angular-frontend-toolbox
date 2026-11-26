@@ -1,0 +1,29 @@
+<ui-page [title]="'households.join.title' | translate">
+  <div class="d-flex flex-column gap-3">
+    @if (message(); as text) {
+      <ui-alert tone="danger">{{ text }}</ui-alert>
+    }
+    @switch (state()) {
+      @case ('loading') {
+        <ui-skeleton shape="block" />
+      }
+      @case ('invalid') {
+        <div>
+          <button uiButton variant="secondary" type="button" (click)="decline()">{{ 'households.join.home' | translate }}</button>
+        </div>
+      }
+      @default {
+        @if (preview(); as invitation) {
+          <p class="m-0">
+            {{ 'households.join.invitedBy' | translate: { name: invitation.invitedBy.name } }}
+            <strong><bdi>{{ invitation.household.name }}</bdi></strong>
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+            <button uiButton variant="ghost" type="button" [disabled]="joining()" (click)="decline()">{{ 'households.join.decline' | translate }}</button>
+            <button uiButton variant="primary" type="button" [loading]="joining()" (click)="join()">{{ 'households.join.accept' | translate }}</button>
+          </div>
+        }
+      }
+    }
+  </div>
+</ui-page>

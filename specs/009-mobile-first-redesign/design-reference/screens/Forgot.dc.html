@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Mot de passe oublié</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#1D4E89}a:hover{color:#163d6c}
+</style>
+</helmet>
+<div class="o-root" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 32px; background: #FBF8F3; display: flex; flex-direction: column; gap: 20px; font-family: Inter, sans-serif; color: #1C1A17">
+<a href="SignIn.dc.html" aria-label="Retour" style="width: 44px; height: 44px; margin-left: -12px; display: flex; align-items: center; justify-content: center; color: #1C1A17"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 13px; font-weight: 600; color: #4E6B1F">Étape 2 sur 2</span>
+<h1 style="margin: 0; font-size: 28px; line-height: 34px; font-weight: 600">Nouveau mot de passe</h1>
+<p style="margin: 0; color: #6B6358; line-height: 22px">Si un compte existe pour <strong style="color: #1C1A17; font-weight: 600">sofiane@exemple.tn</strong>, un code vient d'y être envoyé.</p>
+</div>
+<form style="display: flex; flex-direction: column; gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Code reçu par e-mail
+<input inputmode="numeric" autocomplete="one-time-code" value="482 913" class="num" style="height: 52px; box-sizing: border-box; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; font: 600 20px Inter, sans-serif; letter-spacing: 0.2em">
+</label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Nouveau mot de passe
+<input type="password" autocomplete="new-password" value="nouveaumdp" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; font: 400 16px Inter, sans-serif">
+<span style="font-size: 13px; font-weight: 400; color: #6B6358">8 caractères minimum. Vos autres appareils seront déconnectés.</span>
+</label>
+<a href="SignIn.dc.html" style="min-height: 52px; border-radius: 12px; background: #4E6B1F; color: #FFFFFF; font: 600 16px Inter, sans-serif; display: flex; align-items: center; justify-content: center; text-decoration: none">Enregistrer et me connecter</a>
+</form>
+<button type="button" style="align-self: center; min-height: 44px; border: 0; background: transparent; font: 500 14px Inter, sans-serif; color: #1D4E89">Changer d'adresse e-mail</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

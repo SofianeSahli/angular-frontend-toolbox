@@ -6,48 +6,47 @@
     @if (!ready()) {
       <ui-skeleton shape="block" />
     } @else if (household.household(); as current) {
-      <section class="d-flex flex-column gap-3">
-        <div class="d-flex align-items-center gap-2 flex-wrap">
+      <section class="household-card" [attr.aria-label]="'households.household.title' | translate">
+        <ui-icon name="users" />
+        <div class="household-card__text">
           <h2 class="h4 m-0"><bdi>{{ current.name }}</bdi></h2>
-          <ui-badge [tone]="current.role === 'owner' ? 'accent' : 'neutral'">
-            {{ (current.role === 'owner' ? 'households.household.owner' : 'households.household.member') | translate }}
-          </ui-badge>
+          <span class="household-card__meta">
+            <ui-badge [tone]="current.role === 'owner' ? 'accent' : 'neutral'">
+              {{ (current.role === 'owner' ? 'households.household.owner' : 'households.household.member') | translate }}
+            </ui-badge>
+            @if (books.householdBook(); as householdBook) {
+              &ngsp;{{ 'households.household.bookName' | translate: { name: householdBook.name } }}
+            }
+          </span>
         </div>
-        @if (household.isOwner()) {
-          @if (renaming()) {
-            <app-rename-form
-              [name]="current.name"
-              [busy]="busy() === 'rename'"
-              [serverError]="renameError()"
-              (rename)="rename($event)"
-              (cancelled)="renaming.set(false)"
-            />
-          }
-          <div class="d-flex gap-2 flex-wrap">
-            @if (books.householdBook() === null) {
-              <a uiButton variant="primary" routerLink="/carnets/nouveau" [queryParams]="{ foyer: 1 }">
-                {{ 'households.household.createBook' | translate }}
-              </a>
-            }
-            @if (!renaming()) {
-              <button uiButton type="button" [disabled]="busy() !== null" (click)="startRename()">
-                {{ 'households.household.rename' | translate }}
-              </button>
-            }
-            <button uiButton variant="danger" type="button" [loading]="busy() === 'delete'" [disabled]="busy() !== null" (click)="deleteHousehold()">
-              {{ 'households.household.delete' | translate }}
-            </button>
-          </div>
-        } @else {
-          <div>
-            <button uiButton variant="danger" type="button" [loading]="busy() === 'leave'" [disabled]="busy() !== null" (click)="leave()">
-              {{ 'households.household.leave' | translate }}
-            </button>
-          </div>
+        @if (household.isOwner() && !renaming()) {
+          <button uiButton variant="ghost" size="sm" type="button" [disabled]="busy() !== null" (click)="startRename()">
+            <ui-icon name="pencil" />
+            {{ 'households.household.rename' | translate }}
+          </button>
         }
       </section>
+      @if (household.isOwner()) {
+        @if (renaming()) {
+          <app-rename-form
+            [name]="current.name"
+            [busy]="busy() === 'rename'"
+            [serverError]="renameError()"
+            (rename)="rename($event)"
+            (cancelled)="renaming.set(false)"
+          />
+        }
+        @if (books.householdBook() === null) {
+          <div>
+            <a uiButton variant="primary" routerLink="/carnets/nouveau" [queryParams]="{ foyer: 1 }">
+              {{ 'households.household.createBook' | translate }}
+            </a>
+          </div>
+        }
+      }
+
       <section class="d-flex flex-column gap-2">
-        <ui-section-header [title]="'households.household.members' | translate" [level]="3" />
+        <ui-section-header [title]="'households.household.membersCount' | translate: { count: household.members().length }" [level]="2" />
         @if (household.loading()) {
           <ui-skeleton />
           <ui-skeleton />
@@ -60,20 +59,35 @@
           />
         }
       </section>
+
       @if (household.isOwner()) {
+        <div>
+          <button uiButton variant="primary" type="button" (click)="openInvite()">
+            <ui-icon name="plus" />
+            {{ 'households.invite.open' | translate }}
+          </button>
+        </div>
         <section class="d-flex flex-column gap-2">
-          <ui-section-header [title]="'households.household.sent' | translate" [level]="3" />
+          <ui-section-header [title]="'households.household.sent' | translate" [level]="2" />
           @if (household.loading()) {
             <ui-skeleton />
           } @else {
             <app-sent-invitations [invitations]="household.sent()" (cancelInvitation)="cancelInvitation($event)" />
           }
         </section>
-        <section class="d-flex flex-column gap-2">
-          <ui-section-header [title]="'households.household.invite.title' | translate" [level]="3" />
-          <app-invite-form [busy]="busy() === 'invite'" [serverError]="inviteError()" (invite)="invite($event)" />
-        </section>
       }
+
+      <section class="household-danger" [attr.aria-label]="'households.household.sensitive' | translate">
+        @if (household.isOwner()) {
+          <button uiButton variant="danger" type="button" [loading]="busy() === 'delete'" [disabled]="busy() !== null" (click)="deleteHousehold()">
+            {{ 'households.household.delete' | translate }}
+          </button>
+        } @else {
+          <button uiButton variant="danger" type="button" [loading]="busy() === 'leave'" [disabled]="busy() !== null" (click)="leave()">
+            {{ 'households.household.leave' | translate }}
+          </button>
+        }
+      </section>
     } @else {
       <ui-empty-state icon="house" [title]="'households.household.empty.title' | translate" [text]="'households.household.empty.text' | translate">
         <a uiButton variant="primary" routerLink="/foyer/nouveau">{{ 'households.household.empty.create' | translate }}</a>

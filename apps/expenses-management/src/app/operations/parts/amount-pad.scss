@@ -1,0 +1,41 @@
+@layer app {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-3);
+  }
+
+  .amount-pad__display {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--ui-space-2);
+    border-radius: var(--ui-radius-md);
+    font-size: var(--ui-text-amount-hero-size);
+    font-weight: var(--ui-text-amount-hero-weight);
+    line-height: var(--ui-text-amount-hero-line-height);
+    letter-spacing: var(--ui-text-amount-hero-tracking);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .amount-pad__display:focus-visible {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+    outline-offset: var(--ui-focus-ring-offset);
+  }
+
+  .amount-pad__display--empty {
+    color: var(--ui-color-ink-muted);
+  }
+
+  .amount-pad__currency {
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-title-2-size);
+  }
+
+  .amount-pad__caption {
+    margin: 0;
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+    text-align: center;
+  }
+}

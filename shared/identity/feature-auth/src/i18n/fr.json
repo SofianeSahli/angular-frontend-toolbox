@@ -100,7 +100,9 @@
     "forgotPassword": {
       "title": "Mot de passe oublié",
       "lead": "Saisissez votre e-mail : si un compte existe, nous vous enverrons un code pour choisir un nouveau mot de passe.",
-      "submit": "Recevoir un code"
+      "submit": "Recevoir un code",
+      "step": "Étape {{current}} sur {{total}}",
+      "changeEmail": "Changer d'adresse e-mail"
     },
     "resetPassword": {
       "title": "Nouveau mot de passe",
@@ -135,7 +137,15 @@
       "confirmDisable": "Désactiver la connexion en deux étapes",
       "cancel": "Annuler",
       "twoFactorEnabled": "Connexion en deux étapes activée.",
-      "twoFactorDisabled": "Connexion en deux étapes désactivée."
+      "twoFactorDisabled": "Connexion en deux étapes désactivée.",
+      "preferences": "Préférences",
+      "languageChoice": "Langue de l'appli",
+      "theme": "Thème",
+      "themes": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Système"
+      }
     }
   }
 }

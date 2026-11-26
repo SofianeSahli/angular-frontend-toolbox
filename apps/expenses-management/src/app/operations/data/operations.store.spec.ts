@@ -79,6 +79,24 @@ describe('OperationsStore (REQ-5.5, 5.6, 5.8, 5.9, 4.9, 6.5, 7.4, 7.9)', () => {
     expect(api.page).toHaveBeenCalledTimes(2);
   });
 
+  it('follows every page for a search, up to the cap (spec 009 REQ-7.2)', async () => {
+    const endless = (cursor: string | null): Observable<EntryPage> => of({ items: [entry(`e${cursor ?? 0}`)], nextCursor: `${Number(cursor ?? 0) + 1}` });
+    const { api, store } = setup(endless);
+    await store.open('b1');
+    await store.loadAll(3);
+    expect(store.pages()).toBe(3);
+    expect(api.page).toHaveBeenCalledTimes(3);
+    expect(store.nextCursor()).not.toBeNull();
+  });
+
+  it('stops following pages at the end of the month (spec 009 REQ-7.2)', async () => {
+    const { store } = setup(firstPage);
+    await store.open('b1');
+    await store.loadAll(20);
+    expect(store.entries().map((e) => e.id)).toEqual(['e1', 'e2']);
+    expect(store.nextCursor()).toBeNull();
+  });
+
   it('drops an older answer when the filters change during a load', async () => {
     const slow = new Subject<EntryPage>();
     let calls = 0;

@@ -2,59 +2,68 @@ import { formatMinor } from '@shared/util-format';
 import { screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { TND, renderPart, visibleText } from '../../testing/render-part';
-import { budget, lineDto } from '../testing';
-import { BudgetTotals } from './budget-totals';
+import { budget } from '../testing';
+import { BudgetSummary } from './budget-summary';
+import { KnownRulesCard } from './known-rules-card';
+import { rule } from '../../recurring/testing';
 import { OffPlanList } from './off-plan-list';
 import { PlanLineRow } from './plan-line-row';
 
 describe('budget parts (spec 008 REQ-5.2, 5.4, 5.5, 9.13–9.15)', () => {
-  describe('PlanLineRow', () => {
+  describe('PlanLineRow (spec 009 REQ-9.3, 9.4)', () => {
     const answer = budget().lines[2];
 
-    it('shows the category, the planned field, the actual amount, the percent, the status and a meter', async () => {
-      await renderPart(PlanLineRow, { line: { category: 'transport', text: '100,000', retired: false }, answer, currency: TND });
-      expect((screen.getByLabelText('Prévu') as HTMLInputElement).value).toBe('100,000');
+    it('shows the category, spent over planned and a meter, and opens on tap', async () => {
+      const open = vi.fn();
+      await renderPart(PlanLineRow, { line: { category: 'transport', text: '100,000', retired: false }, answer, currency: TND }, { open });
       expect(screen.getByRole('meter', { name: 'Nom transport' }).getAttribute('aria-valuenow')).toBe('160000');
-      expect(visibleText()).toContain(formatMinor(160000, TND));
-      expect(visibleText()).toContain('160 %');
-      expect(visibleText()).toContain('Dépassé');
+      expect(visibleText()).toContain(`${formatMinor(160000, TND)} / ${formatMinor(100000, TND)}`);
+      const button = screen.getByRole('button');
+      expect(button.getAttribute('aria-label')).toMatch(/^Nom transport, prévu .*, dépensé .*, Dépassé$/);
+      await userEvent.click(button);
+      expect(open).toHaveBeenCalled();
     });
 
-    it('shows no percent for a planned 0', async () => {
-      await renderPart(PlanLineRow, { line: { category: 'x', text: '0', retired: false }, answer: budget().lines[3], currency: TND });
-      expect(visibleText()).not.toContain(' %');
-      expect(visibleText()).toContain('Dépassé');
+    it('shows last month as plain text, zero included, and nothing when unknown (spec 008 REQ-9.14)', async () => {
+      const view = await renderPart(PlanLineRow, { line: { category: 'food', text: '600', retired: false }, currency: TND, lastMonth: 0 });
+      expect(visibleText()).toContain(`Le mois dernier : ${formatMinor(0, TND)}`);
+      view.fixture.componentRef.setInput('lastMonth', null);
+      view.detectChanges();
+      expect(visibleText()).not.toContain('Le mois dernier');
     });
 
-    it('marks a retired line and still lets it be removed and edited', async () => {
-      const remove = vi.fn();
-      const textChange = vi.fn();
-      await renderPart(
-        PlanLineRow,
-        { line: { category: 'old', text: '5', retired: true }, answer: budget({ lines: [lineDto('old', { retired: true })] }).lines[0], currency: TND },
-        { remove, textChange },
-      );
+    it('marks a retired line and shows a line error', async () => {
+      await renderPart(PlanLineRow, { line: { category: 'old', text: 'abc', retired: true }, currency: TND, error: 'Montant invalide' });
       expect(visibleText()).toContain('Retirée');
-      await userEvent.type(screen.getByLabelText('Prévu'), '0');
-      expect(textChange).toHaveBeenLastCalledWith('50');
-      await userEvent.click(screen.getByRole('button', { name: 'Retirer Nom old' }));
-      expect(remove).toHaveBeenCalled();
-    });
-
-    it('shows an error on the field', async () => {
-      await renderPart(PlanLineRow, { line: { category: 'food', text: 'abc', retired: false }, currency: TND, error: 'Montant invalide' });
-      const field = screen.getByLabelText('Prévu');
-      expect(field.getAttribute('aria-invalid')).toBe('true');
-      expect(document.getElementById(field.getAttribute('aria-describedby') ?? '')?.textContent).toContain('Montant invalide');
+      expect(visibleText()).toContain('Montant invalide');
     });
   });
 
-  describe('BudgetTotals', () => {
-    it('shows the local planned total and the answer totals', async () => {
-      await renderPart(BudgetTotals, { budget: budget(), plannedTotal: 1234000, currency: TND });
-      expect(visibleText()).toContain(formatMinor(1234000, TND));
-      expect(visibleText()).toContain(formatMinor(47500, TND));
-      expect(visibleText()).toContain(`${formatMinor(100000, TND)} / ${formatMinor(300000, TND)}`);
+  describe('BudgetSummary (spec 009 REQ-9.3)', () => {
+    it('shows planned, spent and left with a meter and the copy action', async () => {
+      const copy = vi.fn();
+      await renderPart(BudgetSummary, { budget: budget(), plannedTotal: 1500000, currency: TND, copyLabel: "Copier le budget d'octobre" }, { copyPrevious: copy });
+      expect(visibleText()).toContain(formatMinor(1500000, TND));
+      expect(visibleText()).toContain(formatMinor(1212500, TND));
+      expect(visibleText()).toContain(formatMinor(287500, TND));
+      expect(screen.getByRole('meter')).toBeTruthy();
+      await userEvent.click(screen.getByRole('button', { name: "Copier le budget d'octobre" }));
+      expect(copy).toHaveBeenCalled();
+    });
+  });
+
+  describe('KnownRulesCard (spec 009 REQ-9.7)', () => {
+    it('lists the live rules due in the month with their dates and totals the expenses', async () => {
+      const rules = [
+        rule('rent', { comment: 'Loyer', amount: 650000, starts_on: '2026-10-01' }),
+        rule('salary', { comment: 'Salaire', amount: 2800000, type: 'income', starts_on: '2026-10-28' }),
+        rule('ended', { comment: 'Ancien', next_date: null }),
+      ];
+      await renderPart(KnownRulesCard, { rules, month: '2027-01', monthName: 'janvier', currency: TND });
+      const rows = screen.getAllByRole('listitem').map((row) => row.textContent ?? '');
+      expect(rows).toHaveLength(2);
+      expect(rows[0]).toContain('Loyer');
+      expect(visibleText()).toContain(formatMinor(650000, TND));
     });
   });
 
@@ -100,45 +109,6 @@ describe('budget parts (spec 008 REQ-5.2, 5.4, 5.5, 9.13–9.15)', () => {
       expect(screen.getAllByRole('button', { name: /Ajouter .* au budget/ })).toHaveLength(1);
       await userEvent.click(screen.getByRole('button', { name: 'Ajouter Nom health au budget' }));
       expect(add).toHaveBeenCalledWith(expect.objectContaining({ code: 'health', total: 9000 }));
-    });
-  });
-
-  describe('PlanLineRow last month (REQ-9.14)', () => {
-    it('shows last month as plain text, zero included', async () => {
-      const view = await renderPart(PlanLineRow, { line: { category: 'food', text: '600', retired: false }, currency: TND, lastMonth: 450000 });
-      expect(visibleText()).toContain(`Le mois dernier : ${formatMinor(450000, TND)}`);
-      view.fixture.componentRef.setInput('lastMonth', 0);
-      view.detectChanges();
-      expect(visibleText()).toContain(`Le mois dernier : ${formatMinor(0, TND)}`);
-    });
-
-    it('hides it when last month is unknown', async () => {
-      await renderPart(PlanLineRow, { line: { category: 'food', text: '600', retired: false }, currency: TND, lastMonth: null });
-      expect(visibleText()).not.toContain('Le mois dernier');
-    });
-  });
-
-  describe('BudgetTotals meters (REQ-9.15)', () => {
-    it('shows a meter of received over expected and saved over planned, keeping the text', async () => {
-      await renderPart(BudgetTotals, { budget: budget(), plannedTotal: 1100000, currency: TND });
-      const income = screen.getByRole('meter', { name: /Revenus/ });
-      expect(income.getAttribute('aria-valuenow')).toBe('2500000');
-      expect(income.getAttribute('aria-valuemax')).toBe('2500000');
-      expect(screen.getByRole('meter', { name: /Épargne/ }).getAttribute('aria-valuenow')).toBe('100000');
-      expect(visibleText()).toContain(`${formatMinor(100000, TND)} / ${formatMinor(300000, TND)}`);
-    });
-
-    it.each([
-      ['unset', null],
-      ['zero', 0],
-    ])('keeps the text only when the planned amount is %s', async (_name, planned) => {
-      await renderPart(BudgetTotals, {
-        budget: budget({ income: { expected: planned, actual: 500 }, saving: { planned, actual: 100 } }),
-        plannedTotal: 0,
-        currency: TND,
-      });
-      expect(screen.queryAllByRole('meter')).toHaveLength(0);
-      expect(visibleText()).toContain(formatMinor(500, TND));
     });
   });
 });

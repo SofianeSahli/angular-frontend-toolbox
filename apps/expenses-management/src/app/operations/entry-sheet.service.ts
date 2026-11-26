@@ -4,16 +4,16 @@ import { UiDialog } from '@shared/ui-organisms';
 import { filter, merge, takeUntil } from 'rxjs';
 import { BooksStore } from '../households/data/books.store';
 import { Entry } from './data/models';
-import { EntrySheet, EntrySheetData } from './parts/entry-sheet';
+import { EntrySheet, EntrySheetData, EntrySheetMode } from './parts/entry-sheet';
 
 @Injectable({ providedIn: 'root' })
 export class EntrySheetService {
   private readonly dialog = inject(UiDialog);
   private readonly books = inject(BooksStore);
 
-  openNew(): DialogRef<unknown, EntrySheet> | null {
+  openNew(options: { readonly mode?: EntrySheetMode } = {}): DialogRef<unknown, EntrySheet> | null {
     const book = this.books.selectedBook();
-    return book === null ? null : this.open({ book });
+    return book === null ? null : this.open({ book, mode: options.mode ?? 'once' });
   }
 
   openEdit(entry: Entry): DialogRef<unknown, EntrySheet> | null {

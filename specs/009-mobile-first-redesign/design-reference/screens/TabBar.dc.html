@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Barre d'onglets</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<nav aria-label="Navigation principale" style="width: 390px; height: 84px; padding: 8px 12px 20px; box-sizing: border-box; background: #FFFFFF; border-top: 1px solid #E7E0D5; display: grid; grid-template-columns: 1fr 1fr 72px 1fr 1fr; align-items: center; font-family: Inter, sans-serif">
+<a href="Main.dc.html" aria-current="{{home.current}}" style="{{home.style}}"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1z"></path></svg>Accueil</a>
+<a href="OpsList.dc.html" aria-current="{{ops.current}}" style="{{ops.style}}"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12"></path><circle cx="4" cy="6" r="1"></circle><circle cx="4" cy="12" r="1"></circle><circle cx="4" cy="18" r="1"></circle></svg>Opérations</a>
+<span style="display: flex; justify-content: center"><a href="MobAdd.dc.html" aria-label="Ajouter une dépense" style="width: 56px; height: 56px; margin-top: -28px; border-radius: 999px; background: #4E6B1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(28,26,23,0.18)"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></a></span>
+<a href="MobBudget.dc.html" aria-current="{{budget.current}}" style="{{budget.style}}"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13v4"></path><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"></path><circle cx="16" cy="14.5" r="1.2"></circle></svg>Budget</a>
+<a href="Recurring.dc.html" aria-current="{{rec.current}}" style="{{rec.style}}"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l3 3-3 3"></path><path d="M4 11V9a4 4 0 0 1 4-4h12"></path><path d="M7 22l-3-3 3-3"></path><path d="M20 13v2a4 4 0 0 1-4 4H4"></path></svg>Récurrentes</a>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["home","ops","budget","rec","none"],"default":"home"},"$preview":{"width":390,"height":84}}'>
+class Component extends DCLogic {
+renderVals() {
+var active = this.props.active ?? 'home';
+var base = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-decoration: none; font-size: 11px; line-height: 14px; min-height: 44px; ';
+function tab(id) {
+var on = id === active;
+return { current: on ? 'page' : 'false', style: base + (on ? 'color: #4E6B1F; font-weight: 600' : 'color: #6B6358') };
+}
+return { home: tab('home'), ops: tab('ops'), budget: tab('budget'), rec: tab('rec') };
+}
+}
+</script>
+</body>
+</html>

@@ -127,4 +127,18 @@ describe('BudgetDraft (spec 008 REQ-5.3–5.6)', () => {
     value.reset(budget({ lines: [lineDto('food', { retired: true })] }));
     expect(value.lines()[0].retired).toBe(true);
   });
+
+  it('counts the changed lines, income and saving, and discards them (spec 009 REQ-9.5)', () => {
+    const draft = new BudgetDraft(3, () => 0);
+    draft.reset(budget());
+    expect(draft.changeCount()).toBe(0);
+    draft.setLine('food', '650');
+    draft.removeLine('transport');
+    draft.addLine('health');
+    draft.setIncome('');
+    expect(draft.changeCount()).toBe(4);
+    draft.discard();
+    expect(draft.changeCount()).toBe(0);
+    expect(draft.dirty()).toBe(false);
+  });
 });

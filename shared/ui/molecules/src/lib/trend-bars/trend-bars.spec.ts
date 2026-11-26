@@ -16,7 +16,11 @@ describe('ui-trend-bars (spec 008 REQ-9.3, 9.4)', () => {
   it('is a named group (its bars are buttons) with a hidden table of the values', async () => {
     await render(UiTrendBars, { inputs: { items, label: '6 derniers mois' } });
     expect(screen.getByRole('group', { name: '6 derniers mois' })).not.toBeNull();
-    expect([...document.querySelectorAll('tbody tr')].map((row) => row.textContent?.replace(/\s+/g, ' ').trim())).toEqual(['sept. 400 DT', 'oct. 0 DT', 'nov. 800 DT']);
+    expect([...document.querySelectorAll<HTMLTableRowElement>('tbody tr')].map((row) => [...row.cells].map((cell) => cell.textContent?.trim()))).toEqual([
+      ['sept.', '400 DT'],
+      ['oct.', '0 DT'],
+      ['nov.', '800 DT'],
+    ]);
   });
 
   it('scales bars to the largest value and draws none for zero', async () => {

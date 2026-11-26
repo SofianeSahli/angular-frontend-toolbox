@@ -18,6 +18,8 @@ import { book } from '../../households/testing';
 import { Entry, EntryInput } from '../data/models';
 import { OperationsStore, WriteResult } from '../data/operations.store';
 import { OtherNamesApi } from '../data/other-names-api';
+import { EntryHistory } from '../data/entry-history';
+import { RecurringStore, RuleWriteResult } from '../../recurring/data/recurring.store';
 import { entry } from '../testing';
 import { EntrySheet } from './entry-sheet';
 
@@ -41,6 +43,8 @@ const done = (saved: Entry | null = entry('x')): WriteResult => ({
 async function renderSheet(
   options: {
     editing?: Entry;
+    mode?: 'once' | 'recurring';
+    history?: readonly Entry[] | null;
     otherNames?: () => Observable<readonly string[]>;
   } = {},
 ) {
@@ -65,10 +69,15 @@ async function renderSheet(
     list: vi.fn(options.otherNames ?? (() => of(['Épicerie du coin', 'Marché']))),
   };
   const categoriesApi = { tree: vi.fn(() => of<TreeAnswer>('notModified')) };
+  const history = {
+    forBook: options.history === null ? vi.fn().mockRejectedValue(new Error('offline')) : vi.fn().mockResolvedValue(options.history ?? []),
+    invalidate: vi.fn(),
+  };
+  const recurring = { create: vi.fn<(bookId: string, input: unknown) => Promise<RuleWriteResult>>().mockResolvedValue({ outcome: 'done', rule: null }) };
   const view = await render(EntrySheet, {
     providers: [
       provideTranslateService({ lang: 'fr', loader: provideTranslateLoader(FrLoader) }),
-      { provide: DIALOG_DATA, useValue: { book: B1, entry: options.editing } },
+      { provide: DIALOG_DATA, useValue: { book: B1, entry: options.editing, mode: options.mode } },
       {
         provide: UI_DIALOG_CONTEXT,
         useValue: { titleId: 't1', sheet: false, close },
@@ -82,6 +91,8 @@ async function renderSheet(
       { provide: UiConfirm, useValue: confirm },
       { provide: OtherNamesApi, useValue: otherNames },
       { provide: CategoriesApi, useValue: categoriesApi },
+      { provide: EntryHistory, useValue: history },
+      { provide: RecurringStore, useValue: recurring },
     ],
   });
   await settle(view);
@@ -94,6 +105,8 @@ async function renderSheet(
     confirm,
     otherNames,
     categoriesApi,
+    history,
+    recurring,
     toasts: () => TestBed.inject(UiToast).toasts(),
   };
 }
@@ -104,7 +117,7 @@ async function settle(view: { detectChanges(): void }) {
 }
 
 const amountInput = () => screen.getByLabelText(/Montant/) as HTMLInputElement;
-const saveButton = () => screen.getByRole('button', { name: /Enregistrer|Confirmer/ });
+const saveButton = () => document.querySelector('button[type="submit"]') as HTMLButtonElement;
 
 function typeAmount(view: { detectChanges(): void }, text: string) {
   fireEvent.input(amountInput(), { target: { value: text } });
@@ -113,7 +126,7 @@ function typeAmount(view: { detectChanges(): void }, text: string) {
 }
 
 function pickRecent(view: { detectChanges(): void }, name: RegExp) {
-  const recents = screen.getByRole('group', { name: 'Récentes' });
+  const recents = screen.getByRole('group', { name: 'Catégorie' });
   const chip = [...recents.querySelectorAll('button')].find((b) => name.test(b.textContent ?? ''));
   fireEvent.click(chip as HTMLButtonElement);
   view.detectChanges();
@@ -136,15 +149,17 @@ describe('EntrySheet add mode (REQ-4.2–4.10, 7.1–7.8)', () => {
     expect(view.container.textContent).toContain('Trop de décimales pour cette devise');
   });
 
-  it('shows the amount error only after a save attempt or after typing and leaving the field', async () => {
+  it('keeps the save button disabled until an amount is typed, then shows it (spec 009 REQ-3.2, 3.8)', async () => {
     const view = await renderSheet();
     fireEvent.focus(amountInput());
     fireEvent.blur(amountInput());
     view.detectChanges();
-    expect(view.container.textContent).not.toContain('Saisissez un montant');
     expect(amountInput().getAttribute('aria-invalid')).toBeNull();
-    await save(view);
-    expect(view.container.textContent).toContain('Saisissez un montant');
+    expect(saveButton().disabled).toBe(true);
+    expect(saveButton().textContent).toContain('Saisissez un montant');
+    typeAmount(view, '12,5');
+    expect(saveButton().disabled).toBe(false);
+    expect(saveButton().textContent?.replace(/[\u202f\u00a0]/g, ' ')).toContain('Ajouter 12,500 DT');
   });
 
   it('asks to confirm an amount at or above 1 000, then saves on the second press', async () => {
@@ -169,7 +184,7 @@ describe('EntrySheet add mode (REQ-4.2–4.10, 7.1–7.8)', () => {
     pickRecent(view, /Supermarché/);
     await save(view);
     typeAmount(view, '12');
-    expect(saveButton().textContent).toContain('Enregistrer');
+    expect(saveButton().textContent).toContain('Ajouter');
   });
 
   it('closes, toasts by type and updates the recents after a save', async () => {
@@ -235,16 +250,27 @@ describe('EntrySheet add mode (REQ-4.2–4.10, 7.1–7.8)', () => {
     expect(screen.queryByRole('group', { name: 'Suggestions' })).toBeNull();
   });
 
-  it('sets the date with the chips, within the limits', async () => {
+  it('sets the date with the chips, and another date in the collapsed field, within the limits (spec 009 REQ-3.7)', async () => {
     const view = await renderSheet();
     const today = todayIn('Africa/Tunis');
+    expect(view.container.querySelector('input[type="date"]')).toBeNull();
+    expect(screen.queryByLabelText(/Commentaire/)).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Note' }));
+    view.detectChanges();
+    expect(screen.getByLabelText(/Commentaire/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Autre date' }));
+    view.detectChanges();
     const input = view.container.querySelector('input[type="date"]') as HTMLInputElement;
     expect(input.value).toBe(today);
     expect(input.min).toBe('2000-01-01');
     expect(input.max).toBe(addYears(today, 1));
     fireEvent.click(screen.getByRole('button', { name: 'Hier' }));
     view.detectChanges();
-    expect(input.value).toBe(addDays(today, -1));
+    expect(screen.getByRole('button', { name: 'Hier' }).getAttribute('aria-pressed')).toBe('true');
+    typeAmount(view, '12');
+    pickRecent(view, /Supermarché/);
+    await save(view);
+    expect(view.operations.create.mock.calls[0][1].date).toBe(addDays(today, -1));
   });
 
   it('puts field codes on their fields and drops a refused category', async () => {
@@ -330,7 +356,8 @@ describe('EntrySheet edit mode (REQ-6.1–6.5, 7.4)', () => {
   it('prefills the form and shows who created and edited the entry', async () => {
     const view = await renderSheet({ editing: saved() });
     expect(amountInput().value).toBe('12,500');
-    expect(view.container.textContent).toContain('Créé par Moi · modifié par Sami');
+    expect(view.container.textContent).toContain('Ajoutée par Moi');
+    expect(view.container.textContent).toContain('modifiée par Sami');
   });
 
   it('shows a retired leaf with its badge', async () => {
@@ -363,7 +390,7 @@ describe('EntrySheet edit mode (REQ-6.1–6.5, 7.4)', () => {
 
   it('deletes after a destructive confirmation', async () => {
     const view = await renderSheet({ editing: saved() });
-    fireEvent.click(screen.getByRole('button', { name: 'Supprimer' }));
+    fireEvent.click(screen.getByRole('button', { name: /Supprimer l'opération/ }));
     await settle(view);
     expect(view.confirm.ask).toHaveBeenCalledWith(expect.objectContaining({ tone: 'danger' }));
     expect(view.operations.remove).toHaveBeenCalledWith('b1', 'e1');
@@ -383,5 +410,73 @@ describe('EntrySheet edit mode (REQ-6.1–6.5, 7.4)', () => {
   it('shows the recurring badge in the header of an entry made by a rule (spec 008 REQ-6.7)', async () => {
     await renderSheet({ editing: entry('e1', { recurring_rule_id: 'r1' }) });
     expect(screen.getByText('récurrent')).toBeTruthy();
+  });
+});
+
+describe('EntrySheet quick add (spec 009 REQ-3.1–3.6, 4.1–4.3)', () => {
+  afterEach(() => localStorage.clear());
+
+  const now = new Date().toISOString();
+
+  it('opens in one-off mode with a radio switch, or in recurring mode when asked', async () => {
+    await renderSheet();
+    const once = screen.getByRole('radio', { name: 'Une seule fois' });
+    expect(once.getAttribute('aria-checked')).toBe('true');
+    expect(screen.getByRole('radiogroup', { name: 'Type de saisie' })).toBeTruthy();
+  });
+
+  it('pre-selects the suggested category from the history and marks it', async () => {
+    const view = await renderSheet({ history: [entry('h1', { category: 'food.groceries.supermarket', created_at: now })] });
+    await settle(view);
+    const chip = screen.getByRole('button', { description: 'suggérée' });
+    expect(chip.getAttribute('aria-pressed')).toBe('true');
+    expect(view.history.forBook).toHaveBeenCalledWith('u1', expect.objectContaining({ id: 'b1' }));
+  });
+
+  it('fills the amount and the category from a template without saving', async () => {
+    const view = await renderSheet({ history: [entry('h1', { category: 'food.groceries.supermarket', amount: 1500, created_at: now })] });
+    await settle(view);
+    const templates = screen.getByRole('group', { name: 'Reprendre une opération récente' });
+    fireEvent.click(templates.querySelector('button') as HTMLButtonElement);
+    view.detectChanges();
+    expect(amountInput().value).toBe('1,500');
+    expect(view.operations.create).not.toHaveBeenCalled();
+  });
+
+  it('opens at once and adds nothing when the history fails', async () => {
+    const view = await renderSheet({ history: null });
+    await settle(view);
+    expect(amountInput()).toBeTruthy();
+    expect(screen.queryByRole('group', { name: 'Reprendre une opération récente' })).toBeNull();
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('creates a recurring rule in recurring mode, keeping the typed values when switching', async () => {
+    const view = await renderSheet();
+    typeAmount(view, '650');
+    pickRecent(view, /Supermarché/);
+    fireEvent.click(screen.getByRole('radio', { name: 'Récurrente' }));
+    view.detectChanges();
+    expect(screen.getByRole('heading', { name: 'Nouvelle opération récurrente' })).toBeTruthy();
+    expect(amountInput().value).toBe('650');
+    expect(saveButton().textContent).toContain('chaque mois');
+    await save(view);
+    expect(view.operations.create).not.toHaveBeenCalled();
+    expect(view.recurring.create).toHaveBeenCalledWith(
+      'b1',
+      expect.objectContaining({ amount: 650000, category: 'food.groceries.supermarket', frequency: 'monthly', interval: 1, startsOn: todayIn('Africa/Tunis') }),
+    );
+    expect(view.close).toHaveBeenCalled();
+    expect(view.history.invalidate).toHaveBeenCalledWith('u1', 'b1');
+  });
+
+  it('shows the rule limit and keeps the sheet open', async () => {
+    const view = await renderSheet({ mode: 'recurring' });
+    view.recurring.create.mockResolvedValueOnce({ outcome: 'error', error: new ApiError('validation', 422, 'recurring_rule.limit_reached', {}, null, 'r1') });
+    typeAmount(view, '45');
+    pickRecent(view, /Supermarché/);
+    await save(view);
+    expect(view.close).not.toHaveBeenCalled();
+    expect(view.container.textContent).toContain(fr.recurring.errors.limit);
   });
 });

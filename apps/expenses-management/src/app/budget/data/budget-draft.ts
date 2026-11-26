@@ -24,6 +24,16 @@ function parseOptional(text: string, exponent: number): ParseResult | null {
   return text.trim() === '' ? null : parseMajor(text, exponent, { allowZero: true });
 }
 
+function changesBetween(before: Snapshot, after: Snapshot): number {
+  const planned = new Map(before.lines.map((line) => [line.category, line.text.trim()]));
+  const kept = new Set(after.lines.map((line) => line.category));
+  let count = before.lines.filter((line) => !kept.has(line.category)).length;
+  for (const line of after.lines) if (planned.get(line.category) !== line.text.trim()) count += 1;
+  if (before.income.trim() !== after.income.trim()) count += 1;
+  if (before.saving.trim() !== after.saving.trim()) count += 1;
+  return count;
+}
+
 function sameSnapshot(a: Snapshot, b: Snapshot): boolean {
   return (
     a.income.trim() === b.income.trim() &&
@@ -41,6 +51,7 @@ export class BudgetDraft {
   readonly income: Signal<string> = computed(() => this.state().income);
   readonly saving: Signal<string> = computed(() => this.state().saving);
   readonly dirty = computed(() => !sameSnapshot(this.state(), this.baseline()));
+  readonly changeCount = computed(() => changesBetween(this.baseline(), this.state()));
   readonly categories = computed(() => new Set(this.lines().map((line) => line.category)));
   readonly isEmpty = computed(() => this.lines().length === 0 && this.income().trim() === '' && this.saving().trim() === '');
 
@@ -67,6 +78,10 @@ export class BudgetDraft {
     private readonly exponent: number,
     private readonly position: (code: string) => number,
   ) {}
+
+  discard(): void {
+    this.state.set(this.baseline());
+  }
 
   reset(budget: Budget | null): void {
     const snapshot: Snapshot =

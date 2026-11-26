@@ -24,7 +24,7 @@ describe('UpcomingCard (spec 008 REQ-3.5)', () => {
   it('is empty for a past month and links to the rules', async () => {
     await renderPart(UpcomingCard, { rules, today: '2026-11-25', month: '2026-10', currency: TND });
     expect(visibleText()).toContain("Rien de prévu d'ici la fin du mois");
-    expect(screen.getByRole('link', { name: 'Voir les récurrentes' }).getAttribute('href')).toBe('/operations/recurrentes');
+    expect(screen.getByRole('link', { name: 'Voir les récurrentes' }).getAttribute('href')).toBe('/recurrentes');
   });
 
   it('shows the other name or the category name', async () => {

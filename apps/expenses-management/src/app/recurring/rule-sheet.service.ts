@@ -11,11 +11,6 @@ export class RuleSheetService {
   private readonly dialog = inject(UiDialog);
   private readonly books = inject(BooksStore);
 
-  openNew(): DialogRef<unknown, RuleSheet> | null {
-    const book = this.books.selectedBook();
-    return book === null ? null : this.open({ book });
-  }
-
   openEdit(rule: RecurringRule): DialogRef<unknown, RuleSheet> | null {
     const book = this.books.selectedBook();
     return book === null ? null : this.open({ book, rule });

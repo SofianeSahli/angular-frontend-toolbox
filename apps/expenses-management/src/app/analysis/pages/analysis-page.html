@@ -1,0 +1,62 @@
+<ui-page [title]="'analysis.title' | translate">
+  @if (book()) {
+    <ui-month-switcher
+      uiPageActions
+      variant="plain"
+      [month]="month()"
+      [min]="minMonth"
+      [max]="maxMonth()"
+      [locale]="locale()"
+      (monthChange)="setMonth($event)"
+    />
+  }
+
+  @if (book(); as current) {
+    <div class="row g-3">
+      <app-pace-card
+        class="col-12"
+        [summary]="store.summary().data"
+        [previous]="store.previous().data"
+        [budget]="store.budget().data"
+        [fixed]="fixed()"
+        [month]="month()"
+        [today]="today()"
+        [currency]="current.currency"
+        [status]="shownStatus(store.summary().status)"
+        [error]="store.summary().error"
+        (retry)="store.reload('summary')"
+      />
+
+      <app-categories-card
+        class="col-12 col-lg-6"
+        [summary]="store.summary().data"
+        [status]="shownStatus(store.summary().status)"
+        [error]="store.summary().error"
+        [currency]="current.currency"
+        [month]="month()"
+        (retry)="store.reload('summary')"
+      />
+
+      <app-trend-card
+        class="col-12 col-lg-6"
+        [summary]="store.trend().data"
+        [month]="month()"
+        [currency]="current.currency"
+        [status]="shownStatus(store.trend().status)"
+        [error]="store.trend().error"
+        (retry)="store.reload('trend')"
+      />
+
+      @if (showMembers()) {
+        <app-members-card
+          class="col-12"
+          [summary]="store.summary().data"
+          [status]="shownStatus(store.summary().status)"
+          [error]="store.summary().error"
+          [currency]="current.currency"
+          (retry)="store.reload('summary')"
+        />
+      }
+    </div>
+  }
+</ui-page>

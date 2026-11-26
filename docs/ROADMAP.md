@@ -14,9 +14,10 @@ One spec each, approved before any code (ARCHITECTURE §8). From spec 005 on, ev
 6. **006 Households and books** ← done (in review): first-run choice, create household, create book, invitations, members, book switcher (backend specs 003–004).
 7. **007 Categories and operations** ← done (in review): any-currency money, category tree and picker, quick add, operations list with filters, edit and delete (backend specs 005–006).
 8. **008 Dashboard, budget and recurring operations** ← done (in review): dashboard cards, monthly budget with copy, recurring rules, `ui-meter` and `ui-bar-list` (backend specs 006 recurring rules, 007, 008).
-9. **009 Production readiness.**
-10. **010 Capacitor.**
-11. **011 Public launch.**
+9. **009 Mobile-first redesign** ← done (in review): phone-first navigation (top bar, drawer, tabs), add and edit sheets, analysis page, budget month strip, recurring tab; no backend change.
+10. **010 Production readiness.**
+11. **011 Capacitor.**
+12. **012 Public launch.**
 
 ## Known issues (do not "fix" silently — open or update a spec)
 

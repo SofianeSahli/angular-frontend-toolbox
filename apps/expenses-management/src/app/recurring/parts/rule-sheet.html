@@ -1,11 +1,8 @@
-<ui-dialog-header [title]="(editing ? 'recurring.sheet.editTitle' : 'recurring.sheet.addTitle') | translate" />
+<ui-dialog-header [title]="'recurring.sheet.editTitle' | translate" />
 <form [formGroup]="form" (ngSubmit)="save()" novalidate>
   <div uiDialogBody class="d-flex flex-column gap-3">
     <p class="m-0">{{ 'operations.sheet.book' | translate }} <bdi>{{ book.name }}</bdi></p>
 
-    @if (editing) {
-      <ui-alert tone="info">{{ 'recurring.sheet.editNote' | translate }}</ui-alert>
-    }
 
     @if (unavailable()) {
       <ui-alert tone="danger" [title]="'categories.picker.unavailable' | translate">
@@ -83,9 +80,6 @@
     <ui-form-field [label]="'recurring.sheet.startsOn' | translate" required [errors]="errorTemplates">
       <input uiInput type="date" formControlName="startsOn" [min]="minStart" [max]="maxStart" />
     </ui-form-field>
-    @if (pastStart()) {
-      <ui-alert tone="warning">{{ 'recurring.sheet.pastStart' | translate }}</ui-alert>
-    }
 
     <ui-form-field [label]="'recurring.sheet.endsOn' | translate" optional [errors]="errorTemplates">
       <input uiInput type="date" formControlName="endsOn" [min]="endMin()" />
@@ -95,9 +89,22 @@
       <textarea uiInput rows="2" formControlName="comment" [attr.maxlength]="commentMax"></textarea>
     </ui-form-field>
 
+    <ui-alert tone="info">
+      @if (nextDate(); as next) {
+        {{ 'recurring.sheet.next' | translate: { date: next } }}
+      } @else {
+        {{ 'recurring.ended' | translate }}
+      }
+      {{ 'recurring.sheet.editNote' | translate }}
+    </ui-alert>
+
     @if (notice(); as text) {
       <ui-alert tone="danger">{{ text }}</ui-alert>
     }
+
+    <button uiButton variant="ghost" type="button" class="align-self-start" [loading]="deleting()" (click)="stop()">
+      {{ 'recurring.sheet.stop' | translate }}
+    </button>
   </div>
 
   <div uiDialogFooter>

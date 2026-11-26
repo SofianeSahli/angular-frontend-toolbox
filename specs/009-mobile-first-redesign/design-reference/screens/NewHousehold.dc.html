@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Créer le foyer</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#1D4E89}a:hover{color:#163d6c}
+</style>
+</helmet>
+<div class="o-root" style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 20px 32px; background: #FBF8F3; display: flex; flex-direction: column; gap: 20px; font-family: Inter, sans-serif; color: #1C1A17">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<a href="Welcome.dc.html" aria-label="Retour" style="width: 44px; height: 44px; margin-left: -12px; display: flex; align-items: center; justify-content: center; color: #1C1A17"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<span style="font-size: 13px; color: #6B6358">Étape 1 sur 2</span>
+</div>
+<div role="progressbar" aria-label="Étape 1 sur 2" aria-valuenow="1" aria-valuemin="0" aria-valuemax="2" style="height: 4px; border-radius: 2px; background: #E7E0D5"><div style="width: 50%; height: 4px; border-radius: 2px; background: #4E6B1F"></div></div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-size: 28px; line-height: 34px; font-weight: 600">Votre foyer</h1>
+<p style="margin: 0; color: #6B6358; line-height: 22px">Le nom que verront les personnes invitées. Vous pourrez le changer.</p>
+</div>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Nom du foyer
+<input type="text" value="Famille Ben Salah" maxlength="60" style="height: 52px; box-sizing: border-box; padding: 0 14px; border: 2px solid #1D4E89; border-radius: 10px; background: #FFFFFF; font: 400 17px Inter, sans-serif">
+<span style="font-size: 13px; font-weight: 400; color: #6B6358; text-align: right">17 / 60</span>
+</label>
+<a href="NewBook.dc.html" style="margin-top: auto; min-height: 52px; border-radius: 12px; background: #4E6B1F; color: #FFFFFF; font: 600 16px Inter, sans-serif; display: flex; align-items: center; justify-content: center; text-decoration: none">Continuer</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

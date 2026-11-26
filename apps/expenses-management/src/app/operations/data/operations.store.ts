@@ -100,6 +100,30 @@ export const OperationsStore = signalStore(
       return loadFirst();
     }
 
+    async function loadMore(): Promise<StoreResult> {
+      const bookId = store.bookId();
+      const filters = store.filters();
+      const cursor = store.nextCursor();
+      if (bookId === null || filters === null || cursor === null || store.status() !== 'ready' || store.pageStatus() === 'loading') return DONE;
+      const started = generation;
+      patchState(store, { pageStatus: 'loading' });
+      try {
+        const page = await firstValueFrom(api.page(bookId, filters, cursor));
+        if (started !== generation) return DONE;
+        patchState(store, {
+          entries: [...store.entries(), ...page.items],
+          nextCursor: page.nextCursor,
+          pageStatus: 'idle',
+          pages: store.pages() + 1,
+        });
+        return DONE;
+      } catch (error) {
+        if (started !== generation) return DONE;
+        patchState(store, { pageStatus: 'error' });
+        return failed(error);
+      }
+    }
+
     function removeRow(id: string): void {
       patchState(store, {
         entries: store.entries().filter((row) => row.id !== id),
@@ -154,28 +178,15 @@ export const OperationsStore = signalStore(
         return loadFirst();
       },
 
-      async loadMore(): Promise<StoreResult> {
-        const bookId = store.bookId();
-        const filters = store.filters();
-        const cursor = store.nextCursor();
-        if (bookId === null || filters === null || cursor === null || store.status() !== 'ready' || store.pageStatus() === 'loading') return DONE;
-        const started = generation;
-        patchState(store, { pageStatus: 'loading' });
-        try {
-          const page = await firstValueFrom(api.page(bookId, filters, cursor));
-          if (started !== generation) return DONE;
-          patchState(store, {
-            entries: [...store.entries(), ...page.items],
-            nextCursor: page.nextCursor,
-            pageStatus: 'idle',
-            pages: store.pages() + 1,
-          });
-          return DONE;
-        } catch (error) {
-          if (started !== generation) return DONE;
-          patchState(store, { pageStatus: 'error' });
-          return failed(error);
+      loadMore,
+
+      async loadAll(maxPages: number): Promise<StoreResult> {
+        while (store.status() === 'ready' && store.nextCursor() !== null && store.pages() < maxPages) {
+          const before = store.pages();
+          const result = await loadMore();
+          if (result.outcome === 'error' || store.pages() === before) return result;
         }
+        return DONE;
       },
 
       async create(bookId: string, input: EntryInput): Promise<WriteResult> {

@@ -21,3 +21,6 @@ export * from './lib/meter/meter';
 export * from './lib/bar-list/bar-list';
 export * from './lib/pace-chart/pace-chart';
 export * from './lib/trend-bars/trend-bars';
+export * from './lib/amount-keypad/amount-keypad';
+export * from './lib/month-strip/month-strip';
+export * from './lib/save-bar/save-bar';

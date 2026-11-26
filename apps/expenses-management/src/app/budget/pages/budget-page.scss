@@ -25,3 +25,9 @@
   justify-content: flex-end;
   gap: var(--ui-space-2);
 }
+
+.budget-page__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+}

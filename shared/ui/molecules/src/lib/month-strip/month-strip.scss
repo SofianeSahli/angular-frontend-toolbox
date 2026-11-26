@@ -1,0 +1,98 @@
+@layer ui {
+  :host {
+    --ui-month-strip-item-min-inline-size: 76px;
+    --ui-month-strip-dot-size: 6px;
+
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .ui-month-strip__list {
+    display: flex;
+    gap: var(--ui-space-2);
+    margin: 0;
+    padding: var(--ui-space-1);
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .ui-month-strip__item {
+    flex: none;
+  }
+
+  .ui-month-strip__month {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ui-space-1);
+    min-inline-size: var(--ui-month-strip-item-min-inline-size);
+    min-block-size: var(--ui-control-height-lg);
+    padding-block: var(--ui-space-2);
+    padding-inline: var(--ui-space-3);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface);
+    color: var(--ui-color-ink);
+    font: inherit;
+    cursor: pointer;
+    scroll-snap-align: center;
+  }
+
+  .ui-month-strip__month--todo {
+    border-style: dashed;
+    background: transparent;
+  }
+
+  .ui-month-strip__month[aria-current] {
+    border-color: var(--ui-color-accent);
+    background: var(--ui-color-accent-soft);
+  }
+
+  .ui-month-strip__month:focus-visible {
+    outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+    outline-offset: var(--ui-focus-ring-offset);
+  }
+
+  .ui-month-strip__label {
+    font-weight: var(--ui-text-body-strong-weight);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .ui-month-strip__caption {
+    color: var(--ui-color-ink-muted);
+    font-weight: var(--ui-text-small-weight);
+  }
+
+  .ui-month-strip__status {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-1);
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-caption-size);
+    line-height: var(--ui-text-caption-line-height);
+    white-space: nowrap;
+  }
+
+  .ui-month-strip__dot {
+    inline-size: var(--ui-month-strip-dot-size);
+    block-size: var(--ui-month-strip-dot-size);
+    border: var(--ui-border-width-thin) solid currentColor;
+    border-radius: var(--ui-radius-pill);
+    background: currentColor;
+  }
+
+  [data-status='current'] .ui-month-strip__dot {
+    color: var(--ui-color-accent);
+  }
+
+  [data-status='planned'] .ui-month-strip__dot {
+    color: var(--ui-color-success);
+  }
+
+  [data-status='todo'] .ui-month-strip__dot {
+    background: transparent;
+  }
+}

@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { API_CONFIG, handling } from '@shared/http-data-access';
-import { Observable, map } from 'rxjs';
+import { Observable, defer, firstValueFrom, map } from 'rxjs';
 import { toEntry, toEntryBody, toFilterParams, toPatchBody } from './mappers';
-import { Entry, EntryDto, EntryFilters, EntryInput, EntryPage, EntryPatch } from './models';
+import { Entry, EntryCollection, EntryDto, EntryFilters, EntryInput, EntryPage, EntryPatch } from './models';
 
 export const LIST_HANDLED_CODES = ['validation.failed'] as const;
 
@@ -38,6 +38,26 @@ export class EntriesApi {
           nextCursor: page.meta.next_cursor,
         })),
       );
+  }
+
+  collect(
+    bookId: string,
+    filters: EntryFilters,
+    limits: { readonly maxPages: number; readonly maxItems?: number },
+    context: HttpContext = handling(...LIST_HANDLED_CODES),
+  ): Observable<EntryCollection> {
+    return defer(async () => {
+      const items: Entry[] = [];
+      let cursor: string | null = null;
+      for (let page = 0; page < limits.maxPages; page++) {
+        const answer: EntryListDto = await firstValueFrom(this.http.get<EntryListDto>(this.url(bookId), { params: toFilterParams(filters, cursor), context }));
+        items.push(...answer.data.map(toEntry));
+        cursor = answer.meta.next_cursor;
+        if (cursor === null) return { items, complete: true };
+        if (limits.maxItems !== undefined && items.length >= limits.maxItems) return { items: items.slice(0, limits.maxItems), complete: false };
+      }
+      return { items, complete: false };
+    });
   }
 
   create(bookId: string, input: EntryInput): Observable<Entry> {

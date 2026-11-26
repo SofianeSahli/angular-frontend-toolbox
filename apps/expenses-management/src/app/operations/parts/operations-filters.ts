@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { UiButton, UiChip, UiIcon } from '@shared/ui-atoms';
-import { UiMenu, UiMenuItemRadio, UiMenuTrigger, UiMonthSwitcher, UiSegmentedControl, UiSegmentedOption } from '@shared/ui-molecules';
-import { UiDialog, UiFilterBar } from '@shared/ui-organisms';
+import { UiMenu, UiMenuItemRadio, UiMenuTrigger, UiMonthSwitcher } from '@shared/ui-molecules';
+import { UiDialog } from '@shared/ui-organisms';
 import { CategoryType } from '../../categories/data/models';
 import { CategoryLabels } from '../../categories/data/category-labels';
 import { CategoryChip } from '../../categories/parts/category-chip';
@@ -16,27 +15,17 @@ type TypeChoice = CategoryType | 'all';
 
 @Component({
   selector: 'app-operations-filters',
-  imports: [
-    CategoryChip,
-    FormsModule,
-    TranslatePipe,
-    UiButton,
-    UiChip,
-    UiFilterBar,
-    UiIcon,
-    UiMenu,
-    UiMenuItemRadio,
-    UiMenuTrigger,
-    UiMonthSwitcher,
-    UiSegmentedControl,
-  ],
+  imports: [CategoryChip, TranslatePipe, UiButton, UiChip, UiIcon, UiMenu, UiMenuItemRadio, UiMenuTrigger, UiMonthSwitcher],
   templateUrl: './operations-filters.html',
+  styleUrl: './operations-filters.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperationsFilters {
   readonly filters = input.required<EntryFilters>();
   readonly authors = input<readonly Person[]>([]);
   readonly locale = input('fr-TN');
+  readonly caption = input<string>();
+  readonly showAuthors = input(true);
   readonly changed = output<Partial<EntryFilters>>();
   readonly clear = output<void>();
 
@@ -56,24 +45,14 @@ export class OperationsFilters {
     const id = this.filters().author;
     const person = id === null ? null : this.authors().find((candidate) => candidate.id === id);
     this.revision();
-    return person?.name ?? this.translate.instant(id === null ? 'operations.filters.allAuthors' : 'operations.filters.author');
+    return person?.name ?? this.translate.instant('operations.filters.author');
   });
-  protected readonly typeOptions = computed<readonly UiSegmentedOption<TypeChoice>[]>(() => {
+  protected readonly typeOptions = computed<readonly { value: TypeChoice; label: string }[]>(() => {
     this.revision();
     return [
       { value: 'all', label: this.translate.instant('operations.filters.all') },
-      {
-        value: 'expense',
-        label: this.translate.instant('operations.filters.types.expense'),
-      },
-      {
-        value: 'income',
-        label: this.translate.instant('operations.filters.types.income'),
-      },
-      {
-        value: 'saving',
-        label: this.translate.instant('operations.filters.types.saving'),
-      },
+      { value: 'expense', label: this.translate.instant('operations.filters.types.expense') },
+      { value: 'income', label: this.translate.instant('operations.filters.types.income') },
     ];
   });
 
@@ -81,10 +60,8 @@ export class OperationsFilters {
     this.changed.emit(monthRange(month));
   }
 
-  protected setType(choice: TypeChoice | null): void {
-    this.changed.emit({
-      type: choice === null || choice === 'all' ? null : choice,
-    });
+  protected setType(choice: TypeChoice): void {
+    this.changed.emit({ type: choice === 'all' ? null : choice });
   }
 
   protected async pickCategory(): Promise<void> {

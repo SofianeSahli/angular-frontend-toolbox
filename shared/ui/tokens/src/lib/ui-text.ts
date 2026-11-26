@@ -22,6 +22,9 @@ export interface UiText {
   readonly hidePassword: string;
   readonly moreActions: string;
   readonly step: string;
+  readonly keypad: string;
+  readonly keypadDelete: string;
+  readonly keypadSeparator: string;
   readonly errors: UiTextErrors & Readonly<Partial<Record<string, string>>>;
 }
 
@@ -41,6 +44,9 @@ export const DEFAULT_UI_TEXT: UiText = {
   hidePassword: 'Masquer le mot de passe',
   moreActions: "Plus d'actions",
   step: 'Étape {{current}} sur {{total}}',
+  keypad: 'Pavé numérique',
+  keypadDelete: 'Effacer le dernier chiffre',
+  keypadSeparator: 'Virgule',
   errors: {
     required: 'Ce champ est obligatoire.',
     email: 'Saisissez une adresse e-mail valide.',

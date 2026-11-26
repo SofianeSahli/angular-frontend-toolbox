@@ -15,6 +15,8 @@ import { Entry, EntryFilters } from '../data/models';
 import { OperationsStatus, OperationsStore, PageStatus } from '../data/operations.store';
 import { NOVEMBER, entry } from '../testing';
 import { OperationsPage } from './operations-page';
+import { SummaryApi } from '../../dashboard/data/summary-api';
+import { summary } from '../../dashboard/testing';
 
 function fakeOperations() {
   return {
@@ -30,6 +32,7 @@ function fakeOperations() {
     clearFilters: vi.fn().mockResolvedValue(DONE),
     loadMore: vi.fn().mockResolvedValue(DONE),
     reload: vi.fn().mockResolvedValue(DONE),
+    loadAll: vi.fn().mockResolvedValue(DONE),
   };
 }
 
@@ -41,6 +44,7 @@ async function renderPage(options: { household?: boolean; url?: string } = {}) {
   stores.household.members.set([member('u1', 'owner'), member('u2')]);
   const operations = fakeOperations();
   const sheets = { openNew: vi.fn(), openEdit: vi.fn() };
+  const summaries = { get: vi.fn(() => of(summary())) };
   const view = await render('<router-outlet />', {
     imports: [RouterOutlet],
     providers: [
@@ -54,6 +58,7 @@ async function renderPage(options: { household?: boolean; url?: string } = {}) {
       { provide: SessionStore, useValue: stores.session },
       { provide: OperationsStore, useValue: operations },
       { provide: EntrySheetService, useValue: sheets },
+      { provide: SummaryApi, useValue: summaries },
       {
         provide: CategoriesApi,
         useValue: { tree: () => of<TreeAnswer>('notModified') },
@@ -63,7 +68,7 @@ async function renderPage(options: { household?: boolean; url?: string } = {}) {
   TestBed.inject(TranslateService).setTranslation('fr', fr);
   await TestBed.inject(Router).navigateByUrl(options.url ?? '/operations');
   view.detectChanges();
-  return { ...view, operations, sheets, stores };
+  return { ...view, operations, sheets, stores, summaries };
 }
 
 describe('OperationsPage (REQ-5.1–5.7, 5.9)', () => {
@@ -159,9 +164,53 @@ describe('OperationsPage (REQ-5.1–5.7, 5.9)', () => {
       expect(view.operations.open).toHaveBeenCalledWith('b1', { from: '2026-02-01', to: '2026-02-28' });
     });
 
-    it('links to the recurring operations', async () => {
+    it('no longer links to the recurring operations, now a tab (spec 009 REQ-1.6)', async () => {
       await renderPage();
-      expect(screen.getByRole('link', { name: /Récurrentes/ }).getAttribute('href')).toBe('/operations/recurrentes');
+      expect(screen.queryByRole('link', { name: /Récurrentes/ })).toBeNull();
+    });
+  });
+
+  describe('spec 009 (REQ-7.1–7.3)', () => {
+    const SEARCH_DEBOUNCE_MS = 250;
+    async function typeSearch(view: { detectChanges(): void }, search: HTMLElement, value: string): Promise<void> {
+      fireEvent.input(search, { target: { value } });
+      await new Promise((resolve) => setTimeout(resolve, SEARCH_DEBOUNCE_MS + 10));
+      view.detectChanges();
+    }
+
+    it('shows the month totals under the month', async () => {
+      const view = await renderPage();
+      await new Promise((resolve) => setTimeout(resolve));
+      view.detectChanges();
+      expect(view.summaries.get).toHaveBeenCalledWith('b1', { month: '2026-11' }, expect.anything());
+      expect(view.container.querySelector('ui-month-switcher')?.textContent?.replace(/[\u202f\u00a0]/g, ' ')).toContain('+2 500,000 DT');
+    });
+
+    it('follows every page and filters the rows while searching', async () => {
+      const view = await renderPage();
+      view.operations.entries.set([entry('e1', { comment: 'Boulangerie', date: '2026-11-02' }), entry('e2', { comment: 'Taxi', date: '2026-11-02' })]);
+      view.detectChanges();
+      const search = screen.getByRole('searchbox', { name: 'Rechercher une opération' }) as HTMLInputElement;
+      await typeSearch(view, search, 'boulang');
+      expect(view.operations.loadAll).toHaveBeenCalledWith(20);
+      expect(view.container.querySelectorAll('app-entry-row')).toHaveLength(1);
+      await typeSearch(view, search, 'zzz');
+      expect(view.container.textContent).toContain('Aucune opération ne correspond');
+    });
+
+    it('says the search covers only the loaded rows when the cap is reached', async () => {
+      const view = await renderPage();
+      view.operations.nextCursor.set('c21');
+      await typeSearch(view, screen.getByRole('searchbox', { name: 'Rechercher une opération' }), 'x');
+      expect(screen.getByRole('status').textContent).toContain('chargées');
+    });
+
+    it('totals each day once all its rows are loaded', async () => {
+      const view = await renderPage();
+      view.operations.entries.set([entry('e1', { date: '2026-11-03', amount: 12000 }), entry('e2', { date: '2026-11-02', amount: 3500 })]);
+      view.operations.nextCursor.set('c2');
+      view.detectChanges();
+      expect(view.container.querySelectorAll('.ui-grouped-list__total')).toHaveLength(1);
     });
   });
 });

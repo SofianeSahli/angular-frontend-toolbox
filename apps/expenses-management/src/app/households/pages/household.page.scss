@@ -1,0 +1,33 @@
+@layer app {
+  .household-card {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-3);
+    padding: var(--ui-space-4);
+    border: var(--ui-border-width-thin) solid var(--ui-color-line);
+    border-radius: var(--ui-radius-lg);
+    background: var(--ui-color-surface);
+  }
+
+  .household-card__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--ui-space-1);
+    min-inline-size: 0;
+  }
+
+  .household-card__meta {
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+  }
+
+  .household-danger {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ui-space-2);
+    padding-block-start: var(--ui-space-4);
+    border-block-start: var(--ui-border-width-thin) solid var(--ui-color-line);
+  }
+}

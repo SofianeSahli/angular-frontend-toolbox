@@ -1,0 +1,21 @@
+@layer app {
+  .entry-sheet__meta {
+    color: var(--ui-color-ink-muted);
+    font-size: var(--ui-text-small-size);
+  }
+
+  .entry-sheet__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ui-space-2);
+  }
+
+  .entry-sheet__suggested {
+    font-weight: var(--ui-text-small-weight);
+  }
+
+  .entry-sheet__delete {
+    align-self: flex-start;
+    color: var(--ui-color-danger);
+  }
+}

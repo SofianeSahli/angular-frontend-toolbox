@@ -148,3 +148,26 @@
   outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
   outline-offset: var(--ui-focus-ring-offset);
 }
+
+.dashboard-card__link {
+  flex-direction: row;
+  align-items: center;
+  color: var(--ui-color-ink);
+  text-decoration: none;
+}
+
+.dashboard-card__link:focus-visible {
+  outline: var(--ui-focus-ring-width) solid var(--ui-color-focus-ring);
+  outline-offset: var(--ui-focus-ring-offset);
+}
+
+.dashboard-card__link-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.dashboard-card__link-title {
+  font-weight: var(--ui-text-body-strong-weight);
+}

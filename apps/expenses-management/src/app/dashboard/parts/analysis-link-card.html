@@ -1,0 +1,8 @@
+<a class="dashboard-card dashboard-card__link" routerLink="/analyse" [queryParams]="{ mois: month() }">
+  <ui-icon name="chart-column" />
+  <span class="dashboard-card__link-text">
+    <span class="dashboard-card__link-title">{{ 'dashboard.analysisLink.title' | translate }}</span>
+    <span class="dashboard-card__muted">{{ 'dashboard.analysisLink.text' | translate }}</span>
+  </span>
+  <ui-icon name="chevron-right" />
+</a>

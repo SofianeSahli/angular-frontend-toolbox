@@ -45,6 +45,43 @@
     outline: none;
   }
 
+  .ui-drawer-pane {
+    --ui-overlays-drawer-inline-size: 320px;
+    --ui-overlays-drawer-from: -100%;
+    --ui-overlays-viewport-inline-size: 100vw;
+
+    inline-size: min(calc(var(--ui-overlays-viewport-inline-size) - var(--ui-space-12)), var(--ui-overlays-drawer-inline-size));
+    overflow: hidden;
+    border-start-end-radius: var(--ui-radius-lg);
+    border-end-end-radius: var(--ui-radius-lg);
+    background: var(--ui-color-surface-raised);
+    box-shadow: var(--ui-shadow-sheet);
+    animation: ui-drawer-enter var(--ui-duration-slow) var(--ui-easing-standard);
+  }
+
+  .ui-drawer-pane:dir(rtl) {
+    --ui-overlays-drawer-from: 100%;
+  }
+
+  .ui-drawer-pane .cdk-dialog-container {
+    block-size: 100%;
+    overflow-y: auto;
+    outline: none;
+    overscroll-behavior: contain;
+  }
+
+  @keyframes ui-drawer-enter {
+    from {
+      transform: translateX(var(--ui-overlays-drawer-from));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-drawer-pane {
+      animation: none;
+    }
+  }
+
   .ui-dialog-pane :is(.cdk-dialog-container > *, .cdk-dialog-container > * > form) {
     display: flex;
     flex-direction: column;

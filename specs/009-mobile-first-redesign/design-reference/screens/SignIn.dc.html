@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Connexion</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/23d1d29ff2fce2123df00f4c614b0bfe">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#1D4E89}a:hover{color:#163d6c}
+</style>
+</helmet>
+<div class="o-root" style="width: 390px; height: 844px; box-sizing: border-box; padding: 24px 20px 32px; background: #FBF8F3; display: flex; flex-direction: column; gap: 24px; font-family: Inter, sans-serif; color: #1C1A17">
+<div style="display: flex; justify-content: space-between; align-items: center; min-height: 44px">
+<span style="display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px"><span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 9px; background: #4E6B1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 16px">D</span>Dépenses</span>
+<div role="group" aria-label="Langue" style="display: flex; gap: 2px; font-size: 13px">
+<button type="button" aria-pressed="true" style="min-width: 44px; min-height: 44px; border: 0; background: transparent; font: 600 13px Inter, sans-serif; color: #1C1A17">FR</button>
+<button type="button" aria-pressed="false" style="min-width: 44px; min-height: 44px; border: 0; background: transparent; font: 500 13px Inter, sans-serif; color: #6B6358">EN</button>
+<button type="button" aria-pressed="false" lang="ar" style="min-width: 44px; min-height: 44px; border: 0; background: transparent; font: 500 15px Inter, sans-serif; color: #6B6358">ع</button>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 24px">
+<h1 style="margin: 0; font-size: 28px; line-height: 34px; font-weight: 600">Bon retour</h1>
+<p style="margin: 0; color: #6B6358">Les comptes du foyer, au même endroit.</p>
+</div>
+
+<form style="display: flex; flex-direction: column; gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">E-mail
+<input type="email" autocomplete="email" value="sofiane@exemple.tn" style="height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; font: 400 16px Inter, sans-serif; color: #1C1A17">
+</label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Mot de passe
+<span style="position: relative; display: block">
+<input type="password" autocomplete="current-password" value="motdepasse" style="width: 100%; height: 48px; box-sizing: border-box; padding: 0 52px 0 14px; border: 1px solid #D9D1C4; border-radius: 10px; background: #FFFFFF; font: 400 16px Inter, sans-serif">
+<button type="button" aria-label="Afficher le mot de passe" style="position: absolute; right: 2px; top: 2px; width: 44px; height: 44px; border: 0; background: transparent; color: #6B6358; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+</span>
+</label>
+<a href="Forgot.dc.html" style="align-self: flex-end; font-size: 14px; min-height: 44px; display: flex; align-items: center; margin: -8px 0">Mot de passe oublié ?</a>
+<a href="Code.dc.html" style="min-height: 52px; border-radius: 12px; background: #4E6B1F; color: #FFFFFF; font: 600 16px Inter, sans-serif; display: flex; align-items: center; justify-content: center; text-decoration: none">Se connecter</a>
+</form>
+
+<div style="display: flex; align-items: center; gap: 12px; color: #6B6358; font-size: 13px"><span aria-hidden="true" style="flex: 1; height: 1px; background: #E7E0D5"></span>ou<span aria-hidden="true" style="flex: 1; height: 1px; background: #E7E0D5"></span></div>
+<button type="button" style="min-height: 52px; border: 1px solid #D9D1C4; border-radius: 12px; background: #FFFFFF; font: 500 16px Inter, sans-serif; color: #1C1A17; display: flex; align-items: center; justify-content: center; gap: 10px"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid #1D4E89; box-sizing: border-box"></span>Continuer avec Google</button>
+
+<p style="margin: auto 0 0; text-align: center; font-size: 15px; color: #6B6358">Pas encore de compte ? <a href="SignUp.dc.html" style="font-weight: 600">Créer un compte</a></p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

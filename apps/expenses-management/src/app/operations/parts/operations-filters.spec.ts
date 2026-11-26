@@ -9,7 +9,7 @@ import { EntryFilters } from '../data/models';
 import { NOVEMBER } from '../testing';
 import { OperationsFilters } from './operations-filters';
 
-async function renderFilters(filters: EntryFilters) {
+async function renderFilters(filters: EntryFilters, extra: Record<string, unknown> = {}) {
   const changed = vi.fn();
   const clear = vi.fn();
   const dialog = { open: vi.fn(() => ({ closed: of('food.groceries') })) };
@@ -20,6 +20,7 @@ async function renderFilters(filters: EntryFilters) {
         { id: 'u1', name: 'Moi' },
         { id: 'u2', name: 'Sami' },
       ],
+      ...extra,
     },
     on: { changed, clear },
     providers: [
@@ -47,12 +48,19 @@ describe('OperationsFilters (REQ-5.4)', () => {
     });
   });
 
-  it('emits the chosen type, and null for "Tout"', async () => {
+  it('emits the chosen type chip, and null for "Tout" (spec 009 REQ-7.1)', async () => {
     const view = await renderFilters({ ...NOVEMBER, type: 'expense' });
-    fireEvent.click(screen.getByRole('radio', { name: 'Revenus' }));
+    expect(screen.getByRole('button', { name: 'Dépenses' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Revenus' }));
     expect(view.changed).toHaveBeenLastCalledWith({ type: 'income' });
-    fireEvent.click(screen.getByRole('radio', { name: 'Tout' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Tout' }));
     expect(view.changed).toHaveBeenLastCalledWith({ type: null });
+  });
+
+  it('shows the month totals under the month and hides the member chip for a personal book (spec 009 REQ-7.1)', async () => {
+    const view = await renderFilters(NOVEMBER, { caption: '−1 843 DT · +2 800 DT', showAuthors: false });
+    expect(view.container.textContent).toContain('+2 800 DT');
+    expect(screen.queryByRole('button', { name: /Membre/ })).toBeNull();
   });
 
   it('opens the picker in filter mode and emits the code', async () => {

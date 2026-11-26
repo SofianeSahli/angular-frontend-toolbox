@@ -15,12 +15,12 @@
     @if (store.firstUse() === 'yes') {
       <app-first-use-card (add)="add()" />
     } @else {
+      @let budgetCard = store.budget();
+      @let plan = budgetCard.status === 'ready' ? budgetCard.data : null;
       <div class="row g-3">
-        @let budgetCard = store.budget();
-        @if (budgetCard.status === 'ready' && budgetCard.data; as plan) {
+        @if (plan) {
           @if (plan.hasPlan) {
-            <app-hero-card class="col-12 col-lg-6" [budget]="plan" [currency]="current.currency" [month]="month()" />
-            <app-watch-list-card class="col-12 col-lg-6" [lines]="plan.lines" [currency]="current.currency" [month]="month()" />
+            <app-hero-card class="col-12" [budget]="plan" [currency]="current.currency" [month]="month()" />
           } @else {
             <app-no-plan-card
               class="col-12"
@@ -43,49 +43,23 @@
           />
         }
 
-        <app-pace-card
-          class="col-12"
-          [summary]="store.summary().data"
-          [previous]="store.previous().data"
-          [budget]="store.budget().data"
+        <app-recent-card
+          class="col-12 col-lg-6"
+          [entries]="store.recent().data ?? []"
+          [status]="shownStatus(store.recent().status)"
+          [error]="store.recent().error"
+          [currency]="current.currency"
           [month]="month()"
           [today]="today()"
-          [currency]="current.currency"
-          [status]="shownStatus(store.summary().status)"
-          [error]="store.summary().error"
-          (retry)="store.reload('summary')"
+          [todayOnly]="todayOnly()"
+          (retry)="store.reload('recent')"
+          (open)="edit($event)"
+          (add)="add()"
         />
 
-        <app-categories-card
-          class="col-12 col-lg-6"
-          [summary]="store.summary().data"
-          [status]="shownStatus(store.summary().status)"
-          [error]="store.summary().error"
-          [currency]="current.currency"
-          [month]="month()"
-          (retry)="store.reload('summary')"
-        />
-
-        @if (showMembers()) {
-          <app-members-card
-            class="col-12 col-lg-6"
-            [summary]="store.summary().data"
-            [status]="shownStatus(store.summary().status)"
-            [error]="store.summary().error"
-            [currency]="current.currency"
-            (retry)="store.reload('summary')"
-          />
+        @if (plan?.hasPlan) {
+          <app-watch-list-card class="col-12 col-lg-6" [lines]="plan!.lines" [currency]="current.currency" [month]="month()" />
         }
-
-        <app-trend-card
-          class="col-12"
-          [summary]="store.trend().data"
-          [month]="month()"
-          [currency]="current.currency"
-          [status]="shownStatus(store.trend().status)"
-          [error]="store.trend().error"
-          (retry)="store.reload('trend')"
-        />
 
         <app-upcoming-card
           class="col-12 col-lg-6"
@@ -98,24 +72,14 @@
           (retry)="store.reload('upcoming')"
         />
 
-        <app-recent-card
-          class="col-12 col-lg-6"
-          [entries]="store.recent().data ?? []"
-          [status]="shownStatus(store.recent().status)"
-          [error]="store.recent().error"
-          [currency]="current.currency"
-          [month]="month()"
-          [today]="today()"
-          (retry)="store.reload('recent')"
-          (open)="edit($event)"
-        />
+        <app-analysis-link-card class="col-12 col-lg-6" [month]="month()" />
       </div>
     }
   } @else {
     <div class="row g-3">
-      <app-card-frame class="col-12 col-lg-6" [heading]="'dashboard.hero.title' | translate" status="loading" />
+      <app-card-frame class="col-12" [heading]="'dashboard.hero.title' | translate" status="loading" />
+      <app-card-frame class="col-12 col-lg-6" [heading]="'dashboard.today.title' | translate" status="loading" />
       <app-card-frame class="col-12 col-lg-6" [heading]="'dashboard.watch.title' | translate" status="loading" />
-      <app-card-frame class="col-12" [heading]="'dashboard.pace.title' | translate" status="loading" />
     </div>
   }
 </ui-page>

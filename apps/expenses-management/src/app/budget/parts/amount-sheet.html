@@ -1,0 +1,44 @@
+<ui-dialog-header [title]="data.title" />
+<form (submit)="$event.preventDefault(); confirm()" novalidate>
+  <div uiDialogBody class="d-flex flex-column gap-3">
+    @if (keypad) {
+      <app-amount-pad
+        inputId="amount-sheet-value"
+        [value]="text()"
+        [currency]="data.currency"
+        [label]="data.title"
+        [caption]="data.hint"
+        (valueChange)="text.set($event)"
+      />
+    } @else {
+      <div class="d-flex flex-column gap-1">
+        <label uiLabel [optional]="data.optional" for="amount-sheet-value">{{ data.title }}</label>
+        <input
+          uiInput
+          id="amount-sheet-value"
+          type="text"
+          inputmode="decimal"
+          autocomplete="off"
+          dir="ltr"
+          [value]="text()"
+          [attr.aria-invalid]="submitted() && error() ? 'true' : null"
+          [attr.aria-describedby]="submitted() && error() ? 'amount-sheet-error' : null"
+          (input)="setText($event)"
+        />
+        @if (data.hint) {
+          <ui-field-message>{{ data.hint }}</ui-field-message>
+        }
+      </div>
+    }
+    @if (submitted() && error(); as message) {
+      <ui-field-message tone="error" id="amount-sheet-error">{{ message }}</ui-field-message>
+    }
+    @if (data.removable) {
+      <button uiButton variant="ghost" type="button" class="align-self-start" (click)="remove()">{{ 'budget.amountSheet.remove' | translate }}</button>
+    }
+  </div>
+  <div uiDialogFooter>
+    <button uiButton variant="ghost" type="button" (click)="context.close()">{{ 'budget.cancel' | translate }}</button>
+    <button uiButton variant="primary" type="submit">{{ 'budget.amountSheet.apply' | translate }}</button>
+  </div>
+</form>

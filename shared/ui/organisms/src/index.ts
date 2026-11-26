@@ -10,3 +10,4 @@ export * from './lib/bottom-tabs/bottom-tabs';
 export * from './lib/filter-bar/filter-bar';
 export * from './lib/grouped-list/grouped-list';
 export * from './lib/table/table';
+export * from './lib/drawer/drawer';

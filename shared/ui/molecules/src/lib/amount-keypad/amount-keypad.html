@@ -1,0 +1,12 @@
+@for (item of keys(); track item.key) {
+  <button
+    type="button"
+    class="ui-amount-keypad__key"
+    [class.ui-amount-keypad__key--action]="item.name !== null"
+    [attr.aria-label]="item.name"
+    [disabled]="item.disabled"
+    (click)="press(item.key)"
+  >
+    {{ item.label }}
+  </button>
+}

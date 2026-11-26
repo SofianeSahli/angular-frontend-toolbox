@@ -1,0 +1,113 @@
+<nav class="nav-drawer" [attr.aria-label]="'shell.menu' | translate">
+  <header class="nav-drawer__account">
+    @if (account(); as me) {
+      <ui-avatar [name]="me.name" decorative />
+      <span class="nav-drawer__who">
+        <bdi class="nav-drawer__name">{{ me.name }}</bdi>
+        <bdi class="nav-drawer__email" dir="ltr">{{ me.email }}</bdi>
+      </span>
+    }
+    <button uiButton variant="ghost" size="sm" iconOnly type="button" [attr.aria-label]="'shell.drawer.close' | translate" (click)="close()">
+      <ui-icon name="x" />
+    </button>
+  </header>
+
+  <section class="nav-drawer__section" aria-labelledby="nav-drawer-books">
+    <h2 class="nav-drawer__heading" id="nav-drawer-books">{{ 'shell.drawer.books' | translate }}</h2>
+    <ul class="nav-drawer__list">
+      @for (book of orderedBooks(); track book.id) {
+        <li>
+          <button
+            type="button"
+            class="nav-drawer__item nav-drawer__item--book"
+            data-book
+            [attr.aria-current]="book.id === books.selectedBookId() ? 'true' : null"
+            (click)="selectBook(book)"
+          >
+            <ui-icon [name]="book.owner.type === 'household' ? 'users' : 'user'" />
+            <span class="nav-drawer__label">
+              <bdi>{{ book.name }}</bdi>&ngsp;<span class="nav-drawer__hint">
+                {{ (book.owner.type === 'household' ? 'shell.drawer.householdBook' : 'shell.drawer.personalBook') | translate }} · {{ book.currency.code }}
+              </span>
+            </span>
+            @if (book.id === books.selectedBookId()) {
+              <ui-icon name="check" />
+            }
+          </button>
+        </li>
+      }
+      <li>
+        @if (books.canCreatePersonalBook()) {
+          <a class="nav-drawer__item" href="/carnets/nouveau" (click)="go($event, '/carnets/nouveau')">
+            <ui-icon name="plus" />
+            <span class="nav-drawer__label">{{ 'shell.books.new' | translate }}</span>
+          </a>
+        } @else {
+          <p class="nav-drawer__item nav-drawer__item--disabled m-0">
+            <ui-icon name="plus" />
+            <span class="nav-drawer__label">
+              {{ 'shell.books.new' | translate }}
+              <span class="nav-drawer__hint">{{ 'shell.books.limit' | translate }}</span>
+            </span>
+          </p>
+        }
+      </li>
+    </ul>
+  </section>
+
+  <ng-template #links let-destinations>
+    <ul class="nav-drawer__list">
+      @for (destination of destinations; track destination.path) {
+        <li>
+          <a
+            class="nav-drawer__item"
+            [attr.href]="destination.path"
+            [attr.aria-current]="current() === destination.path ? 'page' : null"
+            (click)="go($event, destination.path)"
+          >
+            <ui-icon [name]="destination.icon" />
+            <span class="nav-drawer__label">{{ destination.labelKey | translate }}</span>
+            @if (hintFor(destination); as hint) {
+              &ngsp;<span class="nav-drawer__hint nav-drawer__hint--end">{{ hint }}</span>
+            }
+          </a>
+        </li>
+      }
+    </ul>
+  </ng-template>
+
+  <section class="nav-drawer__section">
+    <ng-container [ngTemplateOutlet]="links" [ngTemplateOutletContext]="{ $implicit: primary }" />
+  </section>
+
+  <section class="nav-drawer__section" aria-labelledby="nav-drawer-planning">
+    <h2 class="nav-drawer__heading" id="nav-drawer-planning">{{ 'shell.drawer.planning' | translate }}</h2>
+    <ng-container [ngTemplateOutlet]="links" [ngTemplateOutletContext]="{ $implicit: planning }" />
+  </section>
+
+  <section class="nav-drawer__section" aria-labelledby="nav-drawer-household">
+    <h2 class="nav-drawer__heading" id="nav-drawer-household">{{ 'shell.drawer.householdAndAccount' | translate }}</h2>
+    <ng-container [ngTemplateOutlet]="links" [ngTemplateOutletContext]="{ $implicit: householdLinks }" />
+  </section>
+
+  <section class="nav-drawer__section nav-drawer__settings">
+    <h2 class="nav-drawer__heading">{{ 'shell.drawer.appearance' | translate }}</h2>
+    <ui-segmented-control
+      [options]="themeOptions()"
+      [ariaLabel]="'shell.drawer.appearance' | translate"
+      [ngModel]="theme.choice()"
+      (ngModelChange)="setTheme($event)"
+    />
+    <h2 class="nav-drawer__heading">{{ 'shell.drawer.language' | translate }}</h2>
+    <ui-segmented-control
+      [options]="languageOptions"
+      [ariaLabel]="'shell.drawer.language' | translate"
+      [ngModel]="languages.language()"
+      (ngModelChange)="setLanguage($event)"
+    />
+    <button uiButton variant="ghost" type="button" class="nav-drawer__sign-out" [loading]="signingOut()" (click)="signOut()">
+      <ui-icon name="log-out" />
+      {{ 'shell.signOut' | translate }}
+    </button>
+  </section>
+</nav>
