@@ -61,21 +61,22 @@ Number specs sequentially (`001`, `002`, …). One folder per feature. Specs are
 **Phase 4 — Implement**, one task at a time:
 1. Write/adjust the test(s) for the task's acceptance criteria first.
 2. Implement the minimum code to satisfy them.
-3. Do not run lint, tests or builds: CI and the owner do (see "Testing rules"). Fix what they report.
-4. Tick the task in `tasks.md` (`- [x]`), note any deviation, and write "verification: left to CI and the owner".
+3. Run lint and tests and fix every failure (see "Testing rules").
+4. Tick the task in `tasks.md` (`- [x]`), note any deviation, and record the lint and test result.
 5. If implementation reveals the spec is wrong or incomplete: **stop, update the spec, and get approval** before continuing. Never let code and spec silently diverge.
 
 When all tasks are done, report: which `REQ` IDs are verified and how, anything unverified, and any follow-ups.
 
 ## Testing rules (permanent)
 
-- **Claude does not run tests, lint or builds.** The owner runs them locally (`npx nx affected -t lint`, `npx nx affected -t test`, `npx nx build <app> --configuration=development`) and GitHub Actions runs them on every PR. `.claude/settings.json` denies these commands.
-- **Claude still writes the tests** each task needs (Vitest + TestBed, jsdom), and fixes failures the owner or CI reports.
+- **Claude runs lint and tests every time it writes or changes code** (`npx nx affected -t lint test --base=main --output-style=static`) and fixes every failure before committing or pushing.
+- Claude does not run builds: the owner and GitHub Actions do.
+- **Claude writes the tests** each task needs (Vitest + TestBed, jsdom), and also fixes failures the owner or CI reports.
 - **Never run Playwright or any e2e test, never start `nx serve`, and never open a browser to check anything.**
-- Only `compile-tokens` and `check-tokens` may be run, after editing `tokens.json` or `contract.json`, because they generate files.
+- Run `compile-tokens` and `check-tokens` after editing `tokens.json` or `contract.json`, because they generate files.
 - The old e2e smoke test was deleted with the old app (spec 002). A new one comes with the spec that brings back the first real screen; once it exists, keep it and its CI job, and don't run it.
 - Don't add visual or screenshot tests, and don't add tests that need a real browser.
-- In `tasks.md`, record "verification: left to CI and the owner" for each task.
+- In `tasks.md`, record the lint and test result for each task.
 
 ## Traceability rules
 
